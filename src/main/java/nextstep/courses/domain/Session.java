@@ -1,100 +1,60 @@
 package nextstep.courses.domain;
 
+import java.util.List;
 import java.util.Set;
 import nextstep.users.domain.NsUser;
 
 public class Session {
-    private EnrollmentsFactory enrollmentsFactory;
-    private Long id;
-    private Charge charge;
-    private SessionStatus sessionStatus;
-    private DefaultEnrollments enrollments;
-    private CoverImage coverImage;
-    private SessionPeriod sessionPeriod;
+    private SessionId id;
+    private SessionInfo sessionInfo;
 
-    public Session(Charge charge, DefaultEnrollments enrollments, CoverImage coverImage, SessionPeriod sessionPeriod) {
-        this(null, charge, enrollments, coverImage, sessionPeriod);
-    }
-
-    public Session(Long id, Charge charge, DefaultEnrollments enrollments, CoverImage coverImage,
+    public Session(SessionId id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
                    SessionPeriod sessionPeriod) {
-        this(id, charge, null, null, enrollments, coverImage, sessionPeriod);
+        this(id, charge, sessionStatus, enrollmentsFactory, List.of(), sessionPeriod);
     }
 
-    public Session(long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
-                   CoverImage coverImage,
-                   SessionPeriod sessionPeriod) {
-        this(id, charge, sessionStatus, enrollmentsFactory, null, coverImage, sessionPeriod);
+    public Session(SessionId id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
+                   List<CoverImage> coverImages, SessionPeriod sessionPeriod) {
+        this(id, charge, sessionStatus, enrollmentsFactory, new CoverImages(coverImages), sessionPeriod);
     }
 
-    public Session(Long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
-                   DefaultEnrollments enrollments, CoverImage coverImage,
+    public Session(SessionId id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
+                   CoverImages coverImages, SessionPeriod sessionPeriod) {
+        this(id, charge, new EnrollmentsInfo(enrollmentsFactory, sessionStatus), coverImages, sessionPeriod);
+    }
+
+    public Session(SessionId id, Charge charge, EnrollmentsInfo enrollmentsInfo, CoverImages coverImages,
                    SessionPeriod sessionPeriod) {
         this.id = id;
-        this.charge = charge;
-        this.sessionStatus = sessionStatus;
-        this.enrollmentsFactory = enrollmentsFactory;
-        this.enrollments = enrollments;
-        this.coverImage = coverImage;
-        this.sessionPeriod = sessionPeriod;
-    }
-
-    public void enrollment(int fee, NsUser enrollmentStudent) {
-        enrollment(new Charge(fee), enrollmentStudent);
-    }
-
-    public void enrollment(Charge fee, NsUser enrollmentStudent) {
-        validateCharge(fee);
-        enrollments.enrollment(this, enrollmentStudent);
+        this.sessionInfo = new SessionInfo(charge, enrollmentsInfo, coverImages, sessionPeriod);
     }
 
     public Enrollments enrollments(int fee, Set<EnrollmentStudent> enrollmentStudents, NsUser user) {
-        Enrollments enrollments = enrollments(fee, enrollmentStudents);
-        enrollments.enrollment(this, user);
-        return enrollments;
+        return sessionInfo.enrollments(fee, this, enrollmentStudents, user);
     }
 
-    public Enrollments enrollments(int fee, Set<EnrollmentStudent> enrollmentStudents) {
-        return enrollments(new Charge(fee), enrollmentStudents);
+    public Enrollments enrollments(Set<EnrollmentStudent> enrollmentStudents) {
+        return sessionInfo.enrollments(enrollmentStudents);
     }
 
-    public Enrollments enrollments(Charge charge, Set<EnrollmentStudent> enrollmentStudents) {
-        validateCharge(charge);
-        return enrollments(enrollmentsFactory, sessionStatus, enrollmentStudents);
-    }
 
-    protected Enrollments enrollments(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus,
-                                      Set<EnrollmentStudent> enrollmentStudents) {
-        return enrollmentsFactory.enrollments(sessionStatus, enrollmentStudents);
-    }
-
-    private void validateCharge(Charge fee) {
-        if (!this.charge.equals(fee)) {
-            throw new IllegalArgumentException("강의 금액과 일치하지 않습니다");
+    public Long id() {
+        if (id == null) {
+            return null;
         }
-    }
-
-    public long id() {
-        return id;
-    }
-
-    public DefaultEnrollments enrollments() {
-        return enrollments;
-    }
-
-    public Set<EnrollmentStudent> enrollmentStudents() {
-        return enrollments.enrolledStudents();
+        return id.toLonge();
     }
 
     public Charge charge() {
-        return charge;
-    }
-
-    public CoverImage coverImage() {
-        return coverImage;
+        return sessionInfo.charge();
     }
 
     public SessionPeriod sessionPeriod() {
-        return sessionPeriod;
+        return sessionInfo.sessionPeriod();
     }
+
+    public EnrollmentsInfo enrollmentsInfo() {
+        return sessionInfo.enrollmentsInfo();
+    }
+
 }
