@@ -1,5 +1,6 @@
 package nextstep.qna.service;
 
+import nextstep.qna.domain.DeleteHistories;
 import nextstep.qna.domain.DeleteHistory;
 import nextstep.qna.domain.DeleteHistoryRepository;
 import org.springframework.stereotype.Service;
