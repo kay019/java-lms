@@ -121,11 +121,10 @@ public class Question {
     }
 
     public List<DeleteHistory> toDeleteHistory() {
-        DeleteHistory QuestionDeleteHistory = new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
-        List<DeleteHistory> res = answers
+        List<DeleteHistory> res = new ArrayList<>(List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now())));
+        res.addAll(answers
             .stream()
-            .map(Answer::toDeleteHistory).collect(Collectors.toList());
-        res.add(QuestionDeleteHistory);
+            .map(Answer::toDeleteHistory).collect(Collectors.toList()));
         return res;
     }
 
