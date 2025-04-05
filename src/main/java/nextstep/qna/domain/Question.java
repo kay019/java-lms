@@ -120,6 +120,15 @@ public class Question {
         answers.forEach(Answer::delete);
     }
 
+    public List<DeleteHistory> toDeleteHistory() {
+        DeleteHistory QuestionDeleteHistory = new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+        List<DeleteHistory> res = answers
+            .stream()
+            .map(Answer::toDeleteHistory).collect(Collectors.toList());
+        res.add(QuestionDeleteHistory);
+        return res;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
