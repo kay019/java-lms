@@ -6,6 +6,8 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
@@ -28,23 +30,28 @@ public class Question {
     }
 
     public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
+        this(0L, writer, title, contents, new ArrayList<>(), false);
     }
 
-    public Question(NsUser writer, String title, String contents,  List<Answer> answers) {
-        this(0L, writer, title, contents, answers);
+    public Question(NsUser writer, String title, String contents, List<Answer> answers) {
+        this(0L, writer, title, contents, answers, false);
+    }
+
+    public Question(NsUser writer, String title, String contents,  List<Answer> answers, boolean deleted) {
+        this(0L, writer, title, contents, answers, deleted);
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this(id, writer, title, contents, new ArrayList<>());
+        this(id, writer, title, contents, new ArrayList<>(), false);
     }
 
-    public Question(Long id, NsUser writer, String title, String contents, List<Answer> answers) {
+    public Question(Long id, NsUser writer, String title, String contents, List<Answer> answers, boolean deleted) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.answers = answers;
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -108,12 +115,27 @@ public class Question {
         }
     }
 
-    public List<DeleteHistory> deleteWithAllAnswers() {
-        return List.of();
+    public void deleteWithAllAnswers() {
+        this.deleted = true;
+        answers.forEach(Answer::delete);
     }
 
-    public List<DeleteHistory> deleteAllAnswers() {
-        return List.of();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return deleted == question.deleted &&
+            Objects.equals(id, question.id) &&
+            Objects.equals(title, question.title) &&
+            Objects.equals(contents, question.contents) &&
+            Objects.equals(writer, question.writer) &&
+            Objects.equals(answers, question.answers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, contents, writer, answers, deleted, createdDate, updatedDate);
     }
 
     @Override

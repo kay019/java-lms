@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuestionTest {
@@ -26,21 +26,23 @@ public class QuestionTest {
   );
 
   @Test
-  public void 생성자테스트() {
+  public void 생성자_테스트() {
     assertAll(
         () -> assertDoesNotThrow(() -> new Question(
             1L,
             NsUserTest.JAVAJIGI,
             "title1",
             "contents1",
-            List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+            List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1")),
+            false
         )),
         () -> assertDoesNotThrow(() -> new Question(
             1L,
             NsUserTest.JAVAJIGI,
             "title1",
             "contents1",
-            List.of(new Answer(NsUserTest.SANJIGI, new Question(), "test content1"))
+            List.of(new Answer(NsUserTest.SANJIGI, new Question(), "test content1")),
+            false
         ))
     );
   }
@@ -65,16 +67,22 @@ public class QuestionTest {
 
   @Test
   public void 질문_및_모든답변_제거() {
-    assertThat(Q1.deleteWithAllAnswers()).isEqualTo(List.of(
-        new DeleteHistory(ContentType.QUESTION, 0L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
-        new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
-    ));
-  }
-
-  @Test
-  public void 모든답변_제거() {
-    assertThat(Q1.deleteAllAnswers()).isEqualTo(List.of(
-        new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
-    ));
+    Question question = new Question(
+        NsUserTest.JAVAJIGI,
+        "title1",
+        "contents1",
+        List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+    );
+    question.deleteWithAllAnswers();
+    assertThat(question)
+        .isEqualTo(
+            new Question(
+                NsUserTest.JAVAJIGI,
+                "title1",
+                "contents1",
+                List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1", true)),
+                true
+            )
+        );
   }
 }
