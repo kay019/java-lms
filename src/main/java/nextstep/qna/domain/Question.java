@@ -83,13 +83,13 @@ public class Question {
     }
 
     private void deleteQuestionAndAnswers() {
-        setDeleted(true);
+        deleted = true;
         for (Answer answer : answers) {
-            answer.setDeleted(true);
+            answer.delete();
         }
     }
 
-    private List<DeleteHistory> createDeleteHistory(){
+    private List<DeleteHistory> createDeleteHistory() {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
 
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
@@ -113,18 +113,13 @@ public class Question {
         return answers.isEmpty();
     }
 
-    public boolean allAnswerFromWriter(){
+    public boolean allAnswerFromWriter() {
         for (Answer answer : answers) {
             if (answer.isNotOwner(writer)) {
                 return false;
             }
         }
         return true;
-    }
-
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
     }
 
     public boolean isDeleted() {
