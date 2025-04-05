@@ -22,7 +22,7 @@ class PaidRegistrationPolicyTest {
         LocalDateTime endedAt = LocalDateTime.of(2023, 10, 1, 23, 0, 0);
 
         Session session
-            = SessionFactory.ofPaid(coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
+            = SessionFactory.ofPaid(1, coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
 
         IllegalArgumentException e = catchIllegalArgumentException(() -> {
             session.register(NsUserTest.JAVAJIGI, new Money(sessionFee));
@@ -42,7 +42,7 @@ class PaidRegistrationPolicyTest {
         LocalDateTime endedAt = LocalDateTime.of(2023, 10, 1, 23, 0, 0);
 
         Session session
-            = SessionFactory.ofPaid(coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
+            = SessionFactory.ofPaid(2, coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
 
         IllegalArgumentException e = catchIllegalArgumentException(() -> {
             session.register(NsUserTest.JAVAJIGI, new Money(sessionFee - 1));

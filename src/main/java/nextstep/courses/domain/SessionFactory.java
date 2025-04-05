@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class SessionFactory {
 
-    public static Session ofPaid(CoverImage coverImage, SessionStatus sessionStatus, int sessionFee, int maxStudentCount, LocalDateTime startedAt, LocalDateTime endedAt) {
+    public static Session ofPaid(long id, CoverImage coverImage, SessionStatus sessionStatus, int sessionFee, int maxStudentCount, LocalDateTime startedAt, LocalDateTime endedAt) {
         RegistrationPolicy registrationPolicy = new PaidRegistrationPolicy(sessionFee, maxStudentCount);
-        return new Session(coverImage, sessionStatus, registrationPolicy, startedAt, endedAt);
+        return new Session(id, coverImage, sessionStatus, registrationPolicy, startedAt, endedAt);
     }
 
-    public static Session ofFree(CoverImage coverImage, SessionStatus sessionStatus, LocalDateTime startedAt, LocalDateTime endedAt) {
-        return new Session(coverImage, sessionStatus, new FreeRegistrationPolicy(), startedAt, endedAt);
+    public static Session ofFree(long id, CoverImage coverImage, SessionStatus sessionStatus, LocalDateTime startedAt, LocalDateTime endedAt) {
+        return new Session(id, coverImage, sessionStatus, new FreeRegistrationPolicy(), startedAt, endedAt);
     }
 
 }

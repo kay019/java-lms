@@ -5,11 +5,11 @@ import java.util.Objects;
 public class Money {
     private final NaturalNumber value;
 
-    public Money(int amount) {
+    public Money(long amount) {
         this.value = new NaturalNumber(amount);
     }
 
-    public int getAmount() {
+    public long getAmount() {
         return value.getValue();
     }
 

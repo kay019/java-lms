@@ -3,10 +3,12 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUsers;
 
 public class Session {
+    private Long id;
     private Course course;
     private final NsUsers nsUsers = new NsUsers();
     private CoverImage coverImage;
@@ -15,7 +17,8 @@ public class Session {
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
 
-    Session(CoverImage coverImage, SessionStatus sessionStatus, RegistrationPolicy registrationPolicy, LocalDateTime startedAt, LocalDateTime endedAt) {
+    Session(long id, CoverImage coverImage, SessionStatus sessionStatus, RegistrationPolicy registrationPolicy, LocalDateTime startedAt, LocalDateTime endedAt) {
+        this.id = id;
         this.coverImage = coverImage;
         this.sessionStatus = sessionStatus;
         this.registrationPolicy = registrationPolicy;
@@ -31,7 +34,7 @@ public class Session {
         return nsUsers.getSize();
     }
 
-    public void register(NsUser nsUser, Money paymentAmount) {
+    public Payment register(NsUser nsUser, Money paymentAmount) {
         if (!sessionStatus.isRegistrable()) {
             throw new IllegalStateException("수강신청이 불가능한 상태입니다.");
         }
@@ -39,5 +42,7 @@ public class Session {
         registrationPolicy.validateRegistration(this, paymentAmount);
 
         nsUsers.add(nsUser);
+
+        return new Payment("", this, nsUser, paymentAmount);
     }
 }

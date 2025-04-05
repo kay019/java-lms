@@ -4,20 +4,20 @@ import java.util.Objects;
 
 public class NaturalNumber implements Comparable<NaturalNumber> {
 
-    private final int value;
+    private final long value;
 
-    public NaturalNumber(int value) {
+    public NaturalNumber(long value) {
         validate(value);
         this.value = value;
     }
 
-    private static void validate(int value) {
+    private static void validate(long value) {
         if (value < 0) {
             throw new IllegalArgumentException("0을 포함한 자연수만 허용 가능합니다.");
         }
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
@@ -41,7 +41,7 @@ public class NaturalNumber implements Comparable<NaturalNumber> {
 
     @Override
     public int compareTo(NaturalNumber o) {
-        return Integer.compare(getValue(), o.getValue());
+        return Long.compare(getValue(), o.getValue());
     }
 
     public int compareTo(int o) {
