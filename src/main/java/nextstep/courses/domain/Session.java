@@ -1,0 +1,43 @@
+package nextstep.courses.domain;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import nextstep.users.domain.NsUser;
+import nextstep.users.domain.NsUsers;
+
+public class Session {
+    private Course course;
+    private final NsUsers nsUsers = new NsUsers();
+    private CoverImage coverImage;
+    private SessionStatus sessionStatus;
+    private RegistrationPolicy registrationPolicy;
+    private LocalDateTime startedAt;
+    private LocalDateTime endedAt;
+
+    Session(CoverImage coverImage, SessionStatus sessionStatus, RegistrationPolicy registrationPolicy, LocalDateTime startedAt, LocalDateTime endedAt) {
+        this.coverImage = coverImage;
+        this.sessionStatus = sessionStatus;
+        this.registrationPolicy = registrationPolicy;
+        this.startedAt = startedAt;
+        this.endedAt = endedAt;
+    }
+
+    public void toCourse(Course course) {
+        this.course = course;
+    }
+
+    public int getStudentCount() {
+        return nsUsers.getSize();
+    }
+
+    public void register(NsUser nsUser, Money paymentAmount) {
+        if (!sessionStatus.isRegistrable()) {
+            throw new IllegalStateException("수강신청이 불가능한 상태입니다.");
+        }
+
+        registrationPolicy.validateRegistration(this, paymentAmount);
+
+        nsUsers.add(nsUser);
+    }
+}
