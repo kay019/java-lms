@@ -7,3 +7,9 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+## Step1 요구사항
+QnAService의 deleteQuestion() 메서드 리펙토링
+- [x] 로그인 한 유저가 삭제할 수 있는 질문인지 체크할 수 있는 기능 추가
+- [] 질문과 그에 따른 답변을 삭제할 수 있는 기능 추가
+- [] 삭제 히스토리 추가 기능 추가
