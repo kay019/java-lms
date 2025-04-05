@@ -4,6 +4,7 @@ import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,7 +24,7 @@ public class QuestionTest {
       "contents2",
       List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
   );
-  
+
   @Test
   public void 생성자테스트() {
     assertAll(
@@ -62,4 +63,18 @@ public class QuestionTest {
     );
   }
 
+  @Test
+  public void 질문_및_모든답변_제거() {
+    assertThat(Q1.deleteWithAllAnswers()).isEqualTo(List.of(
+        new DeleteHistory(ContentType.QUESTION, 0L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
+        new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
+    ));
+  }
+
+  @Test
+  public void 모든답변_제거() {
+    assertThat(Q1.deleteAllAnswers()).isEqualTo(List.of(
+        new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
+    ));
+  }
 }

@@ -108,6 +108,14 @@ public class Question {
         }
     }
 
+    public List<DeleteHistory> deleteWithAllAnswers() {
+        return List.of();
+    }
+
+    public List<DeleteHistory> deleteAllAnswers() {
+        return List.of();
+    }
+
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
