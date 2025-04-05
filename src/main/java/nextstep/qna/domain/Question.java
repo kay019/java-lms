@@ -6,7 +6,6 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
@@ -17,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private final Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -65,7 +64,7 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
 
@@ -73,13 +72,7 @@ public class Question {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
 
         deleteHistories.add(deleteQuestion(loginUser));
-
-        List<DeleteHistory> answerHistories = getAnswers()
-            .stream()
-            .map(ans -> ans.delete(loginUser))
-            .collect(Collectors.toList());
-
-        deleteHistories.addAll(answerHistories);
+        deleteHistories.addAll(getAnswers().delete(loginUser));
 
         return new DeleteHistories(deleteHistories);
     }
@@ -87,7 +80,7 @@ public class Question {
     private DeleteHistory deleteQuestion(NsUser loginUser) {
         validateDelete(loginUser);
         this.deleted = true;
-        return new DeleteHistory(ContentType.QUESTION, getId(), getWriter(), LocalDateTime.now());
+        return DeleteHistoryFactory.ofQuestion(getId(), loginUser, LocalDateTime.now());
     }
 
     private void validateDelete(NsUser loginUser) {
