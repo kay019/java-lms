@@ -85,4 +85,13 @@ public class QuestionTest {
             )
         );
   }
+
+  @Test
+  public void 삭제_히스토리_변환() {
+    assertThat(Q1.toDeleteHistory())
+        .contains(
+            new DeleteHistory(ContentType.QUESTION, 0L,  NsUserTest.JAVAJIGI, LocalDateTime.now()),
+            new DeleteHistory(ContentType.ANSWER, null,NsUserTest.JAVAJIGI, LocalDateTime.now())
+        );
+  }
 }

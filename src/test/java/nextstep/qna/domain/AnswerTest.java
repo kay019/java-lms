@@ -20,5 +20,10 @@ public class AnswerTest {
         .isEqualTo(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", true, createdDate));
   }
 
+  @Test
+  public void 삭제_히스토리_변환() {
+    assertThat(A1.toDeleteHistory())
+        .isEqualTo(new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now()));
+  }
 
 }
