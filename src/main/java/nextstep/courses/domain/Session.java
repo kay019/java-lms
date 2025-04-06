@@ -25,8 +25,8 @@ public class Session {
         this.course = course;
     }
 
-    public int getStudentCount() {
-        return nsUsers.getSize();
+    public boolean isStudentCountLessThan(int count) {
+        return nsUsers.getSize() < count;
     }
 
     public Payment register(NsUser nsUser, Money paymentAmount) {

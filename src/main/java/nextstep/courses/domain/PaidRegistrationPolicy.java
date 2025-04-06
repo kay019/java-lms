@@ -12,8 +12,7 @@ public class PaidRegistrationPolicy implements RegistrationPolicy {
 
     @Override
     public void validateRegistration(Session session, Money paymentAmount) {
-        if (maxStudentCount
-            .compareTo(session.getStudentCount()) <= 0) {
+        if (!session.isStudentCountLessThan((int) maxStudentCount.getValue())) {
             throw new IllegalArgumentException("강의 최대 수강 인원을 초과할 수 없습니다.");
         }
 
