@@ -33,6 +33,10 @@ public class Question {
     this(0L, writer, title, contents, new ArrayList<>(), false);
   }
 
+  public Question(NsUser writer, String title, String contents, boolean deleted) {
+    this(0L, writer, title, contents, new ArrayList<>(), deleted);
+  }
+
   public Question(NsUser writer, String title, String contents, List<Answer> answers) {
     this(0L, writer, title, contents, answers, false);
   }

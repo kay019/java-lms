@@ -2,6 +2,7 @@ package nextstep.qna.domain;
 
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -25,8 +26,9 @@ public class QuestionTest {
       List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
   );
 
+  @DisplayName("생성자")
   @Test
-  public void 생성자_테스트() {
+  public void testConstructor() {
     assertAll(
         () -> assertDoesNotThrow(() -> new Question(
             1L,
@@ -47,26 +49,73 @@ public class QuestionTest {
     );
   }
 
+  @DisplayName("답변 추가")
   @Test
-  public void 삭제_가능한_질문인지_확인() {
+  public void testAddAnswer() {
+    Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+    question.addAnswer(AnswerTest.A1);
+    assertThat(question)
+        .isEqualTo(new Question(NsUserTest.JAVAJIGI, "title1", "contents1", List.of(AnswerTest.A1)));
+  }
+
+  @DisplayName("질문 모든 답변 특정 유저 답변인지 확인")
+  @Test
+  public void testIsAllAnswersWrittenByUser() {
+    Question javajigiQuestion = new Question(
+        NsUserTest.JAVAJIGI,
+        "title1",
+        "contents1",
+        List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+    );
+    Question sanjigiQuestion = new Question(
+        NsUserTest.SANJIGI,
+        "title2",
+        "contents2",
+        List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+    );
     assertAll(
-        () -> assertDoesNotThrow(() -> Q1.checkDeletableByUser(NsUserTest.JAVAJIGI)),
-        () -> assertThrows(CannotDeleteException.class, () -> Q1.checkDeletableByUser(NsUserTest.SANJIGI)),
-        () -> assertThrows(CannotDeleteException.class, () -> Q2.checkDeletableByUser(NsUserTest.JAVAJIGI)),
-        () -> assertThrows(CannotDeleteException.class, () -> Q2.checkDeletableByUser(NsUserTest.SANJIGI))
+        () -> assertThat(javajigiQuestion.isAllAnswersWrittenByUser(NsUserTest.JAVAJIGI)).isEqualTo(true),
+        () -> assertThat(sanjigiQuestion.isAllAnswersWrittenByUser(NsUserTest.SANJIGI)).isEqualTo(false)
     );
   }
 
+  @DisplayName("삭제된 질문인지 확인")
   @Test
-  public void 질문의_답변이_특정유저의_것인지_확인() {
+  public void testIsDeleted() {
     assertAll(
-        () -> assertThat(Q1.isAllAnswersWrittenByUser(NsUserTest.JAVAJIGI)).isEqualTo(true),
-        () -> assertThat(Q1.isAllAnswersWrittenByUser(NsUserTest.SANJIGI)).isEqualTo(false)
+        () -> assertThat(new Question(NsUserTest.JAVAJIGI, "title1", "contents1", true).isDeleted())
+            .isEqualTo(true),
+        () -> assertThat(new Question(NsUserTest.JAVAJIGI, "title1", "contents1", false).isDeleted())
+            .isEqualTo(false)
     );
   }
 
+  @DisplayName("유저가 삭제 할 수 있는 질의 확인")
   @Test
-  public void 질문_및_모든답변_제거() {
+  public void testCheckDeletableByUser() {
+    Question javagijiQuestion = new Question(
+        NsUserTest.JAVAJIGI,
+        "title1",
+        "contents1",
+        List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+    );
+    Question sanjigiQuestion = new Question(
+        NsUserTest.SANJIGI,
+        "title2",
+        "contents2",
+        List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+    );
+    assertAll(
+        () -> assertDoesNotThrow(() ->  javagijiQuestion.checkDeletableByUser(NsUserTest.JAVAJIGI)),
+        () -> assertThrows(CannotDeleteException.class, () -> javagijiQuestion.checkDeletableByUser(NsUserTest.SANJIGI)),
+        () -> assertThrows(CannotDeleteException.class, () -> sanjigiQuestion.checkDeletableByUser(NsUserTest.JAVAJIGI)),
+        () -> assertThrows(CannotDeleteException.class, () -> sanjigiQuestion.checkDeletableByUser(NsUserTest.SANJIGI))
+    );
+  }
+
+  @DisplayName("질문 및 모든 답변 제거")
+  @Test
+  public void testDeleteWithAllAnswers() {
     Question question = new Question(
         NsUserTest.JAVAJIGI,
         "title1",
@@ -86,9 +135,16 @@ public class QuestionTest {
         );
   }
 
+  @DisplayName("삭제 히스토리 변환")
   @Test
-  public void 삭제_히스토리_변환() {
-    assertThat(Q1.toDeleteHistory())
+  public void testToDeleteHistory() {
+    Question javagijiQuestion = new Question(
+        NsUserTest.JAVAJIGI,
+        "title1",
+        "contents1",
+        List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1"))
+    );
+    assertThat(javagijiQuestion.toDeleteHistory())
         .contains(
             new DeleteHistory(ContentType.QUESTION, 0L,  NsUserTest.JAVAJIGI, LocalDateTime.now()),
             new DeleteHistory(ContentType.ANSWER, null,NsUserTest.JAVAJIGI, LocalDateTime.now())
