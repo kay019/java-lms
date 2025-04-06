@@ -5,22 +5,17 @@ import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Answer {
     private Long id;
-
     private NsUser writer;
-
     private Question question;
-
     private String contents;
-
     private boolean deleted = false;
-
     private LocalDateTime createdDate = LocalDateTime.now();
-
     private LocalDateTime updatedDate;
-
     public Answer() {
     }
 
@@ -43,13 +38,18 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
+    public DeleteHistory delete(NsUser loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new UnAuthorizedException("답변을 삭제할 권한이 없습니다.");
+        }
+
+        delete();
+
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    private void delete() {
+        this.deleted = true;
     }
 
     public boolean isDeleted() {
@@ -60,20 +60,12 @@ public class Answer {
         return this.writer.equals(writer);
     }
 
-    public NsUser getWriter() {
-        return writer;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
     public void toQuestion(Question question) {
         this.question = question;
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
     }
 }
