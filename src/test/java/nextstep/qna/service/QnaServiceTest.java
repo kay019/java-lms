@@ -24,10 +24,8 @@ import static org.mockito.Mockito.when;
 public class QnaServiceTest {
     @Mock
     private QuestionRepository questionRepository;
-
     @Mock
     private DeleteHistoryService deleteHistoryService;
-
     @InjectMocks
     private QnAService qnAService;
 
@@ -39,7 +37,7 @@ public class QnaServiceTest {
     private NsUser otherUser;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         writer = new NsUser(1L, "javajigi", "password", "name", "javajigi@slipp.net");
         otherUser = new NsUser(2L, "sanjigi", "password", "name", "sanjigi@slipp.net");
         questionId = 1L;
