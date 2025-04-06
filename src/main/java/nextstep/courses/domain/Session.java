@@ -1,8 +1,5 @@
 package nextstep.courses.domain;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUsers;
@@ -14,16 +11,14 @@ public class Session {
     private CoverImage coverImage;
     private SessionStatus sessionStatus;
     private RegistrationPolicy registrationPolicy;
-    private LocalDateTime startedAt;
-    private LocalDateTime endedAt;
+    private SessionPeriod sessionPeriod;
 
-    Session(long id, CoverImage coverImage, SessionStatus sessionStatus, RegistrationPolicy registrationPolicy, LocalDateTime startedAt, LocalDateTime endedAt) {
+    Session(long id, CoverImage coverImage, SessionStatus sessionStatus, RegistrationPolicy registrationPolicy, SessionPeriod sessionPeriod) {
         this.id = id;
         this.coverImage = coverImage;
         this.sessionStatus = sessionStatus;
         this.registrationPolicy = registrationPolicy;
-        this.startedAt = startedAt;
-        this.endedAt = endedAt;
+        this.sessionPeriod = sessionPeriod;
     }
 
     public void toCourse(Course course) {
@@ -45,4 +40,6 @@ public class Session {
 
         return new Payment("", this, nsUser, paymentAmount);
     }
+
+
 }

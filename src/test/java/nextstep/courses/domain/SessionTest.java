@@ -21,15 +21,13 @@ class SessionTest {
     @ParameterizedTest
     @EnumSource(value = SessionStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "RECRUITING")
     void 강의_수강신청은_강의_상태가_모집중일_때만_가능하다(SessionStatus sessionStatus) {
-        int maxStudentCount = 1;
         int sessionFee = 20000;
+        int maxStudentCount = 1;
 
-        CoverImage coverImage = CoverImageTest.createCoverImage1();
-        LocalDateTime startedAt = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
-        LocalDateTime endedAt = LocalDateTime.of(2023, 10, 1, 23, 0, 0);
-
-        Session session
-            = SessionFactory.ofPaid(1, coverImage, sessionStatus, sessionFee, maxStudentCount, startedAt, endedAt);
+        Session session = new SessionBuilder()
+                .paid(sessionFee, maxStudentCount)
+                .sessionStatus(sessionStatus)
+                .build();
 
         IllegalStateException e = assertThrows(IllegalStateException.class,
             () -> session.register(NsUserTest.JAVAJIGI, new Money(sessionFee)));
@@ -39,16 +37,14 @@ class SessionTest {
 
     @Test
     void register하면_Payment객체를_응답한다() {
-        int maxStudentCount = 1;
         int sessionFee = 20000;
+        int maxStudentCount = 1;
         NsUser loginUser = NsUserTest.JAVAJIGI;
 
-        CoverImage coverImage = CoverImageTest.createCoverImage1();
-        LocalDateTime startedAt = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
-        LocalDateTime endedAt = LocalDateTime.of(2023, 10, 1, 23, 0, 0);
-
-        Session session
-            = SessionFactory.ofPaid(1, coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
+        Session session = new SessionBuilder()
+                .paid(sessionFee, maxStudentCount)
+                .sessionStatus(SessionStatus.RECRUITING)
+                .build();
 
         Payment payment = session.register(loginUser, new Money(sessionFee));
 

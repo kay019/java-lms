@@ -14,15 +14,13 @@ class PaidRegistrationPolicyTest {
 
     @Test
     void 유료_강의는_강의_최대_수강_인원을_초과할_수_없다() {
-        int maxStudentCount = 1;
         int sessionFee = 20000;
+        int maxStudentCount = 1;
 
-        CoverImage coverImage = CoverImageTest.createCoverImage1();
-        LocalDateTime startedAt = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
-        LocalDateTime endedAt = LocalDateTime.of(2023, 10, 1, 23, 0, 0);
-
-        Session session
-            = SessionFactory.ofPaid(1, coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
+        Session session = new SessionBuilder()
+                .paid(sessionFee, maxStudentCount)
+                .sessionStatus(SessionStatus.RECRUITING)
+                .build();
 
         IllegalArgumentException e = catchIllegalArgumentException(() -> {
             session.register(NsUserTest.JAVAJIGI, new Money(sessionFee));
@@ -34,15 +32,13 @@ class PaidRegistrationPolicyTest {
 
     @Test
     void 유료_강의는_수강생이_결제한_금액과_수강료가_일치할_때_수강_신청이_가능하다() {
-        int maxStudentCount = 1;
         int sessionFee = 20000;
+        int maxStudentCount = 1;
 
-        CoverImage coverImage = CoverImageTest.createCoverImage1();
-        LocalDateTime startedAt = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
-        LocalDateTime endedAt = LocalDateTime.of(2023, 10, 1, 23, 0, 0);
-
-        Session session
-            = SessionFactory.ofPaid(2, coverImage, SessionStatus.RECRUITING, sessionFee, maxStudentCount, startedAt, endedAt);
+        Session session = new SessionBuilder()
+                .paid(sessionFee, maxStudentCount)
+                .sessionStatus(SessionStatus.RECRUITING)
+                .build();
 
         IllegalArgumentException e = catchIllegalArgumentException(() -> {
             session.register(NsUserTest.JAVAJIGI, new Money(sessionFee - 1));
