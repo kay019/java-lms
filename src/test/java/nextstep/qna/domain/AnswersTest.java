@@ -26,6 +26,12 @@ public class AnswersTest {
   }
 
   @Test
+  public void isEmpty_빈_답변여부_테스트() {
+    Answers answers = new Answers();
+    assertThat(answers.isEmpty()).isTrue();
+  }
+
+  @Test
   public void areAllAnswersSameWriter_모두_같은_작성자() {
     Answers answers = new Answers(List.of(answer1, answer2));
 
@@ -47,5 +53,7 @@ public class AnswersTest {
     assertThat(deleteHistories).hasSize(2);
     assertThat(deleteHistories.get(0)).isEqualTo(new DeleteHistory(ContentType.ANSWER, 1L, user));
     assertThat(deleteHistories.get(1)).isEqualTo(new DeleteHistory(ContentType.ANSWER, 2L, user));
+    assertThat(answer1.isDeleted()).isTrue();
+    assertThat(answer2.isDeleted()).isTrue();
   }
 }

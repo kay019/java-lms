@@ -28,6 +28,10 @@ public class Answers {
     return newList;
   }
 
+  public boolean isEmpty() {
+    return answerList.isEmpty();
+  }
+
   public boolean areAllAnswersSameWriter(NsUser loginUser) {
     return answerList.stream()
         .allMatch(answer -> answer.isOwner(loginUser));
