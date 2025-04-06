@@ -33,7 +33,6 @@ public class Answer {
     this(null, writer, question, contents, false, createdDate);
   }
 
-
   public Answer(NsUser writer, Question question, String contents, boolean deleted) {
     this(null, writer, question, contents, deleted, LocalDateTime.now());
   }
@@ -77,10 +76,6 @@ public class Answer {
 
   public boolean isOwner(NsUser writer) {
     return this.writer.equals(writer);
-  }
-
-  public NsUser getWriter() {
-    return writer;
   }
 
   public void toQuestion(Question question) {
