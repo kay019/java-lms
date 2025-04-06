@@ -1,9 +1,6 @@
 package nextstep.users.domain;
 
-import nextstep.qna.UnAuthorizedException;
-
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class NsUser {
     public static final GuestNsUser GUEST_USER = new GuestNsUser();
