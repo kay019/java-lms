@@ -46,7 +46,7 @@ public class Question {
         delete();
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer));
 
         deleteHistories.addAll(answers.stream()
                 .map(answer -> answer.delete(loginUser))

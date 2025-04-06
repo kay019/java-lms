@@ -5,8 +5,6 @@ import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Answer {
     private Long id;
@@ -45,7 +43,7 @@ public class Answer {
 
         delete();
 
-        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        return new DeleteHistory(ContentType.ANSWER, id, writer);
     }
 
     private void delete() {
