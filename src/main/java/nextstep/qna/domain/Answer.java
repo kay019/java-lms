@@ -34,7 +34,6 @@ public class Answer {
 
     public DeleteHistory delete() {
         this.deleted = true;
-        this.updatedDate = LocalDateTime.now();
         return createDeleteHistory();
     }
 

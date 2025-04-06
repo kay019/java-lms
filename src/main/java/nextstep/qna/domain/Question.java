@@ -57,7 +57,6 @@ public class Question {
 
     private List<DeleteHistory> delete() {
         this.deleted = true;
-        this.updatedDate = LocalDateTime.now();
 
         List<DeleteHistory> deleteHistoryList = new ArrayList<>();
         deleteHistoryList.add(new DeleteHistory(ContentType.QUESTION, id, writer));
