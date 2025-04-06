@@ -36,7 +36,9 @@ public class QuestionTest {
             "title1",
             "contents1",
             List.of(new Answer(NsUserTest.JAVAJIGI, new Question(), "test content1")),
-            false
+            false,
+            LocalDateTime.now(),
+            LocalDateTime.now()
         )),
         () -> assertDoesNotThrow(() -> new Question(
             1L,
@@ -44,7 +46,9 @@ public class QuestionTest {
             "title1",
             "contents1",
             List.of(new Answer(NsUserTest.SANJIGI, new Question(), "test content1")),
-            false
+            false,
+            LocalDateTime.now(),
+            LocalDateTime.now()
         ))
     );
   }
@@ -52,8 +56,7 @@ public class QuestionTest {
   @DisplayName("답변 추가")
   @Test
   public void testAddAnswer() {
-    Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
-    question.addAnswer(AnswerTest.A1);
+    Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1", List.of(AnswerTest.A1));
     assertThat(question)
         .isEqualTo(new Question(NsUserTest.JAVAJIGI, "title1", "contents1", List.of(AnswerTest.A1)));
   }

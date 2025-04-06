@@ -29,10 +29,6 @@ public class Question {
   public Question() {
   }
 
-  public Question(NsUser writer, String title, String contents) {
-    this(0L, writer, title, contents, new ArrayList<>(), false);
-  }
-
   public Question(NsUser writer, String title, String contents, boolean deleted) {
     this(0L, writer, title, contents, new ArrayList<>(), deleted);
   }
@@ -49,18 +45,31 @@ public class Question {
     this(id, writer, title, contents, new ArrayList<>(), false);
   }
 
+  public Question(Question question, List<Answer> additionalAnswers) {
+    this(question);
+    if (additionalAnswers.stream().anyMatch(answer -> !answer.isQuestion((this)))) {
+      throw new IllegalArgumentException("추가되는 답변의 질문 정보가 해당 질문과 다릅니다.");
+    }
+    this.answers.addAll(additionalAnswers);
+  }
+
+  public Question(Question question) {
+    this(question.id, question.writer, question.title, question.contents, question.answers, question.deleted, question.createdDate, question.updatedDate);
+  }
+
   public Question(Long id, NsUser writer, String title, String contents, List<Answer> answers, boolean deleted) {
+    this(id, writer, title, contents, answers, deleted, LocalDateTime.now(), null);
+  }
+
+  public Question(Long id, NsUser writer, String title, String contents, List<Answer> answers, boolean deleted, LocalDateTime createdDate,LocalDateTime updatedDate) {
     this.id = id;
     this.writer = writer;
     this.title = title;
     this.contents = contents;
     this.answers = answers;
     this.deleted = deleted;
-  }
-
-  public void addAnswer(Answer answer) {
-    answer.toQuestion(this);
-    answers.add(answer);
+    this.createdDate = createdDate;
+    this.updatedDate = updatedDate;
   }
 
   public boolean isOwner(NsUser loginUser) {
@@ -94,9 +103,7 @@ public class Question {
         List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
     );
 
-    res.addAll(
-        answers.stream().map(Answer::toDeleteHistory).collect(Collectors.toList())
-    );
+    res.addAll(answers.stream().map(Answer::toDeleteHistory).collect(Collectors.toList()));
     return res;
   }
 

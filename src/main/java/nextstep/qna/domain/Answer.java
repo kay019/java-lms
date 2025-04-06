@@ -26,26 +26,18 @@ public class Answer {
   }
 
   public Answer(NsUser writer, Question question, String contents) {
-    this(null, writer, question, contents, false, LocalDateTime.now());
-  }
-
-  public Answer(NsUser writer, Question question, String contents, LocalDateTime createdDate) {
-    this(null, writer, question, contents, false, createdDate);
+    this(null, writer, question, contents, false);
   }
 
   public Answer(NsUser writer, Question question, String contents, boolean deleted) {
-    this(null, writer, question, contents, deleted, LocalDateTime.now());
-  }
-
-  public Answer(NsUser writer, Question question, String contents, boolean deleted, LocalDateTime createdDate) {
-    this(null, writer, question, contents, deleted, createdDate);
+    this(null, writer, question, contents, deleted);
   }
 
   public Answer(Long id, NsUser writer, Question question, String contents) {
-    this(id, writer, question, contents, false, LocalDateTime.now());
+    this(id, writer, question, contents, false);
   }
 
-  public Answer(Long id, NsUser writer, Question question, String contents, boolean deleted, LocalDateTime createdDate) {
+  public Answer(Long id, NsUser writer, Question question, String contents, boolean deleted) {
     this.id = id;
     if (writer == null) {
       throw new UnAuthorizedException();
@@ -59,7 +51,6 @@ public class Answer {
     this.question = question;
     this.contents = contents;
     this.deleted = deleted;
-    this.createdDate = createdDate;
   }
 
   public DeleteHistory toDeleteHistory() {
@@ -74,12 +65,12 @@ public class Answer {
     return deleted;
   }
 
-  public boolean isOwner(NsUser writer) {
-    return this.writer.equals(writer);
+  public boolean isQuestion(Question question) {
+    return this.question.equals(question);
   }
 
-  public void toQuestion(Question question) {
-    this.question = question;
+  public boolean isOwner(NsUser writer) {
+    return this.writer.equals(writer);
   }
 
   @Override

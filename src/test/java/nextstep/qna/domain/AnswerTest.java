@@ -17,13 +17,12 @@ public class AnswerTest {
   @DisplayName("생성자")
   @Test
   public void testConstructor() {
-    assertDoesNotThrow(() ->
-        new Answer(
-            0L,
-            NsUserTest.JAVAJIGI,
-            QuestionTest.Q1,
-            "Answers Contents1", false,
-            LocalDateTime.now()
+    assertDoesNotThrow(() -> new Answer(
+        0L,
+        NsUserTest.JAVAJIGI,
+        QuestionTest.Q1,
+        "Answers Contents1",
+        false
         )
     );
   }
@@ -39,29 +38,22 @@ public class AnswerTest {
   @DisplayName("삭제")
   @Test
   public void testDelete() {
-    LocalDateTime createdDate = LocalDateTime.now();
-    Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", createdDate);
+    Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
     answer.delete();
     assertThat(answer)
-        .isEqualTo(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", true, createdDate));
+        .isEqualTo(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", true));
   }
 
   @DisplayName("삭제된 데이터 여부 확인")
   @Test
   public void testIsDeleted() {
+    Answer deleted = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", true);
+    Answer notDeleted = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", false);
     assertAll(
-        () -> assertThat(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", true).isDeleted())
+        () -> assertThat(deleted.isDeleted())
             .isEqualTo(true),
-        () -> assertThat(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1", false).isDeleted())
+        () -> assertThat(notDeleted.isDeleted())
             .isEqualTo(false)
     );
-  }
-
-  @DisplayName("답변 질문 등록")
-  @Test
-  public void testToQuestion() {
-    Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
-    answer.toQuestion(QuestionTest.Q2);
-    assertThat(answer).isEqualTo(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q2, "Answers Contents1"));
   }
 }
