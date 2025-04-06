@@ -6,24 +6,16 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
     private String title;
     private String contents;
     private NsUser writer;
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
     private boolean deleted = false;
     private LocalDateTime createdDate = LocalDateTime.now();
     private LocalDateTime updatedDate;
-
-    public Question() {
-    }
-
-    public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
-    }
 
     public Question(Long id, NsUser writer, String title, String contents) {
         this.id = id;
@@ -32,45 +24,41 @@ public class Question {
         this.contents = contents;
     }
 
-    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
-        if (!isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
-        }
-
-        delete();
-
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer));
-
-        deleteHistories.addAll(answers.stream()
-                .map(answer -> answer.delete(loginUser))
-                .collect(Collectors.toList()));
-
-        return deleteHistories;
+    public void addAnswer(Answer answer) {
+        answers = new Answers(answers, answer);
+        answer.toQuestion(this);
+        this.updatedDate = LocalDateTime.now();
     }
-
 
     private boolean isOwner(NsUser loginUser) {
         return writer.equals(loginUser);
     }
 
-    private void delete() {
-        this.deleted = true;
-    }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
-        answers.add(answer);
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        validateDeletable(loginUser);
+        return this.delete();
+    }
+
+    private void validateDeletable(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        answers.areAllAnswersSameWriter(loginUser);
+    }
+
+    private List<DeleteHistory> delete() {
+        this.deleted = true;
+        this.updatedDate = LocalDateTime.now();
+
+        List<DeleteHistory> deleteHistoryList = new ArrayList<>();
+        deleteHistoryList.add(new DeleteHistory(ContentType.QUESTION, id, writer));
+        deleteHistoryList.addAll(answers.delete());
+        return deleteHistoryList;
     }
 
     @Override

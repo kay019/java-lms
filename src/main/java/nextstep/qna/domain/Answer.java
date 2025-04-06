@@ -14,40 +14,32 @@ public class Answer {
     private boolean deleted = false;
     private LocalDateTime createdDate = LocalDateTime.now();
     private LocalDateTime updatedDate;
-    public Answer() {
-    }
-
-    public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
-    }
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
+        validate(writer, question);
         this.id = id;
-        if(writer == null) {
-            throw new UnAuthorizedException();
-        }
-
-        if(question == null) {
-            throw new NotFoundException();
-        }
-
         this.writer = writer;
         this.question = question;
         this.contents = contents;
     }
 
-    public DeleteHistory delete(NsUser loginUser) {
-        if (!isOwner(loginUser)) {
-            throw new UnAuthorizedException("답변을 삭제할 권한이 없습니다.");
+    private static void validate(NsUser writer, Question question) {
+        if(writer == null) {
+            throw new UnAuthorizedException();
         }
-
-        delete();
-
-        return new DeleteHistory(ContentType.ANSWER, id, writer);
+        if(question == null) {
+            throw new NotFoundException();
+        }
     }
 
-    private void delete() {
+    public DeleteHistory delete() {
         this.deleted = true;
+        this.updatedDate = LocalDateTime.now();
+        return createDeleteHistory();
+    }
+
+    public DeleteHistory createDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, id, writer);
     }
 
     public boolean isDeleted() {
@@ -66,4 +58,5 @@ public class Answer {
     public String toString() {
         return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
     }
+
 }
