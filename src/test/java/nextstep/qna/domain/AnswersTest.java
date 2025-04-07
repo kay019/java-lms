@@ -20,6 +20,15 @@ class AnswersTest {
     }
 
     @Test
+    void addAnswerTest() {
+        Answers sut = new Answers(List.of(A1));
+
+        sut = sut.addAnswer(A2);
+
+        assertThat(sut).isEqualTo(new Answers(List.of(A1, A2)));
+    }
+
+    @Test
     void checkOwnersTest() {
         Answers answers = new Answers(List.of(A1));
 
@@ -31,7 +40,7 @@ class AnswersTest {
         assertThatThrownBy(() -> ANSWERS.checkOwners(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class)
                 .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
     }
-    
+
     @Test
     void createHistoriesTest() {
         List<DeleteHistory> histories = ANSWERS.createHistories();
