@@ -4,8 +4,6 @@ import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Question {
     private Long id;
@@ -16,7 +14,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private final Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -41,15 +39,20 @@ public class Question {
     public void delete(NsUser loginUser) throws CannotDeleteException {
         checkUser(loginUser);
         this.deleted = true;
-        answers.forEach(Answer::delete);
+        answers.delete();
     }
 
-    public Long getId() {
-        return id;
+    public DeleteHistories deleteHistories() {
+        DeleteHistories deleteHistories = answers.deleteHistories();
+        deleteHistories.add(deleteHistory());
+        return deleteHistories;
     }
 
-    public NsUser getWriter() {
-        return writer;
+    private DeleteHistory deleteHistory() {
+        if (deleted) {
+            return new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now());
+        }
+        return null;
     }
 
     public void addAnswer(Answer answer) {
@@ -71,19 +74,10 @@ public class Question {
     }
 
     private boolean isAnswersOwner(NsUser loginUser) {
-        return answers.stream().allMatch(answer -> answer.isOwner(loginUser));
+        return answers.isOwner(loginUser);
     }
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public List<Answer> answers() {
-        return answers;
-    }
-
-    @Override
-    public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 }

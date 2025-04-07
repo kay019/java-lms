@@ -13,4 +13,4 @@
 ### step1
 - [x] Question에 메시지 보내서 질문, 답변 삭제하기
 - [x] Question으로 DeleteHistory 생성하여 저장하기
-- [ ] 힌트 참고해서 보강
+- [x] 힌트 참고해서 보강

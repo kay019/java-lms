@@ -1,22 +1,19 @@
 package nextstep.qna.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class DeleteHistories {
-    private final List<DeleteHistory> deleteHistories;
+    private final Set<DeleteHistory> deleteHistories;
 
-    public DeleteHistories(List<DeleteHistory> deleteHistories) {
+    public DeleteHistories(Set<DeleteHistory> deleteHistories) {
         this.deleteHistories = deleteHistories;
     }
 
-    public static DeleteHistories from(Question question) {
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(question));
-        question.answers()
-                .forEach(answer -> deleteHistories.add(new DeleteHistory(answer)));
-        return new DeleteHistories(deleteHistories);
+    public void add(DeleteHistory deleteHistory) {
+        if (deleteHistory != null) {
+            deleteHistories.add(deleteHistory);
+        }
     }
 
     @Override
@@ -29,5 +26,14 @@ public class DeleteHistories {
     @Override
     public int hashCode() {
         return Objects.hashCode(deleteHistories);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (DeleteHistory deleteHistory : deleteHistories) {
+            sb.append(deleteHistory);
+        }
+        return sb.toString();
     }
 }
