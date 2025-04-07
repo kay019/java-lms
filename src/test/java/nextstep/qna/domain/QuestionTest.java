@@ -2,7 +2,9 @@ package nextstep.qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,9 +19,9 @@ public class QuestionTest {
     @Test
     @DisplayName("질문 삭제 성공")
     public void delete_성공() throws CannotDeleteException {
-        DeleteHistory deleteHistory = Q1.delete(NsUserTest.JAVAJIGI);
+        List<DeleteHistory> deleteHistories = Q1.delete(NsUserTest.JAVAJIGI);
         assertThat(Q1.isDeleted()).isTrue();
-        assertThat(deleteHistory).isEqualTo(new DeleteHistory(ContentType.QUESTION, Q1.getId(), Q1.getWriter(), LocalDateTime.now()));
+        assertThat(deleteHistories).isEqualTo(List.of(new DeleteHistory(ContentType.QUESTION, Q1.getId(), Q1.getWriter(), LocalDateTime.now())));
     }
 
     @Test
