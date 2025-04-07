@@ -26,51 +26,43 @@ public class Answer {
     }
 
     public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents, false);
-    }
-
-    public Answer(NsUser writer, Question question, String contents, boolean deleted) {
-        this(null, writer, question, contents, deleted);
+        this(null, writer, question, contents);
     }
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
-        this(id, writer, question, contents, false);
-    }
-
-    public Answer(Long id, NsUser writer, Question question, String contents, boolean deleted) {
         this.id = id;
-        if (writer == null) {
+        if(writer == null) {
             throw new UnAuthorizedException();
         }
 
-        if (question == null) {
+        if(question == null) {
             throw new NotFoundException();
         }
 
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.deleted = deleted;
     }
 
-    public DeleteHistory toDeleteHistory() {
-        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
-    }
-
-    public void delete() {
-        this.deleted = true;
+    public boolean isOwner(NsUser writer) {
+        return this.writer.equals(writer);
     }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public boolean isQuestion(Question question) {
-        return this.question.equals(question);
+    public void delete() {
+        this.deleted = true;
     }
 
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
+    public void link(Question question) {
+        this.question = question;
+        question.addAnswer(this);
+    }
+
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
     @Override

@@ -29,73 +29,23 @@ public class Question {
     public Question() {
     }
 
-    public Question(NsUser writer, String title, String contents, boolean deleted) {
-        this(0L, writer, title, contents, new ArrayList<>(), deleted);
-    }
-
-    public Question(NsUser writer, String title, String contents, List<Answer> answers) {
-        this(0L, writer, title, contents, answers, false);
-    }
-
-    public Question(NsUser writer, String title, String contents, List<Answer> answers, boolean deleted) {
-        this(0L, writer, title, contents, answers, deleted);
+    public Question(NsUser writer, String title, String contents) {
+        this(0L, writer, title, contents);
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this(id, writer, title, contents, new ArrayList<>(), false);
-    }
-
-    public Question(Question question, List<Answer> additionalAnswers) {
-        this(question);
-        if (additionalAnswers.stream().anyMatch(answer -> !answer.isQuestion((this)))) {
-            throw new IllegalArgumentException("추가되는 답변의 질문 정보가 해당 질문과 다릅니다.");
-        }
-        this.answers.addAll(additionalAnswers);
-    }
-
-    public Question(Question question) {
-        this(question.id, question.writer, question.title, question.contents, question.answers, question.deleted, question.createdDate, question.updatedDate);
-    }
-
-    public Question(Long id, NsUser writer, String title, String contents, List<Answer> answers, boolean deleted) {
-        this(id, writer, title, contents, answers, deleted, LocalDateTime.now(), null);
-    }
-
-    public Question(Long id, NsUser writer, String title, String contents, List<Answer> answers, boolean deleted, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.answers = answers;
-        this.deleted = deleted;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
     }
 
-    public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
-    }
-
-    public boolean isAllAnswersWrittenByUser(NsUser loginUser) {
-        return answers.stream().allMatch(answer -> answer.isOwner(loginUser));
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
     }
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public void checkDeletableByUser(NsUser loginUser) throws CannotDeleteException {
-        if (!isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-        if (!isAllAnswersWrittenByUser(loginUser)) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-        }
-    }
-
-    public void deleteWithAllAnswers() {
-        this.deleted = true;
-        answers.forEach(Answer::delete);
     }
 
     public List<DeleteHistory> toDeleteHistory() {
@@ -105,6 +55,28 @@ public class Question {
 
         res.addAll(answers.stream().map(Answer::toDeleteHistory).collect(Collectors.toList()));
         return res;
+    }
+
+    public void checkDeletableByUser(NsUser loginUser) throws CannotDeleteException {
+        if (isNotOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        if (isNotAllAnswersWrittenByUser(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    public void delete() {
+        this.deleted = true;
+        answers.forEach(Answer::delete);
+    }
+
+    private boolean isNotOwner(NsUser loginUser) {
+        return !writer.equals(loginUser);
+    }
+
+    private boolean isNotAllAnswersWrittenByUser(NsUser loginUser) {
+        return !answers.stream().allMatch(answer -> answer.isOwner(loginUser));
     }
 
     @Override
