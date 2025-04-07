@@ -91,4 +91,9 @@ public class Question {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
     }
+
+    public void checkAnswers(NsUser loginUser) {
+        Answers answers = new Answers(this.answers);
+        answers.checkOwners(loginUser);
+    }
 }
