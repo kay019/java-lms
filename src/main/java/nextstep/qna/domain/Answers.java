@@ -14,16 +14,12 @@ public class Answers {
         this.answers = new ArrayList<>();
     }
 
-    public List<DeleteHistory> toDeleteHistory() {
-        return answers.stream().map(Answer::toDeleteHistory).collect(Collectors.toList());
+    public List<DeleteHistory> delete() {
+        return answers.stream().map(Answer::delete).collect(Collectors.toList());
     }
 
     public void add(Answer answer) {
         answers.add(answer);
-    }
-
-    public void delete() {
-        answers.forEach(Answer::delete);
     }
 
     public boolean isNotOwner(NsUser loginUser) {

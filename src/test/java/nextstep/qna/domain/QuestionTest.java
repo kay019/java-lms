@@ -6,10 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class QuestionTest {
     public static final Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
@@ -21,12 +23,22 @@ public class QuestionTest {
         assertDoesNotThrow(() -> new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1"));
     }
 
-    @DisplayName("삭제")
+    @DisplayName("삭제 후 삭제 히스토리 목록들을 가져온다.")
     @Test
-    public void testDelete() {
+    public void testDelete() throws CannotDeleteException {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        question.delete();
-        assertThat(question.isDeleted()).isTrue();
+        AnswerTest.A1.link(question);
+        List<DeleteHistory> deleteHistoryList = question.delete(NsUserTest.JAVAJIGI);
+
+        assertAll(
+            () -> assertThat(question.isDeleted()).isTrue(),
+            () -> assertThat(deleteHistoryList)
+                .containsExactly(
+                    new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
+                    new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
+                )
+        );
+
     }
 
     @DisplayName("유저가 삭제할수 없는 질문이면 예외를 던짐 - 질문 작성자가 아닌 경우")
@@ -55,16 +67,16 @@ public class QuestionTest {
         assertDoesNotThrow(() -> question.checkDeletableByUser(NsUserTest.JAVAJIGI));
     }
 
-    @DisplayName("삭제 히스토리 변환")
-    @Test
-    public void testToDeleteHistory() {
-        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
-        AnswerTest.A1.link(question);
-
-        assertThat(question.toDeleteHistory())
-            .containsExactly(
-                new DeleteHistory(ContentType.QUESTION, 0L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
-                new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
-            );
-    }
+//    @DisplayName("삭제 히스토리 변환")
+//    @Test
+//    public void testToDeleteHistory() {
+//        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+//        AnswerTest.A1.link(question);
+//
+//        assertThat(question.toDeleteHistory())
+//            .containsExactly(
+//                new DeleteHistory(ContentType.QUESTION, 0L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
+//                new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now())
+//            );
+//    }
 }

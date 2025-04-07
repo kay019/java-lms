@@ -22,9 +22,6 @@ public class Answer {
 
     private LocalDateTime updatedDate;
 
-    public Answer() {
-    }
-
     public Answer(NsUser writer, Question question, String contents) {
         this(null, writer, question, contents);
     }
@@ -52,17 +49,14 @@ public class Answer {
         return deleted;
     }
 
-    public void delete() {
+    public DeleteHistory delete() {
         this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
     public void link(Question question) {
         this.question = question;
         question.addAnswer(this);
-    }
-
-    public DeleteHistory toDeleteHistory() {
-        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
     @Override

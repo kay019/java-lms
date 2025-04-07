@@ -16,16 +16,12 @@ public class QnAService {
     @Resource(name = "questionRepository")
     private QuestionRepository questionRepository;
 
-    @Resource(name = "answerRepository")
-    private AnswerRepository answerRepository;
-
     @Resource(name = "deleteHistoryService")
     private DeleteHistoryService deleteHistoryService;
 
     @Transactional
     public void deleteQuestion(NsUser loginUser, long questionId) throws CannotDeleteException {
         Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
-        question.delete(loginUser);
-        deleteHistoryService.saveAll(question.toDeleteHistory());
+        deleteHistoryService.saveAll(question.delete(loginUser));
     }
 }

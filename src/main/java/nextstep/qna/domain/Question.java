@@ -51,14 +51,15 @@ public class Question {
         return !writer.equals(loginUser);
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         checkDeletableByUser(loginUser);
-        delete();
-    }
-
-    void delete() {
         this.deleted = true;
-        answers.delete();
+        List<DeleteHistory> res = new ArrayList<>(
+            List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
+        );
+
+        res.addAll(answers.delete());
+        return res;
     }
 
     void checkDeletableByUser(NsUser loginUser) throws CannotDeleteException {
@@ -70,14 +71,14 @@ public class Question {
         }
     }
 
-    public List<DeleteHistory> toDeleteHistory() {
-        List<DeleteHistory> res = new ArrayList<>(
-            List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
-        );
-
-        res.addAll(answers.toDeleteHistory());
-        return res;
-    }
+//    public List<DeleteHistory> toDeleteHistory() {
+//        List<DeleteHistory> res = new ArrayList<>(
+//            List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
+//        );
+//
+//        res.addAll(answers.toDeleteHistory());
+//        return res;
+//    }
 
     @Override
     public boolean equals(Object o) {
