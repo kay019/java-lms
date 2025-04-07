@@ -1,7 +1,9 @@
 package nextstep.qna.domain.question;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.AnswerTest;
 import nextstep.qna.domain.Question;
 import nextstep.qna.domain.qustion.QuestionDeletable;
@@ -16,9 +18,7 @@ class QuestionDeletableAnswerTest {
         Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
         QuestionDeletable questionDeletable = new QuestionDeletableAnswer();
 
-        boolean result = questionDeletable.deletable(question, question.getWriter());
-
-        assertThat(result).isTrue();
+        assertThatNoException().isThrownBy(() -> questionDeletable.checkDeletable(question, question.getWriter()));
     }
 
     @Test
@@ -27,9 +27,7 @@ class QuestionDeletableAnswerTest {
         QuestionDeletable questionDeletable = new QuestionDeletableAnswer();
         question.addAnswer(AnswerTest.A1);
 
-        boolean result = questionDeletable.deletable(question, question.getWriter());
-
-        assertThat(result).isTrue();
+        assertThatNoException().isThrownBy(() -> questionDeletable.checkDeletable(question, question.getWriter()));
     }
 
     @Test
@@ -38,8 +36,7 @@ class QuestionDeletableAnswerTest {
         QuestionDeletable questionDeletable = new QuestionDeletableAnswer();
         question.addAnswer(AnswerTest.A2);
 
-        boolean result = questionDeletable.deletable(question, question.getWriter());
-
-        assertThat(result).isFalse();
+        assertThatThrownBy(() -> questionDeletable.checkDeletable(question, question.getWriter())).isInstanceOf(
+                CannotDeleteException.class);
     }
 }

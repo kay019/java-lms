@@ -91,9 +91,7 @@ public class Question {
 
     private void checkDeletable(NsUser loginUser) throws CannotDeleteException {
         for (QuestionDeletable condition : deletableConditions) {
-            if (!condition.deletable(this, loginUser)) {
-                throw new CannotDeleteException(condition.reason());
-            }
+            condition.checkDeletable(this, loginUser);
         }
     }
 
