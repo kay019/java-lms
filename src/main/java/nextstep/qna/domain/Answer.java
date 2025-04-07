@@ -21,9 +21,6 @@ public class Answer {
 
     private LocalDateTime updatedDate;
 
-    public Answer() {
-    }
-
     public Answer(NsUser writer, Question question, String contents) {
         this(null, writer, question, contents);
     }
@@ -51,21 +48,8 @@ public class Answer {
         return deleted;
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
-    }
-
     public NsUser getWriter() {
         return writer;
-    }
-
-    public String getContents() {
-        return contents;
     }
 
     public void toQuestion(Question question) {
