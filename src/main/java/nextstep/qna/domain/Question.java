@@ -78,7 +78,7 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public List<Answer> answers() {
         return answers;
     }
 
