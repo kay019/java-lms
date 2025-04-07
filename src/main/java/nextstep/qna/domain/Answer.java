@@ -75,7 +75,7 @@ public class Answer {
         validateDelete(loginUser);
         this.deleted = true;
         this.updatedDate = LocalDateTime.now();
-        return new DeleteHistory(ContentType.ANSWER, getId(), getWriter(), LocalDateTime.now());
+        return DeleteHistoryFactory.ofAnswer(getId(), loginUser, LocalDateTime.now());
     }
 
     @Override
