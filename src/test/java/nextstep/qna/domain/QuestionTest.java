@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -23,5 +24,21 @@ public class QuestionTest {
     @Test
     void checkOwnerTest() {
         assertThatNoException().isThrownBy(() -> Q1.checkOwner(NsUserTest.JAVAJIGI));
+    }
+
+    @DisplayName("데이터의 상태를 삭제 상태로 변경 할 수 있다.")
+    @Test
+    void deleteTest() {
+        Q2.delete();
+
+        assertThat(Q2.isDeleted()).isTrue();
+    }
+
+    @DisplayName("데이터 삭제 히스토리 내역을 생성한다.")
+    @Test
+    void createDeleteHistoryTest() {
+        DeleteHistory sut = Q1.createDeleteHistory();
+
+        assertThat(sut).isEqualTo(Q1.createDeleteHistory());
     }
 }

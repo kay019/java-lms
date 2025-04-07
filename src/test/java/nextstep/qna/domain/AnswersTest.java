@@ -12,11 +12,11 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 class AnswersTest {
+    public static final Answers ANSWERS = new Answers(List.of(A1, A2));
+
     @Test
     void createTest() {
-        Answers answers = new Answers(List.of(A1, A2));
-
-        assertThat(answers).isEqualTo(new Answers(List.of(A1, A2)));
+        assertThat(new Answers(List.of(A1, A2))).isEqualTo(ANSWERS);
     }
 
     @Test
@@ -28,9 +28,14 @@ class AnswersTest {
 
     @Test
     void checkOwnersExceptionTest() {
-        Answers answers = new Answers(List.of(A1, A2));
-
-        assertThatThrownBy(() -> answers.checkOwners(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class)
+        assertThatThrownBy(() -> ANSWERS.checkOwners(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class)
                 .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+    }
+    
+    @Test
+    void createHistoriesTest() {
+        List<DeleteHistory> histories = ANSWERS.createHistories();
+
+        assertThat(histories).isEqualTo(List.of(A1.createDeleteHistory(), A2.createDeleteHistory()));
     }
 }

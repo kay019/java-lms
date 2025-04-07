@@ -96,4 +96,19 @@ public class Question {
         Answers answers = new Answers(this.answers);
         answers.checkOwners(loginUser);
     }
+
+    public DeleteHistory createDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, this.id, this.writer,
+                LocalDateTime.now());
+    }
+
+    public List<DeleteHistory> createAnswersHistory() {
+        Answers answers = new Answers(this.answers);
+        answers.deleteAll();
+        return answers.createHistories();
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
 }

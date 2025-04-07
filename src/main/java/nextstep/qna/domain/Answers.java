@@ -3,6 +3,7 @@ package nextstep.qna.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import nextstep.users.domain.NsUser;
 
 public class Answers {
@@ -17,6 +18,16 @@ public class Answers {
         for (Answer answer : answers) {
             answer.checkOwner(loginUser);
         }
+    }
+
+    public void deleteAll() {
+        for (Answer answer : answers) {
+            answer.delete();
+        }
+    }
+
+    public List<DeleteHistory> createHistories() {
+        return this.answers.stream().map(Answer::createDeleteHistory).collect(Collectors.toList());
     }
 
     @Override

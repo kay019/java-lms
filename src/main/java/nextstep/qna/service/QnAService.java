@@ -1,14 +1,11 @@
 package nextstep.qna.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
-import nextstep.qna.domain.Answer;
 import nextstep.qna.domain.AnswerRepository;
-import nextstep.qna.domain.ContentType;
 import nextstep.qna.domain.DeleteHistory;
 import nextstep.qna.domain.Question;
 import nextstep.qna.domain.QuestionRepository;
@@ -32,18 +29,10 @@ public class QnAService {
         Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
         question.checkOwner(loginUser);
         question.checkAnswers(loginUser);
-
-        List<Answer> answers = question.getAnswers();
-
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        question.setDeleted(true);
-        deleteHistories.add(
-                new DeleteHistory(ContentType.QUESTION, questionId, question.getWriter(), LocalDateTime.now()));
-        for (Answer answer : answers) {
-            answer.setDeleted(true);
-            deleteHistories.add(
-                    new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
-        }
-        deleteHistoryService.saveAll(deleteHistories);
+        question.delete();
+        List<DeleteHistory> histories = new ArrayList<>();
+        histories.add(question.createDeleteHistory());
+        histories.addAll(question.createAnswersHistory());
+        deleteHistoryService.saveAll(histories);
     }
 }
