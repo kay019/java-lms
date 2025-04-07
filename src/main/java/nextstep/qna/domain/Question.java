@@ -16,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -67,7 +67,7 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
 
@@ -78,24 +78,14 @@ public class Question {
 
     public List<DeleteHistory> delete(NsUser user) throws CannotDeleteException {
         validateOwner(user);
-        validateDeletableQuestion(user);
+        answers.validateAnswerByDifferentPerson(user);
         deleteQuestionAnswers();
         return toDeleteHistories();
     }
 
     private void deleteQuestionAnswers() {
         this.deleted = true;
-        for (Answer answer : answers) {
-            answer.delete();
-        }
-    }
-
-    private void validateDeletableQuestion(NsUser user) throws CannotDeleteException {
-        for (Answer answer : answers) {
-            if (!answer.isOwner(user)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
-        }
+        answers.deleteAnswers();
     }
 
     private void validateOwner(NsUser user) throws CannotDeleteException {
@@ -107,9 +97,7 @@ public class Question {
     private List<DeleteHistory> toDeleteHistories() {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
-        for (Answer answer : answers) {
-            deleteHistories.add(answer.toAnswerDeleteHistory());
-        }
+        deleteHistories.addAll(answers.toAnswersDeleteHistories());
         return deleteHistories;
     }
 }
