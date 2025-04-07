@@ -21,6 +21,14 @@ public class QuestionTest {
         assertDoesNotThrow(() -> new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1"));
     }
 
+    @DisplayName("삭제")
+    @Test
+    public void testDelete() {
+        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
+        question.delete();
+        assertThat(question.isDeleted()).isTrue();
+    }
+
     @DisplayName("유저가 삭제할수 없는 질문이면 예외를 던짐 - 질문 작성자가 아닌 경우")
     @Test
     public void testCheckDeletableByUser_throwExceptionByQuestionOwner() {

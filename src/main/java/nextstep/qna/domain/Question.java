@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
@@ -57,13 +56,9 @@ public class Question {
         delete();
     }
 
-    public List<DeleteHistory> toDeleteHistory() {
-        List<DeleteHistory> res = new ArrayList<>(
-            List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
-        );
-
-        res.addAll(answers.toDeleteHistory());
-        return res;
+    void delete() {
+        this.deleted = true;
+        answers.delete();
     }
 
     void checkDeletableByUser(NsUser loginUser) throws CannotDeleteException {
@@ -75,9 +70,13 @@ public class Question {
         }
     }
 
-    void delete() {
-        this.deleted = true;
-        answers.delete();
+    public List<DeleteHistory> toDeleteHistory() {
+        List<DeleteHistory> res = new ArrayList<>(
+            List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
+        );
+
+        res.addAll(answers.toDeleteHistory());
+        return res;
     }
 
     @Override

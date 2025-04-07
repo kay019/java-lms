@@ -19,6 +19,14 @@ public class AnswerTest {
         assertDoesNotThrow(() -> new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1"));
     }
 
+    @DisplayName("삭제")
+    @Test
+    public void testDelete() {
+        Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        answer.delete();
+        assertThat(answer.isDeleted()).isTrue();
+    }
+
     @DisplayName("삭제 히스토리 변환")
     @Test
     public void testToDeleteHistory() {

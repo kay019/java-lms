@@ -14,6 +14,6 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 - [x] 질문과 그에 따른 답변을 삭제할 수 있는 기능 추가
 - [x] 삭제 히스토리 추가 기능 추가
 - [x] 리펙토링 후 QnaServiceTest의 모든 테스트는 통과
-- [x] 도메인 객체에 get, set 메서드를 제거
-- [x] 도메인 객체 불변 객체로 수정
+- [x] 도메인 객체에 get, set 메서드를 최대한 제거
+- [x] Question Answers 필드 일급 컬렉션으로 추가
 
