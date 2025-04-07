@@ -5,10 +5,14 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class QuestionTest {
@@ -32,5 +36,21 @@ public class QuestionTest {
         assertThatThrownBy(() -> {
             Q2.delete(NsUserTest.SANJIGI);
         }).isInstanceOf(CannotDeleteException.class);
+    }
+
+    @DisplayName("질문 삭제 시, deleteHistory에 추가됩니다.")
+    @Test
+    public void delete_성공_질문자_답변자_같음() throws Exception {
+        Answer answer = new Answer(11L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        Q1.addAnswer(answer);
+
+        List<DeleteHistory> deleteHistories = Q1.delete(NsUserTest.JAVAJIGI);
+
+        assertThat(Q1.isDeleted()).isTrue();
+        assertThat(answer.isDeleted()).isTrue();
+        assertThat(deleteHistories).isEqualTo(Arrays.asList(
+                new DeleteHistory(ContentType.QUESTION, Q1.getId(), Q1.getWriter(), LocalDateTime.now()),
+                new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()))
+        );
     }
 }

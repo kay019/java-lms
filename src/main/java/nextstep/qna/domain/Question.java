@@ -91,9 +91,10 @@ public class Question {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 
-    public void delete(NsUser user) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser user) throws CannotDeleteException {
         validateOwner(user);
         validateDeletableQuestion(user);
+        return toDeleteHistories();
     }
 
     private void validateDeletableQuestion(NsUser user) throws CannotDeleteException {
@@ -108,5 +109,16 @@ public class Question {
         if (!isOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
+    }
+
+    private List<DeleteHistory> toDeleteHistories() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        this.deleted = true;
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        for (Answer answer : answers) {
+            answer.setDeleted(true);
+            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
+        }
+        return deleteHistories;
     }
 }
