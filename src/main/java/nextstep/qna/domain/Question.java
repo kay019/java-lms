@@ -48,6 +48,11 @@ public class Question {
         return deleted;
     }
 
+    public void delete(NsUser loginUser) throws CannotDeleteException {
+        checkDeletableByUser(loginUser);
+        delete();
+    }
+
     public List<DeleteHistory> toDeleteHistory() {
         List<DeleteHistory> res = new ArrayList<>(
             List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
@@ -57,7 +62,7 @@ public class Question {
         return res;
     }
 
-    public void checkDeletableByUser(NsUser loginUser) throws CannotDeleteException {
+    void checkDeletableByUser(NsUser loginUser) throws CannotDeleteException {
         if (isNotOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
@@ -66,7 +71,7 @@ public class Question {
         }
     }
 
-    public void delete() {
+    void delete() {
         this.deleted = true;
         answers.forEach(Answer::delete);
     }
