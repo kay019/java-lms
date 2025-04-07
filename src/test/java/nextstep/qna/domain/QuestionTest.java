@@ -23,7 +23,7 @@ public class QuestionTest {
         assertDoesNotThrow(() -> new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1"));
     }
 
-    @DisplayName("삭제 후 삭제 히스토리 목록들을 가져온다.")
+    @DisplayName("삭제 후 삭제 히스토리 목록들을 가져옴")
     @Test
     public void testDelete() throws CannotDeleteException {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");

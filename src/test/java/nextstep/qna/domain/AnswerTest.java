@@ -19,13 +19,13 @@ public class AnswerTest {
         assertDoesNotThrow(() -> new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1"));
     }
 
-    @DisplayName("삭제 후 삭제 히스토리를 가져온다.")
+    @DisplayName("삭제 후 삭제 히스토리를 가져옴")
     @Test
     public void testDelete() {
         Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
         DeleteHistory deleteHistory = answer.delete();
         assertThat(answer.isDeleted()).isTrue();
         assertThat(deleteHistory)
-            .isEqualTo(new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now()));
+            .isEqualTo(new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()));
     }
 }
