@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import java.time.LocalDateTime;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,10 @@ public class AnswerTest {
     void 삭제() {
         Answer answer = new Answer(11L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
         assertThat(answer.isDeleted()).isFalse();
-        assertThat(answer.delete().isDeleted()).isTrue();
+
+        DeleteHistory history = answer.delete();
+        assertThat(answer.isDeleted()).isTrue();
+        assertThat(history).isEqualTo(
+                new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
     }
 }

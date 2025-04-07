@@ -47,9 +47,9 @@ public class Answer {
         return id;
     }
 
-    public Answer delete() {
+    public DeleteHistory delete() {
         this.deleted = true;
-        return this;
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
     public boolean isDeleted() {

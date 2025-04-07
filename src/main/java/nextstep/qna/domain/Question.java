@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
-    private static final List<QuestionDeletable> deletableConditions = List.of(new QuestionDeletableAnswer(), new QuestionDeletableWriter());
+
+    private static final List<QuestionDeletable> deletableConditions = List.of(
+            new QuestionDeletableAnswer(), new QuestionDeletableWriter());
 
     private Long id;
 
@@ -74,35 +76,25 @@ public class Question {
         answers.add(answer);
     }
 
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        checkDeletable(loginUser);
+
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleted = true;
+        deleteHistories.add(
+                new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        for (Answer answer : answers) {
+            deleteHistories.add(answer.delete());
+        }
+        return deleteHistories;
+    }
+
     private void checkDeletable(NsUser loginUser) throws CannotDeleteException {
         for (QuestionDeletable condition : deletableConditions) {
             if (!condition.deletable(this, loginUser)) {
                 throw new CannotDeleteException(condition.reason());
             }
         }
-    }
-
-    private void deleteQuestionAndAnswers() {
-        deleted = true;
-        for (Answer answer : answers) {
-            answer.delete();
-        }
-    }
-
-    private List<DeleteHistory> createDeleteHistory() {
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
-        for (Answer answer : answers) {
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
-        }
-        return deleteHistories;
-    }
-
-    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
-        checkDeletable(loginUser);
-        deleteQuestionAndAnswers();
-        return createDeleteHistory();
     }
 
     public boolean isOwner(NsUser loginUser) {
@@ -132,6 +124,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents
+                + ", writer=" + writer + "]";
     }
 }
