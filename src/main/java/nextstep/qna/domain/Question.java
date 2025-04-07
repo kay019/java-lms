@@ -92,10 +92,19 @@ public class Question {
     }
 
     public void delete(NsUser user) throws CannotDeleteException {
-        validateUser(user);
+        validateOwner(user);
+        validateDeletableQuestion(user);
     }
 
-    private void validateUser(NsUser user) throws CannotDeleteException {
+    private void validateDeletableQuestion(NsUser user) throws CannotDeleteException {
+        for (Answer answer : answers) {
+            if (!answer.isOwner(user)) {
+                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+            }
+        }
+    }
+
+    private void validateOwner(NsUser user) throws CannotDeleteException {
         if (!isOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
