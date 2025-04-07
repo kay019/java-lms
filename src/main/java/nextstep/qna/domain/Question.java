@@ -46,18 +46,8 @@ public class Question {
         return title;
     }
 
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
     }
 
     public NsUser getWriter() {
@@ -71,11 +61,6 @@ public class Question {
 
     private boolean isOwner(NsUser loginUser) {
         return writer.equals(loginUser);
-    }
-
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
     }
 
     public boolean isDeleted() {
@@ -94,7 +79,15 @@ public class Question {
     public List<DeleteHistory> delete(NsUser user) throws CannotDeleteException {
         validateOwner(user);
         validateDeletableQuestion(user);
+        deleteQuestionAnswers();
         return toDeleteHistories();
+    }
+
+    private void deleteQuestionAnswers() {
+        this.deleted = true;
+        for (Answer answer : answers) {
+            answer.delete();
+        }
     }
 
     private void validateDeletableQuestion(NsUser user) throws CannotDeleteException {
@@ -113,11 +106,9 @@ public class Question {
 
     private List<DeleteHistory> toDeleteHistories() {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        this.deleted = true;
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
         for (Answer answer : answers) {
-            answer.setDeleted(true);
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
+            deleteHistories.add(answer.toAnswerDeleteHistory());
         }
         return deleteHistories;
     }
