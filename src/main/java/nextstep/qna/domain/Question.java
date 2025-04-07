@@ -70,10 +70,14 @@ public class Question {
 
     public List<DeleteHistory> createDeleteHistory() {
         List<DeleteHistory> histories = new ArrayList<>();
-        histories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer,
-                LocalDateTime.now()));
+        histories.add(createQuestionHistory());
         histories.addAll(createAnswersHistory());
         return histories;
+    }
+
+    private DeleteHistory createQuestionHistory() {
+        return new DeleteHistory(ContentType.QUESTION, this.id, this.writer,
+                LocalDateTime.now());
     }
 
     private List<DeleteHistory> createAnswersHistory() {
