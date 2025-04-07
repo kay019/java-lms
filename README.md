@@ -7,3 +7,11 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+## step 1 요구사항
+[X] QnaService의 비지니스 로직을 도메인 모델로 이동한다.
+[X] 도메인 모델로 로직을 이동한 후에도 QnaServiceTest의 모든 테스트는 통과해야 한다
+[X] 로그인 사용자 = 질문 작성자 = 답변 작성자 시 삭제한다.
+[X] 삭제 시 삭제 히스토리를 남긴다.
+[X] get을 사용하지 않는다.
+[X] 일급 콜렉션을 구현한다.
