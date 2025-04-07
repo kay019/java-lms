@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -37,26 +38,14 @@ public class Question {
         this.contents = contents;
     }
 
+    public void delete(NsUser loginUser) throws CannotDeleteException {
+        checkUser(loginUser);
+        this.deleted = true;
+        answers.forEach(Answer::delete);
+    }
+
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
     }
 
     public NsUser getWriter() {
@@ -68,13 +57,21 @@ public class Question {
         answers.add(answer);
     }
 
-    public boolean isOwner(NsUser loginUser) {
+    private void checkUser(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        if (!isAnswersOwner(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    private boolean isOwner(NsUser loginUser) {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    private boolean isAnswersOwner(NsUser loginUser) {
+        return answers.stream().allMatch(answer -> answer.isOwner(loginUser));
     }
 
     public boolean isDeleted() {
