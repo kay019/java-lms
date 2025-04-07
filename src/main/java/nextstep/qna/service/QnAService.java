@@ -1,6 +1,5 @@
 package nextstep.qna.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import nextstep.qna.CannotDeleteException;
@@ -27,12 +26,8 @@ public class QnAService {
     @Transactional
     public void deleteQuestion(NsUser loginUser, long questionId) throws CannotDeleteException {
         Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
-        question.checkOwner(loginUser);
-        question.checkAnswers(loginUser);
-        question.delete();
-        List<DeleteHistory> histories = new ArrayList<>();
-        histories.add(question.createDeleteHistory());
-        histories.addAll(question.createAnswersHistory());
-        deleteHistoryService.saveAll(histories);
+        question.delete(loginUser);
+        List<DeleteHistory> deleteHistories = question.createDeleteHistory();
+        deleteHistoryService.saveAll(deleteHistories);
     }
 }

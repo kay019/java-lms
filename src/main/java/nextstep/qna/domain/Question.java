@@ -81,34 +81,39 @@ public class Question {
         return answers;
     }
 
-    @Override
-    public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+    public void delete(NsUser loginUser) {
+        checkOwner(loginUser);
+        checkAnswers(loginUser);
+        this.deleted = true;
     }
 
-    public void checkOwner(NsUser loginUser) {
+    private void checkOwner(NsUser loginUser) {
         if (!writer.equals(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
     }
 
-    public void checkAnswers(NsUser loginUser) {
+    private void checkAnswers(NsUser loginUser) {
         Answers answers = new Answers(this.answers);
         answers.checkOwners(loginUser);
-    }
-
-    public DeleteHistory createDeleteHistory() {
-        return new DeleteHistory(ContentType.QUESTION, this.id, this.writer,
-                LocalDateTime.now());
-    }
-
-    public List<DeleteHistory> createAnswersHistory() {
-        Answers answers = new Answers(this.answers);
         answers.deleteAll();
+    }
+
+    public List<DeleteHistory> createDeleteHistory() {
+        List<DeleteHistory> histories = new ArrayList<>();
+        histories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer,
+                LocalDateTime.now()));
+        histories.addAll(createAnswersHistory());
+        return histories;
+    }
+
+    private List<DeleteHistory> createAnswersHistory() {
+        Answers answers = new Answers(this.answers);
         return answers.createHistories();
     }
 
-    public void delete() {
-        this.deleted = true;
+    @Override
+    public String toString() {
+        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 }
