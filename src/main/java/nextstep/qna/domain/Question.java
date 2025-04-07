@@ -46,12 +46,15 @@ public class Question {
 
     public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         checkDeletableByUser(loginUser);
+
         this.deleted = true;
+        this.updatedDate = LocalDateTime.now();
+
         List<DeleteHistory> res = new ArrayList<>(
             List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
         );
-
         res.addAll(answers.delete());
+
         return res;
     }
 

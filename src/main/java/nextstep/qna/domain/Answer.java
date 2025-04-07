@@ -47,6 +47,7 @@ public class Answer {
 
     public DeleteHistory delete() {
         this.deleted = true;
+        this.updatedDate = LocalDateTime.now();
         return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
