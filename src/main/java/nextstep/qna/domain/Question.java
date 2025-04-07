@@ -18,7 +18,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -48,6 +48,10 @@ public class Question {
         return deleted;
     }
 
+    public boolean isNotOwner(NsUser loginUser) {
+        return !writer.equals(loginUser);
+    }
+
     public void delete(NsUser loginUser) throws CannotDeleteException {
         checkDeletableByUser(loginUser);
         delete();
@@ -58,7 +62,7 @@ public class Question {
             List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
         );
 
-        res.addAll(answers.stream().map(Answer::toDeleteHistory).collect(Collectors.toList()));
+        res.addAll(answers.toDeleteHistory());
         return res;
     }
 
@@ -66,22 +70,14 @@ public class Question {
         if (isNotOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
-        if (isNotAllAnswersWrittenByUser(loginUser)) {
+        if (answers.isNotOwner(loginUser)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
     }
 
     void delete() {
         this.deleted = true;
-        answers.forEach(Answer::delete);
-    }
-
-    private boolean isNotOwner(NsUser loginUser) {
-        return !writer.equals(loginUser);
-    }
-
-    private boolean isNotAllAnswersWrittenByUser(NsUser loginUser) {
-        return !answers.stream().allMatch(answer -> answer.isOwner(loginUser));
+        answers.delete();
     }
 
     @Override
