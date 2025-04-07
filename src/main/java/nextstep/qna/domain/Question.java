@@ -25,13 +25,6 @@ public class Question {
 
     private LocalDateTime updatedDate;
 
-    public Question() {
-    }
-
-    public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
-    }
-
     public Question(Long id, NsUser writer, String title, String contents) {
         this.id = id;
         this.writer = writer;
@@ -70,15 +63,6 @@ public class Question {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
     }
-
-//    public List<DeleteHistory> toDeleteHistory() {
-//        List<DeleteHistory> res = new ArrayList<>(
-//            List.of(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()))
-//        );
-//
-//        res.addAll(answers.toDeleteHistory());
-//        return res;
-//    }
 
     @Override
     public boolean equals(Object o) {
