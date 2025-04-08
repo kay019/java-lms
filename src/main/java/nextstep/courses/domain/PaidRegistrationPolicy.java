@@ -5,7 +5,7 @@ public class PaidRegistrationPolicy implements RegistrationPolicy {
     private final Money sessionFee;
     private final NaturalNumber maxStudentCount;
 
-    public PaidRegistrationPolicy(int sessionFee, int maxStudentCount) {
+    public PaidRegistrationPolicy(long sessionFee, int maxStudentCount) {
         this.sessionFee = new Money(sessionFee);
         this.maxStudentCount = new NaturalNumber(maxStudentCount);
     }
@@ -19,6 +19,16 @@ public class PaidRegistrationPolicy implements RegistrationPolicy {
         if (!sessionFee.equals(paymentAmount)) {
             throw new IllegalArgumentException("수강생이 결제한 금액과 수강료가 일치할 때 수강 신청이 가능합니다.");
         }
+    }
+
+    @Override
+    public long getSessionFee() {
+        return sessionFee.getAmount();
+    }
+
+    @Override
+    public int getMaxStudentCount() {
+        return (int) maxStudentCount.getValue();
     }
 
 }

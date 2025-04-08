@@ -15,6 +15,14 @@ public class CoverImageResolution {
         this.height = height;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private static void validate(int width, int height) {
         validateWidthAndHeight(width, height);
         validateAspectRatioValid(width, height);

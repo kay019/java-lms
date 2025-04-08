@@ -2,6 +2,7 @@ package nextstep.users.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class NsUsers {
 
@@ -25,5 +26,11 @@ public class NsUsers {
 
     public int getSize() {
         return nsUsers.size();
+    }
+
+    public Optional<NsUser> findById(long id) {
+        return nsUsers.stream()
+            .filter(nsUser -> nsUser.getId().equals(id))
+            .findFirst();
     }
 }
