@@ -1,4 +1,6 @@
-package nextstep.qna.domain;
+package nextstep.qna.infrastructure;
+
+import nextstep.qna.domain.DeleteHistory;
 
 import java.util.List;
 

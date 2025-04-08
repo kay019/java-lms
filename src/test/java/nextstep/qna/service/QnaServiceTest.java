@@ -1,7 +1,9 @@
 package nextstep.qna.service;
 
-import nextstep.qna.CannotDeleteException;
+import nextstep.qna.exception.CannotDeleteException;
 import nextstep.qna.domain.*;
+import nextstep.qna.infrastructure.AnswerRepository;
+import nextstep.qna.infrastructure.QuestionRepository;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,9 @@ import static org.mockito.Mockito.when;
 public class QnaServiceTest {
     @Mock
     private QuestionRepository questionRepository;
+
+    @Mock
+    private AnswerRepository answerRepository;
 
     @Mock
     private DeleteHistoryService deleteHistoryService;
@@ -56,9 +61,7 @@ public class QnaServiceTest {
     public void delete_다른_사람이_쓴_글() throws Exception {
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
 
-        assertThatThrownBy(() -> {
-            qnAService.deleteQuestion(NsUserTest.SANJIGI, question.getId());
-        }).isInstanceOf(CannotDeleteException.class);
+        assertThatThrownBy(() -> qnAService.deleteQuestion(NsUserTest.SANJIGI, question.getId())).isInstanceOf(CannotDeleteException.class);
     }
 
     @Test
@@ -76,9 +79,7 @@ public class QnaServiceTest {
     public void delete_답변_중_다른_사람이_쓴_글() throws Exception {
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
 
-        assertThatThrownBy(() -> {
-            qnAService.deleteQuestion(NsUserTest.SANJIGI, question.getId());
-        }).isInstanceOf(CannotDeleteException.class);
+        assertThatThrownBy(() -> qnAService.deleteQuestion(NsUserTest.SANJIGI, question.getId())).isInstanceOf(CannotDeleteException.class);
     }
 
     private void verifyDeleteHistories() {
