@@ -16,7 +16,7 @@ public class AnswersTest {
                 new Answer(1L, NsUserTest.JAVAJIGI, new Question(), "contents"),
                 new Answer(2L, NsUserTest.JAVAJIGI, new Question(), "contents")
         ));
-        answers.delete();
+        answers.deleteAll();
         assertThat(answers.deleteHistories()).isEqualTo(
             new DeleteHistories(
                 Set.of(

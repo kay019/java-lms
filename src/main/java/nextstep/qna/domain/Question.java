@@ -39,7 +39,7 @@ public class Question {
     public void delete(NsUser loginUser) throws CannotDeleteException {
         checkUser(loginUser);
         this.deleted = true;
-        answers.delete();
+        answers.deleteAll();
     }
 
     public DeleteHistories deleteHistories() {

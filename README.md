@@ -14,3 +14,6 @@
 - [x] Question에 메시지 보내서 질문, 답변 삭제하기
 - [x] Question으로 DeleteHistory 생성하여 저장하기
 - [x] 힌트 참고해서 보강
+- [ ] 리뷰 피드백
+  - [x] 어색한 메서드 네이밍 변경
+  - [ ] delete 실행 시, DeleteHistory까지 하나의 생명주로 가져가도록 변경
