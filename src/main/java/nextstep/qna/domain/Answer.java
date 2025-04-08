@@ -30,17 +30,21 @@ public class Answer {
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
-        if(writer == null) {
+        if (writer == null) {
             throw new UnAuthorizedException();
         }
 
-        if(question == null) {
+        if (question == null) {
             throw new NotFoundException();
         }
 
         this.writer = writer;
         this.question = question;
         this.contents = contents;
+    }
+
+    public DeleteHistory ofDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
     public Long getId() {

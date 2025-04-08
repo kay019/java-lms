@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers(new ArrayList<>());
 
     private boolean deleted = false;
 
@@ -65,7 +66,7 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
-        answers.add(answer);
+        answers = answers.add(answer);
     }
 
     public boolean isOwner(NsUser loginUser) {
@@ -81,12 +82,29 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
 
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+    }
+
+    public void delete(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        answers.checkOwner(loginUser);
+
+        this.setDeleted(true);
+        answers.delete();
+    }
+
+    public List<DeleteHistory> getDeleteHistories() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        deleteHistories.addAll(answers.getDeleteHistories());
+        return deleteHistories;
     }
 }
