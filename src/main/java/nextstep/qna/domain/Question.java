@@ -1,5 +1,9 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
+import nextstep.qna.domain.qustion.QuestionDeletable;
+import nextstep.qna.domain.qustion.QuestionDeletableAnswer;
+import nextstep.qna.domain.qustion.QuestionDeletableWriter;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -7,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
+
+    private static final List<QuestionDeletable> deletableConditions = List.of(
+            new QuestionDeletableAnswer(), new QuestionDeletableWriter());
+
     private Long id;
 
     private String title;
@@ -68,13 +76,40 @@ public class Question {
         answers.add(answer);
     }
 
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        checkDeletable(loginUser);
+
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleted = true;
+        deleteHistories.add(
+                new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        for (Answer answer : answers) {
+            deleteHistories.add(answer.delete());
+        }
+        return deleteHistories;
+    }
+
+    private void checkDeletable(NsUser loginUser) throws CannotDeleteException {
+        for (QuestionDeletable condition : deletableConditions) {
+            condition.checkDeletable(this, loginUser);
+        }
+    }
+
     public boolean isOwner(NsUser loginUser) {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public boolean answerEmpty() {
+        return answers.isEmpty();
+    }
+
+    public boolean allAnswerFromWriter() {
+        for (Answer answer : answers) {
+            if (answer.isNotOwner(writer)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isDeleted() {
@@ -87,6 +122,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents
+                + ", writer=" + writer + "]";
     }
 }
