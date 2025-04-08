@@ -36,23 +36,17 @@ public class Question {
         this.contents = contents;
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public DeleteHistories delete(NsUser loginUser) throws CannotDeleteException {
         checkUser(loginUser);
-        this.deleted = true;
-        answers.deleteAll();
-    }
 
-    public DeleteHistories deleteHistories() {
-        DeleteHistories deleteHistories = answers.deleteHistories();
-        deleteHistories.add(deleteHistory());
+        DeleteHistories deleteHistories = answers.deleteAll();
+        deleteHistories.add(delete());
         return deleteHistories;
     }
 
-    private DeleteHistory deleteHistory() {
-        if (deleted) {
-            return new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now());
-        }
-        return null;
+    private DeleteHistory delete() {
+        this.deleted = true;
+        return new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now());
     }
 
     public void addAnswer(Answer answer) {

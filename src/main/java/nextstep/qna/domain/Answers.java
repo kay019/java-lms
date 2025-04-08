@@ -18,14 +18,9 @@ public class Answers {
         this.answers = answers;
     }
 
-    public void deleteAll() {
-        answers.forEach(Answer::delete);
-    }
-
-    public DeleteHistories deleteHistories() {
+    public DeleteHistories deleteAll() {
         return new DeleteHistories(answers.stream()
-                .map(Answer::deleteHistory)
-                .filter(Objects::nonNull)
+                .map(Answer::delete)
                 .collect(Collectors.toSet()));
     }
 

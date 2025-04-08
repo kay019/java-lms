@@ -18,8 +18,8 @@ public class AnswerTest {
     @Test
     void 삭제_이력() {
         Answer a = new Answer(1L, NsUserTest.JAVAJIGI, new Question(), "Answers Contents1");
-        a.delete();
-        assertThat(a.deleteHistory()).isEqualTo(
+        DeleteHistory deleteHistory = a.delete();
+        assertThat(deleteHistory).isEqualTo(
             new DeleteHistory(
                 ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()
             )

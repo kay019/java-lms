@@ -47,8 +47,8 @@ public class QuestionTest {
     void 삭제_이력() throws CannotDeleteException {
         Question q = new Question(1L, NsUserTest.JAVAJIGI, "title", "contents");
         q.addAnswer(new Answer(2L, NsUserTest.JAVAJIGI, q, "answer content"));
-        q.delete(NsUserTest.JAVAJIGI);
-        assertThat(q.deleteHistories()).isEqualTo(
+        DeleteHistories deleteHistories = q.delete(NsUserTest.JAVAJIGI);
+        assertThat(deleteHistories).isEqualTo(
             new DeleteHistories(
                 Set.of(
                     new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()),

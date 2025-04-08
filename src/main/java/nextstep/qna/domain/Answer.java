@@ -43,15 +43,9 @@ public class Answer {
         this.contents = contents;
     }
 
-    public void delete() {
+    public DeleteHistory delete() {
         this.deleted = true;
-    }
-
-    public DeleteHistory deleteHistory() {
-        if (deleted) {
-            return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
-        }
-        return null;
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
     public boolean isDeleted() {
