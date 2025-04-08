@@ -16,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -82,9 +82,6 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
-    }
 
     @Override
     public String toString() {
@@ -99,17 +96,7 @@ public class Question {
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, getWriter(), LocalDateTime.now()));
-
-        List<Answer> answers = getAnswers();
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
-            DeleteHistory deleteHistory = answer.markAsDeletedBy(loginUser);
-            answer.setDeleted(true);
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
-        }
-
+        deleteHistories.addAll(answers.markAsDeletedBy(loginUser));
         return deleteHistories;
     }
 }
