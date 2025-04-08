@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class QuestionTest {
     public static final Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
     public static final Question Q2 = new Question(NsUserTest.SANJIGI, "title2", "contents2");
@@ -21,5 +23,18 @@ public class QuestionTest {
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessageContaining("질문을 삭제할 권한이 없습니다.");
 
+    }
+
+    @Test
+    @DisplayName("답변이 없는 경우 삭제가 가능하다.")
+    void deleteQuestionWithoutAnswersTest() throws CannotDeleteException {
+        //given
+        Question Q3 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+
+        //when
+        List<DeleteHistory> deleteHistories = Q3.markAsDeletedBy(NsUserTest.JAVAJIGI);
+
+        //then
+        Assertions.assertThat(deleteHistories).hasSize(1);
     }
 }
