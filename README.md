@@ -7,3 +7,11 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+## 1단계
+- [x] Question.delete 추가
+- [x] Answer.createDeleteHistory 추가
+- [x] QnAService.deleteQuestion 리팩토링
+- [x] 피드백
+  - [x] Question.setDelete 삭제
+  - [x] Answer.delete 추가
