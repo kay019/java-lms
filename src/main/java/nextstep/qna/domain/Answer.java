@@ -43,13 +43,19 @@ public class Answer {
         this.contents = contents;
     }
 
+    public void delete(NsUser questionWriter) {
+        if(!isOwner(questionWriter)){
+            throw new IllegalArgumentException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+        setDeleted(isDeleted());
+    }
+
     public Long getId() {
         return id;
     }
 
-    public Answer setDeleted(boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-        return this;
     }
 
     public boolean isDeleted() {
@@ -76,4 +82,5 @@ public class Answer {
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
     }
+
 }
