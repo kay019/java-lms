@@ -72,9 +72,8 @@ public class Question {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-        return this;
     }
 
     public boolean isDeleted() {
@@ -88,5 +87,19 @@ public class Question {
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+    }
+
+    public void delete(NsUser loginUser) {
+        if (isDifferentUser(loginUser)) {
+            throw new IllegalArgumentException("질문을 삭제할 권한이 없습니다.");
+        }
+
+        answers.forEach(a -> a.delete(loginUser));
+
+        setDeleted(isDeleted());
+    }
+
+    private boolean isDifferentUser(NsUser loginUser) {
+        return writer != loginUser;
     }
 }
