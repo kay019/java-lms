@@ -83,7 +83,7 @@ public class Question {
         return deleted;
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문 작성자 아닌 사람은 삭제 권한 없음");
         }
@@ -91,14 +91,11 @@ public class Question {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
         deleted = true;
-        answers.delete();
-    }
-
-    public List<DeleteHistory> collectDeleteHistory() {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
-        deleteHistories.addAll(answers.collectDeleteHistory());
-        return deleteHistories;
+        deleteHistories.add(DeleteHistory.ofQuestion(id, loginUser));
+        List<DeleteHistory> deletedAnswerHistory = answers.deleteAllAnswers(loginUser);
+        deleteHistories.addAll(deletedAnswerHistory);
+        return  deleteHistories;
     }
 
     @Override

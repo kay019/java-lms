@@ -1,8 +1,8 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +22,11 @@ public class Answers {
         return false;
     }
 
-    public void delete() {
-        for (Answer answer : answers) {
-            answer.setDeleted(true);
-        }
-    }
-
-    public List<DeleteHistory> collectDeleteHistory() {
+    public List<DeleteHistory> deleteAllAnswers(NsUser loginUser) throws CannotDeleteException {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         for (Answer answer : answers) {
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
+            answer.delete(loginUser);
+            deleteHistories.add(DeleteHistory.ofAnswer(answer.getId(), answer.getWriter()));
         }
         return deleteHistories;
     }

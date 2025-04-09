@@ -1,10 +1,12 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnswerTest {
     public static final Answer A1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
@@ -18,12 +20,15 @@ public class AnswerTest {
     }
 
     @Test
-    public void testAnswer() {
-        assertThat(answers.hasAnswerFromOtherUser(NsUserTest.JAVAJIGI)).isFalse();
+    public void testAnswer() throws CannotDeleteException {
+        Answer answer = A1.delete(NsUserTest.JAVAJIGI);
+        assertThat(answer).isEqualTo(A1);
+        assertThat(answer.isDeleted()).isTrue();
     }
 
     @Test
     public void testAnswerFromOtherUser() {
-        assertThat(answers.hasAnswerFromOtherUser(NsUserTest.SANJIGI)).isTrue();
+        assertThatThrownBy(() -> A2.delete(NsUserTest.JAVAJIGI))
+                .isInstanceOf(CannotDeleteException.class);
     }
 }
