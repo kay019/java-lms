@@ -17,7 +17,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -42,10 +42,7 @@ public class Question {
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
-
-        deleteHistories.addAll(answers.stream()
-                .map(a -> a.delete(loginUser))
-                .collect(Collectors.toList()));
+        deleteHistories.addAll(answers.deleteAll(loginUser));
         return deleteHistories;
     }
 
