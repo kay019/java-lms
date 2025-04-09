@@ -7,3 +7,13 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+
+## 리팩토링
+### step1
+- [x] Question에 메시지 보내서 질문, 답변 삭제하기
+- [x] Question으로 DeleteHistory 생성하여 저장하기
+- [x] 힌트 참고해서 보강
+- [x] 리뷰 피드백
+  - [x] 어색한 메서드 네이밍 변경
+  - [x] delete 실행 시, DeleteHistory까지 하나의 생명주로 가져가도록 변경
