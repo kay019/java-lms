@@ -135,4 +135,17 @@ public class NsUser {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NsUser)) return false;
+        NsUser that = (NsUser) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

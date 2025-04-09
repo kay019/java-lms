@@ -25,9 +25,6 @@ public class Question {
 
     private LocalDateTime updatedDate;
 
-    public Question() {
-    }
-
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
     }
@@ -39,26 +36,31 @@ public class Question {
         this.contents = contents;
     }
 
+    public List<DeleteHistory> delete(NsUser loginUser) {
+        valid(loginUser);
+        setDeleted(true);
+
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
+
+        deleteHistories.addAll(answers.stream()
+                .map(a -> a.delete(loginUser))
+                .collect(Collectors.toList()));
+        return deleteHistories;
+    }
+
+    private void valid(NsUser loginUser) {
+        if (isDifferentUser(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    private boolean isDifferentUser(NsUser loginUser) {
+        return !writer.equals(loginUser);
+    }
+
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
     }
 
     public NsUser getWriter() {
@@ -70,10 +72,6 @@ public class Question {
         answers.add(answer);
     }
 
-    public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
-    }
-
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
@@ -82,35 +80,8 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
-    }
-
-    public List<DeleteHistory> delete(NsUser loginUser) {
-        valid(loginUser);
-
-        setDeleted(true);
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
-
-        deleteHistories.addAll(answers.stream()
-                        .map(a -> a.delete(loginUser))
-                        .collect(Collectors.toList()));
-        return deleteHistories;
-    }
-
-    private void valid(NsUser loginUser) {
-        if (isDifferentUser(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-    }
-
-    private boolean isDifferentUser(NsUser loginUser) {
-        return writer != loginUser;
     }
 }

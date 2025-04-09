@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,6 @@ public class AnswerTest {
     @Test
     void 질문을_삭제() {
         assertThatCode(() -> A1.delete(NsUserTest.JAVAJIGI)).doesNotThrowAnyException();
-        assertThatIllegalArgumentException()
-                .isThrownBy(() -> A1.delete(NsUserTest.SANJIGI));
+        assertThatThrownBy(() -> A1.delete(NsUserTest.SANJIGI)).isInstanceOf(CannotDeleteException.class);
     }
 }

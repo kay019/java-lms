@@ -1,10 +1,10 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.*;
 
 public class QuestionTest {
     public static final Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
@@ -32,6 +32,6 @@ public class QuestionTest {
         Answer answer = new Answer(NsUserTest.SANJIGI, question, "답변");
         question.addAnswer(answer);
 
-        assertThatIllegalArgumentException().isThrownBy(() -> question.delete(NsUserTest.JAVAJIGI));
+        assertThatThrownBy(() -> question.delete(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
     }
 }
