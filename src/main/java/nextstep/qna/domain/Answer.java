@@ -1,27 +1,19 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Answer {
-    private Long id;
-
-    private NsUser writer;
-
+public class Answer extends Content {
     private Question question;
 
-    private String contents;
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
-
     public Answer() {
+        super();
     }
 
     public Answer(NsUser writer, Question question, String contents) {
@@ -29,7 +21,8 @@ public class Answer {
     }
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
-        this.id = id;
+        super(id, writer, contents);
+
         if(writer == null) {
             throw new UnAuthorizedException();
         }
@@ -38,42 +31,26 @@ public class Answer {
             throw new NotFoundException();
         }
 
-        this.writer = writer;
         this.question = question;
-        this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
-    }
-
-    public NsUser getWriter() {
-        return writer;
-    }
-
-    public String getContents() {
-        return contents;
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        validateOwner(loginUser);
+        this.deleted = true;
+        DeleteHistory deleteHistory = getDeleteHistory();
+        return new ArrayList<>(List.of(deleteHistory));
     }
 
     public void toQuestion(Question question) {
         this.question = question;
     }
 
+    protected DeleteHistory getDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
+    }
+
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
     }
 }
