@@ -40,7 +40,7 @@ public class Answers {
 
     public List<DeleteHistory> getDeleteHistories() {
         return values.stream()
-                .map(Answer::ofDeleteHistory)
+                .map(DeleteHistory::of)
                 .collect(Collectors.toList());
     }
 }
