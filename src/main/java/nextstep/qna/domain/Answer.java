@@ -47,11 +47,6 @@ public class Answer {
         return id;
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
@@ -71,7 +66,10 @@ public class Answer {
     public void toQuestion(Question question) {
         this.question = question;
     }
-
+    public DeleteHistory delete() {
+        this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+    }
     @Override
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
