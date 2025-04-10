@@ -78,14 +78,13 @@ public class Question {
 
     public List<DeleteHistory> delete(NsUser user) throws CannotDeleteException {
         validateOwner(user);
-        answers.validateAnswerByDifferentPerson(user);
-        deleteQuestionAnswers();
+        deleteQuestionAnswers(user);
         return toDeleteHistories();
     }
 
-    private void deleteQuestionAnswers() {
+    private void deleteQuestionAnswers(NsUser user) throws CannotDeleteException {
         this.deleted = true;
-        answers.deleteAnswers();
+        answers.deleteAnswers(user);
     }
 
     private void validateOwner(NsUser user) throws CannotDeleteException {
@@ -96,7 +95,7 @@ public class Question {
 
     private List<DeleteHistory> toDeleteHistories() {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        deleteHistories.add(DeleteHistory.createQuestionDeleteHistory(id, writer));
         deleteHistories.addAll(answers.toAnswersDeleteHistories());
         return deleteHistories;
     }

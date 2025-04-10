@@ -17,7 +17,8 @@ public class Answers {
         return deleteHistories;
     }
 
-    public void deleteAnswers() {
+    public void deleteAnswers(NsUser user) throws CannotDeleteException {
+        validateAnswerByDifferentPerson(user);
         for (Answer answer : answers) {
             answer.delete();
         }
@@ -27,7 +28,7 @@ public class Answers {
         answers.add(answer);
     }
 
-    public void validateAnswerByDifferentPerson(NsUser user) throws CannotDeleteException {
+    private void validateAnswerByDifferentPerson(NsUser user) throws CannotDeleteException {
         for (Answer answer : answers) {
             if (!answer.isOwner(user)) {
                 throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
