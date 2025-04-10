@@ -1,55 +1,46 @@
 package nextstep.qna.domain;
 
+import java.util.List;
 import nextstep.qna.NotFoundException;
-import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
-
-import java.time.LocalDateTime;
 
 public class Answer {
     private Long id;
 
-    private NsUser writer;
-
     private Question question;
 
-    private String contents;
+    private ContentInfo contentInfo;
 
     private boolean deleted = false;
 
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
+    private DateInfo dateInfo;
 
     public Answer() {
     }
 
     public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
+        this(null, question, new ContentInfo(writer, contents));
     }
 
-    public Answer(Long id, NsUser writer, Question question, String contents) {
+    public Answer(Long id, Question question, ContentInfo contentInfo) {
         this.id = id;
-        if(writer == null) {
-            throw new UnAuthorizedException();
-        }
+
+        contentInfo.validWriter();
 
         if(question == null) {
             throw new NotFoundException();
         }
 
-        this.writer = writer;
         this.question = question;
-        this.contents = contents;
+        this.contentInfo = contentInfo;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public void delete() {
+        this.deleted = true;
     }
 
     public boolean isDeleted() {
@@ -57,15 +48,7 @@ public class Answer {
     }
 
     public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
-    }
-
-    public NsUser getWriter() {
-        return writer;
-    }
-
-    public String getContents() {
-        return contents;
+        return contentInfo.isOwner(writer);
     }
 
     public void toQuestion(Question question) {
@@ -74,6 +57,10 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + getId() + ", contentInfo=" + contentInfo + "]";
+    }
+
+    public void addDeleteHistory(List<DeleteHistory> deleteHistories) {
+        contentInfo.addDeleteHistory(ContentType.ANSWER, deleteHistories, id);
     }
 }
