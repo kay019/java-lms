@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -17,12 +18,9 @@ public class Answer {
 
     private boolean deleted = false;
 
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private final LocalDateTime createdDate = LocalDateTime.now();
 
     private LocalDateTime updatedDate;
-
-    public Answer() {
-    }
 
     public Answer(NsUser writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -43,13 +41,24 @@ public class Answer {
         this.contents = contents;
     }
 
+    public DeleteHistory delete(NsUser questionWriter) {
+        valid(questionWriter);
+        setDeleted(true);
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
+    }
+
+    private void valid(NsUser questionWriter) {
+        if(!isOwner(questionWriter)){
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
     public Long getId() {
         return id;
     }
 
-    public Answer setDeleted(boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-        return this;
     }
 
     public boolean isDeleted() {
@@ -64,10 +73,6 @@ public class Answer {
         return writer;
     }
 
-    public String getContents() {
-        return contents;
-    }
-
     public void toQuestion(Question question) {
         this.question = question;
     }
@@ -76,4 +81,5 @@ public class Answer {
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
     }
+
 }
