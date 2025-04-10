@@ -13,7 +13,7 @@ public class Question {
 
   private ContentInfo contentInfo;
 
-  private Answers answers;
+  private Answers answers = new Answers();
 
   private boolean deleted = false;
 
