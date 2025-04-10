@@ -4,10 +4,16 @@ import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class Answers {
     private final List<Answer> answers;
+
+    public Answers() {
+        this.answers = new ArrayList<>();
+    }
 
     public Answers(List<Answer> answers) {
         this.answers = answers;
@@ -18,7 +24,9 @@ public class Answers {
     }
 
     public boolean checkAllOwner(NsUser user) {
-        return answers.stream()
+        return Optional.ofNullable(answers)
+                .orElse(Collections.emptyList())
+                .stream()
                 .allMatch(answer -> answer.isOwner(user));
     }
 
