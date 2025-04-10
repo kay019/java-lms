@@ -31,10 +31,8 @@ public class Answers {
     }
 
     public void checkOwner(NsUser loginUser) throws CannotDeleteException {
-        for (Answer answer : values) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
+        if (values.stream().anyMatch(answer -> !answer.isOwner(loginUser))) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
     }
 
