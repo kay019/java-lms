@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 public class Answers {
@@ -25,7 +24,7 @@ public class Answers {
         return new Answers(newAnswers);
     }
 
-    public List<DeleteHistory> deleteAll(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> deleteAll(NsUser loginUser) {
         return answers.stream()
             .map(answer -> answer.delete(loginUser))
             .collect(Collectors.toList());

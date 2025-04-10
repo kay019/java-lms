@@ -31,7 +31,7 @@ public class QuestionTest {
 
     @Test
     @DisplayName("작성자는 질문을 삭제할 수 있다.")
-    void deleteBySelf() throws CannotDeleteException {
+    void deleteBySelf() {
         DeleteHistory expected = new DeleteHistory(QUESTION, Q1.getId(), JAVAJIGI, LocalDateTime.now());
         List<DeleteHistory> deleteHistories = Q1.delete(JAVAJIGI, Q1.getId());
 

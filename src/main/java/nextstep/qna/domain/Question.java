@@ -46,7 +46,7 @@ public class Question {
         this.answers = answers.withAddedAnswer(answer);
     }
 
-    public List<DeleteHistory> delete(NsUser loginUser, long questionId) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser, long questionId) {
         validate(loginUser);
 
         this.deleted = true;
@@ -57,7 +57,7 @@ public class Question {
         return deleteHistories;
     }
 
-    private void validate(NsUser loginUser) throws CannotDeleteException {
+    private void validate(NsUser loginUser) {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }

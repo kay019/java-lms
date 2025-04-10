@@ -18,7 +18,7 @@ public class AnswerTest {
 
     @Test
     @DisplayName("작성자가 답변을 삭제하면 deleted가 true로 설정되고 DeleteHistory가 반환된다")
-    void delete_by_owner() throws CannotDeleteException {
+    void delete_by_owner() {
         DeleteHistory deleteHistory = A1.delete(JAVAJIGI);
         DeleteHistory expect = new DeleteHistory(ANSWER, 1L, JAVAJIGI, LocalDateTime.now());
 
