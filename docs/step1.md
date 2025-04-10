@@ -27,6 +27,6 @@
 - [x] Answer 도메인을 수정한다.
   - [x] Answer 도메인에 답변 삭제 기능을 구현한다.
 - [x] Answer의 Question 도메인 의존성을 끊도록 수정한다.
-- [ ] Question 도메인을 수정한다.
-  - [ ] Question 도메인에 질문 삭제 기능을 구현한다.
+- [x] Question 도메인을 수정한다.
+  - [x] Question 도메인에 질문 삭제 기능을 구현한다.
 - [ ] QnaService의 로직을 수정한다.
