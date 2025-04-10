@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnswerTest {
-    public static final Answer A1 = new Answer(1L, JAVAJIGI, "Answers Contents1");
+    public static final Answer A1 = new Answer(new AnswerInfo(1L, JAVAJIGI, "Answers Contents1"));
 
     @Test
     @DisplayName("작성자가 답변을 삭제하면 deleted가 true로 설정되고 DeleteHistory가 반환된다")

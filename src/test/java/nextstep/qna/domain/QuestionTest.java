@@ -22,8 +22,8 @@ public class QuestionTest {
     void setUp() {
         Q1 = new Question(JAVAJIGI, "title1", "contents1");
 
-        Answer answer1 = new Answer(1L, JAVAJIGI, "Answer 1");
-        Answer answer2 = new Answer(2L, JAVAJIGI, "Answer 2");
+        Answer answer1 = new Answer(new AnswerInfo(1L, JAVAJIGI, "Answer 1"));
+        Answer answer2 = new Answer(new AnswerInfo(2L, JAVAJIGI, "Answer 2"));
 
         Q1.addAnswer(answer1);
         Q1.addAnswer(answer2);

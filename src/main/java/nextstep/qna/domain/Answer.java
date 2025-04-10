@@ -3,17 +3,12 @@ package nextstep.qna.domain;
 import java.time.LocalDateTime;
 
 import nextstep.qna.CannotDeleteException;
-import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
 import static nextstep.qna.domain.ContentType.ANSWER;
 
 public class Answer {
-    private Long id;
-
-    private NsUser writer;
-
-    private String contents;
+    private final AnswerInfo answerInfo;
 
     private boolean deleted = false;
 
@@ -21,28 +16,19 @@ public class Answer {
 
     private LocalDateTime updatedDate;
 
-    public Answer() {
-    }
-
     public Answer(NsUser writer, String contents) {
-        this(null, writer, contents);
+        this(new AnswerInfo(null, writer, contents));
     }
 
-    public Answer(Long id, NsUser writer, String contents) {
-        this.id = id;
-        if(writer == null) {
-            throw new UnAuthorizedException();
-        }
-
-        this.writer = writer;
-        this.contents = contents;
+    public Answer(AnswerInfo answerInfo) {
+        this.answerInfo = answerInfo;
     }
 
     public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
         validate(loginUser);
 
         this.deleted = true;
-        return new DeleteHistory(ANSWER, id, writer, LocalDateTime.now());
+        return new DeleteHistory(ANSWER, answerInfo.getId(), answerInfo.getWriter(), LocalDateTime.now());
     }
 
     private void validate(NsUser loginUser) throws CannotDeleteException {
@@ -52,7 +38,7 @@ public class Answer {
     }
 
     public Long getId() {
-        return id;
+        return answerInfo.getId();
     }
 
     public boolean isDeleted() {
@@ -60,19 +46,19 @@ public class Answer {
     }
 
     public boolean isOwner(NsUser writer) {
-        return this.writer.equalsNameAndEmail(writer);
+        return this.answerInfo.getWriter().equalsNameAndEmail(writer);
     }
 
     public NsUser getWriter() {
-        return writer;
+        return answerInfo.getWriter();
     }
 
     public String getContents() {
-        return contents;
+        return answerInfo.getContents();
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return answerInfo.toString();
     }
 }

@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.Answer;
+import nextstep.qna.domain.AnswerInfo;
 import nextstep.qna.domain.ContentType;
 import nextstep.qna.domain.DeleteHistory;
 import nextstep.qna.domain.Question;
@@ -43,7 +44,7 @@ public class QnaServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         question = new Question(new QuestionInfo(1L, NsUserTest.JAVAJIGI, "title1", "contents1"));
-        answer = new Answer(11L, NsUserTest.JAVAJIGI, "Answers Contents1");
+        answer = new Answer(new AnswerInfo(11L, NsUserTest.JAVAJIGI, "Answers Contents1"));
         question.addAnswer(answer);
     }
 
