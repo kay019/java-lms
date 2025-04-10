@@ -31,7 +31,20 @@ public class Session {
     }
 
     public Payment register(NsUser user, Long money) {
-        return registerStrategy.register(user, id, money);
+        if (sessionState.equals(SessionState.RECRUTING)) {
+            validateUser(user);
+            students.add(user);
+            return registerStrategy.register(user, id, money);
+        }
+        throw new CannotRegisterException("강의는 모집 중일 때만 등록할 수 있습니다.");
     }
 
+    private void validateUser(NsUser user) {
+        students.stream()
+                .filter(u -> u.matchUser(user))
+                .findFirst()
+                .ifPresent(u -> {
+                    throw new CannotRegisterException("이미 이 강의에 등록한 사람입니다.");
+                });
+    }
 }
