@@ -22,7 +22,7 @@ class AnswersTest {
         answers.add(a1);
 
         //when
-        List<DeleteHistory> deleteHistories = answers.markAsDeletedBy(loginUser);
+        List<DeleteHistory> deleteHistories = answers.delete(loginUser);
 
         //then
         Assertions.assertThat(deleteHistories)

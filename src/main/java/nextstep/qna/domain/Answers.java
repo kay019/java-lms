@@ -18,7 +18,7 @@ public class Answers {
         answers.add(answer);
     }
 
-    public List<DeleteHistory> markAsDeletedBy(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         for (Answer answer : answers) {
             deleteHistories.add(answer.markAsDeletedBy(loginUser));

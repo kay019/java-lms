@@ -19,7 +19,7 @@ public class QuestionTest {
         Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
 
         //when & then
-        Assertions.assertThatThrownBy(() -> Q1.markAsDeletedBy(NsUserTest.SANJIGI))
+        Assertions.assertThatThrownBy(() -> Q1.delete(NsUserTest.SANJIGI))
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessageContaining("질문을 삭제할 권한이 없습니다.");
 
@@ -32,7 +32,7 @@ public class QuestionTest {
         Question Q3 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
 
         //when
-        List<DeleteHistory> deleteHistories = Q3.markAsDeletedBy(NsUserTest.JAVAJIGI);
+        List<DeleteHistory> deleteHistories = Q3.delete(NsUserTest.JAVAJIGI);
 
         //then
         Assertions.assertThat(deleteHistories).hasSize(1);
