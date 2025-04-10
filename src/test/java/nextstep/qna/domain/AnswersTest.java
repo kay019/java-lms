@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.exception.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnswersTest {
 
@@ -26,22 +28,27 @@ public class AnswersTest {
   }
 
   @Test
-  public void isEmpty_빈_답변여부_테스트() {
-    Answers answers = new Answers();
-    assertThat(answers.isEmpty()).isTrue();
-  }
-
-  @Test
-  public void areAllAnswersSameWriter_모두_같은_작성자() {
+  public void validateDeletable_모두_같은_작성자() throws CannotDeleteException {
     Answers answers = new Answers(List.of(answer1, answer2));
 
-    assertThat(answers.areAllAnswersSameWriter(user)).isTrue();
+    answers.validateDeletable(user);
   }
 
   @Test
-  public void areAllAnswersSameWriter_다른_작성자_포함() {
+  public void validateDeletable_다른_작성자_포함() {
     Answers answers = new Answers(List.of(answer1, new Answer(3L, otherUser, question, "Other Answer")));
-    assertThat(answers.areAllAnswersSameWriter(user)).isFalse();
+
+    assertThatThrownBy(
+        () -> answers.validateDeletable(user))
+        .isInstanceOf(CannotDeleteException.class)
+        .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+  }
+
+  @Test
+  public void validateDeletable_빈_답변() throws CannotDeleteException {
+    Answers answers = new Answers();
+
+    answers.validateDeletable(user);
   }
 
   @Test
