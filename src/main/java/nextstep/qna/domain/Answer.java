@@ -3,7 +3,6 @@ package nextstep.qna.domain;
 import java.time.LocalDateTime;
 
 import nextstep.qna.CannotDeleteException;
-import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
@@ -13,8 +12,6 @@ public class Answer {
     private Long id;
 
     private NsUser writer;
-
-    private Question question;
 
     private String contents;
 
@@ -27,22 +24,17 @@ public class Answer {
     public Answer() {
     }
 
-    public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
+    public Answer(NsUser writer, String contents) {
+        this(null, writer, contents);
     }
 
-    public Answer(Long id, NsUser writer, Question question, String contents) {
+    public Answer(Long id, NsUser writer, String contents) {
         this.id = id;
         if(writer == null) {
             throw new UnAuthorizedException();
         }
 
-        if(question == null) {
-            throw new NotFoundException();
-        }
-
         this.writer = writer;
-        this.question = question;
         this.contents = contents;
     }
 
@@ -77,10 +69,6 @@ public class Answer {
 
     public String getContents() {
         return contents;
-    }
-
-    public void toQuestion(Question question) {
-        this.question = question;
     }
 
     @Override
