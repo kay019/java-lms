@@ -16,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private final List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -62,7 +62,7 @@ public class Question {
     }
 
     public void addAnswer(Answer answer) {
-        answers.add(answer);
+        this.answers = answers.withAddedAnswer(answer);
     }
 
     public List<DeleteHistory> delete(NsUser loginUser, long questionId) throws CannotDeleteException {
@@ -72,11 +72,7 @@ public class Question {
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, questionId, writer, LocalDateTime.now()));
-
-        for (Answer answer : answers) {
-            deleteHistories.add(answer.delete(loginUser));
-        }
-
+        deleteHistories.addAll(answers.deleteAll(loginUser));
         return deleteHistories;
     }
 

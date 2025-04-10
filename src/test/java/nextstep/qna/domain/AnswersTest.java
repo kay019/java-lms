@@ -14,12 +14,12 @@ class AnswersTest {
 
     @Test
     @DisplayName("답변을 추가하면 새로운 Answers 인스턴스를 반환한다")
-    void addAnswer() {
+    void withAddedAnswerAnswer() {
         Answer answer1 = new Answer(1L, JAVAJIGI, "첫 번째 답변");
         Answer answer2 = new Answer(2L, JAVAJIGI, "두 번째 답변");
 
         Answers answers = new Answers(List.of(answer1));
-        Answers newAnswers = answers.add(answer2);
+        Answers newAnswers = answers.withAddedAnswer(answer2);
 
         assertThat(newAnswers).isNotEqualTo(answers);
         assertThat(newAnswers.deleteAll(JAVAJIGI)).hasSize(2);
@@ -27,11 +27,11 @@ class AnswersTest {
 
     @Test
     @DisplayName("기존 Answers 인스턴스는 추가 후에도 변경되지 않는다")
-    void immutabilityAfterAdd() {
+    void immutabilityAfterWithAddedAnswer() {
         Answer originalAnswer = new Answer(1L, JAVAJIGI, "기존 답변");
         Answers originalAnswers = new Answers(List.of(originalAnswer));
 
-        Answers newAnswers = originalAnswers.add(new Answer(2L, JAVAJIGI, "새 답변"));
+        Answers newAnswers = originalAnswers.withAddedAnswer(new Answer(2L, JAVAJIGI, "새 답변"));
 
         assertThat(originalAnswers).isNotEqualTo(newAnswers);
     }

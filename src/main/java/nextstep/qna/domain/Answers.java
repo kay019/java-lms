@@ -19,7 +19,7 @@ public class Answers {
         this.answers = answers;
     }
 
-    public Answers add(Answer answer) {
+    public Answers withAddedAnswer(Answer answer) {
         List<Answer> newAnswers = new ArrayList<>(answers);
         newAnswers.add(answer);
         return new Answers(newAnswers);
