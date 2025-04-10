@@ -6,6 +6,8 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Question {
     private Long id;
@@ -95,14 +97,13 @@ public class Question {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
-        answers.checkOwner(loginUser);
+
+        List<DeleteHistory> deleteHistories = answers.delete(loginUser);
         this.setDeleted(true);
-        answers.delete();
 
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(DeleteHistory.of(this));
-        deleteHistories.addAll(answers.getDeleteHistories());
-
-        return deleteHistories;
+        return Stream.concat(
+                Stream.of(DeleteHistory.of(this)),
+                deleteHistories.stream()
+        ).collect(Collectors.toList());
     }
 }

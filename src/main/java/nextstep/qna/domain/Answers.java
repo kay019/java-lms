@@ -24,21 +24,16 @@ public class Answers {
         return new Answers(newList);
     }
 
-    public void delete() {
-        for (Answer answer : values) {
-            answer.setDeleted(true);
-        }
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        checkOwner(loginUser);
+        return values.stream()
+                .map(Answer::delete)
+                .collect(Collectors.toList());
     }
 
     public void checkOwner(NsUser loginUser) throws CannotDeleteException {
-        if (values.stream().anyMatch(answer -> !answer.isOwner(loginUser))) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        for (Answer answer : values) {
+            answer.checkOwner(loginUser);
         }
-    }
-
-    public List<DeleteHistory> getDeleteHistories() {
-        return values.stream()
-                .map(DeleteHistory::of)
-                .collect(Collectors.toList());
     }
 }
