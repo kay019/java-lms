@@ -17,6 +17,7 @@ import nextstep.qna.domain.Answer;
 import nextstep.qna.domain.ContentType;
 import nextstep.qna.domain.DeleteHistory;
 import nextstep.qna.domain.Question;
+import nextstep.qna.domain.QuestionInfo;
 import nextstep.qna.domain.QuestionRepository;
 import nextstep.users.domain.NsUserTest;
 
@@ -41,7 +42,7 @@ public class QnaServiceTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
+        question = new Question(new QuestionInfo(1L, NsUserTest.JAVAJIGI, "title1", "contents1"));
         answer = new Answer(11L, NsUserTest.JAVAJIGI, "Answers Contents1");
         question.addAnswer(answer);
     }

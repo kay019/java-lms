@@ -8,13 +8,7 @@ import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 public class Question {
-    private Long id;
-
-    private String title;
-
-    private String contents;
-
-    private NsUser writer;
+    private final QuestionInfo questionInfo;
 
     private Answers answers = new Answers();
 
@@ -25,40 +19,27 @@ public class Question {
     private LocalDateTime updatedDate;
 
     public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
+        this(new QuestionInfo(0L, writer, title, contents));
     }
 
-    public Question(Long id, NsUser writer, String title, String contents) {
-        this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+    public Question(QuestionInfo questionInfo) {
+        this.questionInfo = questionInfo;
     }
 
     public Long getId() {
-        return id;
+        return questionInfo.getId();
     }
 
     public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
+        return questionInfo.getTitle();
     }
 
     public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
+        return questionInfo.getContents();
     }
 
     public NsUser getWriter() {
-        return writer;
+            return questionInfo.getWriter();
     }
 
     public void addAnswer(Answer answer) {
@@ -71,7 +52,7 @@ public class Question {
         this.deleted = true;
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, questionId, writer, LocalDateTime.now()));
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, questionId, questionInfo.getWriter(), LocalDateTime.now()));
         deleteHistories.addAll(answers.deleteAll(loginUser));
         return deleteHistories;
     }
@@ -83,7 +64,7 @@ public class Question {
     }
 
     public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
+        return questionInfo.getWriter().equals(loginUser);
     }
 
     public boolean isDeleted() {
@@ -92,6 +73,6 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return questionInfo.toString();
     }
 }
