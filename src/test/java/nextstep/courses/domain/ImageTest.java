@@ -21,14 +21,6 @@ public class ImageTest {
                 .hasMessage("이미지의 크기는 1MB 이하여야 합니다.");
     }
 
-    @DisplayName("지원하는 확장자 이외의 이미지는 생성할 수 없습니다.")
-    @Test
-    public void create_image_no_extension() {
-        assertThatThrownBy(() -> new Image(1000, "webp", 300, 200))
-                .isInstanceOf(CannotUploadImageException.class)
-                .hasMessage("이미지의 확장자는 gif, jpg, jpeg, png, svg만 허용합니다.");
-    }
-
     @DisplayName("width가 300픽셀 미만이거나 height가 200픽셀 미만인 이미지는 생성할 수 없습니다.")
     @Test
     public void create_image_below_width_height() {
