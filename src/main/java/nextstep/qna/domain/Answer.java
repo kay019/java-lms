@@ -1,19 +1,14 @@
 package nextstep.qna.domain;
 
-import nextstep.qna.NotFoundException;
-import nextstep.qna.UnAuthorizedException;
-import nextstep.users.domain.NsUser;
-
 import java.time.LocalDateTime;
 
+import nextstep.qna.CannotDeleteException;
+import nextstep.users.domain.NsUser;
+
+import static nextstep.qna.domain.ContentType.ANSWER;
+
 public class Answer {
-    private Long id;
-
-    private NsUser writer;
-
-    private Question question;
-
-    private String contents;
+    private final AnswerInfo answerInfo;
 
     private boolean deleted = false;
 
@@ -21,35 +16,29 @@ public class Answer {
 
     private LocalDateTime updatedDate;
 
-    public Answer() {
+    public Answer(NsUser writer, String contents) {
+        this(new AnswerInfo(null, writer, contents));
     }
 
-    public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
+    public Answer(AnswerInfo answerInfo) {
+        this.answerInfo = answerInfo;
     }
 
-    public Answer(Long id, NsUser writer, Question question, String contents) {
-        this.id = id;
-        if(writer == null) {
-            throw new UnAuthorizedException();
-        }
+    public DeleteHistory delete(NsUser loginUser) {
+        validate(loginUser);
 
-        if(question == null) {
-            throw new NotFoundException();
-        }
+        this.deleted = true;
+        return new DeleteHistory(ANSWER, answerInfo.getId(), answerInfo.getWriter(), LocalDateTime.now());
+    }
 
-        this.writer = writer;
-        this.question = question;
-        this.contents = contents;
+    private void validate(NsUser loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
     }
 
     public Long getId() {
-        return id;
-    }
-
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+        return answerInfo.getId();
     }
 
     public boolean isDeleted() {
@@ -57,23 +46,19 @@ public class Answer {
     }
 
     public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
+        return this.answerInfo.getWriter().equalsNameAndEmail(writer);
     }
 
     public NsUser getWriter() {
-        return writer;
+        return answerInfo.getWriter();
     }
 
     public String getContents() {
-        return contents;
-    }
-
-    public void toQuestion(Question question) {
-        this.question = question;
+        return answerInfo.getContents();
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return answerInfo.toString();
     }
 }
