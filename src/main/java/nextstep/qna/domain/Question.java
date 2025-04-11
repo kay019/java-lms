@@ -24,7 +24,7 @@ public class Question {
 
     private LocalDateTime updatedDate;
 
-    private List<DeleteHistory> deleteHistories = new ArrayList<>();
+    private DeleteHistories deleteHistories;
 
 
     public Question(NsUser writer, String title, String contents) {
@@ -36,6 +36,8 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.answers = new Answers();
+        this.deleteHistories = new DeleteHistories();
     }
 
     public Long getId() {
@@ -69,15 +71,9 @@ public class Question {
         validDelete(loginUser);
 
         this.deleted = true;
-        addDeleteHistories(ContentType.QUESTION, id, writer);
+        deleteHistories.add(ContentType.QUESTION, id, writer);
 
         answers.delete(deleteHistories);
-
-    }
-
-    private void addDeleteHistories(ContentType contentType, Long id, NsUser writer) {
-        deleteHistories.add(new DeleteHistory(contentType, id, writer, LocalDateTime.now()));
-
     }
 
     private void validDelete(NsUser loginUser) throws CannotDeleteException {
@@ -87,10 +83,9 @@ public class Question {
         if (!answers.isOwner(loginUser)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
-
     }
 
     public List<DeleteHistory> todeleteHistories() {
-        return deleteHistories;
+        return deleteHistories.getDeleteHistories();
     }
 }
