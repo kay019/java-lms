@@ -32,7 +32,7 @@ public class Session {
         }
     }
 
-    public Payment register(NsUser user, Long money) {
+    public Payment register(NsUser user, NaturalNumber money) {
         if (sessionState.equals(SessionState.RECRUTING)) {
             validateUser(user);
             students.add(user);

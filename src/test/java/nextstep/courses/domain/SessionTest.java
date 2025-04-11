@@ -20,7 +20,7 @@ public class SessionTest {
                         , LocalDateTime.of(2025, Month.APRIL, 15, 15, 30)
                         , SessionState.RECRUTING
                         , new FreeRegisterStrategy()
-                        , new Image(1000, ImageType.GIF, 300, 200))
+                        , new Image(1000L, ImageType.GIF, 300L, 200L))
         );
     }
 
@@ -33,7 +33,7 @@ public class SessionTest {
                         , LocalDateTime.of(2025, Month.APRIL, 10, 15, 29)
                         , SessionState.RECRUTING
                         , new FreeRegisterStrategy()
-                        , new Image(1000, ImageType.GIF, 300, 200)))
+                        , new Image(1000L, ImageType.GIF, 300L, 200L)))
                 .isInstanceOf(CannotCreateSessionException.class)
                 .hasMessage("강의의 시작 날짜가 끝나는 날짜보다 뒤입니다.");
     }
@@ -46,7 +46,7 @@ public class SessionTest {
                 , LocalDateTime.of(2025, Month.APRIL, 11, 15, 30)
                 , SessionState.FINISHED
                 , new FreeRegisterStrategy()
-                , new Image(1000, ImageType.GIF, 300, 200)).register(NsUserTest.JAVAJIGI, 1000L))
+                , new Image(1000L, ImageType.GIF, 300L, 200L)).register(NsUserTest.JAVAJIGI, new NaturalNumber(1000L)))
                 .isInstanceOf(CannotRegisterException.class)
                 .hasMessage("강의는 모집 중일 때만 등록할 수 있습니다.");
     }
@@ -59,9 +59,9 @@ public class SessionTest {
                 , LocalDateTime.of(2025, Month.APRIL, 11, 15, 30)
                 , SessionState.RECRUTING
                 , new FreeRegisterStrategy()
-                , new Image(1000, ImageType.GIF, 300, 200));
-        session.register(NsUserTest.JAVAJIGI, 1000L);
-        assertThatThrownBy(() -> session.register(NsUserTest.JAVAJIGI, 1000L))
+                , new Image(1000L, ImageType.GIF, 300L, 200L));
+        session.register(NsUserTest.JAVAJIGI, new NaturalNumber(1000L));
+        assertThatThrownBy(() -> session.register(NsUserTest.JAVAJIGI, new NaturalNumber(1000L)))
                 .isInstanceOf(CannotRegisterException.class)
                 .hasMessage("이미 이 강의에 등록한 사람입니다.");
     }
@@ -74,7 +74,7 @@ public class SessionTest {
                                 , LocalDateTime.of(2025, Month.APRIL, 11, 15, 30)
                                 , SessionState.RECRUTING
                                 , new FreeRegisterStrategy()
-                                , new Image(1000, ImageType.GIF, 300, 200)).register(NsUserTest.JAVAJIGI, 1000L))
+                                , new Image(1000L, ImageType.GIF, 300L, 200L)).register(NsUserTest.JAVAJIGI, new NaturalNumber(1000L)))
                 .isEqualTo(new Payment("", 0L, NsUserTest.JAVAJIGI.getId(), 0L)
                 );
     }
@@ -86,8 +86,8 @@ public class SessionTest {
                 , LocalDateTime.of(2025, Month.APRIL, 10, 15, 30)
                 , LocalDateTime.of(2025, Month.APRIL, 11, 15, 30)
                 , SessionState.RECRUTING
-                , new PaidRegsiterStrategy(1000L, 5)
-                , new Image(1000, ImageType.GIF, 300, 200)).register(NsUserTest.JAVAJIGI, 1000L))
+                , new PaidRegsiterStrategy(1000L, 5L)
+                , new Image(1000L, ImageType.GIF, 300L, 200L)).register(NsUserTest.JAVAJIGI, new NaturalNumber(1000L)))
                 .isEqualTo(new Payment("", 0L, NsUserTest.JAVAJIGI.getId(), 1000L)
                 );
     }
@@ -99,8 +99,8 @@ public class SessionTest {
                 , LocalDateTime.of(2025, Month.APRIL, 10, 15, 30)
                 , LocalDateTime.of(2025, Month.APRIL, 11, 15, 30)
                 , SessionState.RECRUTING
-                , new PaidRegsiterStrategy(1000L, 5)
-                , new Image(1000, ImageType.GIF, 300, 200)).register(NsUserTest.JAVAJIGI, 500L))
+                , new PaidRegsiterStrategy(1000L, 5L)
+                , new Image(1000L, ImageType.GIF, 300L, 200L)).register(NsUserTest.JAVAJIGI, new NaturalNumber(500L)))
                 .isInstanceOf(CannotRegisterException.class)
                 .hasMessage("결제 금액이 강의의 가격과 같지 않습니다.");
     }
