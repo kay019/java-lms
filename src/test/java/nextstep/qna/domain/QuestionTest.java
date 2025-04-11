@@ -33,4 +33,25 @@ public class QuestionTest {
         }).isInstanceOf(CannotDeleteException.class);
     }
 
+    @Test
+    @DisplayName("질문자와 답변 글의 모든 답변자가 같은 경우 삭제가 가능하다.")
+    void testDeleteWithAnswer() throws CannotDeleteException {
+        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        question.addAnswer(new Answer(NsUserTest.JAVAJIGI, question, "answer1"));
+
+        assertThat(question.isDeleted()).isFalse();
+        question.delete(NsUserTest.JAVAJIGI);
+        assertThat(question.isDeleted()).isTrue();
+    }
+
+    @Test
+    @DisplayName("질문자와 답변 글의 답변자가 다른 경우 삭제가 불가능하다.")
+    void testDeleteWithDifferentWriter() {
+        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        question.addAnswer(new Answer(NsUserTest.SANJIGI, question, "answer1"));
+
+        assertThatThrownBy(() -> {
+            question.delete(NsUserTest.JAVAJIGI);
+        }).isInstanceOf(CannotDeleteException.class);
+    }
 }
