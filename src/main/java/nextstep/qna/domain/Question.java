@@ -88,6 +88,10 @@ public class Question {
             }
         }
 
+        for (Answer answer : answers) {
+            answer.delete();
+        }
+
         this.deleted = true;
     }
 

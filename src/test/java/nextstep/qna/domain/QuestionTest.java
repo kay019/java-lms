@@ -35,7 +35,7 @@ public class QuestionTest {
 
     @Test
     @DisplayName("질문자와 답변 글의 모든 답변자가 같은 경우 삭제가 가능하다.")
-    void testDeleteWithAnswer() throws CannotDeleteException {
+    void testDeleteWithSameWriterAndAnswer() throws CannotDeleteException {
         Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
         question.addAnswer(new Answer(NsUserTest.JAVAJIGI, question, "answer1"));
 
@@ -53,5 +53,17 @@ public class QuestionTest {
         assertThatThrownBy(() -> {
             question.delete(NsUserTest.JAVAJIGI);
         }).isInstanceOf(CannotDeleteException.class);
+    }
+
+    @Test
+    @DisplayName("질문을 삭제할 때 답변 또한 삭제한다.")
+    void testDeleteWithAnswer() throws CannotDeleteException {
+        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        question.addAnswer(new Answer(NsUserTest.JAVAJIGI, question, "answer1"));
+
+        assertThat(question.isDeleted()).isFalse();
+        question.delete(NsUserTest.JAVAJIGI);
+        assertThat(question.isDeleted()).isTrue();
+        assertThat(question.getAnswers().get(0).isDeleted()).isTrue();
     }
 }
