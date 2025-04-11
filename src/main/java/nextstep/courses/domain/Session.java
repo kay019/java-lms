@@ -13,15 +13,17 @@ public class Session {
     private LocalDateTime endDate;
     private SessionState sessionState;
     private RegisterStrategy registerStrategy;
+    private Image coverImage;
     private List<NsUser> students = new ArrayList<>();
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, RegisterStrategy registerStrategy) {
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, RegisterStrategy registerStrategy, Image coverImage) {
         validateDate(startDate, endDate);
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.sessionState = sessionState;
         this.registerStrategy = registerStrategy;
+        this.coverImage = coverImage;
     }
 
     private void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
