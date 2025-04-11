@@ -63,17 +63,17 @@ public class Question {
         this.deleted = true;
     }
 
-    public List<DeleteHistory> getDeleteHistories() {
+    public List<DeleteHistory> createDeleteHistories() {
         if (!isDeleted()) {
             return List.of();
         }
 
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        List<DeleteHistory> histories = new ArrayList<>();
+        histories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
         for (Answer answer : answers) {
-            deleteHistories.add(answer.getDeleteHistory());
+            histories.add(answer.createDeleteHistory());
         }
-        return deleteHistories;
+        return histories;
     }
 
     private boolean isOwner(NsUser loginUser) {

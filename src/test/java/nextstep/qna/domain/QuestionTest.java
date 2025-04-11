@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 import nextstep.qna.CannotDeleteException;
 import org.junit.jupiter.api.DisplayName;
@@ -70,23 +71,33 @@ public class QuestionTest {
     }
 
     @Test
-    @DisplayName("삭제 이력을 조회할 수 있다.")
-    void testDeleteWithDeleteHistory() throws CannotDeleteException {
+    @DisplayName("삭제 이력을 생성할 수 있다.")
+    void testCreateDeleteHistories() throws CannotDeleteException {
         Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
         question.delete(NsUserTest.JAVAJIGI);
 
-        List<DeleteHistory> deleteHistories = question.getDeleteHistories();
-        assertThat(deleteHistories).hasSize(1);
-        assertThat(deleteHistories.get(0).getContentType()).isEqualTo(ContentType.QUESTION);
-        assertThat(deleteHistories.get(0).getContentId()).isEqualTo(question.getId());
-        assertThat(deleteHistories.get(0).getDeletedBy()).isEqualTo(NsUserTest.JAVAJIGI);
+        List<DeleteHistory> actual = question.createDeleteHistories();
+        List<DeleteHistory> expected = List.of(
+            new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now())
+        );
+        
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("삭제되지 않은 질문의 삭제 이력은 조회할 수 없다.")
-    void testDeleteWithAnswerDeleteHistory(){
+    @DisplayName("답변이 있는 경우 모든 답변의 삭제 이력도 생성할 수 있다.")
+    void testCreateDeleteHistoriesWithAnswers() throws CannotDeleteException {
         Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
-        question.addAnswer(new Answer(NsUserTest.JAVAJIGI, question, "answer1"));
-        assertThat(question.getDeleteHistories()).isEmpty();
+        Answer answer = new Answer(NsUserTest.JAVAJIGI, question, "answer1");
+        question.addAnswer(answer);
+        question.delete(NsUserTest.JAVAJIGI);
+
+        List<DeleteHistory> actual = question.createDeleteHistories();
+        List<DeleteHistory> expected = List.of(
+            new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now()),
+            new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now())
+        );
+        
+        assertThat(actual).isEqualTo(expected);
     }
 }
