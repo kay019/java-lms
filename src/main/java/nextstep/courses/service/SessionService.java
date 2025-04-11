@@ -3,6 +3,7 @@ package nextstep.courses.service;
 import nextstep.courses.record.CoverImageRecord;
 import nextstep.courses.record.SessionRecord;
 import nextstep.courses.domain.*;
+import nextstep.payments.domain.Payment;
 import nextstep.payments.record.PaymentRecord;
 import nextstep.payments.domain.PaymentRepository;
 import nextstep.payments.record.PaymentRecords;
@@ -48,5 +49,10 @@ public class SessionService {
         paymentRecords.withNsUsers(nsUsers);
 
         return sessionRecord.toSession(course, coverImage, paymentRecords);
+    }
+
+    public Payment registerSession(long sessionId, NsUser nsUser, long amount) {
+        Session session = findById(sessionId);
+        return session.register(nsUser, new Money(amount));
     }
 }

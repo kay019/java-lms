@@ -42,8 +42,8 @@ class PaymentRepositoryTest {
             .build();
 
         Payments payments = new Payments();
-        payments.add(new Payment(session, NsUserTest.JAVAJIGI, sessionFee));
-        payments.add(new Payment(session, NsUserTest.SANJIGI, sessionFee));
+        payments.add(new Payment(session.getId(), NsUserTest.JAVAJIGI, sessionFee));
+        payments.add(new Payment(session.getId(), NsUserTest.SANJIGI, sessionFee));
 
         PaymentRecords paymentRecords = PaymentRecord.from(payments);
 

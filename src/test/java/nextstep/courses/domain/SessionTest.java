@@ -48,7 +48,7 @@ class SessionTest {
 
         Payment payment = session.register(loginUser, new Money(sessionFee));
 
-        assertThat(payment.getSession()).isEqualTo(session);
+        assertThat(payment.getSessionId()).isEqualTo(session.getId());
         assertThat(payment.getNsUser()).isEqualTo(loginUser);
         assertThat(payment.getAmount()).isEqualTo(new Money(sessionFee));
     }

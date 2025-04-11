@@ -8,18 +8,18 @@ import nextstep.users.domain.NsUser;
 
 public class Payment {
     private Long id;
-    private final Session session;
+    private final long sessionId;
     private final NsUser nsUser;
     private final Money amount;
     private final LocalDateTime createdAt;
 
-    public Payment(Session session, NsUser nsUser, Money amount) {
-        this(null, session, nsUser, amount, LocalDateTime.now());
+    public Payment(long sessionId, NsUser nsUser, Money amount) {
+        this(null, sessionId, nsUser, amount, LocalDateTime.now());
     }
 
-    public Payment(Long id, Session session, NsUser nsUser, Money amount, LocalDateTime createdAt) {
+    public Payment(Long id, long sessionId, NsUser nsUser, Money amount, LocalDateTime createdAt) {
         this.id = id;
-        this.session = session;
+        this.sessionId = sessionId;
         this.nsUser = nsUser;
         this.amount = amount;
         this.createdAt = createdAt;
@@ -29,8 +29,8 @@ public class Payment {
         return id;
     }
 
-    public Session getSession() {
-        return session;
+    public long getSessionId() {
+        return sessionId;
     }
 
     public NsUser getNsUser() {

@@ -87,7 +87,7 @@ public class Session {
 
         registrationPolicy.validateRegistration(this, paymentAmount);
 
-        Payment payment = new Payment(this, nsUser, paymentAmount);
+        Payment payment = new Payment(this.getId(), nsUser, paymentAmount);
         payments.add(payment);
 
         return payment;

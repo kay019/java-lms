@@ -70,7 +70,7 @@ public class PaymentRecord {
     public static PaymentRecord from(Payment payment) {
         PaymentRecord paymentRecord = new PaymentRecord();
         paymentRecord.setId(payment.getId());
-        paymentRecord.setSessionId(payment.getSession().getId());
+        paymentRecord.setSessionId(payment.getSessionId());
         paymentRecord.setNsUserId(payment.getNsUser().getId());
         paymentRecord.setAmount(payment.getAmount().getAmount());
         paymentRecord.setCreatedAt(payment.getCreatedAt());
@@ -87,6 +87,6 @@ public class PaymentRecord {
     }
 
     public Payment toPayment(Session session) {
-        return new Payment(getId(), session, getNsUser(), new Money(getAmount()), getCreatedAt());
+        return new Payment(getId(), session.getId(), getNsUser(), new Money(getAmount()), getCreatedAt());
     }
 }
