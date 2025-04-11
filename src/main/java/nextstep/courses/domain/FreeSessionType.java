@@ -1,0 +1,11 @@
+package nextstep.courses.domain;
+
+import nextstep.payments.domain.Payment;
+
+class FreeSessionType implements SessionType {
+
+    @Override
+    public boolean enroll(Payment payment, Session session) {
+        return true;
+    }
+}

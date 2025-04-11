@@ -7,3 +7,11 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+# Step 2 요구사항
+* [x] 강의 도메인 추가
+  * [x] 강의 날짜 기능 구현
+  * [x] 강의 커버 이미지 조건 구현
+  * [x] 강의 종류(무료/유료) 구현
+  * [x] 강의 상태 구현
+  * [x] 강의 수강신청 조건 구현
