@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import java.util.List;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -49,6 +50,10 @@ public class Answer {
 
     public void delete() {
         this.deleted = true;
+    }
+
+    public DeleteHistory getDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
     public boolean isDeleted() {

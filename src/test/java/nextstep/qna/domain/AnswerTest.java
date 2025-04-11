@@ -19,4 +19,15 @@ public class AnswerTest {
         answer.delete();
         assertThat(answer.isDeleted()).isTrue();
     }
+
+    @Test
+    @DisplayName("삭제 이력을 조회할 수 있다.")
+    void testDeleteHistory() {
+        Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+
+        DeleteHistory deleteHistory = answer.getDeleteHistory();
+        assertThat(deleteHistory.getContentType()).isEqualTo(ContentType.ANSWER);
+        assertThat(deleteHistory.getContentId()).isEqualTo(answer.getId());
+        assertThat(deleteHistory.getDeletedBy()).isEqualTo(NsUserTest.JAVAJIGI);
+    }
 }

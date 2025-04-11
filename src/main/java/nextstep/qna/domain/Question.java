@@ -95,6 +95,15 @@ public class Question {
         this.deleted = true;
     }
 
+    public List<DeleteHistory> getDeleteHistories() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        for (Answer answer : answers) {
+            deleteHistories.add(answer.getDeleteHistory());
+        }
+        return deleteHistories;
+    }
+
     private boolean isOwner(NsUser loginUser) {
         return writer.equals(loginUser);
     }
