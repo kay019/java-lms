@@ -1,29 +1,20 @@
 package nextstep.qna.domain;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
-
 public class Answer {
-    private Long id;
 
-    private NsUser writer;
+    private final Long id;
 
+    private final NsUser writer;
+    private final String contents;
+    private final LocalDateTime createdDate = LocalDateTime.now();
     private Question question;
-
-    private String contents;
-
     private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
     private LocalDateTime updatedDate;
-
-    public Answer() {
-    }
 
     public Answer(NsUser writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -31,11 +22,11 @@ public class Answer {
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
-        if(writer == null) {
+        if (writer == null) {
             throw new UnAuthorizedException();
         }
 
-        if(question == null) {
+        if (question == null) {
             throw new NotFoundException();
         }
 
@@ -64,20 +55,12 @@ public class Answer {
         return this.writer.equals(writer);
     }
 
-    public NsUser getWriter() {
-        return writer;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
     public void toQuestion(Question question) {
         this.question = question;
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
     }
 }
