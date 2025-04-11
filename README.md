@@ -19,8 +19,8 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 
 ## Step2 요구사항
 수강 신청 기능 추가
-- [] Course은 기수 단위로 운영되며 여러개의 Session를 가질 수 있다.
-  - [] Course에 Session 등록 기능
+- [x] Course은 기수 단위로 운영되며 여러개의 Session를 가질 수 있다.
+  - [x] Course에 Session 등록 기능
 - [] Session은 시작일과 종료일을 가진다.
 - [] Session은 강의 커버 이미지 (SessionImage)를 가진다.
   - [] SessionImage는 크기를 가진다.
