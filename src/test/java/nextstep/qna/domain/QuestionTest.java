@@ -66,7 +66,7 @@ public class QuestionTest {
         assertThat(question.isDeleted()).isFalse();
         question.delete(NsUserTest.JAVAJIGI);
         assertThat(question.isDeleted()).isTrue();
-        assertThat(question.getAnswers().get(0).isDeleted()).isTrue();
+        assertThat(question.areAllAnswersDeleted()).isTrue();
     }
 
     @Test

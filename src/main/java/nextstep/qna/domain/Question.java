@@ -10,15 +10,12 @@ public class Question {
 
     private final List<Answer> answers = new ArrayList<>();
     private final LocalDateTime createdDate = LocalDateTime.now();
-    private Long id;
-    private String title;
-    private String contents;
-    private NsUser writer;
+    private final Long id;
+    private final String title;
+    private final String contents;
+    private final NsUser writer;
     private boolean deleted = false;
     private LocalDateTime updatedDate;
-
-    public Question() {
-    }
 
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
@@ -35,28 +32,6 @@ public class Question {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
-    }
-
-    public NsUser getWriter() {
-        return writer;
-    }
-
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
         answers.add(answer);
@@ -66,8 +41,8 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public boolean areAllAnswersDeleted() {
+        return answers.stream().allMatch(Answer::isDeleted);
     }
 
     public void delete(NsUser loginUser) throws CannotDeleteException {
@@ -107,6 +82,6 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + id + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 }
