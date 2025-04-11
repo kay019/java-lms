@@ -8,20 +8,13 @@ import nextstep.users.domain.NsUser;
 
 public class Question {
 
-    private Long id;
-
-    private String title;
-
-    private String contents;
-
-    private NsUser writer;
-
     private final List<Answer> answers = new ArrayList<>();
-
-    private boolean deleted = false;
-
     private final LocalDateTime createdDate = LocalDateTime.now();
-
+    private Long id;
+    private String title;
+    private String contents;
+    private NsUser writer;
+    private boolean deleted = false;
     private LocalDateTime updatedDate;
 
     public Question() {
@@ -96,6 +89,10 @@ public class Question {
     }
 
     public List<DeleteHistory> getDeleteHistories() {
+        if (!isDeleted()) {
+            return List.of();
+        }
+
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
         for (Answer answer : answers) {

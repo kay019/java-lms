@@ -81,4 +81,12 @@ public class QuestionTest {
         assertThat(deleteHistories.get(0).getContentId()).isEqualTo(question.getId());
         assertThat(deleteHistories.get(0).getDeletedBy()).isEqualTo(NsUserTest.JAVAJIGI);
     }
+
+    @Test
+    @DisplayName("삭제되지 않은 질문의 삭제 이력은 조회할 수 없다.")
+    void testDeleteWithAnswerDeleteHistory(){
+        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        question.addAnswer(new Answer(NsUserTest.JAVAJIGI, question, "answer1"));
+        assertThat(question.getDeleteHistories()).isEmpty();
+    }
 }

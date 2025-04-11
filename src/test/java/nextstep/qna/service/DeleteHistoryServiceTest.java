@@ -1,5 +1,6 @@
 package nextstep.qna.service;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.ContentType;
 import nextstep.qna.domain.DeleteHistory;
 import nextstep.qna.domain.DeleteHistoryRepository;
@@ -31,8 +32,9 @@ public class DeleteHistoryServiceTest {
     private Question question;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws CannotDeleteException {
         question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
+        question.delete(NsUserTest.JAVAJIGI);
     }
 
     @Test
