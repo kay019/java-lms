@@ -55,4 +55,5 @@ public class QuestionTest {
             Q2.delete(NsUserTest.SANJIGI);
         }).isInstanceOf(CannotDeleteException.class);
     }
+    
 }
