@@ -38,32 +38,16 @@ public class QuestionTest {
                     new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now())
                 )
         );
-
     }
 
-    @DisplayName("유저가 삭제할수 없는 질문이면 예외를 던짐 - 질문 작성자가 아닌 경우")
+    @DisplayName("질문 작성자가 아닌 경우 삭제 시 예외를 던짐")
     @Test
-    public void testCheckDeletableByUser_throwExceptionByQuestionOwner() {
+    public void testDelete_throwException() {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        assertThatThrownBy(() -> question.checkDeletableByUser(NsUserTest.SANJIGI))
+        AnswerTest.A1.link(question);
+
+        assertThatThrownBy(() -> question.delete(NsUserTest.SANJIGI))
             .isInstanceOf(CannotDeleteException.class)
             .hasMessageContaining("질문을 삭제할 권한이 없습니다.");
-    }
-
-    @DisplayName("유저가 삭제할수 없는 질문이면 예외를 던짐 - 질문 작성자가 아닌 경우")
-    @Test
-    public void testCheckDeletableByUser_throwExceptionByAnswerOwner() {
-        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        AnswerTest.A2.link(question);
-        assertThatThrownBy(() -> question.checkDeletableByUser(NsUserTest.JAVAJIGI))
-            .isInstanceOf(CannotDeleteException.class)
-            .hasMessageContaining("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-    }
-
-    @DisplayName("유저가 삭제할수 있는 질문이면 예외를 던지지 않음")
-    @Test
-    public void testCheckDeletableByUser_doesNotThrowException() {
-        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        assertDoesNotThrow(() -> question.checkDeletableByUser(NsUserTest.JAVAJIGI));
     }
 }
