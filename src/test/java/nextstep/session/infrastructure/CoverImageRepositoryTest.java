@@ -26,15 +26,18 @@ class CoverImageRepositoryTest {
     @Test
     void crud() {
         CoverImage coverImage = CoverImageTest.createCoverImage1();
+        coverImage.setSessionId(231L);
         int count = jdbcCoverImageRepository.save(coverImage);
 
         CoverImage newCoverImage = jdbcCoverImageRepository.findById(coverImage.getId());
 
         assertThat(count).isEqualTo(1);
-        assertThat(coverImage.getSize()).isEqualTo(newCoverImage.getSize());
-        assertThat(coverImage.getType()).isEqualTo(newCoverImage.getType());
-        assertThat(coverImage.getWidth()).isEqualTo(newCoverImage.getWidth());
-        assertThat(coverImage.getHeight()).isEqualTo(newCoverImage.getHeight());
+        assertThat(newCoverImage.getId()).isEqualTo(coverImage.getId());
+        assertThat(newCoverImage.getSessionId()).isEqualTo(coverImage.getSessionId());
+        assertThat(newCoverImage.getSize()).isEqualTo(coverImage.getSize());
+        assertThat(newCoverImage.getType()).isEqualTo(coverImage.getType());
+        assertThat(newCoverImage.getWidth()).isEqualTo(coverImage.getWidth());
+        assertThat(newCoverImage.getHeight()).isEqualTo(coverImage.getHeight());
     }
 
 }

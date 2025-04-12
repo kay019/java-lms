@@ -6,11 +6,12 @@ import nextstep.payments.domain.Payments;
 public class SessionBuilder {
     private Long id = 1L;
     private long courseId = 1L;
-    private CoverImage coverImage = CoverImageTest.createCoverImage1();
-    private SessionStatus sessionStatus;
+    private CoverImages coverImages = new CoverImages();
+    private SessionProgressStatus progressStatus = SessionProgressStatus.ONGOING;
+    private RecruitmentStatus recruitmentStatus = RecruitmentStatus.RECRUITING;
     private RegistrationPolicy registrationPolicy;
     private SessionPeriod sessionPeriod = SessionPeriodTest.createSessionPeriod1();
-    private Payments payments = new Payments();
+    private boolean selectionRequired = false;
 
     public SessionBuilder id(Long id) {
         this.id = id;
@@ -22,13 +23,13 @@ public class SessionBuilder {
         return this;
     }
 
-    public SessionBuilder coverImage(CoverImage coverImage) {
-        this.coverImage = coverImage;
+    public SessionBuilder progressStatus(SessionProgressStatus progressStatus) {
+        this.progressStatus = progressStatus;
         return this;
     }
 
-    public SessionBuilder sessionStatus(SessionStatus sessionStatus) {
-        this.sessionStatus = sessionStatus;
+    public SessionBuilder recruitmentStatus(RecruitmentStatus recruitmentStatus) {
+        this.recruitmentStatus = recruitmentStatus;
         return this;
     }
 
@@ -42,6 +43,11 @@ public class SessionBuilder {
         return this;
     }
 
+    public SessionBuilder selectionRequired(boolean selectionRequired) {
+        this.selectionRequired = selectionRequired;
+        return this;
+    }
+
     public SessionBuilder sessionPeriod(SessionPeriod sessionPeriod) {
         this.sessionPeriod = sessionPeriod;
         return this;
@@ -51,9 +57,11 @@ public class SessionBuilder {
         return new Session(
                 id,
                 courseId,
-                coverImage,
-                sessionStatus,
+                coverImages,
+                progressStatus,
+                recruitmentStatus,
                 registrationPolicy,
-                sessionPeriod);
+                sessionPeriod,
+                selectionRequired);
     }
 }

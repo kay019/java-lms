@@ -2,6 +2,8 @@ package nextstep.courses.domain;
 
 import java.time.LocalDateTime;
 
+import nextstep.users.domain.NsUser;
+
 public class Course {
     private Long id;
     private final String title;
@@ -35,6 +37,10 @@ public class Course {
 
     public Long getCreatorId() {
         return creatorId;
+    }
+
+    public boolean isOwner(NsUser nsUser) {
+        return creatorId == nsUser.getId();
     }
 
     public LocalDateTime getCreatedAt() {

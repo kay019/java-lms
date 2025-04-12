@@ -4,10 +4,13 @@ import nextstep.payments.domain.PaymentRepository;
 import nextstep.payments.domain.Payments;
 import nextstep.session.domain.CoverImage;
 import nextstep.session.domain.CoverImageRepository;
+import nextstep.session.domain.CoverImages;
+import nextstep.session.domain.RecruitmentStatus;
 import nextstep.session.domain.RegistrationPolicy;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionPeriod;
 import nextstep.session.domain.RegistrationPolicyType;
+import nextstep.session.domain.SessionProgressStatus;
 import nextstep.session.domain.SessionRepository;
 import nextstep.session.domain.SessionStatus;
 
@@ -42,27 +45,30 @@ public class JdbcSessionRepository implements SessionRepository {
             result = saveInternal(session);
         }
 
-        coverImageRepository.save(session.getCoverImage());
+        for (CoverImage coverImage : session.getCoverImages().getCoverImages()) {
+            coverImageRepository.save(coverImage);
+        }
 
         return result;
     }
 
     private int saveInternal(Session session) {
         String sql = "INSERT INTO session (" +
-            "course_id, cover_image_id, session_status, registration_policy_type, session_fee, max_student_count, started_at, ended_at" +
-            ") values (?, ?, ?, ?, ?, ?, ?, ?);";
+                "course_id, progress_status, recruitment_status, registration_policy_type, session_fee, max_student_count, selection_required, started_at, ended_at" +
+                ") values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int updated = jdbcTemplate.update(conn -> {
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, session.getCourseId());
-            ps.setLong(2, session.getCoverImage().getId());
-            ps.setString(3, session.getSessionStatus().name());
+            ps.setString(2, session.getProgressStatus().name());
+            ps.setString(3, session.getRecruitmentStatus().name());
             ps.setString(4, session.getRegistrationPolicyType().name());
             ps.setLong(5, session.getSessionFee());
             ps.setInt(6, session.getMaxStudentCount());
-            ps.setTimestamp(7, Timestamp.valueOf(session.getStartedAt()));
-            ps.setTimestamp(8, Timestamp.valueOf(session.getEndedAt()));
+            ps.setBoolean(7, session.isSelectionRequired());
+            ps.setTimestamp(8, Timestamp.valueOf(session.getStartedAt()));
+            ps.setTimestamp(9, Timestamp.valueOf(session.getEndedAt()));
             return ps;
         }, keyHolder);
 
@@ -77,20 +83,23 @@ public class JdbcSessionRepository implements SessionRepository {
     public Session findById(long id) {
         String sql = "SELECT * FROM session WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rn) -> {
-            Long sessionId = rs.getLong("id");
-            Long courseId = rs.getLong("course_id");
-            CoverImage coverImage = coverImageRepository.findById(rs.getLong("cover_image_id"));
-            SessionStatus status = SessionStatus.valueOf(rs.getString("session_status"));
+            long sessionId = rs.getLong("id");
+            long courseId = rs.getLong("course_id");
+            CoverImages coverImages = new CoverImages(coverImageRepository.findBySessionId(sessionId));
+            SessionProgressStatus progressStatus = SessionProgressStatus.valueOf(rs.getString("progress_status"));
+            RecruitmentStatus recruitmentStatus = RecruitmentStatus.valueOf(rs.getString("recruitment_status"));
             RegistrationPolicyType type = RegistrationPolicyType.valueOf(rs.getString("registration_policy_type"));
             long sessionFee = rs.getLong("session_fee");
             int maxStudentCount = rs.getInt("max_student_count");
             LocalDateTime startedAt = rs.getTimestamp("started_at").toLocalDateTime();
             LocalDateTime endedAt = rs.getTimestamp("ended_at").toLocalDateTime();
 
+            boolean selectionRequired = rs.getBoolean("selection_required");
+
             RegistrationPolicy policy = type.createPolicy(sessionFee, maxStudentCount);
             SessionPeriod period = new SessionPeriod(startedAt, endedAt);
 
-            return new Session(sessionId, courseId, coverImage, status, policy, period);
+            return new Session(sessionId, courseId, coverImages, progressStatus, recruitmentStatus, policy, period, selectionRequired);
         }, id);
     }
 

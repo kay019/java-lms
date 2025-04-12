@@ -1,0 +1,21 @@
+package nextstep.courses.service;
+
+import org.springframework.stereotype.Service;
+
+import nextstep.courses.domain.Course;
+import nextstep.courses.domain.CourseRepository;
+
+@Service
+public class CourseService {
+
+    private final CourseRepository courseRepository;
+
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
+
+    public Course findById(long id) {
+        return courseRepository.findById(id);
+    }
+
+}

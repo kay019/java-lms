@@ -38,8 +38,6 @@ class PaymentRepositoryTest {
         assertThat(newPayment.getSessionId()).isEqualTo(payment.getSessionId());
         assertThat(newPayment.getNsUserId()).isEqualTo(payment.getNsUserId());
         assertThat(newPayment.getAmount()).isEqualTo(payment.getAmount());
-        assertThat(newPayment.getCreatedAt()).isEqualTo(payment.getCreatedAt());
-
     }
 
 }

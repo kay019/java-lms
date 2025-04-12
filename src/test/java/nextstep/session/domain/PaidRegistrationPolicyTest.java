@@ -16,7 +16,7 @@ class PaidRegistrationPolicyTest {
 
         Session session = new SessionBuilder()
                 .paid(sessionFee, maxStudentCount)
-                .sessionStatus(SessionStatus.RECRUITING)
+                .recruitmentStatus(RecruitmentStatus.RECRUITING)
                 .build();
 
         IllegalArgumentException e = catchIllegalArgumentException(() -> {
@@ -33,7 +33,7 @@ class PaidRegistrationPolicyTest {
 
         Session session = new SessionBuilder()
                 .paid(sessionFee, maxStudentCount)
-                .sessionStatus(SessionStatus.RECRUITING)
+                .recruitmentStatus(RecruitmentStatus.RECRUITING)
                 .build();
 
         IllegalArgumentException e = catchIllegalArgumentException(() -> {

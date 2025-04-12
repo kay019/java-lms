@@ -4,6 +4,8 @@ import nextstep.courses.infrastructure.JdbcCoverImageRepository;
 import nextstep.courses.infrastructure.JdbcSessionRepository;
 import nextstep.payments.infrastructure.JdbcPaymentRepository;
 import nextstep.session.domain.CoverImageRepository;
+import nextstep.session.domain.CoverImageTest;
+import nextstep.session.domain.RecruitmentStatus;
 import nextstep.session.domain.SessionRepository;
 import nextstep.session.domain.CoverImage;
 import nextstep.session.domain.Session;
@@ -25,29 +27,28 @@ class SessionRepositoryTest {
     private JdbcTemplate jdbcTemplate;
 
     private SessionRepository sessionRepository;
-    private CoverImageRepository coverImageRepository;
 
     @BeforeEach
     void setUp() {
-        this.coverImageRepository = new JdbcCoverImageRepository(jdbcTemplate);
+        CoverImageRepository coverImageRepository = new JdbcCoverImageRepository(jdbcTemplate);
 
         this.sessionRepository = new JdbcSessionRepository(
                 jdbcTemplate,
-                this.coverImageRepository,
+            coverImageRepository,
                 new JdbcPaymentRepository(jdbcTemplate)
         );
     }
 
     @Test
     void crud() {
-        CoverImage coverImage = coverImageRepository.findById(1L);
-
         Session session = new SessionBuilder()
                 .id(null)
                 .paid(1000, 10)
-                .sessionStatus(SessionStatus.RECRUITING)
-                .coverImage(coverImage)
+                .recruitmentStatus(RecruitmentStatus.RECRUITING)
                 .build();
+
+        session.addCoverImage(CoverImageTest.createCoverImage1());
+        session.addCoverImage(CoverImageTest.createCoverImage2());
 
         sessionRepository.save(session);
 
@@ -55,8 +56,10 @@ class SessionRepositoryTest {
 
         assertThat(newSession.getId()).isEqualTo(session.getId());
         assertThat(newSession.getCourseId()).isEqualTo(session.getCourseId());
-        assertThat(newSession.getCoverImage().getId()).isEqualTo(session.getCoverImage().getId());
-        assertThat(newSession.getSessionStatus()).isEqualTo(session.getSessionStatus());
+        assertThat(newSession.getCoverImages().getIds())
+            .containsExactlyInAnyOrderElementsOf(session.getCoverImages().getIds());
+        assertThat(newSession.getProgressStatus()).isEqualTo(session.getProgressStatus());
+        assertThat(newSession.getRecruitmentStatus()).isEqualTo(session.getRecruitmentStatus());
         assertThat(newSession.getRegistrationPolicyType()).isEqualTo(session.getRegistrationPolicyType());
         assertThat(newSession.getSessionFee()).isEqualTo(session.getSessionFee());
         assertThat(newSession.getMaxStudentCount()).isEqualTo(session.getMaxStudentCount());
