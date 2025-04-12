@@ -17,7 +17,7 @@ public class URLImageHandler implements ImageHandler {
     }
 
     @Override
-    public BufferedImage getImage() {
+    public BufferedImage image() {
         return image;
     }
 

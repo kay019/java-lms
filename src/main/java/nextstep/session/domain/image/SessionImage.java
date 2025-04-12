@@ -18,7 +18,7 @@ public class SessionImage {
     }
 
     public SessionImage(String urlStr, ImageHandler imageHandler, SessionImageType type) {
-        BufferedImage res = imageHandler.getImage();
+        BufferedImage res = imageHandler.image();
         if ((WIDTH_RATIO * res.getHeight()) != (HEIGHT_RATIO * res.getWidth())) {
             throw new IllegalArgumentException("width와 height의 비율은 3:2 이여야 합니다.");
         }
@@ -32,7 +32,7 @@ public class SessionImage {
     }
 
     public BufferedImage image() {
-        return imageHandler.getImage();
+        return imageHandler.image();
     }
 
     public void updateImage() throws IOException {

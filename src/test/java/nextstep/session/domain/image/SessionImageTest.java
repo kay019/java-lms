@@ -17,7 +17,7 @@ class SessionImageTest {
     public void testConstructor() {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage getImage() {
+            public BufferedImage image() {
                 return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
             }
 
@@ -39,7 +39,7 @@ class SessionImageTest {
     public void testImage_throwExceptionByRatio() throws IOException {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage getImage() {
+            public BufferedImage image() {
                 return new BufferedImage(300, 201, BufferedImage.TYPE_INT_ARGB);
             }
 
@@ -63,7 +63,7 @@ class SessionImageTest {
     public void testImage_throwExceptionBySize() throws IOException {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage getImage() {
+            public BufferedImage image() {
                 return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
             }
 
