@@ -15,7 +15,8 @@ public class Payment extends BaseDomain {
 
     private Long amount;
 
-    public Payment() { }
+    public Payment() {
+    }
 
     public Payment(Long id, Session session, NsUser user, Long amount) {
         super(id, LocalDateTime.now(), LocalDateTime.now());

@@ -34,5 +34,4 @@ public class SessionTest {
     public void testConstructor() {
         assertDoesNotThrow(() -> new Session(1L, course, new SessionImage(), payments, period, SessionStatus.PREPARING, SessionType.FREE));
     }
-
 }

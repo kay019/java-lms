@@ -19,11 +19,11 @@ public class SessionPayments {
         this(fee, capacity, new Payments());
     }
 
-    public SessionPayments( long fee, int capacity) {
+    public SessionPayments(long fee, int capacity) {
         this(new SessionFee(fee), new SessionCapacity(capacity), new Payments());
     }
 
-    public SessionPayments( long fee, int capacity, Payments payments) {
+    public SessionPayments(long fee, int capacity, Payments payments) {
         this(new SessionFee(fee), new SessionCapacity(capacity), payments);
     }
 

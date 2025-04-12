@@ -5,5 +5,6 @@ import java.io.IOException;
 
 public interface ImageHandler {
     BufferedImage download() throws IOException;
+
     long byteSize();
 }
