@@ -3,8 +3,6 @@ package nextstep.session.domain.payment;
 import nextstep.payments.domain.Payment;
 import nextstep.payments.domain.Payments;
 
-import java.util.List;
-
 public class SessionPayments {
     private final SessionType sessionType;
     private final Payments payments;
@@ -39,10 +37,10 @@ public class SessionPayments {
         return payment.isSameAmount(fee.getValue());
     }
 
-    public void add(Payment payment) {
+    public boolean add(Payment payment) {
         if (sessionType.canNotEnroll(this, payment)) {
-            return;
+            return false;
         }
-        payments.add(payment);
+        return payments.add(payment);
     }
 }

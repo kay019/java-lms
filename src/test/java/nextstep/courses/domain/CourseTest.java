@@ -13,7 +13,7 @@ public class CourseTest {
     @DisplayName("Course 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new Course(1L,"test-course", 3L, LocalDateTime.now(), LocalDateTime.now()));
+        assertDoesNotThrow(() -> new Course(1L, "test-course", 3L, LocalDateTime.now(), LocalDateTime.now()));
     }
 
 }

@@ -5,8 +5,6 @@ import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionPeriod;
 import nextstep.session.domain.image.SessionCoverImage;
 import nextstep.session.domain.image.SessionCoverImageType;
-import nextstep.session.domain.payment.SessionCapacity;
-import nextstep.session.domain.payment.SessionFee;
 import nextstep.session.domain.payment.SessionPayments;
 import nextstep.session.domain.payment.SessionType;
 import nextstep.users.domain.NsUserTest;

@@ -1,10 +1,7 @@
 package nextstep.session.domain;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseTest;
-import nextstep.payments.domain.Payment;
 import nextstep.session.domain.image.SessionCoverImage;
-import nextstep.session.domain.image.SessionCoverImageTest;
 import nextstep.session.domain.image.SessionCoverImageType;
 import nextstep.session.domain.payment.SessionCapacity;
 import nextstep.session.domain.payment.SessionFee;
@@ -15,11 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static nextstep.session.domain.image.RowsTest.dummyRows;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class SessionTest {

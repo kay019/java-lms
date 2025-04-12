@@ -21,6 +21,7 @@ public class Rows {
 
         this.value = rows;
     }
+
     public int size() {
         return value.size();
     }
