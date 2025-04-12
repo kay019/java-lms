@@ -1,8 +1,9 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+
 import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.Test;
 
