@@ -19,7 +19,7 @@ public class SessionImage {
     }
 
     public SessionImage(String urlStr, SessionImageType type) throws MalformedURLException {
-        this(urlStr, new UrlImageHandler(urlStr), type);
+        this(urlStr, new URLImageHandler(urlStr), type);
     }
 
     public SessionImage(String urlStr, ImageHandler imageHandler, SessionImageType type) {

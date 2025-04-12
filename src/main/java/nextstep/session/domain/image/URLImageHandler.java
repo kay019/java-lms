@@ -7,10 +7,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class UrlImageHandler implements ImageHandler {
+public class URLImageHandler implements ImageHandler {
     private final URL url;
 
-    public UrlImageHandler(String url) throws MalformedURLException {
+    public URLImageHandler(String url) throws MalformedURLException {
         this.url = new URL(url);
     }
 
