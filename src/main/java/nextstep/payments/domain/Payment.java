@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Payment {
-    private String id;
+    private Long id;
 
     private Session session;
 
@@ -20,7 +20,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String id, Session session, NsUser user, Long amount) {
+    public Payment(Long id, Session session, NsUser user, Long amount) {
         this.id = id;
         this.session = session;
         this.user = user;
@@ -41,7 +41,12 @@ public class Payment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Objects.equals(id, payment.id) && Objects.equals(session, payment.session) && Objects.equals(user, payment.user) && Objects.equals(amount, payment.amount) && Objects.equals(createdAt, payment.createdAt);
+        return Objects.equals(id, payment.id) &&
+            Objects.equals(session, payment.session) &&
+            Objects.equals(user, payment.user) &&
+            Objects.equals(amount, payment.amount) &&
+            Objects.equals(createdAt, payment.createdAt)
+            ;
     }
 
     @Override

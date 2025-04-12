@@ -1,5 +1,6 @@
 package nextstep.session.domain.image;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rows {
@@ -8,7 +9,8 @@ public class Rows {
 
     public Rows(List<Row> rows) {
         if (rows == null || rows.isEmpty()) {
-            throw new IllegalArgumentException("null이나 빈 값을 할당할 수 없습니다.");
+            this.value = new ArrayList<>();
+            return;
         }
 
         int rowSize = rows.get(0).size();

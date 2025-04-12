@@ -1,81 +1,32 @@
 package nextstep.session.domain;
 
+import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.Course;
-import nextstep.payments.domain.Payment;
 import nextstep.session.domain.image.SessionCoverImage;
-import nextstep.session.domain.type.SessionType;
-import nextstep.users.domain.NsUser;
+import nextstep.session.domain.payment.SessionPayments;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-public class Session {
-
-    private Long id;
+public class Session extends BaseDomain {
 
     private Course course;
 
-    private SessionCoverImage coverSessionCoverImage;
+    private SessionCoverImage image;
 
-    private int capacity;
+    private SessionPeriod period;
 
-    private Long fee;
+    private SessionPayments payments;
 
-    private List<Payment> payments;
-
-    private SessionType sessionType;
-
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-
-    public Session(Long id, Course course, SessionCoverImage sessionCoverImage, int capacity, Long fee, SessionType sessionType, LocalDateTime startDate, LocalDateTime endDate) {
-        this(id, course, sessionCoverImage, capacity, fee, new ArrayList<>(), sessionType, startDate, endDate, LocalDateTime.now(), LocalDateTime.now());
-    }
-
-    public Session(Long id, Course course, SessionCoverImage sessionCoverImage, int capacity, Long fee, List<Payment> payments, SessionType sessionType, LocalDateTime startDate, LocalDateTime endDate) {
-        this(id, course, sessionCoverImage, capacity, fee, payments, sessionType, startDate, endDate, LocalDateTime.now(), LocalDateTime.now());
-    }
-
-    public Session(Long id, Course course, SessionCoverImage sessionCoverImage, int capacity, Long fee, List<Payment> payments, SessionType sessionType, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period) {
+        super(id, LocalDateTime.now(), LocalDateTime.now());
         this.course = course;
-        this.coverSessionCoverImage = sessionCoverImage;
-        this.capacity = capacity;
-        this.fee = fee;
+        this.image = image;
+        this.period = period;
         this.payments = payments;
-        this.sessionType = sessionType;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public void toCourse(Course course) {
         this.course = course;
     }
 
-    public boolean isCapacityNotExceeded() {
-        return payments.size() < capacity;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(course, session.course);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, course);
-    }
 }

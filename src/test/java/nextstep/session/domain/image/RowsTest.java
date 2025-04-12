@@ -11,7 +11,7 @@ import static nextstep.session.domain.image.RowTest.dummyImageRow;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class RowsTest {
+public class RowsTest {
 
     public static Rows dummyRows(int width, int height) {
         List<Row> rows = IntStream.range(0, height)
@@ -24,14 +24,14 @@ class RowsTest {
     @Test
     public void testConstructor() {
         assertDoesNotThrow(() -> new Rows(List.of(new Row(List.of(PixelTest.P1)))));
-        assertThatThrownBy(() -> new Rows(null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("null이나 빈 값을 할당할 수 없습니다.");
-        assertThatThrownBy(() -> new Rows(List.of()))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("null이나 빈 값을 할당할 수 없습니다.");
+    }
+
+    @DisplayName("Rows 인스턴스 생성 - row의 크기들이 동일하지 않으면 예외를 던짐")
+    @Test
+    public void testConstructor_null() {
         assertThatThrownBy(() -> new Rows(List.of(dummyImageRow(1), dummyImageRow(2))))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("row의 크기들은 동일해야 합니다.");
     }
+
 }

@@ -1,27 +1,26 @@
-package nextstep.payments.domain;
+package nextstep.session.domain.payment;
 
 import nextstep.courses.domain.Course;
+import nextstep.payments.domain.Payment;
+import nextstep.payments.domain.Payments;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionPeriod;
 import nextstep.session.domain.image.SessionCoverImage;
 import nextstep.session.domain.image.SessionCoverImageType;
-import nextstep.session.domain.payment.SessionCapacity;
-import nextstep.session.domain.payment.SessionFee;
-import nextstep.session.domain.payment.SessionPayments;
-import nextstep.session.domain.payment.SessionType;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static nextstep.session.domain.image.RowsTest.dummyRows;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class PaymentTest {
+class SessionPaymentsTest {
 
     private Session session;
 
@@ -34,22 +33,31 @@ public class PaymentTest {
         session = new Session(1L, course, image, payments, period);
     }
 
-    @DisplayName("Payment 인스턴스 생성")
+    @DisplayName("SessionPayments 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new Payment(1L, session, NsUserTest.JAVAJIGI, 300_000L));
+        assertDoesNotThrow(() -> new SessionPayments(SessionType.PAID, new SessionFee(800_000), new SessionCapacity(80)));
     }
 
-    @DisplayName("두개의 Payment 강의와 유저 정보가 동일 판별")
+    @DisplayName("최대 수강 인원이 찼는지 확인")
     @Test
-    public void testEqualsSessionUser() {
+    public void testIsFull() {
+        Payments payments = new Payments(List.of(new Payment()));
+        SessionPayments sessionPayments = new SessionPayments(SessionType.PAID, 800_000, 1, payments);
+
+        assertThat(sessionPayments.isFull()).isTrue();
+    }
+
+    @DisplayName("수강료와 지불 요금 금액이 맞는지 확인")
+    @Test
+    public void testMatchesFee() {
+        SessionPayments sessionPayments = new SessionPayments(SessionType.PAID, 200_000, 1);
         Payment payment1 = new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L);
-        Payment payment2 = new Payment(2L, session, NsUserTest.JAVAJIGI, 200_000L);
-        Payment payment3 = new Payment(3L, session, NsUserTest.SANJIGI, 200_000L);
+        Payment payment2 = new Payment(1L, session, NsUserTest.JAVAJIGI, 300_000L);
 
         assertAll(
-            () -> assertThat(payment1.equalsSessionUser(payment2)).isTrue(),
-            () -> assertThat(payment1.equalsSessionUser(payment3)).isFalse()
+            () -> assertThat(sessionPayments.matchesFee(payment1)).isTrue(),
+            () -> assertThat(sessionPayments.matchesFee(payment2)).isFalse()
         );
     }
 }

@@ -1,12 +1,13 @@
 package nextstep.session.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sessions {
     private final List<Session> value;
 
-    public Sessions(List<Session> sessions) {
-        this.value = sessions;
+    public Sessions() {
+        this.value = new ArrayList<>();
     }
 
     public void add(Session session) {

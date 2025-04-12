@@ -1,21 +1,25 @@
 package nextstep.payments.domain;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseTest;
 import nextstep.session.domain.Session;
-import nextstep.session.domain.SessionTest;
-import nextstep.session.domain.image.SessionCoverImageTest;
-import nextstep.session.domain.type.SessionType;
+import nextstep.session.domain.SessionPeriod;
+import nextstep.session.domain.image.SessionCoverImage;
+import nextstep.session.domain.image.SessionCoverImageType;
+import nextstep.session.domain.payment.SessionCapacity;
+import nextstep.session.domain.payment.SessionFee;
+import nextstep.session.domain.payment.SessionPayments;
+import nextstep.session.domain.payment.SessionType;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import static nextstep.session.domain.image.RowsTest.dummyRows;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class PaymentsTest {
 
@@ -23,38 +27,43 @@ class PaymentsTest {
 
     @BeforeEach
     public void setUp() {
-        LocalDateTime now = LocalDateTime.now();
-        session = new Session(
-            1L,
-            new Course(),
-            SessionCoverImageTest.I1,
-            80,
-            200_000L,
-            List.of(new Payment()),
-            SessionType.PAID,
-            now,
-            now,
-            now,
-            now
+        Course course = new Course("test-course-1", 1L);
+        SessionPayments payments = new SessionPayments(
+            SessionType.FREE,
+            new SessionFee(500_000),
+            new SessionCapacity(80)
         );
+        SessionCoverImage image = new SessionCoverImage(dummyRows(300, 200), SessionCoverImageType.GIF);
+        SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
+        session = new Session(1L, course, image, payments, period);
     }
 
     @DisplayName("Payments 인스턴스 생성 테스트")
     @Test
     public void testConstructor() {
-        Payment payment1 = new Payment("1L", session, NsUserTest.JAVAJIGI, 200_000L);
-        Payment payment2 = new Payment("2L", session, NsUserTest.SANJIGI, 200_000L);
-        assertDoesNotThrow(() -> new Payments(List.of(payment1, payment2)));
+        assertDoesNotThrow(() -> new Payments());
     }
 
-    @DisplayName("Payments 인스턴스 생성 테스트 - 동일 코스에 대해 한 유저가 두개의 지불을 하는 경우 예외 던짐")
+    @DisplayName("payment 추가")
     @Test
-    public void testConstructor_duplicatePaymentByUser() {
-        Payment payment1 = new Payment("1L", session, NsUserTest.JAVAJIGI, 300_000L);
-        Payment payment2 =  new Payment("13", session, NsUserTest.JAVAJIGI, 200_000L);
-        assertThatThrownBy(() -> new Payments(List.of(payment1, payment2)))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("한 유저가 동일한 코스에 두번 결재할 수 없습니다.");
+    public void testAdd() {
+        Payment payment = new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L);
+        Payments payments = new Payments();
+        assertDoesNotThrow(() -> payments.add(payment));
     }
 
+    @DisplayName("payment 추가 - 동일 유저가 한 코드에 대해서 결재를 여러번 하면 예외 던짐")
+    @Test
+    public void testAdd_throwException() {
+        Payment payment1 = new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L);
+        Payment payment2 = new Payment(2L, session, NsUserTest.JAVAJIGI, 200_000L);
+
+        Payments payments = new Payments();
+        assertAll(
+            () -> assertDoesNotThrow(() -> payments.add(payment1)),
+            () -> assertThatThrownBy(() -> payments.add(payment2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("한 유저가 동일한 코스에 두번 결재할 수 없습니다.")
+        );
+    }
 }
