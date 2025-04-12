@@ -1,15 +1,15 @@
 package nextstep.session.domain.image;
 
-public class Image {
+public class SessionCoverImage {
     private static final double WIDTH_RATIO = 3;
     private static final double HEIGHT_RATIO = 2;
     private static final int MAX_BYTE_SIZE = 1024 * 1024;
 
     Rows rows;
 
-    Type type;
+    SessionCoverImageType sessionCoverImageType;
 
-    public Image(Rows rows, Type type) {
+    public SessionCoverImage(Rows rows, SessionCoverImageType sessionCoverImageType) {
         if ((WIDTH_RATIO * rows.size()) != (HEIGHT_RATIO * rows.rowSize())) {
             throw new IllegalArgumentException("width와 height의 비율은 3:2 이여야 합니다.");
         }
@@ -18,6 +18,6 @@ public class Image {
         }
 
         this.rows = rows;
-        this.type = type;
+        this.sessionCoverImageType = sessionCoverImageType;
     }
 }
