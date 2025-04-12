@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static nextstep.qna.domain.AnswerTest.*;
-import static nextstep.qna.domain.QuestionTest.Q1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnswersTest {
@@ -46,9 +45,9 @@ public class AnswersTest {
     @DisplayName("deleteAll 메소드 동작 확인 - DeleteHistory 객체 생성")
     void delete_all_test() {
         Answers answers = new Answers();
-        answers.add(new Answer(NsUserTest.JAVAJIGI, Q1, "Answers Test1"));
-        answers.add(new Answer(NsUserTest.JAVAJIGI, Q1, "Answers Test2"));
-        List<DeleteHistory> histories = answers.deleteAll(loginUser);
+        answers.add(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Test1"));
+        answers.add(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Test2"));
+        List<DeleteHistory> histories = answers.deleteAll();
         assertThat(histories).hasSize(2);
     }
 }

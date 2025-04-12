@@ -5,8 +5,7 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static nextstep.qna.domain.AnswerTest.A1;
-import static nextstep.qna.domain.AnswerTest.A2;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -18,7 +17,7 @@ public class QuestionTest {
 
     @Test
     @DisplayName("질문 작성자만 삭제할 수 있다")
-    void delete_success_if_writer () {
+    void delete_success_if_writer () throws CannotDeleteException {
         Q1.delete(NsUserTest.JAVAJIGI);
 
         assertThat(Q1.isDeleted()).isTrue();
@@ -32,7 +31,7 @@ public class QuestionTest {
 
     @Test
     @DisplayName("답변 없는 경우 삭제가 가능하다")
-    void delete_success_if_no_answer() {
+    void delete_success_if_no_answer() throws CannotDeleteException {
         Q1.delete(NsUserTest.JAVAJIGI);
 
         assertThat(Q1.isDeleted()).isTrue();
@@ -40,21 +39,21 @@ public class QuestionTest {
 
     @Test
     @DisplayName("답변이 있지만 모두 질문 작성자에 의해 작성된 경우 삭제가 가능하다")
-    void delete_success_if_all_answers_by_writer () {
-        Q1.addAnswer(A1);
-        Q1.addAnswer(new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents2"));
+    void delete_success_if_all_answers_by_writer () throws CannotDeleteException {
+        Q1.addAnswer(AnswerTest.A1);  // Answer by writer (JAVAJIGI)
+        Q1.addAnswer(AnswerTest.A3);  // Answer by writer (JAVAJIGI)
 
-        Q1.delete(NsUserTest.JAVAJIGI);
+        List<DeleteHistory> deleteHistoryList = Q1.delete(NsUserTest.JAVAJIGI);
 
         assertThat(Q1.isDeleted()).isTrue();
-        assertThat(Q1.getAnswers()).allMatch(Answer::isDeleted);
+        assertThat(deleteHistoryList.size()).isEqualTo(1);
     }
 
     @Test
     @DisplayName("질문 답변 중 질문 작성자가 아닌 다른 사람 답변이 있는 경우 예외처리한다")
     void delete_error_if_all_answers_not_by_writer () {
-        Q1.addAnswer(A1); // Answer by writer (JAVAJIGI)
-        Q1.addAnswer(A2); // Answer by not writer (SANGJIGI)
+        Q1.addAnswer(AnswerTest.A1); // Answer by writer (JAVAJIGI)
+        Q1.addAnswer(AnswerTest.A2); // Answer by not writer (SANGJIGI)
 
         assertThatThrownBy(()-> Q1.delete(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class).hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
     }
