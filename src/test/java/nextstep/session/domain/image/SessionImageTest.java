@@ -10,7 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class SessionImageTest {
-    private static final String testImageUrl = "https://cdn.pixabay.com/photo/2022/01/13/05/48/dog-6934437_1280.jpg";
+    private static final String testImageUrl = "https://test.com";
 
     @DisplayName("SessionImage 인스턴스 생성")
     @Test
