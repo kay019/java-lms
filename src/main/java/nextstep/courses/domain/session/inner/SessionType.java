@@ -10,4 +10,16 @@ public abstract class SessionType {
     protected long fee;
 
     public abstract boolean enroll(Payment payment, Session session);
+
+    public String getSessionType(){
+        return sessionType;
+    }
+
+    public int getMaxEnrollment() {
+        return maxEnrollment;
+    }
+
+    public long getFee() {
+        return fee;
+    }
 }

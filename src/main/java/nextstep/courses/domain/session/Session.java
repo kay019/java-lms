@@ -51,4 +51,40 @@ public class Session {
         // 수강 신청 여부를 DB에 등록? 수강신청한 유저 명단을 어떻게 관리해야 할지 요구 사항 명확하지 않음
         enrollmentCount++;
     }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSessionType() {
+        return sessionType.getSessionType();
+    }
+
+    public int getMaxEnrollment() {
+        return sessionType.getMaxEnrollment();
+    }
+
+    public long getFee() {
+        return sessionType.getFee();
+    }
+
+    public LocalDate getStartDate() {
+        return sessionDate.startDate();
+    }
+
+    public LocalDate getFinishDate() {
+        return sessionDate.finishDate();
+    }
+
+    public String getStatus() {
+        return status.name();
+    }
+
+    public int getEnrollmentCount() {
+        return enrollmentCount;
+    }
 }

@@ -5,7 +5,7 @@ import nextstep.payments.domain.Payment;
 
 public class PaidSessionType extends SessionType {
 
-    private static final String TYPE = "PAID";
+    public static final String TYPE = "PAID";
 
     public PaidSessionType(int maxEnrollment, long fee) {
         this.sessionType = TYPE;
