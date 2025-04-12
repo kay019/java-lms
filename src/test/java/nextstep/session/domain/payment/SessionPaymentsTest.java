@@ -27,7 +27,7 @@ class SessionPaymentsTest {
     @BeforeEach
     public void setUp() {
         Course course = new Course("test-course-1", 1L);
-        SessionPayments payments = new SessionPayments(SessionType.FREE, 500_000, 80);
+        SessionPayments payments = new SessionPayments(500_000, 80);
         SessionCoverImage image = new SessionCoverImage(dummyRows(300, 200), SessionCoverImageType.GIF);
         SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
         session = new Session(1L, course, image, payments, period);
@@ -36,14 +36,14 @@ class SessionPaymentsTest {
     @DisplayName("SessionPayments 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new SessionPayments(SessionType.PAID, new SessionFee(800_000), new SessionCapacity(80)));
+        assertDoesNotThrow(() -> new SessionPayments(new SessionFee(800_000), new SessionCapacity(80)));
     }
 
     @DisplayName("최대 수강 인원이 찼는지 확인")
     @Test
     public void testIsFull() {
         Payments payments = new Payments(List.of(new Payment()));
-        SessionPayments sessionPayments = new SessionPayments(SessionType.PAID, 800_000, 1, payments);
+        SessionPayments sessionPayments = new SessionPayments(800_000, 1, payments);
 
         assertThat(sessionPayments.isFull()).isTrue();
     }
@@ -51,7 +51,7 @@ class SessionPaymentsTest {
     @DisplayName("수강료와 지불 요금 금액이 맞는지 확인")
     @Test
     public void testMatchesFee() {
-        SessionPayments sessionPayments = new SessionPayments(SessionType.PAID, 200_000, 1);
+        SessionPayments sessionPayments = new SessionPayments(200_000, 1);
         Payment payment1 = new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L);
         Payment payment2 = new Payment(1L, session, NsUserTest.JAVAJIGI, 300_000L);
 

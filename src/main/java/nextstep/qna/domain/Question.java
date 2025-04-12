@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Question extends BaseDomain {
+
     private final String title;
 
     private final String contents;

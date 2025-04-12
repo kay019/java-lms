@@ -26,7 +26,7 @@ public class SessionTest {
     @BeforeEach
     void setUp() {
         course = new Course("test-course-1", 1L);
-        payments = new SessionPayments(SessionType.FREE, new SessionFee(500_000), new SessionCapacity(80));
+        payments = new SessionPayments(new SessionFee(500_000), new SessionCapacity(80));
         image = new SessionCoverImage(dummyRows(300, 200), SessionCoverImageType.GIF);
         period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
     }
@@ -34,7 +34,7 @@ public class SessionTest {
     @DisplayName("Session 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new Session(1L, course, image, payments, period));
+        assertDoesNotThrow(() -> new Session(1L, course, image, payments, period, SessionStatus.PREPARING, SessionType.FREE));
     }
 
 }

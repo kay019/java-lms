@@ -4,26 +4,26 @@ import nextstep.payments.domain.Payment;
 import nextstep.payments.domain.Payments;
 
 public class SessionPayments {
-    private final SessionType sessionType;
+
     private final Payments payments;
+
     private final SessionFee fee;
+
     private final SessionCapacity capacity;
 
-
-    public SessionPayments(SessionType sessionType, SessionFee fee, SessionCapacity capacity) {
-        this(sessionType, fee, capacity, new Payments());
+    public SessionPayments(SessionFee fee, SessionCapacity capacity) {
+        this(fee, capacity, new Payments());
     }
 
-    public SessionPayments(SessionType sessionType, long fee, int capacity) {
-        this(sessionType, new SessionFee(fee), new SessionCapacity(capacity), new Payments());
+    public SessionPayments( long fee, int capacity) {
+        this(new SessionFee(fee), new SessionCapacity(capacity), new Payments());
     }
 
-    public SessionPayments(SessionType sessionType, long fee, int capacity, Payments payments) {
-        this(sessionType, new SessionFee(fee), new SessionCapacity(capacity), payments);
+    public SessionPayments( long fee, int capacity, Payments payments) {
+        this(new SessionFee(fee), new SessionCapacity(capacity), payments);
     }
 
-    public SessionPayments(SessionType sessionType, SessionFee fee, SessionCapacity capacity, Payments payments) {
-        this.sessionType = sessionType;
+    public SessionPayments(SessionFee fee, SessionCapacity capacity, Payments payments) {
         this.fee = fee;
         this.capacity = capacity;
         this.payments = payments;
@@ -38,9 +38,6 @@ public class SessionPayments {
     }
 
     public boolean add(Payment payment) {
-        if (sessionType.canNotEnroll(this, payment)) {
-            return false;
-        }
         return payments.add(payment);
     }
 }

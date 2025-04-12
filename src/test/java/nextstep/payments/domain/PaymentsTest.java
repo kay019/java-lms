@@ -28,11 +28,7 @@ class PaymentsTest {
     @BeforeEach
     public void setUp() {
         Course course = new Course("test-course-1", 1L);
-        SessionPayments payments = new SessionPayments(
-            SessionType.FREE,
-            new SessionFee(500_000),
-            new SessionCapacity(80)
-        );
+        SessionPayments payments = new SessionPayments(500_000, 80);
         SessionCoverImage image = new SessionCoverImage(dummyRows(300, 200), SessionCoverImageType.GIF);
         SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
         session = new Session(1L, course, image, payments, period);
