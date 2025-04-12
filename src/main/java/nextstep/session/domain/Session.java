@@ -3,7 +3,7 @@ package nextstep.session.domain;
 import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.Course;
 import nextstep.payments.domain.Payment;
-import nextstep.session.domain.image.SessionCoverImage;
+import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.payment.SessionPayments;
 import nextstep.session.domain.property.SessionProperty;
 import nextstep.session.domain.property.SessionStatus;
@@ -19,14 +19,14 @@ public class Session extends BaseDomain {
 
     private final SessionDescriptor descriptor;
 
-    public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period) {
+    public Session(Long id, Course course, SessionImage image, SessionPayments payments, SessionPeriod period) {
         super(id);
         this.course = course;
         this.descriptor = new SessionDescriptor(image, period, new SessionProperty());
         this.payments = payments;
     }
 
-    public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period, SessionStatus status, SessionType type) {
+    public Session(Long id, Course course, SessionImage image, SessionPayments payments, SessionPeriod period, SessionStatus status, SessionType type) {
         super(id);
         this.course = course;
         this.descriptor = new SessionDescriptor(image, period, new SessionProperty(status, type));

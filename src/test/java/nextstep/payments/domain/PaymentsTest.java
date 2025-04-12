@@ -3,8 +3,7 @@ package nextstep.payments.domain;
 import nextstep.courses.domain.Course;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionPeriod;
-import nextstep.session.domain.image.SessionCoverImage;
-import nextstep.session.domain.image.SessionCoverImageType;
+import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.payment.SessionPayments;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static nextstep.session.domain.image.RowsTest.dummyRows;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -26,9 +24,8 @@ class PaymentsTest {
     public void setUp() {
         Course course = new Course("test-course-1", 1L);
         SessionPayments payments = new SessionPayments(500_000, 80);
-        SessionCoverImage image = new SessionCoverImage(dummyRows(300, 200), SessionCoverImageType.GIF);
         SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
-        session = new Session(1L, course, image, payments, period);
+        session = new Session(1L, course, new SessionImage(), payments, period);
     }
 
     @DisplayName("Payments 인스턴스 생성 테스트")
