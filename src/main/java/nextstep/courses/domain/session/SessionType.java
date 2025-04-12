@@ -2,7 +2,10 @@ package nextstep.courses.domain.session;
 
 import nextstep.payments.domain.Payment;
 
-public interface SessionType {
+public abstract class SessionType {
 
-    boolean enroll(Payment payment, Session session);
+    protected int maxEnrollment;
+    protected long fee;
+
+    abstract boolean enroll(Payment payment, Session session);
 }

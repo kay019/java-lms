@@ -2,10 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.payments.domain.Payment;
 
-class PaidSessionType implements SessionType {
-
-    private int maxEnrollment;
-    private long fee;
+class PaidSessionType extends SessionType {
 
     public PaidSessionType(int maxEnrollment, long fee) {
         this.maxEnrollment = maxEnrollment;
