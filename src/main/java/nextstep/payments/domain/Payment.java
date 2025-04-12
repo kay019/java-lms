@@ -36,6 +36,10 @@ public class Payment {
         return payment.user.equals(this.user) && payment.session.equals(this.session);
     }
 
+    public void toSession(Session session) {
+        this.session = session;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

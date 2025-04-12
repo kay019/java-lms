@@ -2,6 +2,7 @@ package nextstep.session.domain;
 
 import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.Course;
+import nextstep.payments.domain.Payment;
 import nextstep.session.domain.image.SessionCoverImage;
 import nextstep.session.domain.payment.SessionPayments;
 
@@ -11,11 +12,11 @@ public class Session extends BaseDomain {
 
     private Course course;
 
-    private SessionCoverImage image;
+    private final SessionCoverImage image;
 
-    private SessionPeriod period;
+    private final SessionPeriod period;
 
-    private SessionPayments payments;
+    private final SessionPayments payments;
 
     public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period) {
         super(id, LocalDateTime.now(), LocalDateTime.now());
@@ -29,4 +30,11 @@ public class Session extends BaseDomain {
         this.course = course;
     }
 
+    public boolean addPayment(Payment payment) {
+        if (payments.add(payment)) {
+            payment.toSession(this);
+            return true;
+        }
+        return false;
+    }
 }
