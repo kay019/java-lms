@@ -3,17 +3,22 @@ package nextstep.courses.domain.session;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class ImageFormatTest {
 
-    @Test
-    void 타입_확인() {
-        assertThat(ImageFormat.findFormat("jpg")).isEqualTo(ImageFormat.JPEG);
-        assertThat(ImageFormat.findFormat("jpeg")).isEqualTo(ImageFormat.JPEG);
-        assertThat(ImageFormat.findFormat("png")).isEqualTo(ImageFormat.PNG);
-        assertThat(ImageFormat.findFormat("gif")).isEqualTo(ImageFormat.GIF);
-        assertThat(ImageFormat.findFormat("bmp")).isEqualTo(ImageFormat.NOT_SUPPORTED);
-        assertThat(ImageFormat.findFormat("tiff")).isEqualTo(ImageFormat.NOT_SUPPORTED);
+    @ParameterizedTest
+    @CsvSource({
+            "jpg, JPEG",
+            "jpeg, JPEG",
+            "png, PNG",
+            "gif, GIF",
+            "bmp, NOT_SUPPORTED",
+            "tiff, NOT_SUPPORTED"
+    })
+    void 타입_확인(String format, ImageFormat expectedFormat) {
+        assertThat(ImageFormat.findFormat(format)).isEqualTo(expectedFormat);
     }
 
 }

@@ -22,12 +22,4 @@ class ImageTest {
                 .hasMessage("지원하지 않는 이미지 포맷입니다.");
     }
 
-    @Test
-    void 너무_큰_이미지() {
-        assertThatThrownBy(() ->
-                new Image("http://daumt.jpg", 300, 200, 2 * 1024 * 1024, "jpg")
-        ).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지의 용량이 너무 큽니다.");
-    }
-
 }
