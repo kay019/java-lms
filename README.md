@@ -32,10 +32,12 @@ QnAService의 deleteQuestion() 메서드 리펙토링
     - [x] Image 크기는 width는 300픽셀, height는 200픽셀 이상이어야 하며 width와 height의 비율은 3:2여야 한다.
     - [x] Image는 타입을 가진다.
     - [x] Image 타입은 gif, jpg(jpeg 포함),, png, svg만 허용한다.
-- [] Session은 강의 타입(SessionType)을 가진다.
-  - [] SessionType은 무료 강의(Free)와 유료 강의(Paid)로 나뉜다.
+- [x] Session은 강의 타입(SessionType)을 가진다.
+  - [x] SessionType은 무료 강의(Free)와 유료 강의(Paid)로 나뉜다.
   - [] 무료강의는 최대 수강 인원 제한이 없다.
   - [] 유료 강의는 강의 최대 수강 인원을 초과할 수 없다.
+- [] Session은 Payments를 가진다.
+  - [] Payments는 동일
   - [] 유료 강의는 수강생이 결제한 금액과 수강료가 일치할 때 수강 신청이 가능하다.
 - [] Session은 상태(Status)를 가진다.
   - [] 준비중, 모집중, 종료 3가지 상태를 가진다.
