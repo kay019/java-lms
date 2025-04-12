@@ -6,7 +6,6 @@ import java.util.List;
 public class Payments {
     private final List<Payment> value;
 
-
     public Payments() {
         this.value = new ArrayList<>();
     }

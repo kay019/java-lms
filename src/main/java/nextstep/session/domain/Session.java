@@ -15,30 +15,22 @@ public class Session extends BaseDomain {
 
     private Course course;
 
-    private final SessionCoverImage image;
-
-    private final SessionPeriod period;
-
     private final SessionPayments payments;
 
-    private final SessionProperty property;
+    private final SessionDescriptor descriptor;
 
     public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period) {
         super(id);
         this.course = course;
-        this.image = image;
-        this.period = period;
+        this.descriptor = new SessionDescriptor(image, period, new SessionProperty());
         this.payments = payments;
-        this.property = new SessionProperty();
     }
 
     public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period, SessionStatus status, SessionType type) {
         super(id);
         this.course = course;
-        this.image = image;
-        this.period = period;
+        this.descriptor = new SessionDescriptor(image, period, new SessionProperty(status, type));
         this.payments = payments;
-        this.property = new SessionProperty(status, type);
     }
 
     public void toCourse(Course course) {
@@ -46,7 +38,7 @@ public class Session extends BaseDomain {
     }
 
     public boolean addPayment(Payment payment) {
-        if (property.canNotEnroll(payments, payment)) {
+        if (descriptor.canNotEnroll(payments, payment)) {
             return false;
         }
         payments.add(payment);

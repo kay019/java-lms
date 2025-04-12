@@ -42,7 +42,6 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 - [x] Session은 상태(Status)를 가진다.
   - [x] 준비중, 모집중, 종료 3가지 상태를 가진다.
   - [x] 강의 수강신청은 강의 상태가 모집중일 때만 가능하다.
-- [] Session은 수강신청 유저 정보를 가지고 있다.
-- [] Session에서 user를 받아 결재하면 결제 정보를 받아와 저장한다.
-- [] Session의 필드 값은 3개로 관리한다.
+- [x] Session은 수강신청 유저 정보를 가지고 있다.
+- [x] Session의 필드 값은 3개로 관리한다.
 

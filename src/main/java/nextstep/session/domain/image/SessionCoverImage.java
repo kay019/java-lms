@@ -7,7 +7,7 @@ public class SessionCoverImage {
 
     Rows rows;
 
-    SessionCoverImageType sessionCoverImageType;
+    private final SessionCoverImageType sessionCoverImageType;
 
     public SessionCoverImage(Rows rows, SessionCoverImageType sessionCoverImageType) {
         if ((WIDTH_RATIO * rows.size()) != (HEIGHT_RATIO * rows.rowSize())) {
