@@ -8,7 +8,7 @@ import nextstep.users.domain.NsUser;
 
 public class Question {
 
-    private final List<Answer> answers = new ArrayList<>();
+    private final Answers answers = new Answers();
     private final LocalDateTime createdDate = LocalDateTime.now();
     private final Long id;
     private final String title;
@@ -41,8 +41,8 @@ public class Question {
         return deleted;
     }
 
-    public boolean areAllAnswersDeleted() {
-        return answers.stream().allMatch(Answer::isDeleted);
+    public boolean isAllAnswersDeleted() {
+        return answers.isAllDeleted();
     }
 
     public void delete(NsUser loginUser) throws CannotDeleteException {
@@ -50,16 +50,11 @@ public class Question {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
 
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
+        if (answers.hasOtherOwner(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
 
-        for (Answer answer : answers) {
-            answer.delete();
-        }
-
+        answers.deleteAll();
         this.deleted = true;
     }
 
@@ -70,9 +65,7 @@ public class Question {
 
         List<DeleteHistory> histories = new ArrayList<>();
         histories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
-        for (Answer answer : answers) {
-            histories.add(answer.createDeleteHistory());
-        }
+        histories.addAll(answers.createDeleteHistories());
         return histories;
     }
 

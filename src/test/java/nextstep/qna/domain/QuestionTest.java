@@ -3,8 +3,8 @@ package nextstep.qna.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.List;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import nextstep.qna.CannotDeleteException;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +67,7 @@ public class QuestionTest {
         assertThat(question.isDeleted()).isFalse();
         question.delete(NsUserTest.JAVAJIGI);
         assertThat(question.isDeleted()).isTrue();
-        assertThat(question.areAllAnswersDeleted()).isTrue();
+        assertThat(question.isAllAnswersDeleted()).isTrue();
     }
 
     @Test
