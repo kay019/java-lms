@@ -1,6 +1,9 @@
-package nextstep.session.domain.payment;
+package nextstep.session.domain.property;
 
 import nextstep.payments.domain.Payment;
+import nextstep.session.domain.payment.AmountValidator;
+import nextstep.session.domain.payment.CapacityValidator;
+import nextstep.session.domain.payment.SessionPayments;
 
 public enum SessionType {
     FREE(((sessionCapacity) -> true), (((sessionPayment, payment) -> true))),

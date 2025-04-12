@@ -5,7 +5,9 @@ import nextstep.courses.domain.Course;
 import nextstep.payments.domain.Payment;
 import nextstep.session.domain.image.SessionCoverImage;
 import nextstep.session.domain.payment.SessionPayments;
-import nextstep.session.domain.payment.SessionType;
+import nextstep.session.domain.property.SessionProperty;
+import nextstep.session.domain.property.SessionStatus;
+import nextstep.session.domain.property.SessionType;
 
 import java.time.LocalDateTime;
 
@@ -19,9 +21,7 @@ public class Session extends BaseDomain {
 
     private final SessionPayments payments;
 
-    private final SessionStatus status;
-
-    private final SessionType type;
+    private final SessionProperty property;
 
     public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period) {
         super(id);
@@ -29,8 +29,7 @@ public class Session extends BaseDomain {
         this.image = image;
         this.period = period;
         this.payments = payments;
-        this.status = SessionStatus.PREPARING;
-        this.type = SessionType.FREE;
+        this.property = new SessionProperty();
     }
 
     public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period, SessionStatus status, SessionType type) {
@@ -39,8 +38,7 @@ public class Session extends BaseDomain {
         this.image = image;
         this.period = period;
         this.payments = payments;
-        this.status = status;
-        this.type = type;
+        this.property = new SessionProperty(status, type);
     }
 
     public void toCourse(Course course) {
@@ -48,11 +46,12 @@ public class Session extends BaseDomain {
     }
 
     public boolean addPayment(Payment payment) {
-        if (payments.add(payment)) {
-            payment.toSession(this);
-            this.updatedAt = LocalDateTime.now();
-            return true;
+        if (property.canNotEnroll(payments, payment)) {
+            return false;
         }
-        return false;
+        payments.add(payment);
+        payment.toSession(this);
+        this.updatedAt = LocalDateTime.now();
+        return true;
     }
 }

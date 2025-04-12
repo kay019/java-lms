@@ -6,7 +6,6 @@ import nextstep.session.domain.SessionPeriod;
 import nextstep.session.domain.image.SessionCoverImage;
 import nextstep.session.domain.image.SessionCoverImageType;
 import nextstep.session.domain.payment.SessionPayments;
-import nextstep.session.domain.payment.SessionType;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

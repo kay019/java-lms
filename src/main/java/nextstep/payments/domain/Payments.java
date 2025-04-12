@@ -22,11 +22,11 @@ public class Payments {
         return value.size();
     }
 
-    public boolean add(Payment payment) {
+    public void add(Payment payment) {
         boolean hasDuplicate = value.stream().anyMatch(payment::equalsSessionUser);
         if (hasDuplicate) {
             throw new IllegalArgumentException("한 유저가 동일한 코스에 두번 결재할 수 없습니다.");
         }
-        return value.add(payment);
+        value.add(payment);
     }
 }

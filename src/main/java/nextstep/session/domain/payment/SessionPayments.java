@@ -37,7 +37,7 @@ public class SessionPayments {
         return payment.isSameAmount(fee.getValue());
     }
 
-    public boolean add(Payment payment) {
-        return payments.add(payment);
+    public void add(Payment payment) {
+        payments.add(payment);
     }
 }
