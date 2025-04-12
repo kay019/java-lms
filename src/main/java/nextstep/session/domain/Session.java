@@ -49,7 +49,11 @@ public class Session extends BaseDomain {
         return true;
     }
 
-    public BufferedImage image() throws IOException {
+    public BufferedImage image() {
         return descriptor.image();
+    }
+
+    public void updateImage() throws IOException {
+        descriptor.updateImage();
     }
 }

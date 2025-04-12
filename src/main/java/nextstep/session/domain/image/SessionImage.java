@@ -2,7 +2,6 @@ package nextstep.session.domain.image;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 public class SessionImage {
     private static final double WIDTH_RATIO = 3;
@@ -18,24 +17,25 @@ public class SessionImage {
     public SessionImage() {
     }
 
-    public SessionImage(String urlStr, SessionImageType type) throws MalformedURLException {
-        this(urlStr, new URLImageHandler(urlStr), type);
-    }
-
     public SessionImage(String urlStr, ImageHandler imageHandler, SessionImageType type) {
-        this.urlStr = urlStr;
-        this.imageHandler = imageHandler;
-        this.type = type;
-    }
-
-    public BufferedImage image() throws IOException {
-        BufferedImage res = imageHandler.download();
+        BufferedImage res = imageHandler.getImage();
         if ((WIDTH_RATIO * res.getHeight()) != (HEIGHT_RATIO * res.getWidth())) {
             throw new IllegalArgumentException("width와 height의 비율은 3:2 이여야 합니다.");
         }
         if (imageHandler.byteSize() > MAX_BYTE_SIZE) {
             throw new IllegalArgumentException("크기가 1MB를 초과했습니다.");
         }
-        return res;
+
+        this.urlStr = urlStr;
+        this.imageHandler = imageHandler;
+        this.type = type;
+    }
+
+    public BufferedImage image() {
+        return imageHandler.getImage();
+    }
+
+    public void updateImage() throws IOException {
+        imageHandler.updateImage();
     }
 }

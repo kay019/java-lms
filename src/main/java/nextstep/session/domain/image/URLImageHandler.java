@@ -3,20 +3,27 @@ package nextstep.session.domain.image;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 public class URLImageHandler implements ImageHandler {
+
+    private BufferedImage image;
     private final URL url;
 
-    public URLImageHandler(String url) throws MalformedURLException {
+    public URLImageHandler(String url) throws IOException {
         this.url = new URL(url);
+        this.image = ImageIO.read(this.url);
     }
 
     @Override
-    public BufferedImage download() throws IOException {
-        return ImageIO.read(url);
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public void updateImage() throws IOException {
+        this.image = ImageIO.read(url);
     }
 
     @Override

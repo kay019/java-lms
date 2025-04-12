@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public interface ImageHandler {
-    BufferedImage download() throws IOException;
+    BufferedImage getImage();
+
+    void updateImage() throws IOException;
 
     long byteSize();
 }

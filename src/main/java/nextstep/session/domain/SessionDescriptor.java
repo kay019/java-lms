@@ -26,7 +26,11 @@ public class SessionDescriptor {
         return property.canNotEnroll(sessionPayments, payment);
     }
 
-    public BufferedImage image() throws IOException {
+    public BufferedImage image() {
         return image.image();
+    }
+
+    public void updateImage() throws IOException {
+        image.updateImage();
     }
 }
