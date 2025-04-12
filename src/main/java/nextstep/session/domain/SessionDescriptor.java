@@ -5,6 +5,9 @@ import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.payment.SessionPayments;
 import nextstep.session.domain.property.SessionProperty;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
 public class SessionDescriptor {
 
     private final SessionImage image;
@@ -21,5 +24,9 @@ public class SessionDescriptor {
 
     public boolean canNotEnroll(SessionPayments sessionPayments, Payment payment) {
         return property.canNotEnroll(sessionPayments, payment);
+    }
+
+    public BufferedImage image() throws IOException {
+        return image.image();
     }
 }

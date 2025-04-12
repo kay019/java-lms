@@ -9,6 +9,8 @@ import nextstep.session.domain.property.SessionProperty;
 import nextstep.session.domain.property.SessionStatus;
 import nextstep.session.domain.property.SessionType;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class Session extends BaseDomain {
@@ -45,5 +47,9 @@ public class Session extends BaseDomain {
         payment.toSession(this);
         this.updatedAt = LocalDateTime.now();
         return true;
+    }
+
+    public BufferedImage image() throws IOException {
+        return descriptor.image();
     }
 }
