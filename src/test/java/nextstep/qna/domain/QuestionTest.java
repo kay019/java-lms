@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class QuestionTest {
     public static final Question Q1 = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-    public static final Question Q2 = new Question(1L, NsUserTest.SANJIGI, "title2", "contents2");
 
     @DisplayName("Question 인스턴스 생성")
     @Test
@@ -27,7 +26,8 @@ public class QuestionTest {
     @Test
     public void testDelete() throws CannotDeleteException {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        AnswerTest.A1.link(question);
+        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, question, "Answers Contents1");
+        question.addAnswer(answer);
         List<DeleteHistory> deleteHistoryList = question.delete(NsUserTest.JAVAJIGI);
 
         assertAll(
@@ -44,7 +44,8 @@ public class QuestionTest {
     @Test
     public void testDelete_throwException() {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        AnswerTest.A1.link(question);
+        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, question, "Answers Contents1");
+        question.addAnswer(answer);
 
         assertThatThrownBy(() -> question.delete(NsUserTest.SANJIGI))
             .isInstanceOf(CannotDeleteException.class)

@@ -28,6 +28,7 @@ public class Question extends BaseDomain {
     }
 
     public void addAnswer(Answer answer) {
+        answer.toQuestion(this);
         answers.add(answer);
     }
 
