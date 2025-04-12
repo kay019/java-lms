@@ -7,32 +7,30 @@ import nextstep.courses.domain.Session;
 import nextstep.users.domain.NsUser;
 
 public class Payment {
-    private String id;
+    private Long id;
+    private final long sessionId;
+    private final NsUser nsUser;
+    private final Money amount;
+    private final LocalDateTime createdAt;
 
-    // 결제한 강의
-    private Session session;
-
-    // 결제한 사용자
-    private NsUser nsUser;
-
-    // 결제 금액
-    private Money amount;
-
-    private LocalDateTime createdAt;
-
-    public Payment() {
+    public Payment(long sessionId, NsUser nsUser, Money amount) {
+        this(null, sessionId, nsUser, amount, LocalDateTime.now());
     }
 
-    public Payment(String id, Session session, NsUser nsUser, Money amount) {
+    public Payment(Long id, long sessionId, NsUser nsUser, Money amount, LocalDateTime createdAt) {
         this.id = id;
-        this.session = session;
+        this.sessionId = sessionId;
         this.nsUser = nsUser;
         this.amount = amount;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = createdAt;
     }
 
-    public Session getSession() {
-        return session;
+    public Long getId() {
+        return id;
+    }
+
+    public long getSessionId() {
+        return sessionId;
     }
 
     public NsUser getNsUser() {
@@ -41,5 +39,9 @@ public class Payment {
 
     public Money getAmount() {
         return amount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

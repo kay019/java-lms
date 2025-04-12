@@ -14,7 +14,7 @@ class PaidRegistrationPolicyTest {
 
     @Test
     void 유료_강의는_강의_최대_수강_인원을_초과할_수_없다() {
-        int sessionFee = 20000;
+        long sessionFee = 20000;
         int maxStudentCount = 1;
 
         Session session = new SessionBuilder()
@@ -32,7 +32,7 @@ class PaidRegistrationPolicyTest {
 
     @Test
     void 유료_강의는_수강생이_결제한_금액과_수강료가_일치할_때_수강_신청이_가능하다() {
-        int sessionFee = 20000;
+        long sessionFee = 20000;
         int maxStudentCount = 1;
 
         Session session = new SessionBuilder()

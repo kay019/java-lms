@@ -21,7 +21,7 @@ class SessionTest {
     @ParameterizedTest
     @EnumSource(value = SessionStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "RECRUITING")
     void 강의_수강신청은_강의_상태가_모집중일_때만_가능하다(SessionStatus sessionStatus) {
-        int sessionFee = 20000;
+        long sessionFee = 20000;
         int maxStudentCount = 1;
 
         Session session = new SessionBuilder()
@@ -37,7 +37,7 @@ class SessionTest {
 
     @Test
     void register하면_Payment객체를_응답한다() {
-        int sessionFee = 20000;
+        long sessionFee = 20000;
         int maxStudentCount = 1;
         NsUser loginUser = NsUserTest.JAVAJIGI;
 
@@ -48,7 +48,7 @@ class SessionTest {
 
         Payment payment = session.register(loginUser, new Money(sessionFee));
 
-        assertThat(payment.getSession()).isEqualTo(session);
+        assertThat(payment.getSessionId()).isEqualTo(session.getId());
         assertThat(payment.getNsUser()).isEqualTo(loginUser);
         assertThat(payment.getAmount()).isEqualTo(new Money(sessionFee));
     }

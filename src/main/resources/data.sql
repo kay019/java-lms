@@ -8,3 +8,12 @@ INSERT INTO answer (writer_id, contents, created_at, question_id, deleted) VALUE
 INSERT INTO answer (writer_id, contents, created_at, question_id, deleted) VALUES (2, '언더스코어 강력 추천드려요. 다만 최신 버전을 공부하는 것보다는 0.10.0 버전부터 보는게 더 좋더군요. 코드의 변천사도 알 수 있고, 최적화되지 않은 코드들이 기능은 그대로 두고 최적화되어 가는 걸 보면 재미가 있습니다 :)', CURRENT_TIMESTAMP(), 1, false);
 
 INSERT INTO question (id, writer_id, title, contents, created_at, deleted) VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 있을까요?', '설계를 희한하게 하는 바람에 꼬인 문제같긴 합니다만. 여쭙습니다. 상황은 mybatis select 실행될 시에 return object 의 getter 가 호출되면서인데요. getter 안에 다른 property 에 의존중인 코드가 삽입되어 있어서, 만약 다른 mybatis select 구문에 해당 property 가 없다면 exception 이 발생하게 됩니다.', CURRENT_TIMESTAMP(), false);
+
+INSERT INTO course (id, title, creator_id, created_at) VALUES (1, 'title', 1, CURRENT_TIMESTAMP());
+
+INSERT INTO cover_image (id, size, type, width, height) VALUES (1, 1024, 'GIF', 300, 200);
+
+INSERT INTO session (id, course_id, cover_image_id, session_status, registration_policy_type, session_fee, max_student_count, started_at, ended_at) VALUES (1, 1, 1, 'PREPARING', 'PAID', 5000, 20, '2025-04-09 10:00:00', '2025-04-09 12:00:00');
+
+insert into payment (id, session_id, ns_user_id, amount, created_at) values (1, 1, 1, 5000, CURRENT_TIMESTAMP());
+insert into payment (id, session_id, ns_user_id, amount, created_at) values (2, 1, 2, 5000, CURRENT_TIMESTAMP());

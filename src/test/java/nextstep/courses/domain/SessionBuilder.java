@@ -28,7 +28,7 @@ public class SessionBuilder {
         return this;
     }
 
-    public SessionBuilder paid(int sessionFee, int maxStudentCount) {
+    public SessionBuilder paid(long sessionFee, int maxStudentCount) {
         this.registrationPolicy = new PaidRegistrationPolicy(sessionFee, maxStudentCount);
         return this;
     }
