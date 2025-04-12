@@ -7,6 +7,8 @@ public class Session {
 
     private Long id;
 
+    private Long courseId;
+
     private String title;
 
     private SessionType sessionType;
@@ -17,9 +19,10 @@ public class Session {
 
     private int enrollmentCount;
 
-    public Session(Long id, String title, SessionType sessionType, LocalDate startDate,
+    public Session(Long id, Long courseId, String title, SessionType sessionType, LocalDate startDate,
             LocalDate finishDate, SessionStatus status, int enrollmentCount) {
         this.id = id;
+        this.courseId = courseId;
         this.title = title;
         this.sessionType = sessionType;
         this.sessionDate = new SessionDate(startDate, finishDate);

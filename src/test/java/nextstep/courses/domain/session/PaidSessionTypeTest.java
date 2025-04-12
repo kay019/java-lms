@@ -33,7 +33,7 @@ class PaidSessionTypeTest {
 
     @Test
     void 인원초과() {
-        Session session = new Session(2L, "paid", new PaidSessionType(10, 10000),
+        Session session = new Session(2L, 1L, "paid", new PaidSessionType(10, 10000),
                 LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.OPEN, 10);
         SessionType sessionType = new PaidSessionType(10, 10000);
         Payment payment = new Payment("1", 1L, 100L, 1000L);
