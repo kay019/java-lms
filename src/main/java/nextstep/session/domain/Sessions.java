@@ -10,7 +10,7 @@ public class Sessions {
         this.value = new ArrayList<>();
     }
 
-    public void add(Session session) {
-        value.add(session);
+    public boolean add(Session session) {
+        return value.add(session);
     }
 }

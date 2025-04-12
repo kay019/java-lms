@@ -19,7 +19,7 @@ public class Session extends BaseDomain {
     private final SessionPayments payments;
 
     public Session(Long id, Course course, SessionCoverImage image, SessionPayments payments, SessionPeriod period) {
-        super(id, LocalDateTime.now(), LocalDateTime.now());
+        super(id);
         this.course = course;
         this.image = image;
         this.period = period;
@@ -33,6 +33,7 @@ public class Session extends BaseDomain {
     public boolean addPayment(Payment payment) {
         if (payments.add(payment)) {
             payment.toSession(this);
+            this.updatedAt = LocalDateTime.now();
             return true;
         }
         return false;

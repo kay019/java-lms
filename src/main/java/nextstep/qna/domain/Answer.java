@@ -1,6 +1,6 @@
 package nextstep.qna.domain;
 
-import nextstep.qna.CannotDeleteException;
+import nextstep.common.domian.BaseDomain;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -8,20 +8,13 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Answer {
-    private Long id;
+public class Answer  extends BaseDomain {
 
-    private NsUser writer;
+    private final NsUser writer;
+
+    private final String contents;
 
     private Question question;
-
-    private String contents;
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
@@ -48,7 +41,7 @@ public class Answer {
 
     public DeleteHistory delete() {
         this.deleted = true;
-        this.updatedDate = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
         return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
@@ -71,11 +64,6 @@ public class Answer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, writer, question, contents, deleted, createdDate, updatedDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
+        return Objects.hash(super.hashCode(), writer, question, contents);
     }
 }

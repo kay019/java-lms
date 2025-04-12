@@ -4,17 +4,28 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class BaseDomain {
-    private final Long id;
+    protected Long id;
 
-    private final LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
-    private final LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
+
+    protected boolean deleted = false;
+
+    public BaseDomain() {
+
+    }
+
+    public BaseDomain(Long id) {
+        this(id, LocalDateTime.now(), LocalDateTime.now());
+    }
 
     public BaseDomain(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
 
     @Override
     public boolean equals(Object o) {
