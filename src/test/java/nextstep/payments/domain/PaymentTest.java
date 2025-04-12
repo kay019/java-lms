@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -22,10 +20,7 @@ public class PaymentTest {
 
     @BeforeEach
     public void setUp() {
-        Course course = new Course("test-course-1", 1L);
-        SessionPayments payments = new SessionPayments(500_000, 80);
-        SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
-        session = new Session(1L, course, new SessionImage(), payments, period);
+        session = new Session(1L, new Course(), new SessionImage(), new SessionPayments(), new SessionPeriod());
     }
 
     @DisplayName("Payment 인스턴스 생성")

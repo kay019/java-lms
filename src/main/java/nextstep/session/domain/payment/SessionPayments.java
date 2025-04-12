@@ -5,11 +5,15 @@ import nextstep.payments.domain.Payments;
 
 public class SessionPayments {
 
-    private final Payments payments;
+    private Payments payments;
 
-    private final SessionFee fee;
+    private SessionFee fee;
 
-    private final SessionCapacity capacity;
+    private SessionCapacity capacity;
+
+    public SessionPayments() {
+
+    }
 
     public SessionPayments(SessionFee fee, SessionCapacity capacity) {
         this(fee, capacity, new Payments());
