@@ -21,8 +21,4 @@ public class Payments {
     public int getSize() {
         return payments.size();
     }
-
-    public void add(Payment payment) {
-        payments.add(payment);
-    }
 }

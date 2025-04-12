@@ -4,29 +4,16 @@ import java.time.LocalDateTime;
 
 public class Course {
     private Long id;
-
-    private String title;
-
-    private Long creatorId;
-
-    private final Sessions sessions = new Sessions();
-
-    private LocalDateTime createdAt;
-
+    private final String title;
+    private final long creatorId;
+    private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Course() {
-    }
-
-    public Course(String title, Long creatorId) {
+    public Course(String title, long creatorId) {
         this(null, title, creatorId, LocalDateTime.now(), null);
     }
 
-    public Course(Long id, String title, Long creatorId) {
-        this(id, title, creatorId, LocalDateTime.now(), null);
-    }
-
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(Long id, String title, long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.creatorId = creatorId;
@@ -52,11 +39,6 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void addSession(Session session) {
-        session.toCourse(this);
-        sessions.add(session);
     }
 
     @Override
