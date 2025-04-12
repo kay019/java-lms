@@ -1,6 +1,7 @@
 package nextstep.session.domain;
 
 import nextstep.courses.domain.Course;
+import nextstep.session.domain.image.Image;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,6 +12,8 @@ public class Session {
 
     private Course course;
 
+    private Image coverImage;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -19,13 +22,14 @@ public class Session {
 
     private LocalDateTime updatedAt;
 
-    public Session(Long id, Course course, LocalDateTime startDate, LocalDateTime endDate) {
-        this(id, course, startDate, endDate, LocalDateTime.now(), LocalDateTime.now());
+    public Session(Long id, Course course, Image image, LocalDateTime startDate, LocalDateTime endDate) {
+        this(id, course, image, startDate, endDate, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public Session(Long id, Course course, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Session(Long id, Course course, Image image, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.course = course;
+        this.coverImage = image;
         this.startDate = startDate;
         this.endDate = endDate;
         this.createdAt = createdAt;

@@ -7,7 +7,8 @@ import static nextstep.session.domain.image.RowsTest.dummyRows;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class ImageTest {
+public class ImageTest {
+    public static Image I1 = new Image(dummyRows(300, 200), Type.GIF);
 
     @DisplayName("SessionImage 인스턴스 생성")
     @Test
