@@ -55,8 +55,12 @@ public class Answers {
         answers.forEach(Answer::delete);
     }
 
-    public List<DeleteHistory> createDeleteHistories() {
-        return answers.stream().filter(Answer::isDeleted).map(Answer::createDeleteHistory).collect(Collectors.toList());
+    public DeleteHistories createDeleteHistories() {
+        DeleteHistories histories = new DeleteHistories();
+        answers.stream()
+                .filter(Answer::isDeleted)
+                .forEach(answer -> histories.addAll(answer.createDeleteHistories()));
+        return histories;
     }
 
     @Override

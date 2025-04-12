@@ -43,8 +43,14 @@ public class Answer {
         this.deleted = true;
     }
 
-    public DeleteHistory createDeleteHistory() {
-        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+    public DeleteHistories createDeleteHistories() {
+        if (!isDeleted()) {
+            return new DeleteHistories();
+        }
+        
+        DeleteHistories histories = new DeleteHistories();
+        histories.add(new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now()));
+        return histories;
     }
 
     public boolean isDeleted() {

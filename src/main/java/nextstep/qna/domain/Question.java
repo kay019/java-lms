@@ -58,15 +58,19 @@ public class Question {
         this.deleted = true;
     }
 
-    public List<DeleteHistory> createDeleteHistories() {
+    public DeleteHistories createDeleteHistories() {
         if (!isDeleted()) {
-            return List.of();
+            return new DeleteHistories();
         }
 
-        List<DeleteHistory> histories = new ArrayList<>();
-        histories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        DeleteHistories histories = new DeleteHistories();
+        histories.add(createDeleteHistory());
         histories.addAll(answers.createDeleteHistories());
         return histories;
+    }
+
+    private DeleteHistory createDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
     }
 
     private boolean isOwner(NsUser loginUser) {

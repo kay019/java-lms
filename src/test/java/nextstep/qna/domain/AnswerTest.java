@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AnswerTest {
     public static final Answer A1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
@@ -24,12 +25,18 @@ public class AnswerTest {
 
     @Test
     @DisplayName("답변의 삭제 이력을 생성할 수 있다.")
-    void testCreateDeleteHistory() {
+    void testCreateDeleteHistories() {
         Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        answer.delete();
         
-        DeleteHistory actual = answer.createDeleteHistory();
+        DeleteHistories deleteHistories = answer.createDeleteHistories();
+        
+        assertThat(deleteHistories.size()).isEqualTo(1);
+        
         DeleteHistory expected = new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        List<DeleteHistory> histories = deleteHistories.getHistories();
         
-        assertThat(actual).isEqualTo(expected);
+        assertThat(histories).hasSize(1);
+        assertThat(histories.get(0)).isEqualTo(expected);
     }
 }

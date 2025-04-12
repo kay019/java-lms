@@ -3,6 +3,7 @@ package nextstep.qna.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,15 +95,21 @@ public class AnswersTest {
         Answer answer1 = new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용1");
         Answer answer2 = new Answer(2L, NsUserTest.SANJIGI, QuestionTest.Q1, "내용2");
         Answers answers = new Answers(List.of(answer1, answer2));
-
+        
         // when
         answer1.delete();
         answer2.delete();
-        List<DeleteHistory> deleteHistories = answers.createDeleteHistories();
-
+        DeleteHistories deleteHistories = answers.createDeleteHistories();
+        
         // then
-        assertThat(deleteHistories).hasSize(2);
-        assertThat(deleteHistories).containsExactly(answer1.createDeleteHistory(), answer2.createDeleteHistory());
+        assertThat(deleteHistories.size()).isEqualTo(2);
+        
+        List<DeleteHistory> histories = deleteHistories.getHistories();
+        DeleteHistory expected1 = new DeleteHistory(ContentType.ANSWER, answer1.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expected2 = new DeleteHistory(ContentType.ANSWER, answer2.getId(), NsUserTest.SANJIGI, LocalDateTime.now());
+        
+        assertThat(histories).hasSize(2);
+        assertThat(histories).contains(expected1, expected2);
     }
 
     @Test

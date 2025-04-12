@@ -76,12 +76,15 @@ public class QuestionTest {
         Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
         question.delete(NsUserTest.JAVAJIGI);
 
-        List<DeleteHistory> actual = question.createDeleteHistories();
-        List<DeleteHistory> expected = List.of(
-            new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now())
-        );
+        DeleteHistories deleteHistories = question.createDeleteHistories();
         
-        assertThat(actual).isEqualTo(expected);
+        assertThat(deleteHistories.size()).isEqualTo(1);
+        
+        List<DeleteHistory> histories = deleteHistories.getHistories();
+        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        
+        assertThat(histories).hasSize(1);
+        assertThat(histories.get(0)).isEqualTo(expected);
     }
 
     @Test
@@ -92,12 +95,16 @@ public class QuestionTest {
         question.addAnswer(answer);
         question.delete(NsUserTest.JAVAJIGI);
 
-        List<DeleteHistory> actual = question.createDeleteHistories();
-        List<DeleteHistory> expected = List.of(
-            new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now()),
-            new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now())
-        );
+        DeleteHistories deleteHistories = question.createDeleteHistories();
         
-        assertThat(actual).isEqualTo(expected);
+        assertThat(deleteHistories.size()).isEqualTo(2);
+        
+        List<DeleteHistory> histories = deleteHistories.getHistories();
+        
+        DeleteHistory expectedQuestionHistory = new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expectedAnswerHistory = new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        
+        assertThat(histories).hasSize(2);
+        assertThat(histories).contains(expectedQuestionHistory, expectedAnswerHistory);
     }
 }
