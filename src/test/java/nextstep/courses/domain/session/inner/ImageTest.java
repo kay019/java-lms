@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.courses.domain.session.inner;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

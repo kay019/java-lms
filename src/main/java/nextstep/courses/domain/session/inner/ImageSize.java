@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.courses.domain.session.inner;
 
 public class ImageSize {
     private static final int MIN_WIDTH = 300;

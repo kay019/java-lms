@@ -1,6 +1,10 @@
 package nextstep.courses.domain.session;
 
 import java.time.LocalDate;
+
+import nextstep.courses.domain.session.inner.SessionDate;
+import nextstep.courses.domain.session.inner.SessionStatus;
+import nextstep.courses.domain.session.inner.SessionType;
 import nextstep.payments.domain.Payment;
 
 public class Session {
