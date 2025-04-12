@@ -2,6 +2,7 @@ package nextstep.qna.domain;
 
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +13,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 
 public class QuestionTest {
-    public static final Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
-    public static final Question Q2 = new Question(NsUserTest.SANJIGI, "title2", "contents2");
+    public static Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+    public static Question Q2 = new Question(NsUserTest.SANJIGI, "title2", "contents2");
+
+    @BeforeEach
+    void setUp() {
+        Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        Q2 = new Question(NsUserTest.SANJIGI, "title2", "contents2");
+    }
 
     @Test
     @DisplayName("질문 작성자만 삭제할 수 있다")
@@ -46,7 +53,7 @@ public class QuestionTest {
         List<DeleteHistory> deleteHistoryList = Q1.delete(NsUserTest.JAVAJIGI);
 
         assertThat(Q1.isDeleted()).isTrue();
-        assertThat(deleteHistoryList.size()).isEqualTo(1);
+        assertThat(deleteHistoryList.size()).isEqualTo(3);
     }
 
     @Test
