@@ -8,21 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Session {
-  private Long id;
-  private Course course;
+  private final Long id;
+  private final Course course;
   private Image coverImage;
   private String title;
   private LocalDateTime startDate;
   private LocalDateTime endDate;
   private SessionStatus status;
-  private EnrollmentPolicy enrollmentPolicy;
-  private List<Enrollment> enrollments = new ArrayList<>();
+  private final EnrollmentPolicy enrollmentPolicy;
+  private List<Enrollment> enrollments;
 
   public Session(Course course, String title, LocalDateTime startDate, LocalDateTime endDate, EnrollmentPolicy enrollmentPolicy) {
     this(0L, course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy);
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy) {
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new ArrayList<>());
+  }
+
+  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, List<Enrollment> enrollments) {
     this.id = id;
     this.course = course;
     this.title = title;
@@ -30,6 +34,7 @@ public class Session {
     this.endDate = endDate;
     this.status = status;
     this.enrollmentPolicy = enrollmentPolicy;
+    this.enrollments = enrollments;
   }
 
   public void enroll(NsUser user, Payment payment) {
