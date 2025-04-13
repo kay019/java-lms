@@ -14,7 +14,15 @@ public class DeleteHistories {
         return deleteHistories;
     }
 
-    public void add(ContentType contentType, Long id, NsUser writer) {
-        deleteHistories.add(new DeleteHistory(contentType, id, writer, LocalDateTime.now()));
+    public void add(DeleteHistory deleteHistory) {
+        deleteHistories.add(deleteHistory);
+    }
+
+    public int size(){
+        return deleteHistories.size();
+    }
+
+    public void add(List<DeleteHistory> delete) {
+        deleteHistories.addAll(delete);
     }
 }
