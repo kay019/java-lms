@@ -24,8 +24,6 @@ public class Question {
 
     private LocalDateTime updatedDate;
 
-    private DeleteHistories deleteHistories;
-
 
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
@@ -37,7 +35,6 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.answers = new Answers();
-        this.deleteHistories = new DeleteHistories();
     }
 
     public Long getId() {
@@ -85,7 +82,5 @@ public class Question {
         }
     }
 
-    public List<DeleteHistory> todeleteHistories() {
-        return deleteHistories.getDeleteHistories();
     }
 }
