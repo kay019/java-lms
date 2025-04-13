@@ -66,4 +66,28 @@ public class SessionTest {
                 )
         ).isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void testRegisterOpenSession() {
+        Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
+        ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
+        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.OPEN);
+        assertThat(session.register()).isTrue();
+    }
+
+    @Test
+    void testRegisterReadySession() {
+        Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
+        ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
+        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.READY);
+        assertThatThrownBy(session::register).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void testRegisterClosedSession() {
+        Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
+        ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
+        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.CLOSED);
+        assertThatThrownBy(session::register).isInstanceOf(IllegalStateException.class);
+    }
 }

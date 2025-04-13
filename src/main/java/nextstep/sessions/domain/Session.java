@@ -31,6 +31,13 @@ public class Session {
                 && imageInfo.hasRatio(IMAGE_RATIO);
     }
 
+    public boolean register() {
+        if (!sessionStatus.isOpened()) {
+            throw new IllegalStateException();
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
