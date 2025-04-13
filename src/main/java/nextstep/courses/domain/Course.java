@@ -3,51 +3,62 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class Course {
-    private Long id;
+  private Long id;
+  private String title;
+  private Long creatorId;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
+  private Sessions sessions;
 
-    private String title;
+  public Course() {
+    this(0L, null, null, LocalDateTime.now(), null, new Sessions());
+  }
 
-    private Long creatorId;
+  public Course(String title, Long creatorId) {
+    this(0L, title, creatorId, LocalDateTime.now(), null, new Sessions());
+  }
 
-    private LocalDateTime createdAt;
+  public Course (Long id, String title, Long createId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    this(id, title, createId, createdAt, updatedAt, new Sessions());
+  }
 
-    private LocalDateTime updatedAt;
+  public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, Sessions sessions) {
+    this.id = id;
+    this.title = title;
+    this.creatorId = creatorId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.sessions = sessions;
+  }
 
-    public Course() {
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
-    }
+  public Long getCreatorId() {
+    return creatorId;
+  }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public void addSession(Session session) {
+    sessions = new Sessions(sessions, session);
+  }
 
-    public Long getCreatorId() {
-        return creatorId;
-    }
+  public Sessions getSessions() {
+    return sessions;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Course{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", creatorId=" + creatorId +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            '}';
+  }
 }
