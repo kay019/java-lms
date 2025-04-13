@@ -1,31 +1,23 @@
 package nextstep.courses.domain;
 
+import nextstep.common.domain.Audit;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Course {
-    private Long id;
 
+    private CourseIdentity identity;
     private String title;
+    private int term;
+    private Audit audit;
+    private List<CourseSession> sessions = new ArrayList<>();
 
-    private Long creatorId;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    public Course() {
-    }
-
-    public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
-    }
-
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public Course(final Long id, final String title, final Long creatorId, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+        this.identity = new CourseIdentity(id, creatorId);
         this.title = title;
-        this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.audit = new Audit(createdAt, updatedAt);
     }
 
     public String getTitle() {
@@ -33,21 +25,44 @@ public class Course {
     }
 
     public Long getCreatorId() {
-        return creatorId;
+        return identity.getCreatorId();
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return audit.getCreatedAt();
+    }
+    
+    public Long getId() {
+        return identity.getId();
     }
 
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
+                "id=" + identity.getId() +
                 ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", term=" + term +
+                ", creatorId=" + identity.getCreatorId() +
+                ", createdAt=" + audit.getCreatedAt() +
+                ", updatedAt=" + audit.getUpdatedAt() +
                 '}';
+    }
+    
+    public static class CourseIdentity {
+        private final Long id;
+        private final Long creatorId;
+        
+        public CourseIdentity(Long id, Long creatorId) {
+            this.id = id;
+            this.creatorId = creatorId;
+        }
+        
+        public Long getId() {
+            return id;
+        }
+        
+        public Long getCreatorId() {
+            return creatorId;
+        }
     }
 }

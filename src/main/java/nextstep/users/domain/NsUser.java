@@ -1,5 +1,6 @@
 package nextstep.users.domain;
 
+import nextstep.common.domain.Audit;
 import nextstep.qna.exception.UnAuthorizedException;
 
 import java.time.LocalDateTime;
@@ -9,18 +10,10 @@ public class NsUser {
     public static final GuestNsUser GUEST_USER = new GuestNsUser();
 
     private Long id;
-
     private String userId;
-
     private String password;
-
-    private String name;
-
-    private String email;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
+    private UserProfile profile;
+    private Audit audit;
 
     public NsUser() {
     }
@@ -33,10 +26,8 @@ public class NsUser {
         this.id = id;
         this.userId = userId;
         this.password = password;
-        this.name = name;
-        this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.profile = new UserProfile(name, email);
+        this.audit = new Audit(createdAt, updatedAt);
     }
 
     public Long getId() {
@@ -47,36 +38,16 @@ public class NsUser {
         return userId;
     }
 
-    public NsUser setUserId(String userId) {
-        this.userId = userId;
-        return this;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public NsUser setPassword(String password) {
-        this.password = password;
-        return this;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public NsUser setName(String name) {
-        this.name = name;
-        return this;
+        return profile.getName();
     }
 
     public String getEmail() {
-        return email;
-    }
-
-    public NsUser setEmail(String email) {
-        this.email = email;
-        return this;
+        return profile.getEmail();
     }
 
     public void update(NsUser loginUser, NsUser target) {
@@ -88,8 +59,7 @@ public class NsUser {
             throw new UnAuthorizedException();
         }
 
-        this.name = target.name;
-        this.email = target.email;
+        this.profile = new UserProfile(target.getName(), target.getEmail());
     }
 
     public boolean matchUser(NsUser target) {
@@ -109,8 +79,8 @@ public class NsUser {
             return false;
         }
 
-        return name.equals(target.name) &&
-                email.equals(target.email);
+        return profile.getName().equals(target.getName()) &&
+                profile.getEmail().equals(target.getEmail());
     }
 
     public boolean isGuestUser() {
@@ -129,10 +99,87 @@ public class NsUser {
         return "NsUser{" +
                 "id=" + id +
                 ", userId='" + userId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", name='" + profile.getName() + '\'' +
+                ", email='" + profile.getEmail() + '\'' +
+                ", createdAt=" + audit.getCreatedAt() +
+                ", updatedAt=" + audit.getUpdatedAt() +
                 '}';
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class UserProfile {
+        private final String name;
+        private final String email;
+        
+        public UserProfile(String name, String email) {
+            this.name = name;
+            this.email = email;
+        }
+        
+        public String getName() {
+            return name;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+    }
+
+    public static class Builder {
+        private Long id;
+        private String userId;
+        private String password;
+        private String name;
+        private String email;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        private Builder() {
+        }
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public NsUser build() {
+            if (createdAt == null) {
+                createdAt = LocalDateTime.now();
+            }
+            return new NsUser(id, userId, password, name, email, createdAt, updatedAt);
+        }
     }
 }
