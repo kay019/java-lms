@@ -29,12 +29,16 @@ public class Registration {
         if (registeredUserIds.contains(user.getId())) {
             return;
         }
+        checkRegister(amount);
+        registeredUserIds.add(user.getId());
+    }
+
+    private void checkRegister(Long amount) {
         if (registeredUserIds.size() == maxStudentNumber) {
             throw new IllegalStateException();
         }
         if (registrationType == RegistrationType.PAID && !amount.equals(fee)) {
             throw new IllegalStateException();
         }
-        registeredUserIds.add(user.getId());
     }
 }
