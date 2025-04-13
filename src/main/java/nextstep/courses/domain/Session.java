@@ -4,7 +4,6 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Session {
@@ -16,17 +15,21 @@ public class Session {
   private LocalDateTime endDate;
   private SessionStatus status;
   private final EnrollmentPolicy enrollmentPolicy;
-  private List<Enrollment> enrollments;
+  private Enrollments enrollments;
 
   public Session(Course course, String title, LocalDateTime startDate, LocalDateTime endDate, EnrollmentPolicy enrollmentPolicy) {
     this(0L, course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy);
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy) {
-    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new ArrayList<>());
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments());
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, List<Enrollment> enrollments) {
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(enrollments));
+  }
+
+  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments) {
     this.id = id;
     this.course = course;
     this.title = title;
@@ -38,11 +41,11 @@ public class Session {
   }
 
   public void enroll(NsUser user, Payment payment) {
-    validateEnrollment(user, payment);
-    enrollments.add(new Enrollment(user, this));
+    checkAvailability(user, payment);
+    enrollments = new Enrollments(enrollments, new Enrollment(user, this));
   }
 
-  private void validateEnrollment(NsUser user, Payment payment) {
+  private void checkAvailability(NsUser user, Payment payment) {
     if (!isRecruiting()) {
       throw new IllegalStateException("모집중인 상태가 아닙니다.");
     }
