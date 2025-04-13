@@ -22,7 +22,7 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 - [x] Course은 기수 단위로 운영되며 여러개의 Session를 가질 수 있다.
   - [x] Course에 Session 등록 기능
 - [X] Session은 시작일과 종료일을 가진다.
-- [] Session은 강의 커버 이미지 (Image)를 가진다.
+- [x] Session은 강의 커버 이미지 (Image)를 가진다.
     - [x] Image의 크기는 1MB 이하여야 한다.
     - [x] 이미지의 width는 300픽셀, height는 200픽셀 이상이어야 하며, width와 height의 비율은 3:2여야 한다.
     - [x] Image는 타입을 가진다.
