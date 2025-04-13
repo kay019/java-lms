@@ -1,5 +1,6 @@
 package nextstep.sessions;
 
+import nextstep.payments.domain.Payment;
 import nextstep.sessions.domain.*;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
@@ -18,15 +19,16 @@ public class SessionTest {
         );
         ImageInfo imageInfo = new ImageInfo(10^6, "png", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
-        assertThat(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN, registration))
-                .isEqualTo(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN, registration));
+        assertThat(new Session(1L, sessionPeriod, imageInfo, SessionStatus.OPEN, registration))
+                .isEqualTo(new Session(1L, sessionPeriod, imageInfo, SessionStatus.OPEN, registration));
     }
 
     @Test
     void testInvalidImageVolume() {
         ImageInfo imageInfo = new ImageInfo(10^7, "png", 300, 200);
         assertThatThrownBy(() ->
-            new Session(LocalDate.of(2025, 4, 13),
+            new Session(1L,
+                    LocalDate.of(2025, 4, 13),
                     LocalDate.of(2025, 4, 14),
                     imageInfo
             )
@@ -37,7 +39,8 @@ public class SessionTest {
     void testInvalidImageWidth() {
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 100, 200);
         assertThatThrownBy(() ->
-                new Session(LocalDate.of(2025, 4, 13),
+                new Session(1L,
+                        LocalDate.of(2025, 4, 13),
                         LocalDate.of(2025, 4, 14),
                         imageInfo
                 )
@@ -48,7 +51,8 @@ public class SessionTest {
     void testInvalidImageHeight() {
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 100);
         assertThatThrownBy(() ->
-                new Session(LocalDate.of(2025, 4, 13),
+                new Session(1L,
+                        LocalDate.of(2025, 4, 13),
                         LocalDate.of(2025, 4, 14),
                         imageInfo
                 )
@@ -59,7 +63,8 @@ public class SessionTest {
     void testInvalidImageRatio() {
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 400, 200);
         assertThatThrownBy(() ->
-                new Session(LocalDate.of(2025, 4, 13),
+                new Session(1L,
+                        LocalDate.of(2025, 4, 13),
                         LocalDate.of(2025, 4, 14),
                         imageInfo
                 )
@@ -71,8 +76,10 @@ public class SessionTest {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
-        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.OPEN, registration);
-        session.register(NsUserTest.SANJIGI);
+        Session session = new Session(1L, sessionPeriod, imageInfo, SessionStatus.OPEN, registration);
+        assertThat(session.register(NsUserTest.SANJIGI, 0L)).isEqualTo(
+                new Payment("1|2", 1L, 2L, 0L)
+        );
     }
 
     @Test
@@ -80,8 +87,8 @@ public class SessionTest {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
-        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.READY, registration);
-        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI)).isInstanceOf(IllegalStateException.class);
+        Session session = new Session(1L, sessionPeriod, imageInfo, SessionStatus.READY, registration);
+        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI, 0L)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -89,7 +96,7 @@ public class SessionTest {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
-        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.CLOSED, registration);
-        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI)).isInstanceOf(IllegalStateException.class);
+        Session session = new Session(1L, sessionPeriod, imageInfo, SessionStatus.CLOSED, registration);
+        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI, 0L)).isInstanceOf(IllegalStateException.class);
     }
 }

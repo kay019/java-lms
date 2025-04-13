@@ -7,29 +7,34 @@ import java.util.Set;
 
 public class Registration {
     private final RegistrationType registrationType;
+    private final Long fee;
     private final int maxStudentNumber;
-    private final Set<NsUser> registeredUsers;
+    private final Set<Long> registeredUserIds;
 
     public Registration(RegistrationType registrationType) {
-        this(registrationType, Integer.MAX_VALUE);
+        this(registrationType, 0L, Integer.MAX_VALUE);
     }
 
-    public Registration(RegistrationType registrationType, int maxStudentNumber) {
+    public Registration(RegistrationType registrationType, Long fee, int maxStudentNumber) {
         if (maxStudentNumber == Integer.MAX_VALUE && registrationType != RegistrationType.FREE) {
             throw new IllegalArgumentException();
         }
         this.registrationType = registrationType;
+        this.fee = fee;
         this.maxStudentNumber = maxStudentNumber;
-        this.registeredUsers = new HashSet<>();
+        this.registeredUserIds = new HashSet<>();
     }
 
-    public void register(NsUser user) {
-        if (registeredUsers.size() == maxStudentNumber) {
-            throw new IllegalStateException();
-        }
-        if (registeredUsers.contains(user)) {
+    public void register(NsUser user, Long amount) {
+        if (registeredUserIds.contains(user.getId())) {
             return;
         }
-        registeredUsers.add(user);
+        if (registeredUserIds.size() == maxStudentNumber) {
+            throw new IllegalStateException();
+        }
+        if (registrationType == RegistrationType.PAID && !amount.equals(fee)) {
+            throw new IllegalStateException();
+        }
+        registeredUserIds.add(user.getId());
     }
 }
