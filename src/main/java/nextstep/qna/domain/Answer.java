@@ -36,10 +36,6 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public void delete() {
         this.deleted = true;
         deleteHistory = new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());

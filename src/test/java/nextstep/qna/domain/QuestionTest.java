@@ -73,7 +73,7 @@ public class QuestionTest {
     @Test
     @DisplayName("삭제 이력을 생성할 수 있다.")
     void testCreateDeleteHistories() throws CannotDeleteException {
-        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
         question.delete(NsUserTest.JAVAJIGI);
 
         DeleteHistories deleteHistories = question.getDeleteHistories();
@@ -81,7 +81,7 @@ public class QuestionTest {
         assertThat(deleteHistories.size()).isEqualTo(1);
         
         List<DeleteHistory> histories = deleteHistories.getHistories();
-        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now());
         
         assertThat(histories).hasSize(1);
         assertThat(histories.get(0)).isEqualTo(expected);
@@ -90,8 +90,8 @@ public class QuestionTest {
     @Test
     @DisplayName("답변이 있는 경우 모든 답변의 삭제 이력도 생성할 수 있다.")
     void testCreateDeleteHistoriesWithAnswers() throws CannotDeleteException {
-        Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
-        Answer answer = new Answer(NsUserTest.JAVAJIGI, question, "answer1");
+        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
+        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, question, "answer1");
         question.addAnswer(answer);
         question.delete(NsUserTest.JAVAJIGI);
 
@@ -101,8 +101,8 @@ public class QuestionTest {
         
         List<DeleteHistory> histories = deleteHistories.getHistories();
         
-        DeleteHistory expectedQuestionHistory = new DeleteHistory(ContentType.QUESTION, question.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
-        DeleteHistory expectedAnswerHistory = new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expectedQuestionHistory = new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expectedAnswerHistory = new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now());
         
         assertThat(histories).hasSize(2);
         assertThat(histories).contains(expectedQuestionHistory, expectedAnswerHistory);

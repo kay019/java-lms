@@ -107,8 +107,8 @@ public class AnswersTest {
         assertThat(deleteHistories.size()).isEqualTo(2);
         
         List<DeleteHistory> histories = deleteHistories.getHistories();
-        DeleteHistory expected1 = new DeleteHistory(ContentType.ANSWER, answer1.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
-        DeleteHistory expected2 = new DeleteHistory(ContentType.ANSWER, answer2.getId(), NsUserTest.SANJIGI, LocalDateTime.now());
+        DeleteHistory expected1 = new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expected2 = new DeleteHistory(ContentType.ANSWER, 2L, NsUserTest.SANJIGI, LocalDateTime.now());
         
         assertThat(histories).hasSize(2);
         assertThat(histories).contains(expected1, expected2);

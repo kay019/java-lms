@@ -27,10 +27,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
         answers.add(answer);

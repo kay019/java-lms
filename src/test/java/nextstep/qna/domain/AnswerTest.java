@@ -26,12 +26,12 @@ public class AnswerTest {
     @Test
     @DisplayName("답변의 삭제 이력을 생성할 수 있다.")
     void testCreateDeleteHistories() {
-        Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
         answer.delete();
         
         DeleteHistory deleteHistory = answer.getDeleteHistory();
 
-        DeleteHistory expected = new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expected = new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now());
 
         assertThat(deleteHistory).isEqualTo(expected);
     }
