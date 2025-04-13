@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.utils.IdGenerator;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
@@ -18,7 +19,7 @@ public class Session {
   private Enrollments enrollments;
 
   public Session(Course course, String title, LocalDateTime startDate, LocalDateTime endDate, EnrollmentPolicy enrollmentPolicy) {
-    this(0L, course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy);
+    this(IdGenerator.generate(), course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy);
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy) {
@@ -62,5 +63,9 @@ public class Session {
 
   public void changeStatus(SessionStatus status) {
     this.status = status;
+  }
+
+  public MoneyType moneyType() {
+    return enrollmentPolicy.moneyType();
   }
 }
