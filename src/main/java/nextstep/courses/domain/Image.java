@@ -25,9 +25,7 @@ public class Image {
     if (filename == null || filename.isEmpty()) {
       throw new IllegalArgumentException("파일이름이 null이거나 비어있습니다.");
     }
-    if (!isValidType(filename)) {
-      throw new IllegalArgumentException("이미지 형식이 유효하지 않습니다.");
-    }
+    ImageType.validate(filename);
     if (sizeInBytes <= 0) {
       throw new IllegalArgumentException("파일 크기가 유효하지 않습니다.");
     }
@@ -43,11 +41,5 @@ public class Image {
     if (widthInPixel * 2 != heightInPixel * 3) {
       throw new IllegalArgumentException("가로 세로 비율이 유효하지 않습니다.");
     }
-  }
-
-  private boolean isValidType(String filename) {
-    String lower = filename.toLowerCase();
-    return lower.endsWith(".gif") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") ||
-            lower.endsWith(".png") || lower.endsWith(".svg");
   }
 }
