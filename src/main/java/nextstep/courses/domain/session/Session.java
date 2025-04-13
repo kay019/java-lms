@@ -1,11 +1,17 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import java.time.LocalDate;
+
+import nextstep.courses.domain.session.inner.SessionDate;
+import nextstep.courses.domain.session.inner.SessionStatus;
+import nextstep.courses.domain.session.inner.SessionType;
 import nextstep.payments.domain.Payment;
 
 public class Session {
 
     private Long id;
+
+    private Long courseId;
 
     private String title;
 
@@ -17,9 +23,10 @@ public class Session {
 
     private int enrollmentCount;
 
-    public Session(Long id, String title, SessionType sessionType, LocalDate startDate,
+    public Session(Long id, Long courseId, String title, SessionType sessionType, LocalDate startDate,
             LocalDate finishDate, SessionStatus status, int enrollmentCount) {
         this.id = id;
+        this.courseId = courseId;
         this.title = title;
         this.sessionType = sessionType;
         this.sessionDate = new SessionDate(startDate, finishDate);
@@ -40,8 +47,44 @@ public class Session {
         return false;
     }
 
-    public void enrollUser(Long nsUserId) {
+    private void enrollUser(Long nsUserId) {
         // 수강 신청 여부를 DB에 등록? 수강신청한 유저 명단을 어떻게 관리해야 할지 요구 사항 명확하지 않음
         enrollmentCount++;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSessionType() {
+        return sessionType.getSessionType();
+    }
+
+    public int getMaxEnrollment() {
+        return sessionType.getMaxEnrollment();
+    }
+
+    public long getFee() {
+        return sessionType.getFee();
+    }
+
+    public LocalDate getStartDate() {
+        return sessionDate.startDate();
+    }
+
+    public LocalDate getFinishDate() {
+        return sessionDate.finishDate();
+    }
+
+    public String getStatus() {
+        return status.name();
+    }
+
+    public int getEnrollmentCount() {
+        return enrollmentCount;
     }
 }

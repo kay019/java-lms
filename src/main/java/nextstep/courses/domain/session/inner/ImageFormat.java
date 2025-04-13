@@ -1,7 +1,8 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.inner;
 
 import static java.util.Collections.emptySet;
 
+import java.util.Arrays;
 import java.util.Set;
 
 public enum ImageFormat {
@@ -18,12 +19,10 @@ public enum ImageFormat {
     }
 
     public static ImageFormat findFormat(String format) {
-        for (ImageFormat imageFormat : values()) {
-            if (imageFormat.allFormat.contains(format.toLowerCase())) {
-                return imageFormat;
-            }
-        }
-        return NOT_SUPPORTED;
+        return Arrays.stream(values())
+                .filter(imageFormat -> imageFormat.allFormat.contains(format.toLowerCase()))
+                .findFirst()
+                .orElse(NOT_SUPPORTED);
     }
 
 }

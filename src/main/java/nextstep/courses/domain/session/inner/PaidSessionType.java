@@ -1,13 +1,14 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.inner;
 
+import nextstep.courses.domain.session.Session;
 import nextstep.payments.domain.Payment;
 
-class PaidSessionType implements SessionType {
+public class PaidSessionType extends SessionType {
 
-    private int maxEnrollment;
-    private long fee;
+    public static final String TYPE = "PAID";
 
     public PaidSessionType(int maxEnrollment, long fee) {
+        this.sessionType = TYPE;
         this.maxEnrollment = maxEnrollment;
         this.fee = fee;
     }

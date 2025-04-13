@@ -1,9 +1,11 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.inner;
 
-import static nextstep.courses.domain.SessionTest.SESSION2;
+import static nextstep.courses.domain.session.SessionTest.SESSION2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+
+import nextstep.courses.domain.session.Session;
 import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +34,7 @@ class PaidSessionTypeTest {
 
     @Test
     void 인원초과() {
-        Session session = new Session(2L, "paid", new PaidSessionType(10, 10000),
+        Session session = new Session(2L, 1L, "paid", new PaidSessionType(10, 10000),
                 LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.OPEN, 10);
         SessionType sessionType = new PaidSessionType(10, 10000);
         Payment payment = new Payment("1", 1L, 100L, 1000L);

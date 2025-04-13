@@ -13,8 +13,6 @@ public class Course {
 
     private LocalDateTime updatedAt;
 
-    private Sessions sessions;
-
     public Course() {
     }
 

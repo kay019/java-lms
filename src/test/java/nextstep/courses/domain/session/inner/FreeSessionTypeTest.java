@@ -1,6 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.inner;
 
-import static nextstep.courses.domain.SessionTest.SESSION1;
+import static nextstep.courses.domain.session.SessionTest.SESSION1;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

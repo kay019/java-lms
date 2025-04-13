@@ -1,9 +1,10 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.inner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 
 class SessionDateTest {
