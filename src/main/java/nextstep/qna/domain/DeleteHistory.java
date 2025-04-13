@@ -32,6 +32,11 @@ public class DeleteHistory {
             LocalDateTime.now());
     }
 
+    public static DeleteHistory ofQuestion(Question question) {
+        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter(),
+            LocalDateTime.now());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

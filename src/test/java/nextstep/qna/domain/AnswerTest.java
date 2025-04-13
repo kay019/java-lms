@@ -12,11 +12,13 @@ import org.junit.jupiter.api.Test;
 
 public class AnswerTest {
 
+    public Question question;
     public Answer answer;
 
     @BeforeEach
     void setUp() {
-        answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        answer = new Answer(NsUserTest.JAVAJIGI, question, "Answers Contents1");
     }
 
     @Nested
