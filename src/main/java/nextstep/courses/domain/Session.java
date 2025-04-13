@@ -42,15 +42,15 @@ public class Session {
   }
 
   public void enroll(NsUser user, Payment payment) {
-    checkAvailability(user, payment);
+    checkAvailability(payment);
     enrollments = new Enrollments(enrollments, new Enrollment(user, this));
   }
 
-  private void checkAvailability(NsUser user, Payment payment) {
+  private void checkAvailability(Payment payment) {
     if (!isRecruiting()) {
       throw new IllegalStateException("모집중인 상태가 아닙니다.");
     }
-    enrollmentPolicy.checkEnrollAvailability(this, user, payment);
+    enrollmentPolicy.checkEnrollAvailability(this, payment);
   }
 
   private boolean isRecruiting() {

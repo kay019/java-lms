@@ -30,7 +30,7 @@ class PaidEnrollmentPolicyTest {
   @Test
   void 정원이_남아있고_결제금액이_일치하면_통과() {
     Payment payment = new Payment("id", session, user, 10000L);
-    policy.checkEnrollAvailability(session, user, payment);
+    policy.checkEnrollAvailability(session, payment);
   }
 
   @Test
@@ -42,7 +42,7 @@ class PaidEnrollmentPolicyTest {
 
     Payment payment = new Payment("id", session, user, 10000L);
 
-    assertThatThrownBy(() -> policy.checkEnrollAvailability(session, user, payment))
+    assertThatThrownBy(() -> policy.checkEnrollAvailability(session, payment))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("정원이 초과되었습니다.");
   }
@@ -51,14 +51,14 @@ class PaidEnrollmentPolicyTest {
   void 결제금액이_다르면_예외발생() {
     Payment wrongPayment = new Payment("id", session, user, 5000L);
 
-    assertThatThrownBy(() -> policy.checkEnrollAvailability(session, user, wrongPayment))
+    assertThatThrownBy(() -> policy.checkEnrollAvailability(session, wrongPayment))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("결제 정보가 유효하지 않습니다.");
   }
 
   @Test
   void 결제정보가_null이면_예외발생() {
-    assertThatThrownBy(() -> policy.checkEnrollAvailability(session, user, null))
+    assertThatThrownBy(() -> policy.checkEnrollAvailability(session, null))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("결제 정보가 유효하지 않습니다.");
   }
