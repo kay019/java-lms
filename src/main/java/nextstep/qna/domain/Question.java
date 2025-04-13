@@ -64,13 +64,14 @@ public class Question {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public DeleteHistories delete(NsUser loginUser) throws CannotDeleteException {
         validDelete(loginUser);
 
         this.deleted = true;
-        deleteHistories.add(ContentType.QUESTION, id, writer);
-
-        answers.delete(deleteHistories);
+        DeleteHistories deleteHistories = new DeleteHistories();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        deleteHistories.add(answers.delete(loginUser));
+        return deleteHistories;
     }
 
     private void validDelete(NsUser loginUser) throws CannotDeleteException {
