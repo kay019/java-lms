@@ -1,9 +1,7 @@
 package nextstep.sessions;
 
-import nextstep.sessions.domain.ImageInfo;
-import nextstep.sessions.domain.Session;
-import nextstep.sessions.domain.Period;
-import nextstep.sessions.domain.SessionStatus;
+import nextstep.sessions.domain.*;
+import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -19,8 +17,9 @@ public class SessionTest {
                 LocalDate.of(2025, 4, 14)
         );
         ImageInfo imageInfo = new ImageInfo(10^6, "png", 300, 200);
-        assertThat(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN))
-                .isEqualTo(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN));
+        Registration registration = new Registration(RegistrationType.FREE);
+        assertThat(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN, registration))
+                .isEqualTo(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN, registration));
     }
 
     @Test
@@ -71,23 +70,26 @@ public class SessionTest {
     void testRegisterOpenSession() {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
-        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.OPEN);
-        assertThat(session.register()).isTrue();
+        Registration registration = new Registration(RegistrationType.FREE);
+        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.OPEN, registration);
+        session.register(NsUserTest.SANJIGI);
     }
 
     @Test
     void testRegisterReadySession() {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
-        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.READY);
-        assertThatThrownBy(session::register).isInstanceOf(IllegalStateException.class);
+        Registration registration = new Registration(RegistrationType.FREE);
+        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.READY, registration);
+        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void testRegisterClosedSession() {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
         ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
-        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.CLOSED);
-        assertThatThrownBy(session::register).isInstanceOf(IllegalStateException.class);
+        Registration registration = new Registration(RegistrationType.FREE);
+        Session session = new Session(sessionPeriod, imageInfo, SessionStatus.CLOSED, registration);
+        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI)).isInstanceOf(IllegalStateException.class);
     }
 }

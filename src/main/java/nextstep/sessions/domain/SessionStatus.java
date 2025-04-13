@@ -1,7 +1,5 @@
 package nextstep.sessions.domain;
 
-import java.util.Objects;
-
 public enum SessionStatus {
     READY("ready"),
     OPEN("open"),

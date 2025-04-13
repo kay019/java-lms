@@ -1,5 +1,7 @@
 package nextstep.sessions.domain;
 
+import nextstep.users.domain.NsUser;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -10,18 +12,20 @@ public class Session {
     private final Period sessionPeriod;
     private final ImageInfo coverImage;
     private final SessionStatus sessionStatus;
+    private final Registration registration;
 
     public Session(LocalDate startDate, LocalDate endDate, ImageInfo imageInfo) {
-        this(new Period(startDate, endDate), imageInfo, SessionStatus.READY);
+        this(new Period(startDate, endDate), imageInfo, SessionStatus.READY, new Registration(RegistrationType.FREE));
     }
 
-    public Session(Period sessionPeriod, ImageInfo imageInfo, SessionStatus sessionStatus) {
+    public Session(Period sessionPeriod, ImageInfo imageInfo, SessionStatus sessionStatus, Registration registration) {
         if (!validImage(imageInfo)) {
             throw new IllegalArgumentException();
         }
         this.sessionPeriod = sessionPeriod;
         this.coverImage = imageInfo;
         this.sessionStatus = sessionStatus;
+        this.registration = registration;
     }
 
     private boolean validImage(ImageInfo imageInfo) {
@@ -31,11 +35,11 @@ public class Session {
                 && imageInfo.hasRatio(IMAGE_RATIO);
     }
 
-    public boolean register() {
+    public void register(NsUser user) {
         if (!sessionStatus.isOpened()) {
             throw new IllegalStateException();
         }
-        return true;
+        registration.register(user);
     }
 
     @Override
