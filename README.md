@@ -19,11 +19,11 @@
   - [x] delete 실행 시, DeleteHistory까지 하나의 생명주로 가져가도록 변경
 ### step2
 - [x] 강의(Session)는 시작일과 종료일을 갖는다.
-- [ ] 강의(Session)은 강의 커버 이미지를 갖는다.
-  - [ ] 이미지 크기는 1MB 이하
-  - [ ] 이미지 타입은 gif, jpg(jpeg), png, svg 허용
-  - [ ] 이미지 width는 300px, height는 200px 이상이어야 함
-  - [ ] width와 height의 비율은 3:2
+- [x] 강의(Session)은 강의 커버 이미지를 갖는다.
+  - 이미지 크기는 1MB 이하
+  - 이미지 타입은 gif, jpg(jpeg), png, svg 허용
+  - 이미지 width는 300px, height는 200px 이상이어야 함
+  - width와 height의 비율은 3:2
 - [ ] 강의(Session)는 무료와 유료로 나뉜다.
   - [ ] 무료 강의는 수강 인원 제한이 없음
   - [ ] 유료 강의는 최대 수강 인원이 존재
