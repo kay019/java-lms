@@ -7,23 +7,24 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static nextstep.qna.domain.AnswerTest.A1;
+import static nextstep.qna.domain.AnswerTest.A2;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 
 public class AnswersTest {
 
     Answers answers = new Answers();
-    Answer answer;
 
     @BeforeEach
     void setUp(){
-        answer = new Answer(11L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
-        answers.add(answer);
+        answers.add(A1);
     }
 
     @Test
     void add(){
-        assertThat(answers).hasFieldOrPropertyWithValue("answers", List.of(answer));
+        assertThat(answers).hasFieldOrPropertyWithValue("answers", List.of(A1));
     }
 
     @Test
@@ -37,11 +38,18 @@ public class AnswersTest {
     }
 
     @Test
-    void delete() {
-        DeleteHistories deleteHistories = new DeleteHistories();
-        answers.delete(deleteHistories);
+    void delete_성공() throws CannotDeleteException {
+        assertThat(answers.delete(NsUserTest.JAVAJIGI).size()).isEqualTo(1);
+        assertThat(A1.isDeleted()).isTrue();
+    }
 
-        assertThat(answer.isDeleted()).isTrue();
-        assertThat(deleteHistories.getDeleteHistories().size()).isEqualTo(1);
+    @Test
+    void delete_답변작성자가아닌답변이포함() throws CannotDeleteException {
+        answers.add(A2);
+
+        assertThatThrownBy(() -> answers.delete(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
+        assertThat(A1.isDeleted()).isFalse();
+        assertThat(A2.isDeleted()).isFalse();
+
     }
 }
