@@ -9,21 +9,19 @@ public class Session {
 
     private final Period sessionPeriod;
     private final ImageInfo coverImage;
+    private final SessionStatus sessionStatus;
 
     public Session(LocalDate startDate, LocalDate endDate, ImageInfo imageInfo) {
-        if (!validImage(imageInfo)) {
-            throw new IllegalArgumentException();
-        }
-        this.sessionPeriod = new Period(startDate, endDate);
-        this.coverImage = imageInfo;
+        this(new Period(startDate, endDate), imageInfo, SessionStatus.READY);
     }
 
-    public Session(Period sessionPeriod, ImageInfo imageInfo) {
+    public Session(Period sessionPeriod, ImageInfo imageInfo, SessionStatus sessionStatus) {
         if (!validImage(imageInfo)) {
             throw new IllegalArgumentException();
         }
         this.sessionPeriod = sessionPeriod;
         this.coverImage = imageInfo;
+        this.sessionStatus = sessionStatus;
     }
 
     private boolean validImage(ImageInfo imageInfo) {
@@ -37,11 +35,11 @@ public class Session {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Session session = (Session) o;
-        return Objects.equals(sessionPeriod, session.sessionPeriod) && Objects.equals(coverImage, session.coverImage);
+        return Objects.equals(sessionPeriod, session.sessionPeriod) && Objects.equals(coverImage, session.coverImage) && sessionStatus == session.sessionStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionPeriod, coverImage);
+        return Objects.hash(sessionPeriod, coverImage, sessionStatus);
     }
 }

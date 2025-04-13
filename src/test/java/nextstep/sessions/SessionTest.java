@@ -3,6 +3,7 @@ package nextstep.sessions;
 import nextstep.sessions.domain.ImageInfo;
 import nextstep.sessions.domain.Session;
 import nextstep.sessions.domain.Period;
+import nextstep.sessions.domain.SessionStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -18,7 +19,8 @@ public class SessionTest {
                 LocalDate.of(2025, 4, 14)
         );
         ImageInfo imageInfo = new ImageInfo(10^6, "png", 300, 200);
-        assertThat(new Session(sessionPeriod, imageInfo)).isEqualTo(new Session(sessionPeriod, imageInfo));
+        assertThat(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN))
+                .isEqualTo(new Session(sessionPeriod, imageInfo, SessionStatus.OPEN));
     }
 
     @Test
