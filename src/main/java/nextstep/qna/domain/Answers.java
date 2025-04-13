@@ -9,18 +9,18 @@ import java.util.List;
 
 public class Answers {
 
-  private final List<Answer> answerList;
+  private final List<Answer> answers;
 
   public Answers() {
-    this.answerList = Collections.emptyList();
+    this.answers = Collections.emptyList();
   }
 
   public Answers(List<Answer> answers) {
-    this.answerList = Collections.unmodifiableList(new ArrayList<>(answers));
+    this.answers = Collections.unmodifiableList(new ArrayList<>(answers));
   }
 
   public Answers(Answers existingAnswers, Answer newAnswer) {
-    this(createNewList(existingAnswers.answerList, newAnswer));
+    this(createNewList(existingAnswers.answers, newAnswer));
   }
 
   public void validateDeletable(NsUser loginUser) throws CannotDeleteException {
@@ -39,18 +39,18 @@ public class Answers {
   }
 
   private boolean isEmpty() {
-    return answerList.isEmpty();
+    return answers.isEmpty();
   }
 
   private boolean areAllAnswersSameWriter(NsUser loginUser) {
-    return answerList.stream()
+    return answers.stream()
         .allMatch(answer -> answer.isOwner(loginUser));
   }
 
   public List<DeleteHistory> delete() {
     List<DeleteHistory> deleteHistoryList = new ArrayList<>();
 
-    for (Answer answer : answerList) {
+    for (Answer answer : answers) {
       DeleteHistory deleteHistory = answer.delete();
       deleteHistoryList.add(deleteHistory);
     }
