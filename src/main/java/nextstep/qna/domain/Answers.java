@@ -19,10 +19,17 @@ public class Answers {
     }
 
     public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        validDelete(loginUser);
         List<DeleteHistory> deleteHistoriesList = new ArrayList<>();
         for (Answer answer : answers) {
             deleteHistoriesList.add(answer.delete(loginUser));
         }
         return deleteHistoriesList;
+    }
+
+    private void validDelete(NsUser loginUser) throws CannotDeleteException {
+        if(!isOwner(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
     }
 }
