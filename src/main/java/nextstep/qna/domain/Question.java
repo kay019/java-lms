@@ -1,7 +1,6 @@
 package nextstep.qna.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
@@ -16,7 +15,7 @@ public class Question {
 
     private NsUser writer;
 
-    private final List<Answer> answers = new ArrayList<>();
+    private final Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -82,7 +81,7 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
 
@@ -97,11 +96,7 @@ public class Question {
             throw new CannotDeleteException("로그인한 사용자와 질문의 작성자가 달라 삭제할 수 없습니다.");
         }
 
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        for (Answer answer : answers) {
-            deleteHistories.add(answer.deleteBy(user));
-        }
-
+        List<DeleteHistory> deleteHistories = answers.deleteBy(user);
         this.deleted = true;
         deleteHistories.add(DeleteHistory.ofQuestion(this));
         return deleteHistories;
