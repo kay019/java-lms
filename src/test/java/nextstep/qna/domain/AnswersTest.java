@@ -1,9 +1,11 @@
 package nextstep.qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.time.LocalDateTime;
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,14 +75,14 @@ public class AnswersTest {
 
     @Test
     @DisplayName("모든 답변을 삭제할 수 있다")
-    void deleteAll() {
+    void deleteAll() throws CannotDeleteException {
         // given
         Answer answer1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용1");
         Answer answer2 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용2");
         Answers answers = new Answers(List.of(answer1, answer2));
 
         // when
-        answers.deleteAll();
+        answers.deleteAll(NsUserTest.JAVAJIGI);
 
         // then
         assertThat(answers.isAllDeleted()).isTrue();
@@ -141,5 +143,36 @@ public class AnswersTest {
         Answer answer2 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용2");
         Answers multipleAnswers = new Answers(List.of(answer1, answer2));
         assertThat(multipleAnswers.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("다른 사람이 작성한 답변이 있으면 삭제할 수 없다")
+    void deleteAll_withOtherUserAnswers() {
+        // given
+        Answer answer1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용1");
+        Answer answer2 = new Answer(NsUserTest.SANJIGI, QuestionTest.Q1, "내용2");
+        Answers answers = new Answers(List.of(answer1, answer2));
+
+        // then
+        assertThatThrownBy(() -> answers.deleteAll(NsUserTest.JAVAJIGI))
+            .isInstanceOf(CannotDeleteException.class)
+            .hasMessageContaining("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다");
+    }
+
+    @Test
+    @DisplayName("자신이 작성한 답변만 있으면 삭제할 수 있다")
+    void deleteAll_withOnlyOwnAnswers() throws CannotDeleteException {
+        // given
+        Answer answer1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용1");
+        Answer answer2 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "내용2");
+        Answers answers = new Answers(List.of(answer1, answer2));
+
+        // when
+        answers.deleteAll(NsUserTest.JAVAJIGI);
+
+        // then
+        assertThat(answers.isAllDeleted()).isTrue();
+        assertThat(answer1.isDeleted()).isTrue();
+        assertThat(answer2.isDeleted()).isTrue();
     }
 }
