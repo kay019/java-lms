@@ -29,7 +29,7 @@ public class AnswerTest {
         Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
         answer.delete();
         
-        DeleteHistory deleteHistory = answer.getDeleteHistory();
+        DeleteHistory deleteHistory = answer.createDeleteHistory();
 
         DeleteHistory expected = new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now());
 

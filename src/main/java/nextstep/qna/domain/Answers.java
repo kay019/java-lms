@@ -63,10 +63,12 @@ public class Answers {
         }
     }
 
-    public DeleteHistories getDeleteHistories() {
+    public DeleteHistories createDeleteHistories() {
         DeleteHistories histories = new DeleteHistories();
         for (Answer answer : answers) {
-            histories.add(answer.getDeleteHistory());
+            if (answer.isDeleted()) {
+                histories.add(answer.createDeleteHistory());
+            }
         }
         return histories;
     }

@@ -1,20 +1,16 @@
 package nextstep.qna.domain;
 
-import java.time.LocalDateTime;
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 public class Question {
 
     private final Answers answers = new Answers();
-    private final LocalDateTime createdDate = LocalDateTime.now();
+    private final Metadata metadata = new Metadata();
     private final Long id;
     private final String title;
     private final String contents;
     private final NsUser writer;
-    private boolean deleted = false;
-    private LocalDateTime updatedDate;
-    private DeleteHistory deleteHistory;
 
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
@@ -33,7 +29,7 @@ public class Question {
     }
 
     public boolean isDeleted() {
-        return deleted;
+        return metadata.isDeleted();
     }
 
     public boolean isAllAnswersDeleted() {
@@ -46,16 +42,22 @@ public class Question {
         }
 
         answers.deleteAll(loginUser);
-        
-        deleted = true;
-        deleteHistory = new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+        metadata.delete();
     }
 
-    public DeleteHistories getDeleteHistories() {
-        DeleteHistories deleteHistories = new DeleteHistories();
-        deleteHistories.add(deleteHistory);
-        deleteHistories.addAll(answers.getDeleteHistories());
-        return deleteHistories;
+    public DeleteHistories createDeleteHistories() {
+        if (!isDeleted()) {
+            return new DeleteHistories();
+        }
+
+        DeleteHistories histories = new DeleteHistories();
+        histories.add(createDeleteHistory());
+        histories.addAll(answers.createDeleteHistories());
+        return histories;
+    }
+
+    private DeleteHistory createDeleteHistory() {
+        return DeleteHistory.fromQuestion(id, writer, metadata.getDeletedAt());
     }
 
     private boolean isOwner(NsUser loginUser) {

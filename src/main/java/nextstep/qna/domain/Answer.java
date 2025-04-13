@@ -1,6 +1,5 @@
 package nextstep.qna.domain;
 
-import java.time.LocalDateTime;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -8,14 +7,10 @@ import nextstep.users.domain.NsUser;
 public class Answer {
 
     private final Long id;
-
     private final NsUser writer;
     private final String contents;
-    private final LocalDateTime createdDate = LocalDateTime.now();
+    private final Metadata metadata = new Metadata();
     private Question question;
-    private boolean deleted = false;
-    private LocalDateTime updatedDate;
-    private DeleteHistory deleteHistory;
 
     public Answer(NsUser writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -37,16 +32,15 @@ public class Answer {
     }
 
     public void delete() {
-        this.deleted = true;
-        deleteHistory = new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        metadata.delete();
     }
 
-    public DeleteHistory getDeleteHistory() {
-        return deleteHistory;
+    public DeleteHistory createDeleteHistory() {
+        return DeleteHistory.fromAnswer(id, writer, metadata.getDeletedAt());
     }
 
     public boolean isDeleted() {
-        return deleted;
+        return metadata.isDeleted();
     }
 
     public boolean isOwner(NsUser writer) {
