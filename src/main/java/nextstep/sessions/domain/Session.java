@@ -11,20 +11,22 @@ public class Session {
     private final float IMAGE_RATIO = 1.5f;
 
     private final Long id;
+    private final Long courseId;
     private final Period sessionPeriod;
     private final ImageInfo coverImage;
     private final SessionStatus sessionStatus;
     private final Registration registration;
 
-    public Session(Long id, LocalDate startDate, LocalDate endDate, ImageInfo imageInfo) {
-        this(id, new Period(startDate, endDate), imageInfo, SessionStatus.READY, new Registration(RegistrationType.FREE));
+    public Session(Long id, Long courseId, LocalDate startDate, LocalDate endDate, ImageInfo imageInfo) {
+        this(id, courseId, new Period(startDate, endDate), imageInfo, SessionStatus.READY, new Registration(RegistrationType.FREE));
     }
 
-    public Session(Long id, Period sessionPeriod, ImageInfo imageInfo, SessionStatus sessionStatus, Registration registration) {
+    public Session(Long id, Long courseId, Period sessionPeriod, ImageInfo imageInfo, SessionStatus sessionStatus, Registration registration) {
         if (!validImage(imageInfo)) {
             throw new IllegalArgumentException();
         }
         this.id = id;
+        this.courseId = courseId;
         this.sessionPeriod = sessionPeriod;
         this.coverImage = imageInfo;
         this.sessionStatus = sessionStatus;
