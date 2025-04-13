@@ -13,13 +13,8 @@ public class Answers {
         answers.add(answer);
     }
 
-    public boolean isOwner(NsUser loginUser) throws CannotDeleteException {
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isOwner(NsUser loginUser) {
+        return answers.stream().allMatch(answer -> answer.isOwner(loginUser));
     }
 
     public void delete(DeleteHistories deleteHistories) {
