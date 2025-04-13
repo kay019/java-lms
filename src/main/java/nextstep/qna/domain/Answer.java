@@ -15,6 +15,7 @@ public class Answer {
     private Question question;
     private boolean deleted = false;
     private LocalDateTime updatedDate;
+    private DeleteHistory deleteHistory;
 
     public Answer(NsUser writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -41,16 +42,11 @@ public class Answer {
 
     public void delete() {
         this.deleted = true;
+        deleteHistory = new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
-    public DeleteHistories createDeleteHistories() {
-        if (!isDeleted()) {
-            return new DeleteHistories();
-        }
-        
-        DeleteHistories histories = new DeleteHistories();
-        histories.add(new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now()));
-        return histories;
+    public DeleteHistory getDeleteHistory() {
+        return deleteHistory;
     }
 
     public boolean isDeleted() {

@@ -29,14 +29,10 @@ public class AnswerTest {
         Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
         answer.delete();
         
-        DeleteHistories deleteHistories = answer.createDeleteHistories();
-        
-        assertThat(deleteHistories.size()).isEqualTo(1);
-        
+        DeleteHistory deleteHistory = answer.getDeleteHistory();
+
         DeleteHistory expected = new DeleteHistory(ContentType.ANSWER, answer.getId(), NsUserTest.JAVAJIGI, LocalDateTime.now());
-        List<DeleteHistory> histories = deleteHistories.getHistories();
-        
-        assertThat(histories).hasSize(1);
-        assertThat(histories.get(0)).isEqualTo(expected);
+
+        assertThat(deleteHistory).isEqualTo(expected);
     }
 }

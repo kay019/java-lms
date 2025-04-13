@@ -101,7 +101,7 @@ public class AnswersTest {
         // when
         answer1.delete();
         answer2.delete();
-        DeleteHistories deleteHistories = answers.createDeleteHistories();
+        DeleteHistories deleteHistories = answers.getDeleteHistories();
         
         // then
         assertThat(deleteHistories.size()).isEqualTo(2);

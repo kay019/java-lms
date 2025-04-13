@@ -1,8 +1,6 @@
 package nextstep.qna.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
@@ -16,6 +14,7 @@ public class Question {
     private final NsUser writer;
     private boolean deleted = false;
     private LocalDateTime updatedDate;
+    private DeleteHistory deleteHistory;
 
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
@@ -51,22 +50,16 @@ public class Question {
         }
 
         answers.deleteAll(loginUser);
-        this.deleted = true;
+        
+        deleted = true;
+        deleteHistory = new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
     }
 
-    public DeleteHistories createDeleteHistories() {
-        if (!isDeleted()) {
-            return new DeleteHistories();
-        }
-
-        DeleteHistories histories = new DeleteHistories();
-        histories.add(createDeleteHistory());
-        histories.addAll(answers.createDeleteHistories());
-        return histories;
-    }
-
-    private DeleteHistory createDeleteHistory() {
-        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+    public DeleteHistories getDeleteHistories() {
+        DeleteHistories deleteHistories = new DeleteHistories();
+        deleteHistories.add(deleteHistory);
+        deleteHistories.addAll(answers.getDeleteHistories());
+        return deleteHistories;
     }
 
     private boolean isOwner(NsUser loginUser) {

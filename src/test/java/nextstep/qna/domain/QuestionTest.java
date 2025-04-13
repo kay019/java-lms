@@ -76,7 +76,7 @@ public class QuestionTest {
         Question question = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
         question.delete(NsUserTest.JAVAJIGI);
 
-        DeleteHistories deleteHistories = question.createDeleteHistories();
+        DeleteHistories deleteHistories = question.getDeleteHistories();
         
         assertThat(deleteHistories.size()).isEqualTo(1);
         
@@ -95,7 +95,7 @@ public class QuestionTest {
         question.addAnswer(answer);
         question.delete(NsUserTest.JAVAJIGI);
 
-        DeleteHistories deleteHistories = question.createDeleteHistories();
+        DeleteHistories deleteHistories = question.getDeleteHistories();
         
         assertThat(deleteHistories.size()).isEqualTo(2);
         

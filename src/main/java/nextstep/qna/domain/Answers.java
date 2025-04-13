@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -58,14 +59,15 @@ public class Answers {
 
         for (Answer answer : answers) {
             answer.delete();
+
         }
     }
 
-    public DeleteHistories createDeleteHistories() {
+    public DeleteHistories getDeleteHistories() {
         DeleteHistories histories = new DeleteHistories();
-        answers.stream()
-                .filter(Answer::isDeleted)
-                .forEach(answer -> histories.addAll(answer.createDeleteHistories()));
+        for (Answer answer : answers) {
+            histories.add(answer.getDeleteHistory());
+        }
         return histories;
     }
 
