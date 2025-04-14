@@ -31,6 +31,7 @@ public class Question extends BaseDomain {
     public void addAnswer(Answer answer) {
         answer.link(this);
         answers.add(answer);
+        this.updatedAt = LocalDateTime.now();
     }
 
     public boolean isDeleted() {
