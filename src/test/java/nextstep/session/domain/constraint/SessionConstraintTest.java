@@ -1,17 +1,7 @@
-package nextstep.session.domain.payment;
+package nextstep.session.domain.constraint;
 
-import nextstep.courses.domain.Course;
-import nextstep.payments.domain.Payment;
-import nextstep.payments.domain.Payments;
-import nextstep.session.domain.Session;
-import nextstep.session.domain.SessionPeriod;
-import nextstep.session.domain.image.SessionImage;
-import nextstep.users.domain.NsUserTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

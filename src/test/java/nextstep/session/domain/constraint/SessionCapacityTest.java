@@ -1,4 +1,4 @@
-package nextstep.session.domain.payment;
+package nextstep.session.domain.constraint;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

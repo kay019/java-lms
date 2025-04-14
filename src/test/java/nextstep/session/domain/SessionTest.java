@@ -2,9 +2,9 @@ package nextstep.session.domain;
 
 import nextstep.courses.domain.Course;
 import nextstep.session.domain.image.SessionImage;
-import nextstep.session.domain.payment.SessionCapacity;
-import nextstep.session.domain.payment.SessionFee;
-import nextstep.session.domain.payment.SessionConstraint;
+import nextstep.session.domain.constraint.SessionCapacity;
+import nextstep.session.domain.constraint.SessionFee;
+import nextstep.session.domain.constraint.SessionConstraint;
 import nextstep.session.domain.property.SessionStatus;
 import nextstep.session.domain.property.SessionType;
 import org.junit.jupiter.api.BeforeEach;

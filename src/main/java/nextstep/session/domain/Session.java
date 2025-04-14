@@ -2,16 +2,14 @@ package nextstep.session.domain;
 
 import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.Course;
-import nextstep.payments.domain.Payment;
 import nextstep.session.domain.image.SessionImage;
-import nextstep.session.domain.payment.SessionConstraint;
+import nextstep.session.domain.constraint.SessionConstraint;
 import nextstep.session.domain.property.SessionProperty;
 import nextstep.session.domain.property.SessionStatus;
 import nextstep.session.domain.property.SessionType;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 public class Session extends BaseDomain {
 

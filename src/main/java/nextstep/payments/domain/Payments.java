@@ -1,6 +1,6 @@
 package nextstep.payments.domain;
 
-import nextstep.session.domain.payment.SessionConstraint;
+import nextstep.session.domain.constraint.SessionConstraint;
 
 import java.util.ArrayList;
 import java.util.List;

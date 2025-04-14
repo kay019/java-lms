@@ -3,7 +3,7 @@ package nextstep.session.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.payments.domain.Payments;
 import nextstep.session.domain.image.SessionImage;
-import nextstep.session.domain.payment.SessionConstraint;
+import nextstep.session.domain.constraint.SessionConstraint;
 import nextstep.session.domain.property.SessionProperty;
 
 import java.awt.image.BufferedImage;

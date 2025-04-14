@@ -1,4 +1,4 @@
-package nextstep.session.domain.payment;
+package nextstep.session.domain.constraint;
 
 public class SessionCapacity {
     private final int value;

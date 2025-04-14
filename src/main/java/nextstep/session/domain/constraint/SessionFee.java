@@ -1,4 +1,4 @@
-package nextstep.session.domain.payment;
+package nextstep.session.domain.constraint;
 
 public class SessionFee {
     private final long value;

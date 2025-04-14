@@ -2,7 +2,7 @@ package nextstep.session.domain.property;
 
 import nextstep.payments.domain.Payment;
 import nextstep.payments.domain.Payments;
-import nextstep.session.domain.payment.SessionConstraint;
+import nextstep.session.domain.constraint.SessionConstraint;
 
 public class SessionProperty {
 

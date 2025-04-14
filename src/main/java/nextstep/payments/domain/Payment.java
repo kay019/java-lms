@@ -2,7 +2,7 @@ package nextstep.payments.domain;
 
 import nextstep.common.domian.BaseDomain;
 import nextstep.session.domain.Session;
-import nextstep.session.domain.payment.SessionConstraint;
+import nextstep.session.domain.constraint.SessionConstraint;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
