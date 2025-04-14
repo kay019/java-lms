@@ -13,11 +13,6 @@ public class PaidEnrollmentPolicy implements EnrollmentPolicy {
   }
 
   @Override
-  public MoneyType moneyType() {
-    return MoneyType.PAID;
-  }
-
-  @Override
   public void checkEnrollAvailability(Session session, Payment payment) {
     if (session.enrolledCount() >= capacity) {
       throw new IllegalStateException("정원이 초과되었습니다.");

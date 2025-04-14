@@ -23,11 +23,11 @@ public class Session {
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy) {
-    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), new Image("temp"));
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), new Image("temp.jpeg"));
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, List<Enrollment> enrollments) {
-    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(enrollments), new Image("temp"));
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(enrollments), new Image("temp.jpeg"));
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments, Image coverImage) {
@@ -64,9 +64,5 @@ public class Session {
 
   public void changeStatus(SessionStatus status) {
     this.status = status;
-  }
-
-  public MoneyType moneyType() {
-    return enrollmentPolicy.moneyType();
   }
 }

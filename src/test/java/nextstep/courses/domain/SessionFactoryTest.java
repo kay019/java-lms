@@ -1,9 +1,12 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUser;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SessionFactoryTest {
@@ -17,7 +20,9 @@ class SessionFactoryTest {
 
     Session session = SessionFactory.createFreeSession(course, title, start, end);
 
-    assertEquals(MoneyType.FREE, session.moneyType());
+    assertThatThrownBy(() -> session.enroll(new NsUser(), null))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("모집중인 상태가 아닙니다.");
   }
 
   @Test
@@ -31,6 +36,9 @@ class SessionFactoryTest {
 
     Session session = SessionFactory.createPaidSession(course, title, start, end, capacity, price);
 
-    assertEquals(MoneyType.PAID, session.moneyType());
+    assertEquals(0, session.enrolledCount());
+    assertThatThrownBy(() -> session.enroll(new NsUser(), new Payment()))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("모집중인 상태가 아닙니다.");
   }
 }
