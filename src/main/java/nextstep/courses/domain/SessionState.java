@@ -5,7 +5,7 @@ public enum SessionState {
     RECRUTING,
     FINISHED;
 
-    public static boolean canRegister(SessionState sessionState) {
-        return sessionState == RECRUTING;
+    public static boolean canNotRegister(SessionState sessionState) {
+        return sessionState != RECRUTING;
     }
 }

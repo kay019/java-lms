@@ -33,12 +33,12 @@ public class Session {
     }
 
     public Payment register(NsUser user, NaturalNumber money) {
-        if (sessionState.equals(SessionState.RECRUTING)) {
-            validateUser(user);
-            students.add(user);
-            return registerStrategy.register(user, id, money);
+        if (SessionState.canNotRegister(sessionState)) {
+            throw new CannotRegisterException("강의는 모집 중일 때만 등록할 수 있습니다.");
         }
-        throw new CannotRegisterException("강의는 모집 중일 때만 등록할 수 있습니다.");
+        validateUser(user);
+        students.add(user);
+        return registerStrategy.register(user, id, money);
     }
 
     private void validateUser(NsUser user) {
