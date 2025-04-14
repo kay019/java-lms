@@ -15,7 +15,7 @@ public class Answer  extends BaseDomain {
 
     private final String contents;
 
-    private Question question;
+    private final Question question;
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
