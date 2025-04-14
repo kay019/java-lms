@@ -1,8 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.common.domian.BaseDomain;
-import nextstep.session.domain.Session;
-import nextstep.session.domain.Sessions;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,8 +10,6 @@ public class Course extends BaseDomain {
     private String title;
 
     private Long creatorId;
-
-    private Sessions sessions;
 
     public Course() {
     }
@@ -38,14 +34,6 @@ public class Course extends BaseDomain {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public boolean addSession(Session session) {
-        if (sessions.add(session)) {
-            session.link(this);
-            return true;
-        }
-        return false;
     }
 
     @Override
