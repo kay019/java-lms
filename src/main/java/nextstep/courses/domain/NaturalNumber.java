@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.InvalidNaturalNumberException;
+
 import java.util.Objects;
 
 public class NaturalNumber implements Comparable<NaturalNumber> {

@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.CannotUploadImageException;
+
 public class Image {
     public static final int MAX_IMAGE_SIZE = 1000;
     public static final int MIN_IMAGE_WIDTH = 300;

@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.InvalidPeriodException;
+
 import java.time.LocalDateTime;
 
 public class Period {

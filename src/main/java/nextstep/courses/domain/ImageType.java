@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.CannotUploadImageException;
+
 import java.util.Arrays;
 
 public enum ImageType {
