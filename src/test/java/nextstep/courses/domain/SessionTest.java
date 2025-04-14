@@ -105,4 +105,19 @@ public class SessionTest {
                 .hasMessage("결제 금액이 강의의 가격과 같지 않습니다.");
     }
 
+    @DisplayName("유료 강의는 등록 시 수강 정원이 초과되면 등록 불가능")
+    @Test
+    public void cannot_register_paid_session_over_capacity() {
+        Session session = new Session(0L
+                , LocalDateTime.of(2025, Month.APRIL, 10, 15, 30)
+                , LocalDateTime.of(2025, Month.APRIL, 11, 15, 30)
+                , SessionState.RECRUTING
+                , new PaidRegsiterStrategy(1000L, 1L)
+                , new Image(1000L, ImageType.GIF, 300L, 200L));
+        session.register(NsUserTest.JAVAJIGI, new NaturalNumber(1000L));
+        assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI, new NaturalNumber(1000L)))
+                .isInstanceOf(CannotRegisterException.class)
+                .hasMessage("해당 강의의 수강 정원이 모두 마감되었습니다.");
+    }
+
 }

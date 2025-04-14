@@ -24,6 +24,10 @@ public class NaturalNumber implements Comparable<NaturalNumber> {
         return (int)(number.value - this.value);
     }
 
+    public int compareTo(int number) {
+        return (int)(number- this.value);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

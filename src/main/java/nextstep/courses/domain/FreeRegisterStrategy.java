@@ -5,7 +5,7 @@ import nextstep.users.domain.NsUser;
 
 public class FreeRegisterStrategy implements RegisterStrategy {
     @Override
-    public Payment register(NsUser user, Long sessionId, NaturalNumber money) {
+    public Payment register(NsUser user, Long sessionId, int studentCount, NaturalNumber money) {
         return new Payment("", sessionId, user.getId(), 0L);
     }
 }

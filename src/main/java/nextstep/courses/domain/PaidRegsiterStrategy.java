@@ -13,9 +13,16 @@ public class PaidRegsiterStrategy implements RegisterStrategy {
     }
 
     @Override
-    public Payment register(NsUser user, Long sessionId, NaturalNumber money) {
+    public Payment register(NsUser user, Long sessionId, int studentCount, NaturalNumber money) {
         validateMoney(money);
+        validateStudentCapacity(studentCount);
         return new Payment("", sessionId, user.getId(), money.value());
+    }
+
+    private void validateStudentCapacity(int studentCount) {
+        if (capacity.compareTo(studentCount) > 0) {
+            throw new CannotRegisterException("해당 강의의 수강 정원이 모두 마감되었습니다.");
+        }
     }
 
     private void validateMoney(NaturalNumber money) {

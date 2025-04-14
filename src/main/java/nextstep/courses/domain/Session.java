@@ -38,7 +38,7 @@ public class Session {
         }
         validateUser(user);
         students.add(user);
-        return registerStrategy.register(user, id, money);
+        return registerStrategy.register(user, id, students.size(), money);
     }
 
     private void validateUser(NsUser user) {
