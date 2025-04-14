@@ -9,18 +9,15 @@ import java.util.List;
 
 public class Session {
     private Long id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Period sessionPeriod;
     private SessionState sessionState;
     private RegisterStrategy registerStrategy;
     private Image coverImage;
     private List<NsUser> students = new ArrayList<>();
 
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, RegisterStrategy registerStrategy, Image coverImage) {
-        validateDate(startDate, endDate);
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.sessionPeriod = new Period(startDate, endDate);
         this.sessionState = sessionState;
         this.registerStrategy = registerStrategy;
         this.coverImage = coverImage;

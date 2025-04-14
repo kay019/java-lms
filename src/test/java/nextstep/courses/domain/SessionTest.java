@@ -24,20 +24,6 @@ public class SessionTest {
         );
     }
 
-    @DisplayName("끝나는 날짜가 시작 날짜보다 앞일 경우 강의 생성 오류")
-    @Test
-    public void create_session_period_error() {
-        assertThatThrownBy(() ->
-                new Session(0L
-                        , LocalDateTime.of(2025, Month.APRIL, 10, 15, 30)
-                        , LocalDateTime.of(2025, Month.APRIL, 10, 15, 29)
-                        , SessionState.RECRUTING
-                        , new FreeRegisterStrategy()
-                        , new Image(1000L, ImageType.GIF, 300L, 200L)))
-                .isInstanceOf(CannotCreateSessionException.class)
-                .hasMessage("강의의 시작 날짜가 끝나는 날짜보다 뒤입니다.");
-    }
-
     @DisplayName("강의는 모집 중에만 등록 가능")
     @Test
     public void register_session_out_recruiting() {
