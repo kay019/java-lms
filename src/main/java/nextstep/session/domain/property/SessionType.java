@@ -10,14 +10,14 @@ public enum SessionType {
         payment.matchesFee(sessionConstraint) && payments.isAvailability(sessionConstraint)
     );
 
-    private final EnrollStrategy enrollStrategy;
+    private final SessionTypeEnrollStrategy sessionTypeEnrollStrategy;
 
-    SessionType(EnrollStrategy enrollStrategy) {
-        this.enrollStrategy = enrollStrategy;
+    SessionType(SessionTypeEnrollStrategy sessionTypeEnrollStrategy) {
+        this.sessionTypeEnrollStrategy = sessionTypeEnrollStrategy;
     }
 
     public boolean canEnroll(SessionConstraint sessionConstraint, Payments payments, Payment payment) {
-        return enrollStrategy.canEnroll(sessionConstraint, payments, payment);
+        return sessionTypeEnrollStrategy.canEnroll(sessionConstraint, payments, payment);
     }
 
     public boolean canNotEnroll(SessionConstraint sessionConstraint, Payments payments, Payment payment) {
