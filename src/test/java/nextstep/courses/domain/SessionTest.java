@@ -16,7 +16,7 @@ class SessionTest {
     PaidEnrollmentPolicy policy = new PaidEnrollmentPolicy(capacity, price);
     Session session = new Session(course, "유료강의", LocalDateTime.now(), LocalDateTime.now().plusDays(30), policy);
     NsUser user = createUser();
-    session.changeStatus(SessionStatus.RECRUITING);
+    session.openForEnrollment();
     for (int i = 0; i < preEnrolledCount; i++) {
       session.enroll(user, new Payment("id", session, user, price));
     }
@@ -26,7 +26,7 @@ class SessionTest {
   private Session createFreeSession() {
     FreeEnrollmentPolicy policy = new FreeEnrollmentPolicy();
     Session session = new Session(course, "무료강의", LocalDateTime.now(), LocalDateTime.now().plusDays(30), policy);
-    session.changeStatus(SessionStatus.RECRUITING);
+    session.openForEnrollment();
     return session;
   }
 
@@ -89,5 +89,17 @@ class SessionTest {
             .hasMessage("모집중인 상태가 아닙니다.");
   }
 
+  @Test
+  void 모집인원이_꽉차면_모집중단() {
+    Session session = createPaidSession(1, 10000, 1);
+    NsUser user = createUser();
+    Payment payment = new Payment("p5", session, user, 10000L);
 
+    assertThatThrownBy(() -> session.enroll(user, payment))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("정원이 초과되었습니다.");
+    assertThatThrownBy(() -> session.enroll(user, payment))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("모집중인 상태가 아닙니다.");
+  }
 }

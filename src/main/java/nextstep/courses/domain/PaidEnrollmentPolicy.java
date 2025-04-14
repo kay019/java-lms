@@ -13,10 +13,14 @@ public class PaidEnrollmentPolicy implements EnrollmentPolicy {
   }
 
   @Override
-  public void checkEnrollAvailability(Session session, Payment payment) {
+  public void checkEnrollAvailability(Session session) {
     if (session.enrolledCount() >= capacity) {
       throw new IllegalStateException("정원이 초과되었습니다.");
     }
+  }
+
+  @Override
+  public void checkPayment(Payment payment) {
     if (payment == null || !payment.isSameAmount(this.price)) {
       throw new IllegalStateException("결제 정보가 유효하지 않습니다.");
     }

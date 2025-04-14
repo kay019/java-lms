@@ -5,5 +5,8 @@ import nextstep.payments.domain.Payment;
 public class FreeEnrollmentPolicy implements EnrollmentPolicy{
 
     @Override
-    public void checkEnrollAvailability(Session session, Payment payment) {}
+    public void checkEnrollAvailability(Session session) {}
+
+    @Override
+    public void checkPayment(Payment payment) {}
 }

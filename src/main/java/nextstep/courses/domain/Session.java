@@ -43,26 +43,60 @@ public class Session {
   }
 
   public void enroll(NsUser user, Payment payment) {
-    checkAvailability(payment);
+    checkAvailability();
+    checkPayment(payment);
     enrollments = new Enrollments(enrollments, new Enrollment(user, this));
   }
 
-  private void checkAvailability(Payment payment) {
+  private void checkAvailability() {
     if (!isRecruiting()) {
       throw new IllegalStateException("모집중인 상태가 아닙니다.");
     }
-    enrollmentPolicy.checkEnrollAvailability(this, payment);
+    try {
+      enrollmentPolicy.checkEnrollAvailability(this);
+    } catch (IllegalStateException e) {
+      closeEnrollment();
+      throw e;
+    }
+  }
+
+  private void checkPayment(Payment payment) {
+    enrollmentPolicy.checkPayment(payment);
+  }
+
+  public void openForEnrollment() {
+    if (isRecruiting()) {
+      throw new IllegalStateException("이미 모집중입니다.");
+    }
+    if (isClosed()) {
+      throw new IllegalStateException("모집이 종료된 상태입니다.");
+    }
+    this.status = SessionStatus.RECRUITING;
+  }
+
+  public void closeEnrollment() {
+    if (isPreparing()) {
+      throw new IllegalStateException("모집이 시작되지 않은 상태입니다.");
+    }
+    if (isClosed()) {
+      throw new IllegalStateException("이미 모집이 종료되었습니다.");
+    }
+    this.status = SessionStatus.CLOSED;
+  }
+
+  private boolean isPreparing() {
+    return this.status == SessionStatus.PREPARING;
   }
 
   private boolean isRecruiting() {
     return this.status == SessionStatus.RECRUITING;
   }
 
-  public int enrolledCount() {
-    return enrollments.size();
+  private boolean isClosed() {
+    return this.status == SessionStatus.CLOSED;
   }
 
-  public void changeStatus(SessionStatus status) {
-    this.status = status;
+  public int enrolledCount() {
+    return enrollments.size();
   }
 }
