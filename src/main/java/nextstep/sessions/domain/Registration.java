@@ -11,18 +11,25 @@ public class Registration {
     private final int maxStudentNumber;
     private final Set<Long> registeredUserIds;
 
-    public Registration(RegistrationType registrationType) {
-        this(registrationType, 0L, Integer.MAX_VALUE);
-    }
-
     public Registration(RegistrationType registrationType, Long fee, int maxStudentNumber) {
-        if (maxStudentNumber == Integer.MAX_VALUE && registrationType != RegistrationType.FREE) {
-            throw new IllegalArgumentException();
-        }
         this.registrationType = registrationType;
         this.fee = fee;
         this.maxStudentNumber = maxStudentNumber;
         this.registeredUserIds = new HashSet<>();
+    }
+
+    public static Registration createFreeRegistration(RegistrationType registrationType) {
+        if (!registrationType.isFree()) {
+            throw new IllegalArgumentException();
+        }
+        return new Registration(registrationType, 0L, Integer.MAX_VALUE);
+    }
+
+    public static Registration createPaidRegistration(RegistrationType registrationType, Long fee, int maxStudentNumber) {
+        if (registrationType.isFree()) {
+            throw new IllegalArgumentException();
+        }
+        return new Registration(registrationType, fee, maxStudentNumber);
     }
 
     public void register(NsUser user, Long amount) {

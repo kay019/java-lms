@@ -10,14 +10,33 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class RegistrationTest {
     @Test
     void testFreeRegistration() {
-        Registration registration = new Registration(RegistrationType.FREE);
+        Registration registration = Registration.createFreeRegistration(RegistrationType.FREE);
         registration.register(NsUserTest.JAVAJIGI, 0L);
         registration.register(NsUserTest.SANJIGI, 0L);
     }
 
     @Test
+    void testPaidRegistration() {
+        Registration registration = Registration.createPaidRegistration(RegistrationType.PAID, 100L, 10);
+        registration.register(NsUserTest.JAVAJIGI, 100L);
+        registration.register(NsUserTest.SANJIGI, 100L);
+    }
+
+    @Test
+    void testFreeRegistrationException() {
+        assertThatThrownBy(() -> Registration.createFreeRegistration(RegistrationType.PAID))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testPaidRegistrationException() {
+        assertThatThrownBy(() -> Registration.createPaidRegistration(RegistrationType.FREE, 100L, 10))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     void testOverMaxStudentException() {
-        Registration registration = new Registration(RegistrationType.PAID, 100L, 1);
+        Registration registration = Registration.createPaidRegistration(RegistrationType.PAID, 100L, 1);
         registration.register(NsUserTest.JAVAJIGI, 100L);
         assertThatThrownBy(() ->
             registration.register(NsUserTest.SANJIGI, 100L)
@@ -26,7 +45,7 @@ public class RegistrationTest {
 
     @Test
     void testNotEqualFeeException() {
-        Registration registration = new Registration(RegistrationType.PAID, 100L, 1);
+        Registration registration = Registration.createPaidRegistration(RegistrationType.PAID, 100L, 1);
         assertThatThrownBy(() ->
                 registration.register(NsUserTest.SANJIGI, 90L)
         ).isInstanceOf(IllegalStateException.class);

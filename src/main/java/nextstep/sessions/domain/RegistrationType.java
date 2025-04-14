@@ -2,5 +2,9 @@ package nextstep.sessions.domain;
 
 public enum RegistrationType {
     FREE,
-    PAID
+    PAID;
+
+    public boolean isFree() {
+        return this == FREE;
+    }
 }
