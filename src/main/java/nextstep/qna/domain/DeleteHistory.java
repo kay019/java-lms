@@ -1,23 +1,16 @@
 package nextstep.qna.domain;
 
-import nextstep.users.domain.NsUser;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
+import nextstep.users.domain.NsUser;
 
 public class DeleteHistory {
+
+    private final ContentType contentType;
+    private final Long contentId;
+    private final NsUser deletedBy;
     private Long id;
-
-    private ContentType contentType;
-
-    private Long contentId;
-
-    private NsUser deletedBy;
-
     private LocalDateTime createdDate = LocalDateTime.now();
-
-    public DeleteHistory() {
-    }
 
     public DeleteHistory(ContentType contentType, Long contentId, NsUser deletedBy, LocalDateTime createdDate) {
         this.contentType = contentType;
@@ -26,10 +19,22 @@ public class DeleteHistory {
         this.createdDate = createdDate;
     }
 
+    public static DeleteHistory fromQuestion(Long contentId, NsUser deletedBy, LocalDateTime createdDate) {
+        return new DeleteHistory(ContentType.QUESTION, contentId, deletedBy, createdDate);
+    }
+
+    public static DeleteHistory fromAnswer(Long contentId, NsUser deletedBy, LocalDateTime createdDate) {
+        return new DeleteHistory(ContentType.ANSWER, contentId, deletedBy, createdDate);
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         DeleteHistory that = (DeleteHistory) o;
         return Objects.equals(id, that.id) &&
                 contentType == that.contentType &&
@@ -44,7 +49,7 @@ public class DeleteHistory {
 
     @Override
     public String toString() {
-        return "DeleteHistory [id=" + id + ", contentType=" + contentType + ", contentId=" + contentId + ", deletedBy="
-                + deletedBy + ", createdDate=" + createdDate + "]";
+        return "DeleteHistory [id=" + id + ", contentType=" + contentType + ", contentId=" + contentId + ", deletedBy=" + deletedBy + ", createdDate="
+            + createdDate + "]";
     }
 }
