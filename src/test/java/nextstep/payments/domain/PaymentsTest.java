@@ -4,7 +4,7 @@ import nextstep.courses.domain.Course;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionPeriod;
 import nextstep.session.domain.image.SessionImage;
-import nextstep.session.domain.payment.SessionPayments;
+import nextstep.session.domain.payment.SessionConstraint;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ class PaymentsTest {
 
     @BeforeEach
     public void setUp() {
-        session = new Session(1L, new Course(), new SessionImage(), new SessionPayments(), new SessionPeriod());
+        session = new Session(1L, new Course(), new SessionImage(), new SessionConstraint(200_000, 8), new SessionPeriod());
     }
 
     @DisplayName("Payments 인스턴스 생성 테스트")

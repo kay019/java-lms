@@ -10,7 +10,7 @@ public class SessionCapacity {
         this.value = capacity;
     }
 
-    public boolean isSame(int value) {
-        return this.value == value;
+    public boolean isGreaterThan(int value) {
+        return value > this.value;
     }
 }

@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class CourseTest {
-    public static final Course C1 = new Course("test-course-1", 1L);
 
     @DisplayName("Course 인스턴스 생성")
     @Test

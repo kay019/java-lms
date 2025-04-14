@@ -1,27 +1,24 @@
 package nextstep.session.domain.property;
 
 import nextstep.payments.domain.Payment;
-import nextstep.session.domain.payment.AmountValidator;
-import nextstep.session.domain.payment.CapacityValidator;
-import nextstep.session.domain.payment.SessionPayments;
+import nextstep.payments.domain.Payments;
+import nextstep.session.domain.payment.SessionConstraint;
 
 public enum SessionType {
-    FREE(((sessionCapacity) -> true), (((sessionPayment, payment) -> true))),
-    PAID((SessionPayments::isFull), (SessionPayments::matchesFee));
+    FREE((sessionConstraint, payments, payment) -> true),
+    PAID((sessionConstraint, payments, payment) -> true);
 
-    private final CapacityValidator capacityValidator;
-    private final AmountValidator amountValidator;
+    private final EnrollStrategy enrollStrategy;
 
-    SessionType(CapacityValidator capacityValidator, AmountValidator amountValidator) {
-        this.capacityValidator = capacityValidator;
-        this.amountValidator = amountValidator;
+    SessionType(EnrollStrategy enrollStrategy) {
+        this.enrollStrategy = enrollStrategy;
     }
 
-    public boolean canEnroll(SessionPayments sessionPayments, Payment payment) {
-        return capacityValidator.canEnroll(sessionPayments) && this.amountValidator.canEnroll(sessionPayments, payment);
+    public boolean canEnroll(SessionConstraint sessionConstraint, Payments payments, Payment payment) {
+        return enrollStrategy.canEnroll(sessionConstraint, payments, payment);
     }
 
-    public boolean canNotEnroll(SessionPayments sessionPayments, Payment payment) {
-        return !canEnroll(sessionPayments, payment);
+    public boolean canNotEnroll(SessionConstraint sessionConstraint, Payments payments, Payment payment) {
+        return !canEnroll(sessionConstraint, payments, payment);
     }
 }
