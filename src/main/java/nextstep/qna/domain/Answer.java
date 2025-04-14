@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -75,5 +76,13 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+    }
+
+    public DeleteHistory deleteBy(NsUser user) {
+        if (!writer.equals(user)) {
+            throw new CannotDeleteException("로그인한 사용자와 답변의 작성자가 달라 삭제할 수 없습니다.");
+        }
+        this.deleted = true;
+        return DeleteHistory.ofAnswer(this);
     }
 }
