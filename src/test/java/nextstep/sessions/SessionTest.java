@@ -17,7 +17,7 @@ public class SessionTest {
                 LocalDate.of(2025, 4, 13),
                 LocalDate.of(2025, 4, 14)
         );
-        ImageInfo imageInfo = new ImageInfo(10^6, "png", 300, 200);
+        ImageInfo imageInfo = new ImageInfo(1_000, "png", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
         assertThat(new Session(1L, 2L, sessionPeriod, imageInfo, SessionStatus.OPEN, registration))
                 .isEqualTo(new Session(1L, 2L, sessionPeriod, imageInfo, SessionStatus.OPEN, registration));
@@ -26,7 +26,7 @@ public class SessionTest {
     @Test
     void testRegisterOpenSession() {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
-        ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
+        ImageInfo imageInfo = new ImageInfo(1_000, "jpg", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
         Session session = new Session(1L, 2L, sessionPeriod, imageInfo, SessionStatus.OPEN, registration);
         assertThat(session.register(NsUserTest.SANJIGI, 0L)).isEqualTo(
@@ -37,7 +37,7 @@ public class SessionTest {
     @Test
     void testRegisterReadySession() {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
-        ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
+        ImageInfo imageInfo = new ImageInfo(1_000, "jpg", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
         Session session = new Session(1L, 2L, sessionPeriod, imageInfo, SessionStatus.READY, registration);
         assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI, 0L)).isInstanceOf(IllegalStateException.class);
@@ -46,7 +46,7 @@ public class SessionTest {
     @Test
     void testRegisterClosedSession() {
         Period sessionPeriod = new Period(LocalDate.of(2025, 4, 13), LocalDate.of(2025, 4, 14));
-        ImageInfo imageInfo = new ImageInfo(10^6, "jpg", 300, 200);
+        ImageInfo imageInfo = new ImageInfo(1_000, "jpg", 300, 200);
         Registration registration = new Registration(RegistrationType.FREE);
         Session session = new Session(1L, 2L, sessionPeriod, imageInfo, SessionStatus.CLOSED, registration);
         assertThatThrownBy(() -> session.register(NsUserTest.SANJIGI, 0L)).isInstanceOf(IllegalStateException.class);

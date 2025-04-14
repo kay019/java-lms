@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class ImageInfo {
     private static final Set<String> ACCEPTABLE_TYPES = Set.of("gif", "jpg", "jpeg", "png", "svg");
-    private static final int MAX_BYTES = 10^6;
+    private static final int MAX_BYTES = 1_000_000;
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 200;
     private static final float STANDARD_RATIO = 1.5f;

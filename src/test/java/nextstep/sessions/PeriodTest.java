@@ -10,11 +10,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class PeriodTest {
     @Test
     void testInvalidPeriod() {
-        assertThatThrownBy(() -> {
+        assertThatThrownBy(() ->
             new Period(
                     LocalDate.of(2025, 4, 15),
                     LocalDate.of(2025, 4, 14)
-            );
-        }).isInstanceOf(IllegalArgumentException.class);
+            )
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 }
