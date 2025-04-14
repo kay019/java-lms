@@ -9,10 +9,10 @@ public class CoverImage {
     private static final int WIDTH_RATIO = 3;
     private static final int HEIGHT_RATIO = 2;
 
-    private int size;
-    private String type;
-    private int width;
-    private int height;
+    private final int size;
+    private final String type;
+    private final int width;
+    private final int height;
 
     public CoverImage(int size, String type, int width, int height) {
         validateInput(size, type, width, height);
@@ -49,5 +49,21 @@ public class CoverImage {
         if (width * HEIGHT_RATIO != height * WIDTH_RATIO) {
             throw new IllegalArgumentException("이미지 크기가 적절하지 않습니다.");
         }
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
