@@ -5,28 +5,28 @@ import nextstep.users.domain.NsUser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Answers {
 
     private final List<Answer> answers;
 
     public Answers() {
-        this.answers = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    public Answers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
-        if (isNotOwner(loginUser)) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        List<DeleteHistory> res = new ArrayList<>();
+        for (Answer answer : answers) {
+            res.add(answer.delete(loginUser));
         }
-        return answers.stream().map(Answer::delete).collect(Collectors.toList());
+        return res;
     }
 
     public void add(Answer answer) {
         answers.add(answer);
-    }
-
-    public boolean isNotOwner(NsUser loginUser) {
-        return !answers.stream().allMatch(answer -> answer.isOwner(loginUser));
     }
 }

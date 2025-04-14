@@ -18,7 +18,7 @@ class AnswersTest {
     @DisplayName("Answers 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(Answers::new);
+        assertDoesNotThrow(() -> new Answers(List.of(new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1"))));
     }
 
     @DisplayName("삭제 후 삭제 히스토리 목록들을 가져옴")
@@ -45,6 +45,6 @@ class AnswersTest {
 
         assertThatThrownBy(() -> answers.delete(NsUserTest.SANJIGI))
             .isInstanceOf(CannotDeleteException.class)
-            .hasMessageContaining("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+            .hasMessageContaining("답변을 삭제할 권한이 없습니다.");
     }
 }

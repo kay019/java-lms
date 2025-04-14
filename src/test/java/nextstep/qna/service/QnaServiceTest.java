@@ -27,24 +27,29 @@ public class QnaServiceTest {
     private QuestionRepository questionRepository;
 
     @Mock
+    private AnswerRepository answerRepository;
+
+    @Mock
     private DeleteHistoryService deleteHistoryService;
 
     @InjectMocks
     private QnAService qnAService;
 
     private Question question;
-    private Answer answer;
+    private Answer answer1;
+    private Answer answer2;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        answer = new Answer(11L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
-        question.addAnswer(answer);
+        answer1 = new Answer(11L, NsUserTest.JAVAJIGI,  question, "Answers Contents1");
+        answer2 = new Answer(11L, NsUserTest.SANJIGI,  question, "Answers Contents1");
     }
 
     @Test
     public void delete_성공() throws Exception {
         when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
+        when(answerRepository.findByQuestion(1L)).thenReturn(List.of(answer1));
 
         assertThat(question.isDeleted()).isFalse();
         qnAService.deleteQuestion(NsUserTest.JAVAJIGI, 1L);
@@ -54,7 +59,7 @@ public class QnaServiceTest {
     }
 
     @Test
-    public void delete_다른_사람이_쓴_글() throws Exception {
+    public void delete_다른_사람이_쓴_글() {
         when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
 
         assertThatThrownBy(() -> {
@@ -65,17 +70,19 @@ public class QnaServiceTest {
     @Test
     public void delete_성공_질문자_답변자_같음() throws Exception {
         when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
+        when(answerRepository.findByQuestion(1L)).thenReturn(List.of(answer1));
 
         qnAService.deleteQuestion(NsUserTest.JAVAJIGI, 1L);
 
         assertThat(question.isDeleted()).isTrue();
-        assertThat(answer.isDeleted()).isTrue();
+        assertThat(answer1.isDeleted()).isTrue();
         verifyDeleteHistories();
     }
 
     @Test
     public void delete_답변_중_다른_사람이_쓴_글() throws Exception {
         when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
+        when(answerRepository.findByQuestion(1L)).thenReturn(List.of(answer2));
 
         assertThatThrownBy(() -> {
             qnAService.deleteQuestion(NsUserTest.SANJIGI, 1L);

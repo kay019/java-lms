@@ -1,6 +1,7 @@
 package nextstep.qna.domain;
 
 import nextstep.common.domian.BaseDomain;
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -31,22 +32,22 @@ public class Answer  extends BaseDomain {
         this.contents = contents;
     }
 
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
 
-    public DeleteHistory delete() {
+    public boolean isNotOwner(NsUser loginUser) {
+        return !writer.equals(loginUser);
+    }
+
+    public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
+        if (isNotOwner(loginUser)) {
+            throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
+        }
+
         this.deleted = true;
         this.updatedAt = LocalDateTime.now();
         return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
-    }
-
-    public void link(Question question) {
-        this.question = question;
     }
 
     @Override

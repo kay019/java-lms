@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,17 +25,12 @@ public class QuestionTest {
     @Test
     public void testDelete() throws CannotDeleteException {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, question, "Answers Contents1");
-        question.addAnswer(answer);
-        List<DeleteHistory> deleteHistoryList = question.delete(NsUserTest.JAVAJIGI);
+        DeleteHistory deleteHistory = question.delete(NsUserTest.JAVAJIGI);
 
         assertAll(
             () -> assertThat(question.isDeleted()).isTrue(),
-            () -> assertThat(deleteHistoryList)
-                .containsExactly(
-                    new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
-                    new DeleteHistory(ContentType.ANSWER, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now())
-                )
+            () -> assertThat(deleteHistory)
+                .isEqualTo(new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()))
         );
     }
 
@@ -44,8 +38,6 @@ public class QuestionTest {
     @Test
     public void testDelete_throwException() {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, question, "Answers Contents1");
-        question.addAnswer(answer);
 
         assertThatThrownBy(() -> question.delete(NsUserTest.SANJIGI))
             .isInstanceOf(CannotDeleteException.class)
