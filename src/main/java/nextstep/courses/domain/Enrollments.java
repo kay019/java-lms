@@ -7,19 +7,15 @@ import java.util.List;
 import java.util.Set;
 
 public class Enrollments {
-  private final List<Enrollment> enrollments;
+  private List<Enrollment> enrollments;
 
   public Enrollments() {
     this(Collections.emptyList());
   }
 
-  public Enrollments(Enrollments existingEnrollments, Enrollment newEnrollment) {
-    this(createNewEnrollments(existingEnrollments.enrollments, newEnrollment));
-  }
-
   public Enrollments(List<Enrollment> enrollments) {
     validate(enrollments);
-    this.enrollments = Collections.unmodifiableList(enrollments);
+    this.enrollments = new ArrayList<>(enrollments);
   }
 
   private void validate(List<Enrollment> enrollments) {
@@ -29,10 +25,11 @@ public class Enrollments {
     }
   }
 
-  private static List<Enrollment> createNewEnrollments(List<Enrollment> enrollments, Enrollment newEnrollment) {
-    List<Enrollment> newList = new ArrayList<>(enrollments);
-    newList.add(newEnrollment);
-    return newList;
+  public void add(Enrollment enrollment) {
+    if (enrollments.contains(enrollment)) {
+      throw new IllegalArgumentException("이미 수강신청한 사용자입니다.");
+    }
+    this.enrollments.add(enrollment);
   }
 
   public int size() {

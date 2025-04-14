@@ -46,7 +46,7 @@ public class Course {
   }
 
   public void addSession(Session session) {
-    sessions = new Sessions(sessions, session);
+    sessions.add(session);
   }
 
   public Sessions getSessions() {

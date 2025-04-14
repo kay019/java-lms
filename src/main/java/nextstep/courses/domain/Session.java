@@ -45,7 +45,7 @@ public class Session {
   public void enroll(NsUser user, Payment payment) {
     checkAvailability();
     checkPayment(payment);
-    enrollments = new Enrollments(enrollments, new Enrollment(user, this));
+    enrollments.add(new Enrollment(user, this));
   }
 
   private void checkAvailability() {

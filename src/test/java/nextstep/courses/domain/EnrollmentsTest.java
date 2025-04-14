@@ -19,7 +19,7 @@ class EnrollmentsTest {
     Enrollment duplicateEnrollment = new Enrollment(user, session);
     Enrollments enrollments = new Enrollments(List.of(enrollment));
 
-    assertThatThrownBy(() -> new Enrollments(enrollments, duplicateEnrollment))
+    assertThatThrownBy(() -> enrollments.add(duplicateEnrollment))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("이미 수강신청한 사용자입니다.");
   }
