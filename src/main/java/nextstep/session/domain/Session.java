@@ -19,17 +19,10 @@ public class Session extends BaseDomain {
 
     private final SessionDescriptor descriptor;
 
-    public Session(Long id, Course course, SessionImage image, SessionConstraint constraint, SessionPeriod period) {
+    public Session(Long id, Course course, SessionConstraint constraint, SessionDescriptor descriptor) {
         super(id);
         this.course = course;
-        this.descriptor = new SessionDescriptor(image, period, new SessionProperty());
-        this.constraint = constraint;
-    }
-
-    public Session(Long id, Course course, SessionImage image, SessionConstraint constraint, SessionPeriod period, SessionStatus status, SessionType type) {
-        super(id);
-        this.course = course;
-        this.descriptor = new SessionDescriptor(image, period, new SessionProperty(status, type));
+        this.descriptor = descriptor;
         this.constraint = constraint;
     }
 

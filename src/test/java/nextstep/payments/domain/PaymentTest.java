@@ -2,9 +2,13 @@ package nextstep.payments.domain;
 
 import nextstep.courses.domain.Course;
 import nextstep.session.domain.Session;
+import nextstep.session.domain.SessionDescriptor;
 import nextstep.session.domain.SessionPeriod;
 import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.constraint.SessionConstraint;
+import nextstep.session.domain.property.SessionProperty;
+import nextstep.session.domain.property.SessionStatus;
+import nextstep.session.domain.property.SessionType;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +24,11 @@ public class PaymentTest {
 
     @BeforeEach
     public void setUp() {
-        session = new Session(1L, new Course(), new SessionImage(), new SessionConstraint(200_000, 8), new SessionPeriod());
+        Course course = new Course();
+        SessionConstraint constraint = new SessionConstraint(200_000, 1);
+        SessionDescriptor descriptor = new SessionDescriptor(new SessionImage(), new SessionPeriod(), new SessionProperty(SessionStatus.ENROLLING, SessionType.FREE));
+
+        session = new Session(1L, course, constraint, descriptor);
     }
 
     @DisplayName("Payment 인스턴스 생성")
