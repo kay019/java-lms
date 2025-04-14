@@ -1,4 +1,4 @@
-package nextstep.courses.service;
+package nextstep.students.service;
 
 import nextstep.students.domain.Student;
 import nextstep.students.domain.StudentRepository;

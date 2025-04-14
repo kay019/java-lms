@@ -2,7 +2,7 @@ package nextstep.application.service;
 
 import nextstep.courses.domain.Session;
 import nextstep.courses.service.SessionService;
-import nextstep.courses.service.StudentService;
+import nextstep.students.service.StudentService;
 import nextstep.payments.service.PaymentService;
 import nextstep.students.domain.Student;
 import org.springframework.http.ResponseEntity;
