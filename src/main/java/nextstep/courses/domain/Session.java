@@ -26,10 +26,6 @@ public class Session {
     this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), new Image("temp.jpeg"));
   }
 
-  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, List<Enrollment> enrollments) {
-    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(enrollments), new Image("temp.jpeg"));
-  }
-
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments, Image coverImage) {
     this.id = id;
     this.course = course;
@@ -46,6 +42,13 @@ public class Session {
     checkAvailability();
     checkPayment(payment);
     enrollments.add(new Enrollment(user, this));
+    closeIfFull();
+  }
+
+  private void closeIfFull() {
+    if (enrollmentPolicy.isFull(enrollments)) {
+      closeEnrollment();
+    }
   }
 
   private void checkAvailability() {

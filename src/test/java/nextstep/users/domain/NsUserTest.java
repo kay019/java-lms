@@ -1,20 +1,13 @@
 package nextstep.users.domain;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NsUserTest {
 
-    private NsUser user;
-    private NsUser guestUser;
-
-    @BeforeEach
-    public void setUp() {
-        user = new NsUser(1L, "userId", "password", "name", "email");
-        guestUser = NsUser.GUEST_USER;
-    }
+    private final NsUser user = new NsUser(1L, "userId", "password", "name", "email");
+    private final NsUser guestUser = NsUser.GUEST_USER;
 
     @Test
     public void 일반_사용자_확인() {

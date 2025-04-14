@@ -25,4 +25,9 @@ public class PaidEnrollmentPolicy implements EnrollmentPolicy {
       throw new IllegalStateException("결제 정보가 유효하지 않습니다.");
     }
   }
+
+  @Override
+  public boolean isFull(Enrollments enrollments) {
+    return enrollments.size() == capacity;
+  }
 }

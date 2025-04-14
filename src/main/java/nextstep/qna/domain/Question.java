@@ -26,7 +26,6 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answers = new Answers(answers, answer);
-        answer.toQuestion(this);
         this.updatedDate = LocalDateTime.now();
     }
 

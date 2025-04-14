@@ -18,7 +18,7 @@ class SessionTest {
     NsUser user = createUser();
     session.openForEnrollment();
     for (int i = 0; i < preEnrolledCount; i++) {
-      session.enroll(user, new Payment("id", session, user, price));
+      session.enroll(user, new Payment(session, user, price));
     }
     return session;
   }
@@ -38,7 +38,7 @@ class SessionTest {
   void 유료강의_정상결제시_수강신청_성공() {
     Session session = createPaidSession(10, 10000, 0);
     NsUser user = createUser();
-    Payment payment = new Payment("p1", session, user, 10000L);
+    Payment payment = new Payment(session, user, 10000L);
 
     session.enroll(user, payment);
 
@@ -49,7 +49,7 @@ class SessionTest {
   void 유료강의_결제금액_불일치시_예외발생() {
     Session session = createPaidSession(10, 10000, 0);
     NsUser user = createUser();
-    Payment wrongPayment = new Payment("p2", session, user, 5000L);
+    Payment wrongPayment = new Payment(session, user, 5000L);
 
     assertThatThrownBy(() -> session.enroll(user, wrongPayment))
             .isInstanceOf(IllegalStateException.class)
@@ -60,11 +60,11 @@ class SessionTest {
   void 유료강의_정원초과시_예외발생() {
     Session session = createPaidSession(1, 10000, 1);
     NsUser user = createUser();
-    Payment payment = new Payment("p3", session, user, 10000L);
+    Payment payment = new Payment(session, user, 10000L);
 
     assertThatThrownBy(() -> session.enroll(user, payment))
             .isInstanceOf(IllegalStateException.class)
-            .hasMessage("정원이 초과되었습니다.");
+            .hasMessage("모집중인 상태가 아닙니다.");
   }
 
   @Test
@@ -82,24 +82,11 @@ class SessionTest {
     PaidEnrollmentPolicy policy = new PaidEnrollmentPolicy(10, 10000);
     Session session = new Session(course, "유료강의", LocalDateTime.now(), LocalDateTime.now().plusDays(30), policy);
     NsUser user = createUser();
-    Payment payment = new Payment("p4", session, user, 10000L);
+    Payment payment = new Payment(session, user, 10000L);
 
     assertThatThrownBy(() -> session.enroll(user, payment))
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("모집중인 상태가 아닙니다.");
   }
 
-  @Test
-  void 모집인원이_꽉차면_모집중단() {
-    Session session = createPaidSession(1, 10000, 1);
-    NsUser user = createUser();
-    Payment payment = new Payment("p5", session, user, 10000L);
-
-    assertThatThrownBy(() -> session.enroll(user, payment))
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessage("정원이 초과되었습니다.");
-    assertThatThrownBy(() -> session.enroll(user, payment))
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessage("모집중인 상태가 아닙니다.");
-  }
 }

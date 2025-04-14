@@ -8,7 +8,7 @@ class PaymentTest {
 
   @Test
   void 같은금액인지_확인() {
-    Payment payment = new Payment("1", null, null, 1000L);
+    Payment payment = new Payment(null, null, 1000L);
 
     assertTrue(payment.isSameAmount(1000L));
   }
