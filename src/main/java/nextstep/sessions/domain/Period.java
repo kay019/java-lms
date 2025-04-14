@@ -8,8 +8,15 @@ public class Period {
     private final LocalDate endDate;
 
     public Period(LocalDate startDate, LocalDate endDate) {
+        if (!validate(startDate, endDate)) {
+            throw new IllegalArgumentException("Invalid date");
+        }
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    private boolean validate(LocalDate startDate, LocalDate endDate) {
+        return startDate.isBefore(endDate);
     }
 
     @Override
