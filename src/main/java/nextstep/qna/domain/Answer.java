@@ -45,7 +45,7 @@ public class Answer  extends BaseDomain {
         return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
-    public void toQuestion(Question question) {
+    public void link(Question question) {
         this.question = question;
     }
 

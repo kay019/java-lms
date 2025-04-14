@@ -35,7 +35,7 @@ public class Session extends BaseDomain {
         this.payments = payments;
     }
 
-    public void toCourse(Course course) {
+    public void link(Course course) {
         this.course = course;
     }
 
@@ -44,7 +44,7 @@ public class Session extends BaseDomain {
             return false;
         }
         payments.add(payment);
-        payment.toSession(this);
+        payment.link(this);
         this.updatedAt = LocalDateTime.now();
         return true;
     }

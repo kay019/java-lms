@@ -42,7 +42,7 @@ public class Course extends BaseDomain {
 
     public boolean addSession(Session session) {
         if (sessions.add(session)) {
-            session.toCourse(this);
+            session.link(this);
             return true;
         }
         return false;

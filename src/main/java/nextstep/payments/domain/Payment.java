@@ -33,7 +33,7 @@ public class Payment extends BaseDomain {
         return payment.user.equals(this.user) && payment.session.equals(this.session);
     }
 
-    public void toSession(Session session) {
+    public void link(Session session) {
         this.session = session;
         this.updatedAt = LocalDateTime.now();
     }

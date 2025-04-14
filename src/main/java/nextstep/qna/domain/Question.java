@@ -29,7 +29,7 @@ public class Question extends BaseDomain {
     }
 
     public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
+        answer.link(this);
         answers.add(answer);
     }
 
