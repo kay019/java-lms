@@ -32,18 +32,8 @@ public class Session {
     }
 
     public NsStudent register(NsUser user, NaturalNumber money) {
-        validateDuplicateUser(user);
-        NsStudent student = Register.registerSession(user, id, money, sessionState, registerStrategy, students.size());
+        NsStudent student = Register.registerSession(user, id, money, sessionState, registerStrategy, students);
         students.add(student);
         return student;
-    }
-
-    private void validateDuplicateUser(NsUser user) {
-        students.stream()
-                .filter(u -> u.isSameUser(user))
-                .findFirst()
-                .ifPresent(u -> {
-                    throw new CannotRegisterException("이미 이 강의에 등록한 사람입니다.");
-                });
     }
 }
