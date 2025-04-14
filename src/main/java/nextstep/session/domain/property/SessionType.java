@@ -6,7 +6,9 @@ import nextstep.session.domain.payment.SessionConstraint;
 
 public enum SessionType {
     FREE((sessionConstraint, payments, payment) -> true),
-    PAID((sessionConstraint, payments, payment) -> true);
+    PAID((sessionConstraint, payments, payment) ->
+        payment.matchesFee(sessionConstraint) && payments.isAvailability(sessionConstraint)
+    );
 
     private final EnrollStrategy enrollStrategy;
 
