@@ -3,13 +3,13 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class Course {
-  private Long id;
-  private String title;
-  private Long creatorId;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+  private final Long id;
+  private final String title;
+  private final Long creatorId;
+  private final LocalDateTime createdAt;
+  private final LocalDateTime updatedAt;
   private Sessions sessions;
-  private Cohort cohort;
+  private final Cohort cohort;
 
   public Course() {
     this(0L, null, null, LocalDateTime.now(), null, new Sessions(), new Cohort());

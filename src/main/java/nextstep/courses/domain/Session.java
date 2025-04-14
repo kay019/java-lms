@@ -10,10 +10,10 @@ import java.util.List;
 public class Session {
   private final Long id;
   private final Course course;
-  private Image coverImage;
-  private String title;
-  private LocalDateTime startDate;
-  private LocalDateTime endDate;
+  private final Image coverImage;
+  private final String title;
+  private final LocalDateTime startDate;
+  private final LocalDateTime endDate;
   private SessionStatus status;
   private final EnrollmentPolicy enrollmentPolicy;
   private Enrollments enrollments;
@@ -23,14 +23,14 @@ public class Session {
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy) {
-    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments());
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), new Image("temp"));
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, List<Enrollment> enrollments) {
-    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(enrollments));
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(enrollments), new Image("temp"));
   }
 
-  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments) {
+  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments, Image coverImage) {
     this.id = id;
     this.course = course;
     this.title = title;
@@ -39,6 +39,7 @@ public class Session {
     this.status = status;
     this.enrollmentPolicy = enrollmentPolicy;
     this.enrollments = enrollments;
+    this.coverImage = coverImage;
   }
 
   public void enroll(NsUser user, Payment payment) {

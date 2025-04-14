@@ -1,8 +1,8 @@
 package nextstep.courses.domain;
 
 public class Cohort {
-  private Long id;
-  private String name;
+  private final Long id;
+  private final String name;
 
   public Cohort() {
     this(0L, null);

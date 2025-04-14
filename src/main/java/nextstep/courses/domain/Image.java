@@ -1,17 +1,27 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.utils.IdGenerator;
+
 public class Image {
   private static final long MAX_SIZE_IN_BYTES = 1_000_000L;
   private static final int MIN_WIDTH_IN_PIXEL = 300;
   private static final int MIN_HEIGHT_IN_PIXEL = 200;
 
-  private Long id;
-  private String filename;
-  private long sizeInBytes;
-  private int widthInPixel;
-  private int heightInPixel;
+  private final Long id;
+  private final String filename;
+  private final long sizeInBytes;
+  private final int widthInPixel;
+  private final int heightInPixel;
 
-  public Image(Long id, String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
+  public Image(String filename) {
+    this(IdGenerator.generate(), filename, 1000, 300, 200);
+  }
+
+  public Image (String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
+    this(IdGenerator.generate(), filename, sizeInBytes, widthInPixel, heightInPixel);
+  }
+
+  public Image (Long id, String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
     validate(filename, sizeInBytes, widthInPixel, heightInPixel);
 
     this.id = id;
