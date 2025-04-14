@@ -3,13 +3,9 @@ package nextstep.sessions.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class Session {
-    private final ImageInfo STANDARD_IMAGE_INFO = new ImageInfo(10^6, "jpg", 300, 200);
-    private final float IMAGE_RATIO = 1.5f;
-
     private final Long id;
     private final Long courseId;
     private final Period sessionPeriod;
@@ -17,27 +13,13 @@ public class Session {
     private final SessionStatus sessionStatus;
     private final Registration registration;
 
-    public Session(Long id, Long courseId, LocalDate startDate, LocalDate endDate, ImageInfo imageInfo) {
-        this(id, courseId, new Period(startDate, endDate), imageInfo, SessionStatus.READY, new Registration(RegistrationType.FREE));
-    }
-
     public Session(Long id, Long courseId, Period sessionPeriod, ImageInfo imageInfo, SessionStatus sessionStatus, Registration registration) {
-        if (!validImage(imageInfo)) {
-            throw new IllegalArgumentException();
-        }
         this.id = id;
         this.courseId = courseId;
         this.sessionPeriod = sessionPeriod;
         this.coverImage = imageInfo;
         this.sessionStatus = sessionStatus;
         this.registration = registration;
-    }
-
-    private boolean validImage(ImageInfo imageInfo) {
-        return imageInfo.smallerOrEqual(STANDARD_IMAGE_INFO)
-                && imageInfo.widerOrEqual(STANDARD_IMAGE_INFO)
-                && imageInfo.LongerOrEqual(STANDARD_IMAGE_INFO)
-                && imageInfo.hasRatio(IMAGE_RATIO);
     }
 
     public Payment register(NsUser user, Long amount) {

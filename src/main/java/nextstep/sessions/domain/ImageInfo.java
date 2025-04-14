@@ -4,7 +4,11 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ImageInfo {
-    private final Set<String> ACCEPTABLE_TYPES = Set.of("gif", "jpg", "jpeg", "png", "svg");
+    private static final Set<String> ACCEPTABLE_TYPES = Set.of("gif", "jpg", "jpeg", "png", "svg");
+    private static final int MAX_BYTES = 10^6;
+    private static final int MIN_WIDTH = 300;
+    private static final int MIN_HEIGHT = 200;
+    private static final float STANDARD_RATIO = 1.5f;
 
     private final int bytes;
     private final String type;
@@ -12,30 +16,37 @@ public class ImageInfo {
     private final int height;
 
     public ImageInfo(int bytes, String type, int width, int height) {
-        if (!ACCEPTABLE_TYPES.contains(type)) {
-            throw new IllegalArgumentException();
+        if (!validate(bytes, type, width, height)) {
+            throw new IllegalArgumentException("Invalid image");
         }
-
         this.bytes = bytes;
         this.type = type;
         this.width = width;
         this.height = height;
     }
 
-    public boolean smallerOrEqual(ImageInfo imageInfo) {
-        return this.bytes <= imageInfo.bytes;
+    private boolean validate(int bytes, String type, int width, int height) {
+        return ACCEPTABLE_TYPES.contains(type)
+                && smallerOrEqual(bytes)
+                && widerOrEqual(width)
+                && longerOrEqual(height)
+                && validRatio(width, height);
     }
 
-    public boolean widerOrEqual(ImageInfo imageInfo) {
-        return this.width >= imageInfo.width;
+    private boolean smallerOrEqual(int bytes) {
+        return bytes <= MAX_BYTES;
     }
 
-    public boolean LongerOrEqual(ImageInfo imageInfo) {
-        return this.height >= imageInfo.height;
+    private boolean widerOrEqual(int width) {
+        return width >= MIN_WIDTH;
     }
 
-    public boolean hasRatio(float ratio) {
-        return (float) this.width / this.height == ratio;
+    private boolean longerOrEqual(int height) {
+        return height >= MIN_HEIGHT;
+    }
+
+    private boolean validRatio(int width, int height) {
+        return (float) width / height == STANDARD_RATIO;
     }
 
     @Override
