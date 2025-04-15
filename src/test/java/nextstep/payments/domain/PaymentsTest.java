@@ -6,11 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class PaymentsTest {
-
 
     @DisplayName("Payments 인스턴스 생성 테스트")
     @Test
@@ -34,11 +32,9 @@ class PaymentsTest {
         Payment payment2 = new Payment(2L, session, NsUserTest.JAVAJIGI, 200_000L);
 
         Payments payments = new Payments();
-        assertAll(
-            () -> assertDoesNotThrow(() -> payments.add(payment1)),
-            () -> assertThatThrownBy(() -> payments.add(payment2))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("한 유저가 동일한 코스에 두번 결재할 수 없습니다.")
-        );
+        payments.add(payment1);
+        assertThatThrownBy(() -> payments.add(payment2))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("한 유저가 동일한 코스에 두번 결재할 수 없습니다.");
     }
 }
