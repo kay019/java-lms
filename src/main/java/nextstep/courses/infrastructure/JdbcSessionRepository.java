@@ -10,6 +10,11 @@ import java.util.List;
 public class JdbcSessionRepository implements SessionRepository {
 
     @Override
+    public int save(Session session) {
+        return 0;
+    }
+
+    @Override
     public Session findById(Long sessionId) {
         return null;
     }
