@@ -8,17 +8,14 @@ public class SessionImage {
     private static final double HEIGHT_RATIO = 2;
     private static final int MAX_BYTE_SIZE = 1024 * 1024;
 
-    private String urlStr;
+    private final String urlStr;
 
-    private ImageHandler imageHandler;
+    private final ImageHandler imageHandler;
 
-    private SessionImageType type;
+    private final SessionImageType type;
 
-    public SessionImage() {
-    }
-
-    public SessionImage(String urlStr, SessionImageType type) throws IOException {
-        this(urlStr, new URLImageHandler(urlStr), type);
+    public SessionImage(ImageHandler imageHandler) {
+        this(null, imageHandler, null);
     }
 
     public SessionImage(String urlStr, ImageHandler imageHandler, SessionImageType type) {

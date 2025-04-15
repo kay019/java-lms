@@ -6,6 +6,10 @@ public class SessionConstraint {
 
     private final SessionCapacity capacity;
 
+    public SessionConstraint() {
+        this(null, null);
+    }
+
     public SessionConstraint(long fee, int capacity) {
         this(new SessionFee(fee), new SessionCapacity(capacity));
     }

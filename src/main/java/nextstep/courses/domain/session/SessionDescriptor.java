@@ -15,6 +15,10 @@ public class SessionDescriptor {
 
     private final SessionProperty property;
 
+    public SessionDescriptor() {
+        this(null, null, null);
+    }
+
     public SessionDescriptor(SessionImage image, SessionPeriod period, SessionProperty property) {
         this.image = image;
         this.period = period;

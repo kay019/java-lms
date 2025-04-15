@@ -1,8 +1,5 @@
 package nextstep.courses.domain.session.constraint;
 
-import nextstep.courses.domain.session.constraint.SessionCapacity;
-import nextstep.courses.domain.session.constraint.SessionConstraint;
-import nextstep.courses.domain.session.constraint.SessionFee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

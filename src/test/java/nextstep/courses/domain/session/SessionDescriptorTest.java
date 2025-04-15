@@ -1,29 +1,36 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.property.SessionProperty;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.awt.image.BufferedImage;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class SessionDescriptorTest {
 
-    private SessionPeriod period;
-    private SessionProperty property;
-
-    @BeforeEach
-    void setUp() {
-        period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now());
-        property = new SessionProperty();
-    }
-
     @DisplayName("SessionDescriptor 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new SessionDescriptor(new SessionImage(), period, property));
+        ImageHandler imageHandlerStub = new ImageHandler() {
+            @Override
+            public BufferedImage image() {
+                return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
+            }
+
+            @Override
+            public void updateImage() {
+            }
+
+            @Override
+            public long byteSize() {
+                return 1024L * 866L;
+            }
+        };
+
+        assertDoesNotThrow(() -> new SessionDescriptor(new SessionImage(imageHandlerStub), new SessionPeriod(), new SessionProperty()));
     }
 }

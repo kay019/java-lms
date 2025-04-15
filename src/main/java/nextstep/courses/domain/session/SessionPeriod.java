@@ -4,11 +4,12 @@ import java.time.LocalDateTime;
 
 public class SessionPeriod {
 
-    private LocalDateTime startDate;
+    private final LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
     public SessionPeriod() {
+        this(LocalDateTime.now(), LocalDateTime.now());
     }
 
     public SessionPeriod(LocalDateTime startDate, LocalDateTime endDate) {
