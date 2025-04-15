@@ -26,6 +26,9 @@ public class BaseDomain {
         this.updatedAt = updatedAt;
     }
 
+    public Long getId() {
+        return id;
+    }
 
     @Override
     public boolean equals(Object o) {

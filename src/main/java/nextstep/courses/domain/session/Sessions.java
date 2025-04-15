@@ -7,10 +7,18 @@ public class Sessions {
     private final List<Session> value;
 
     public Sessions() {
-        this.value = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    public Sessions(List<Session> value) {
+        this.value = value;
     }
 
     public boolean add(Session session) {
         return value.add(session);
+    }
+
+    public void delete() {
+        value.forEach(Session::delete);
     }
 }

@@ -6,6 +6,7 @@ import nextstep.courses.domain.session.constraint.SessionConstraint;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class Session extends BaseDomain {
 
@@ -14,6 +15,11 @@ public class Session extends BaseDomain {
     private final SessionConstraint constraint;
 
     private final SessionDescriptor descriptor;
+
+
+    public Session(Course course, SessionConstraint constraint, SessionDescriptor descriptor) {
+        this(null, course, constraint, descriptor);
+    }
 
     public Session(Long id, Course course, SessionConstraint constraint, SessionDescriptor descriptor) {
         super(id);
@@ -24,6 +30,11 @@ public class Session extends BaseDomain {
 
     public BufferedImage image() {
         return descriptor.image();
+    }
+
+    public void delete() {
+        this.deleted = true;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public boolean canEnroll(int enrollCount, long amount) {
