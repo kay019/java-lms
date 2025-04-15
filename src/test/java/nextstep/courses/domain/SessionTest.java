@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SessionTest {
 
     @Test
@@ -18,7 +16,7 @@ class SessionTest {
     void paidSessionEnrollTest() {
         //given
         CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.GIF, 300, 200);
-        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L);
+        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L, 100L);
         session.open();
         NsUser user = NsUserTest.JAVAJIGI;
         Payment payment = new Payment("0", session.getId(), user.getId(), 10000L);
@@ -39,7 +37,7 @@ class SessionTest {
     void paidSessionEnrollThrowTest() {
         //given
         CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.GIF, 300, 200);
-        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L);
+        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L, 100L);
         session.open();
         NsUser user = NsUserTest.JAVAJIGI;
         Payment payment = new Payment("0", session.getId(), user.getId(), 100L);
@@ -57,7 +55,7 @@ class SessionTest {
     void enrollClosedSessionThrowTest() {
         // given
         CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.GIF, 300, 200);
-        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L);
+        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L, 100L);
         session.close(); // <-- 도메인 메서드로 상태 변경
 
         NsUser user = NsUserTest.JAVAJIGI;
@@ -70,4 +68,30 @@ class SessionTest {
                 .hasMessageContaining("모집 중이 아닙니다");
     }
 
+    @Test
+    @DisplayName("유료강의는 수강인원 제한이 있다")
+    void sessionCapacityTest() {
+        // given
+        CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.PNG, 300, 200);
+        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L, 1L);
+        session.open();
+        NsUser user1 = NsUserTest.JAVAJIGI;
+        NsUser user2 = NsUserTest.SANJIGI;
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // when: 첫 번째 유저는 정상 수강
+        session.enroll(user1, 10000L, now);
+
+        // then: 두 번째 유저는 정원 초과로 예외 발생
+        Assertions.assertThatThrownBy(() -> session.enroll(user2, 10000L, now))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("수강 정원을 초과했습니다");
+    }
+
+    @Test
+    @DisplayName("무료강의는 수강인원 제한이 없다.")
+    void freeSessionCapacityTest() {
+
+    }
 }
