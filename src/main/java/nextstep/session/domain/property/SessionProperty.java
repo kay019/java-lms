@@ -1,7 +1,5 @@
 package nextstep.session.domain.property;
 
-import nextstep.payments.domain.Payment;
-import nextstep.payments.domain.Payments;
 import nextstep.session.domain.constraint.SessionConstraint;
 
 public class SessionProperty {
@@ -19,7 +17,11 @@ public class SessionProperty {
         this.type = type;
     }
 
-    public boolean canNotEnroll(SessionConstraint sessionConstraint, Payments payments, Payment payment) {
-        return type.canNotEnroll(sessionConstraint, payments, payment) && status.canNotEnroll();
+    public boolean canEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {
+        return type.canEnroll(sessionConstraint, enrollCount, amount) && status.canEnroll();
+    }
+
+    public boolean canNotEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {
+        return !canEnroll(sessionConstraint, enrollCount, amount);
     }
 }

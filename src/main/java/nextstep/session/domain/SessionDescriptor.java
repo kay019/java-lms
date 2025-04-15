@@ -1,9 +1,7 @@
 package nextstep.session.domain;
 
-import nextstep.payments.domain.Payment;
-import nextstep.payments.domain.Payments;
-import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.constraint.SessionConstraint;
+import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.property.SessionProperty;
 
 import java.awt.image.BufferedImage;
@@ -23,8 +21,8 @@ public class SessionDescriptor {
         this.property = property;
     }
 
-    public boolean canNotEnroll(SessionConstraint sessionConstraint, Payments payments, Payment payment) {
-        return property.canNotEnroll(sessionConstraint, payments, payment);
+    public boolean canEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {
+        return property.canEnroll(sessionConstraint, enrollCount, amount);
     }
 
     public BufferedImage image() {

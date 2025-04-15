@@ -2,11 +2,7 @@ package nextstep.session.domain;
 
 import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.Course;
-import nextstep.session.domain.image.SessionImage;
 import nextstep.session.domain.constraint.SessionConstraint;
-import nextstep.session.domain.property.SessionProperty;
-import nextstep.session.domain.property.SessionStatus;
-import nextstep.session.domain.property.SessionType;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -26,12 +22,12 @@ public class Session extends BaseDomain {
         this.constraint = constraint;
     }
 
-    public void link(Course course) {
-        this.course = course;
-    }
-
     public BufferedImage image() {
         return descriptor.image();
+    }
+
+    public boolean canEnroll(int enrollCount, long amount) {
+        return descriptor.canEnroll(constraint, enrollCount, amount);
     }
 
     public void updateImage() throws IOException {

@@ -1,7 +1,5 @@
 package nextstep.payments.domain;
 
-import nextstep.session.domain.constraint.SessionConstraint;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +12,6 @@ public class Payments {
 
     public Payments(List<Payment> payments) {
         this.value = payments;
-    }
-
-    public boolean isAvailability(SessionConstraint sessionConstraint) {
-        return sessionConstraint.isGreaterThenCapacity(value.size());
     }
 
     public void add(Payment payment) {

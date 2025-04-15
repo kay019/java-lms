@@ -2,7 +2,6 @@ package nextstep.payments.domain;
 
 import nextstep.common.domian.BaseDomain;
 import nextstep.session.domain.Session;
-import nextstep.session.domain.constraint.SessionConstraint;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -26,17 +25,8 @@ public class Payment extends BaseDomain {
         this.amount = amount;
     }
 
-    public boolean matchesFee(SessionConstraint sessionConstraint) {
-        return sessionConstraint.isSameFee(amount);
-    }
-
     public boolean equalsSessionUser(Payment payment) {
         return payment.user.equals(this.user) && payment.session.equals(this.session);
-    }
-
-    public void link(Session session) {
-        this.session = session;
-        this.updatedAt = LocalDateTime.now();
     }
 
     @Override
