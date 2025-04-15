@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 
+import nextstep.payments.domain.Payment;
+import nextstep.payments.domain.PaymentTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -63,11 +65,11 @@ class SessionTest {
     @Test
     @DisplayName("참여자 수를 초과할 수 없다.")
     void participantsMustNotExceedMaxParticipants() {
-        Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 1, 10000L);
+        Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 1, 1000L);
         session.openEnrollment();
-        session.enroll(1L, 10000L);
+        session.enroll(1L, PaymentTest.DEFAULT_PAYMENT);
         assertThatThrownBy(() -> {
-            session.enroll(2L, 10000L);
+            session.enroll(2L, PaymentTest.DEFAULT_PAYMENT);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -76,9 +78,8 @@ class SessionTest {
     void priceMustMatch() {
         Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 1, 10000L);
         session.openEnrollment();
-        session.enroll(1L, 10000L);
         assertThatThrownBy(() -> {
-            session.enroll(2L, 9999L);
+            session.enroll(1L, PaymentTest.DEFAULT_PAYMENT);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -87,16 +88,16 @@ class SessionTest {
     void freeSessionMustBeParticipant() {
         Session session = new FreeSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now());
         session.openEnrollment();
-        session.enroll(1L, 0L);
+        session.enroll(1L, PaymentTest.DEFAULT_PAYMENT);
         assertThat(session.isParticipant(1L)).isTrue();
     }
 
     @Test
     @DisplayName("참여자 수와 가격을 맞추면 유료 강의에 참여할 수 있다.")
     void paidSessionMustBeParticipant() {
-        Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 10, 10000L);
+        Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 10, 1000L);
         session.openEnrollment();
-        session.enroll(1L, 10000L);
+        session.enroll(1L, PaymentTest.DEFAULT_PAYMENT);
         assertThat(session.isParticipant(1L)).isTrue();
     }
     
@@ -112,11 +113,11 @@ class SessionTest {
     void enrolledCourseMustBeEnrolled() {
         Session session = new FreeSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now());
         assertThatThrownBy(() -> {
-            session.enroll(1L, 0L);
+            session.enroll(1L, PaymentTest.DEFAULT_PAYMENT);
         }).isInstanceOf(IllegalStateException.class);
         
         session.openEnrollment();
-        session.enroll(1L, 0L);
+        session.enroll(1L, PaymentTest.DEFAULT_PAYMENT);
         assertThat(session.isParticipant(1L)).isTrue();
     }
 }

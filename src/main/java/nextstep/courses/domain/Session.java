@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import nextstep.payments.domain.Payment;
+
 public abstract class Session {
 
     private final Image coverImage;
@@ -58,13 +60,13 @@ public abstract class Session {
         status = status.closeEnrollment();
     }
 
-    public void enroll(Long userId, long amount) {
+    public void enroll(Long userId, Payment payment) {
         status.assertCanEnroll();
-        validateEnrollment(amount);
+        validateEnrollment(payment);
         participants.add(userId);
     }
 
-    protected abstract void validateEnrollment(long amount);
+    protected abstract void validateEnrollment(Payment payment);
 
     protected int getParticipantsCount() {
         return participants.size();

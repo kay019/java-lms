@@ -2,6 +2,7 @@ package nextstep.courses.domain;
 
 import java.time.LocalDate;
 
+import nextstep.payments.domain.Payment;
 public class PaidSession extends Session {
 
     private final Integer maxParticipants;
@@ -32,12 +33,12 @@ public class PaidSession extends Session {
     }
 
     @Override
-    protected void validateEnrollment(long amount) {
+    protected void validateEnrollment(Payment payment) {
         if (getParticipantsCount() >= maxParticipants) {
             throw new IllegalArgumentException("최대 참여자 수를 초과했습니다.");
         }
         
-        if (amount != price) {
+        if (!payment.equals(price)) {
             throw new IllegalArgumentException("가격이 일치하지 않습니다.");
         }
     }
