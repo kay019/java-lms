@@ -27,7 +27,7 @@ public class Payment {
         this.createdAt = LocalDateTime.now();
     }
 
-    public boolean equals(Long amount) {
+    public boolean isSameAmount(Long amount) {
         return this.amount.equals(amount);
     }
 }

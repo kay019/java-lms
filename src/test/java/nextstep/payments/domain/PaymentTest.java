@@ -11,6 +11,6 @@ public class PaymentTest {
     @Test
     @DisplayName("equals")
     void equals() {
-        assertThat(DEFAULT_PAYMENT.equals(1000L)).isTrue();
+        assertThat(DEFAULT_PAYMENT.isSameAmount(1000L)).isTrue();
     }
 }

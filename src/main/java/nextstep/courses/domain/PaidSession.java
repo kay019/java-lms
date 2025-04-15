@@ -36,7 +36,7 @@ public class PaidSession extends Session {
             throw new IllegalArgumentException("최대 참여자 수를 초과했습니다.");
         }
         
-        if (!payment.equals(price)) {
+        if (!payment.isSameAmount(price)) {
             throw new IllegalArgumentException("가격이 일치하지 않습니다.");
         }
     }
