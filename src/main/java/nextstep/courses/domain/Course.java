@@ -1,6 +1,8 @@
 package nextstep.courses.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Course {
     private Long id;
@@ -12,6 +14,8 @@ public class Course {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private final Map<Integer, Session> sessionsByTerm = new HashMap<>();
 
     public Course() {
     }
@@ -38,6 +42,15 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void addSession(Session session) {
+        int nextTerm = sessionsByTerm.size() + 1;
+        sessionsByTerm.put(nextTerm, session);
+    }
+
+    public Session getSessionByTerm(int term) {
+        return sessionsByTerm.get(term);
     }
 
     @Override
