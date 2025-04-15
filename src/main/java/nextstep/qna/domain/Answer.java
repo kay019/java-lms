@@ -21,6 +21,7 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
+        this.question.addAnswer(this);
     }
 
     private static void validate(NsUser writer, Question question) {

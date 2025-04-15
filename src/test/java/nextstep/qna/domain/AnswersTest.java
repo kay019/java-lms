@@ -1,47 +1,44 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.exception.CannotDeleteException;
 import nextstep.users.domain.NsUser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnswersTest {
 
-  private NsUser user;
-  private NsUser otherUser;
-  private Question question;
-  private Answer answer1;
-  private Answer answer2;
-
-  @BeforeEach
-  public void setUp() {
-    user = new NsUser(1L, "userId", "password", "name", "email");
-    otherUser = new NsUser(2L, "otherId", "password", "name", "email");
-    question = new Question(1L, user, "title", "contents");
-    answer1 = new Answer(1L, user, question, "Answer1");
-    answer2 = new Answer(2L, user, question, "Answer2");
-  }
+  private final NsUser user = new NsUser(1L, "userId", "password", "name", "email");
+  private final NsUser otherUser = new NsUser(2L, "otherId", "password", "name", "email");
+  private final Question question = new Question(1L, user, "title", "contents");
+  private final Answer answer1 = new Answer(1L, user, question, "Answer1");
+  private final Answer answer2 = new Answer(2L, user, question, "Answer2");
 
   @Test
-  public void isEmpty_빈_답변여부_테스트() {
-    Answers answers = new Answers();
-    assertThat(answers.isEmpty()).isTrue();
-  }
-
-  @Test
-  public void areAllAnswersSameWriter_모두_같은_작성자() {
+  public void validateDeletable_모두_같은_작성자() throws CannotDeleteException {
     Answers answers = new Answers(List.of(answer1, answer2));
 
-    assertThat(answers.areAllAnswersSameWriter(user)).isTrue();
+    answers.validateDeletable(user);
   }
 
   @Test
-  public void areAllAnswersSameWriter_다른_작성자_포함() {
+  public void validateDeletable_다른_작성자_포함() {
     Answers answers = new Answers(List.of(answer1, new Answer(3L, otherUser, question, "Other Answer")));
-    assertThat(answers.areAllAnswersSameWriter(user)).isFalse();
+
+    assertThatThrownBy(
+        () -> answers.validateDeletable(user))
+        .isInstanceOf(CannotDeleteException.class)
+        .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+  }
+
+  @Test
+  public void validateDeletable_빈_답변() throws CannotDeleteException {
+    Answers answers = new Answers();
+
+    answers.validateDeletable(user);
   }
 
   @Test
