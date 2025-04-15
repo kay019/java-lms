@@ -5,7 +5,7 @@ import nextstep.users.domain.NsUser;
 
 import java.util.Objects;
 
-public class Session {
+public abstract class Session {
     private final Long id;
     private final Long courseId;
     private final Period sessionPeriod;
@@ -26,8 +26,17 @@ public class Session {
         if (!sessionStatus.isOpened()) {
             throw new IllegalStateException();
         }
-        registration.register(user, amount);
+        if (!canRegister(user, amount)) {
+            throw new IllegalStateException();
+        }
+        registration.register(user);
         return new Payment(makePaymentId(user), this.id, user.getId(), amount);
+    }
+
+    protected abstract boolean canRegister(NsUser user, Long amount);
+
+    protected int registeredUserCount() {
+        return registration.registeredUserCount();
     }
 
     private String makePaymentId(NsUser user) {

@@ -3,53 +3,40 @@ package nextstep.sessions.domain;
 import nextstep.users.domain.NsUser;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Registration {
-    private final RegistrationType registrationType;
-    private final Long fee;
-    private final int maxStudentNumber;
     private final Set<NsUser> registeredUsers;
 
-    public Registration(RegistrationType registrationType, Long fee, int maxStudentNumber) {
-        this.registrationType = registrationType;
-        this.fee = fee;
-        this.maxStudentNumber = maxStudentNumber;
+    public Registration() {
         this.registeredUsers = new HashSet<>();
     }
 
-    public static Registration createFreeRegistration(RegistrationType registrationType) {
-        if (!registrationType.isFree()) {
-            throw new IllegalArgumentException();
-        }
-        return new Registration(registrationType, 0L, Integer.MAX_VALUE);
+    public Registration(Set<NsUser> registeredUsers) {
+        this.registeredUsers = registeredUsers;
     }
 
-    public static Registration createPaidRegistration(RegistrationType registrationType, Long fee, int maxStudentNumber) {
-        if (registrationType.isFree()) {
-            throw new IllegalArgumentException();
-        }
-        return new Registration(registrationType, fee, maxStudentNumber);
-    }
-
-    public void register(NsUser user, Long amount) {
+    public void register(NsUser user) {
         if (registeredUsers.contains(user)) {
             return;
         }
-        checkRegister(amount);
         registeredUsers.add(user);
     }
 
-    private void checkRegister(Long amount) {
-        if (registeredUsers.size() == maxStudentNumber) {
-            throw new IllegalStateException();
-        }
-        if (registrationType == RegistrationType.PAID && !amount.equals(fee)) {
-            throw new IllegalStateException();
-        }
+    public int registeredUserCount() {
+        return registeredUsers.size();
     }
 
-    public boolean contains(NsUser user) {
-        return registeredUsers.contains(user);
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Registration that = (Registration) o;
+        return Objects.equals(registeredUsers, that.registeredUsers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(registeredUsers);
     }
 }
