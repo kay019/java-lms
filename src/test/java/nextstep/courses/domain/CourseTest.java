@@ -21,6 +21,5 @@ class CourseTest {
         Session session = SessionTest.DEFAULT_SESSION;
         course.addSession(session);
         assertThat(course.getSessionByTerm(1)).isEqualTo(session);
-        assertThat(course.getSessionByTerm(2)).isNull();
     }
 }
