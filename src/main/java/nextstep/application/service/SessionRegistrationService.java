@@ -13,20 +13,18 @@ public class SessionRegistrationService {
     private final SessionService sessionService;
     private final StudentService studentService;
     private final PaymentService paymentService;
-    private final SessionRegistrationValidator sessionRegistrationValidator;
 
-    public SessionRegistrationService(SessionService sessionService, StudentService studentService, PaymentService paymentService, SessionRegistrationValidator validator) {
+    public SessionRegistrationService(SessionService sessionService, StudentService studentService, PaymentService paymentService) {
         this.sessionService = sessionService;
         this.studentService = studentService;
         this.paymentService = paymentService;
-        this.sessionRegistrationValidator = validator;
     }
 
     // 수업 등록 로직
     public ResponseEntity<String> register(Long studentId, Long sessionId) {
         Student student = studentService.findStudentById(studentId);
         Session session = sessionService.findSessionById(sessionId);
-        sessionRegistrationValidator.validate(session, student);
+        session.validateEnrollment(student.getBudget());
         sessionService.addStudentAndSaveSession(session);
         paymentService.payment(sessionId, studentId, session.getFee().longValue());
         studentService.addSessionAndSaveStudent(student, sessionId);

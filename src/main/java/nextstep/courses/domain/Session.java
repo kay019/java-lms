@@ -29,6 +29,24 @@ public class Session {
         this.studentsCount = 0;
     }
 
+    public void validateEnrollment(Long studentBudget) {
+        if (status != SessionStatus.OPEN) {
+            throw new IllegalArgumentException("세션이 '모집 중' 일때만 수강 신청이 가능합니다.");
+        }
+        if (type == SessionType.PAID) {
+            if (studentsCount == capacity) {
+                throw new IllegalArgumentException("정원이 초과되었습니다.");
+            }
+            if (fee > studentBudget) {
+                throw new IllegalArgumentException("예산이 부족하여 강의를 신청할 수 없습니다.");
+            }
+        }
+    }
+
+    public void addStudent() {
+        studentsCount++;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -63,9 +81,5 @@ public class Session {
 
     public int getStudentsCount() {
         return studentsCount;
-    }
-
-    public void addStudent() {
-        studentsCount++;
     }
 }
