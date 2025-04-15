@@ -10,12 +10,23 @@ public class Session {
 
     private final LocalDate endDate;
 
-    public Session(Image coverImage, LocalDate startDate, LocalDate endDate) {
+    private final boolean isFree;
+
+    private Session(Image coverImage, LocalDate startDate, LocalDate endDate, boolean isFree) {
         validate(coverImage, startDate, endDate);
 
         this.coverImage = coverImage;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.isFree = isFree;
+    }
+
+    public static Session createFreeSession(Image coverImage, LocalDate startDate, LocalDate endDate) {
+        return new Session(coverImage, startDate, endDate, true);
+    }
+
+    public static Session createPaidSession(Image coverImage, LocalDate startDate, LocalDate endDate) {
+        return new Session(coverImage, startDate, endDate, false);
     }
 
     private void validate(Image coverImage, LocalDate startAt, LocalDate endAt) {
