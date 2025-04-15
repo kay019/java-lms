@@ -8,7 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class SessionTypeTest {
 
-    @DisplayName("무료강의는 수당신청을 조건없이 할 수 있다.")
+    @DisplayName("무료강의는 수강신청을 조건없이 할 수 있다.")
     @Test
     public void testCanEnroll_Free() {
         SessionConstraint constraint = new SessionConstraint(200_000, 1);
