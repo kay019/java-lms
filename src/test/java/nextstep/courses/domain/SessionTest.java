@@ -92,6 +92,16 @@ class SessionTest {
     @Test
     @DisplayName("무료강의는 수강인원 제한이 없다.")
     void freeSessionCapacityTest() {
+        // given
+        CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.PNG, 300, 200);
 
+        // when
+        Session session = Session.register(0L, coverImage, SessionType.FREE, 0L, 999L);
+
+        // then
+        Assertions.assertThat(session)
+                .isNotNull()
+                .extracting("capacity")
+                .isNull();
     }
 }
