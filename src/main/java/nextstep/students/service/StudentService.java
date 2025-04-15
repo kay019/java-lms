@@ -12,11 +12,6 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public void addSessionAndSaveStudent(Student student, Long sessionId) {
-        student.addSession(sessionId);
-        studentRepository.save(student);
-    }
-
     public Student findStudentById(Long studentId) {
         return studentRepository.findById(studentId);
     }

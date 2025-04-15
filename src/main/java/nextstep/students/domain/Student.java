@@ -1,11 +1,16 @@
 package nextstep.students.domain;
 
+import nextstep.courses.domain.Session;
+import nextstep.courses.domain.Sessions;
+
+import java.util.ArrayList;
+
 public class Student {
     private final Long id;
     private final String name;
     private final String email;
     private final Long budget;
-    private Long sessionId;
+    private Sessions sessions;
 
     public Student(String name, String email, Long budget) {
         this(0L, name, email, budget);
@@ -16,6 +21,7 @@ public class Student {
         this.name = name;
         this.email = email;
         this.budget = budget;
+        this.sessions = new Sessions(new ArrayList<>());
     }
 
     public Long getId() {
@@ -34,7 +40,15 @@ public class Student {
         return budget;
     }
 
-    public void addSession(Long sessionId) {
-        this.sessionId = sessionId;
+    public boolean isBudgetOver(Long fee) {
+        return fee > budget;
+    }
+
+    public boolean isAlreadyRegistered(Long sessionId) {
+        return sessions.isAlreadyIncluded(sessionId);
+    }
+
+    public void registerSession(Session session) {
+        this.sessions = sessions.addSession(session);
     }
 }

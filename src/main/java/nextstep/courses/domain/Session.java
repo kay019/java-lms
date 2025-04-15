@@ -1,6 +1,11 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
+import nextstep.students.domain.Student;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Session {
     private final Long id;
@@ -10,14 +15,14 @@ public class Session {
     private final SessionStatus status;
     private final SessionType type;
     private final Integer capacity;
-    private final Integer fee;
-    private int studentsCount;
+    private final Long fee;
+    private Students students;
 
     public Session(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status) {
         this(0L, startDate, endDate, coverImage, status, SessionType.FREE, null, null);
     }
 
-    public Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type, Integer capacity, Integer fee) {
+    public Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type, Integer capacity, Long fee) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -26,25 +31,35 @@ public class Session {
         this.type = type;
         this.capacity = capacity;
         this.fee = fee;
-        this.studentsCount = 0;
+        this.students = new Students(new ArrayList<>());
     }
 
-    public void validateEnrollment(Long studentBudget) {
+    public Payment registerStudent(Student student) {
+        validateEnrollment(student);
+        this.students = this.students.addStudent(student);
+        student.registerSession(this);
+        return new Payment(id, student.getId(), fee);
+    }
+
+    public void validateEnrollment(Student student) {
         if (status != SessionStatus.OPEN) {
             throw new IllegalArgumentException("세션이 '모집 중' 일때만 수강 신청이 가능합니다.");
         }
         if (type == SessionType.PAID) {
-            if (studentsCount == capacity) {
+            if (students.getSize() == capacity) {
                 throw new IllegalArgumentException("정원이 초과되었습니다.");
             }
-            if (fee > studentBudget) {
+            if (student.isBudgetOver(fee)) {
                 throw new IllegalArgumentException("예산이 부족하여 강의를 신청할 수 없습니다.");
             }
         }
+        if (student.isAlreadyRegistered(id)) {
+            throw new IllegalStateException("이미 등록한 강의입니다.");
+        }
     }
 
-    public void addStudent() {
-        studentsCount++;
+    public boolean sessionIdMatches(Long id) {
+        return Objects.equals(this.id, id);
     }
 
     public LocalDate getStartDate() {
@@ -75,11 +90,7 @@ public class Session {
         return capacity;
     }
 
-    public Integer getFee() {
+    public Long getFee() {
         return fee;
-    }
-
-    public int getStudentsCount() {
-        return studentsCount;
     }
 }

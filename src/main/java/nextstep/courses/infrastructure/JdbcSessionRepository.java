@@ -39,7 +39,7 @@ public class JdbcSessionRepository implements SessionRepository {
                     SessionStatus.valueOf(rs.getString("status")),
                     SessionType.valueOf(rs.getString("type")),
                     rs.getInt("capacity"),
-                    rs.getInt("fee")
+                    rs.getLong("fee")
             );
         }, id);
     }
