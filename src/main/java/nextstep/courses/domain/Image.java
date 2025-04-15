@@ -5,7 +5,10 @@ import java.util.List;
 public class Image {
     private static final int MAX_SIZE = 1024 * 1024;
     private static final List<String> SUPPORTED_FORMATS = List.of("gif", "jpg", "png", "svg");
-    private static final int MIN_RESOLUTION = 300;
+    private static final int MIN_WIDTH = 300;
+    private static final int MIN_HEIGHT = 200;
+    private static final double RATIO = 3.0 / 2.0;
+    private static final double RATIO_TOLERANCE = 0.01;
 
     private final String url;
     private final int width;
@@ -28,8 +31,8 @@ public class Image {
             throw new IllegalArgumentException("URL은 필수 값입니다.");
         }
         
-        if (width < MIN_RESOLUTION || height < MIN_RESOLUTION) {
-            throw new IllegalArgumentException("너비와 높이는 최소 300픽셀, 200픽셀 이상이어야 합니다.");
+        if (width < MIN_WIDTH || height < MIN_HEIGHT) {
+            throw new IllegalArgumentException("너비는 최소 " + MIN_WIDTH + "픽셀, 높이는 최소 " + MIN_HEIGHT + "픽셀 이상이어야 합니다.");
         }
         
         if (format == null || format.isEmpty()) {
@@ -42,6 +45,13 @@ public class Image {
         
         if (!SUPPORTED_FORMATS.contains(format)) {
             throw new IllegalArgumentException("지원 형식은 gif, jpg, png, svg 중 하나여야 합니다.");
+        }
+
+        double actualRatio = (double) width / height;
+        if (Math.abs(actualRatio - RATIO) > RATIO_TOLERANCE) {
+            throw new IllegalArgumentException(
+                String.format("이미지 비율은 3:2(너비:높이)여야 합니다. 현재 비율: %.2f:1", actualRatio)
+            );
         }
     }
 }
