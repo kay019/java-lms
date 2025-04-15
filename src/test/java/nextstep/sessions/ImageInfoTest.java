@@ -9,7 +9,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ImageInfoTest {
     @ParameterizedTest
-    @CsvSource(value = {"100,jpg,300,200", "1_000,png,600,400", "10_000,gif,750,500", "1_000_000,svg,1200,800"})
+    @CsvSource(value = {
+            "100,jpg,300,200", "100,JPG,300,200",
+            "1_000,png,600,400", "1_000,PNG,600,400",
+            "10_000,gif,750,500", "10_000,GIF,750,500",
+            "1_000_000,svg,1200,800", "1_000_000,SVG,1200,800"
+    })
     void testCreateImageInfo(int bytes, String type, int width, int height) {
         new ImageInfo(bytes, type, width, height);
     }

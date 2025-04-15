@@ -26,7 +26,7 @@ public class ImageInfo {
     }
 
     private boolean validate(int bytes, String type, int width, int height) {
-        return ACCEPTABLE_TYPES.contains(type)
+        return ACCEPTABLE_TYPES.contains(type.toLowerCase())
                 && smallerOrEqual(bytes)
                 && widerOrEqual(width)
                 && longerOrEqual(height)
