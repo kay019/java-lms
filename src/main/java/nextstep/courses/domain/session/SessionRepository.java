@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import nextstep.courses.domain.session.Session;
+package nextstep.courses.domain.session;
 
 import java.util.List;
 

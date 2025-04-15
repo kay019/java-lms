@@ -1,6 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.SessionRepository;
+import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.domain.session.Session;
 import org.springframework.stereotype.Repository;
 
