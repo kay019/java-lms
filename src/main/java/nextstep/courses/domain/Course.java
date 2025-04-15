@@ -13,6 +13,8 @@ public class Course {
 
     private LocalDateTime updatedAt;
 
+    private final Sessions sessions = new Sessions();
+
     public Course() {
     }
 
@@ -38,6 +40,14 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void addSession(Session session) {
+        sessions.add(session);
+    }
+
+    public Session getSessionByTerm(int term) {
+        return sessions.getByTerm(term);
     }
 
     @Override
