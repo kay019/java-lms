@@ -44,7 +44,19 @@ public class Session {
         );
     }
 
+    public void close() {
+        this.sessionStatus = SessionStatus.CLOSED;
+    }
+
+    public void open() {
+        this.sessionStatus = SessionStatus.OPEN;
+    }
+
     public EnrollmentHistory enroll(NsUser user, Long amount, LocalDateTime enrolledAt) {
+        if (sessionStatus.isNotOpen()) {
+            throw new IllegalStateException("모집 중이 아닙니다");
+        }
+
         if (sessionType.isPaid() && !Objects.equals(this.sessionPrice, amount)) {
             throw new IllegalArgumentException("결제 금액이 수강료와 일치하지 않습니다.");
         }

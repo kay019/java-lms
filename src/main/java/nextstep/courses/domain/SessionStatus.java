@@ -8,4 +8,8 @@ public enum SessionStatus {
     SessionStatus(String description) {
         this.description = description;
     }
+
+    public boolean isNotOpen() {
+        return this != OPEN;
+    }
 }

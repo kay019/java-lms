@@ -19,6 +19,7 @@ class SessionTest {
         //given
         CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.GIF, 300, 200);
         Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L);
+        session.open();
         NsUser user = NsUserTest.JAVAJIGI;
         Payment payment = new Payment("0", session.getId(), user.getId(), 10000L);
         LocalDateTime now = LocalDateTime.now();
@@ -39,6 +40,7 @@ class SessionTest {
         //given
         CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.GIF, 300, 200);
         Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L);
+        session.open();
         NsUser user = NsUserTest.JAVAJIGI;
         Payment payment = new Payment("0", session.getId(), user.getId(), 100L);
         LocalDateTime now = LocalDateTime.now();
@@ -48,6 +50,24 @@ class SessionTest {
                 .isThrownBy(() -> session.enroll(user, payment.getAmount(), now))
                 .withMessageContaining("결제 금액이 수강료와 일치하지 않습니다.");
 
+    }
+
+    @Test
+    @DisplayName("강의 수강신청은 강의 상태가 모집중이 아닌 경우 에러를 던진다.")
+    void enrollClosedSessionThrowTest() {
+        // given
+        CoverImage coverImage = new CoverImage(1024 * 1024, ImageType.GIF, 300, 200);
+        Session session = Session.register(0L, coverImage, SessionType.PAID, 10000L);
+        session.close(); // <-- 도메인 메서드로 상태 변경
+
+        NsUser user = NsUserTest.JAVAJIGI;
+        Payment payment = new Payment("0", session.getId(), user.getId(), 10000L);
+        LocalDateTime now = LocalDateTime.now();
+
+        // when & then
+        Assertions.assertThatThrownBy(() -> session.enroll(user, payment.getAmount(), now))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("모집 중이 아닙니다");
     }
 
 }
