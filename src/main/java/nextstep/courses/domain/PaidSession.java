@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import java.time.LocalDate;
-
 import nextstep.payments.domain.Payment;
 public class PaidSession extends Session {
 
@@ -9,8 +7,8 @@ public class PaidSession extends Session {
 
     private final Long price;
 
-    public PaidSession(Image coverImage, LocalDate startDate, LocalDate endDate, Integer maxParticipants, Long price) {
-        super(coverImage, startDate, endDate);
+    public PaidSession(Image coverImage, Period period, Integer maxParticipants, Long price) {
+        super(coverImage, period);
 
         validate(maxParticipants, price);
 

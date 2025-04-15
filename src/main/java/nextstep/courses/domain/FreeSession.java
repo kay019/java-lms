@@ -1,13 +1,11 @@
 package nextstep.courses.domain;
 
-import java.time.LocalDate;
-
 import nextstep.payments.domain.Payment;
 
 public class FreeSession extends Session {
 
-    public FreeSession(Image coverImage, LocalDate startDate, LocalDate endDate) {
-        super(coverImage, startDate, endDate);
+    public FreeSession(Image coverImage, Period period) {
+        super(coverImage, period);
     }
 
     @Override
