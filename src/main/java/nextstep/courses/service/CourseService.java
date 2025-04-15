@@ -44,6 +44,12 @@ public class CourseService {
     }
 
     @Transactional
+    public void deleteSession(long sessionId) {
+        Session session = sessionRepository.findById(sessionId);
+        session.delete();
+    }
+
+    @Transactional
     public void deleteCourse(long courseId) {
         Course course = courseRepository.findById(courseId);
         Sessions sessions = new Sessions(sessionRepository.findByCourse(courseId));
