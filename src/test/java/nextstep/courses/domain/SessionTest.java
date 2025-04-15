@@ -64,6 +64,7 @@ class SessionTest {
     @DisplayName("참여자 수를 초과할 수 없다.")
     void participantsMustNotExceedMaxParticipants() {
         Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 1, 10000L);
+        session.openEnrollment();
         session.enroll(1L, 10000L);
         assertThatThrownBy(() -> {
             session.enroll(2L, 10000L);
@@ -74,6 +75,7 @@ class SessionTest {
     @DisplayName("가격이 일치하지 않으면 참여할 수 없다.")
     void priceMustMatch() {
         Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 1, 10000L);
+        session.openEnrollment();
         session.enroll(1L, 10000L);
         assertThatThrownBy(() -> {
             session.enroll(2L, 9999L);
@@ -84,6 +86,7 @@ class SessionTest {
     @DisplayName("무료 강의는 참여할 수 있다.")
     void freeSessionMustBeParticipant() {
         Session session = new FreeSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now());
+        session.openEnrollment();
         session.enroll(1L, 0L);
         assertThat(session.isParticipant(1L)).isTrue();
     }
@@ -92,7 +95,28 @@ class SessionTest {
     @DisplayName("참여자 수와 가격을 맞추면 유료 강의에 참여할 수 있다.")
     void paidSessionMustBeParticipant() {
         Session session = new PaidSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now(), 10, 10000L);
+        session.openEnrollment();
         session.enroll(1L, 10000L);
+        assertThat(session.isParticipant(1L)).isTrue();
+    }
+    
+    @Test
+    @DisplayName("강의는 처음에 준비 중 상태이다.")
+    void courseMustBePreparing() {
+        Session session = new FreeSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now());
+        assertThat(session.isPreparing()).isTrue();
+    }
+
+    @Test
+    @DisplayName("참여 중 강의만 수강할 수 있다.")
+    void enrolledCourseMustBeEnrolled() {
+        Session session = new FreeSession(ImageTest.DEFAULT_IMAGE, LocalDate.now(), LocalDate.now());
+        assertThatThrownBy(() -> {
+            session.enroll(1L, 0L);
+        }).isInstanceOf(IllegalStateException.class);
+        
+        session.openEnrollment();
+        session.enroll(1L, 0L);
         assertThat(session.isParticipant(1L)).isTrue();
     }
 }

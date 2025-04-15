@@ -14,6 +14,8 @@ public abstract class Session {
 
     private final List<Long> participants = new ArrayList<>();
 
+    private SessionStatus status = SessionStatus.PREPARING;
+
     protected Session(Image coverImage, LocalDate startDate, LocalDate endDate) {
         validate(coverImage, startDate, endDate);
 
@@ -36,7 +38,28 @@ public abstract class Session {
         }
     }
 
+    public boolean isPreparing() {
+        return status.equals(SessionStatus.PREPARING);
+    }
+
+    public boolean isEnrolling() {
+        return status.equals(SessionStatus.ENROLLING);
+    }
+
+    public boolean isClosed() {
+        return status.equals(SessionStatus.CLOSED);
+    }
+
+    public void openEnrollment() {
+        status = status.openEnrollment();
+    }
+
+    public void closeEnrollment() {
+        status = status.closeEnrollment();
+    }
+
     public void enroll(Long userId, long amount) {
+        status.assertCanEnroll();
         validateEnrollment(amount);
         participants.add(userId);
     }
