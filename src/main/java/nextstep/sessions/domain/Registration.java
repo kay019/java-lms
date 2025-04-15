@@ -48,4 +48,8 @@ public class Registration {
             throw new IllegalStateException();
         }
     }
+
+    public boolean contains(NsUser user) {
+        return registeredUsers.contains(user);
+    }
 }

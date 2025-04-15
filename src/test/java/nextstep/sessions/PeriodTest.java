@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PeriodTest {
@@ -17,7 +18,8 @@ public class PeriodTest {
             "2025-04-15,2026-04-15"
     })
     void testCreatePeriod(LocalDate startDate, LocalDate endDate) {
-        new Period(startDate, endDate);
+        assertThat(new Period(startDate, endDate))
+                .isNotNull();
     }
 
     @Test

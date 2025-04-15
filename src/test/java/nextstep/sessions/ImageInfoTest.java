@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ImageInfoTest {
@@ -16,7 +17,8 @@ public class ImageInfoTest {
             "1_000_000,svg,1200,800", "1_000_000,SVG,1200,800"
     })
     void testCreateImageInfo(int bytes, String type, int width, int height) {
-        new ImageInfo(bytes, type, width, height);
+        assertThat(new ImageInfo(bytes, type, width, height))
+                .isNotNull();
     }
 
     @Test
