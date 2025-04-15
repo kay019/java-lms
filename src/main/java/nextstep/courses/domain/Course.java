@@ -12,6 +12,8 @@ public class Course {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+    private int generation;
+    private Sessions sessions;
 
     public Course() {
     }
