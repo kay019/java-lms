@@ -2,7 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.session.constraint.SessionConstraint;
 import nextstep.courses.domain.session.image.SessionImage;
-import nextstep.courses.domain.session.property.SessionEnrollPolicy;
+import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

@@ -2,7 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.domain.session.image.SessionImage;
-import nextstep.courses.domain.session.property.SessionEnrollPolicy;
+import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

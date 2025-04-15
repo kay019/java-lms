@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session.property;
+package nextstep.courses.domain.session.policy;
 
 import nextstep.courses.domain.session.constraint.SessionConstraint;
 

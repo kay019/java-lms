@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session.property;
+package nextstep.courses.domain.session.policy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
