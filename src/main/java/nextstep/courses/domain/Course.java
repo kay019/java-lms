@@ -46,7 +46,11 @@ public class Course extends BaseDomain {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(id, course.id) && Objects.equals(title, course.title) && Objects.equals(creatorId, course.creatorId) && Objects.equals(createdAt, course.createdAt) && Objects.equals(updatedAt, course.updatedAt);
+        return Objects.equals(id, course.id) &&
+            Objects.equals(title, course.title) &&
+            Objects.equals(creatorId, course.creatorId) &&
+            Objects.equals(createdAt, course.createdAt) &&
+            Objects.equals(updatedAt, course.updatedAt);
     }
 
     @Override

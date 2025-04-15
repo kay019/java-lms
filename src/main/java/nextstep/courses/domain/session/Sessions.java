@@ -1,14 +1,9 @@
 package nextstep.courses.domain.session;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Sessions {
     private final List<Session> value;
-
-    public Sessions() {
-        this(new ArrayList<>());
-    }
 
     public Sessions(List<Session> value) {
         this.value = value;

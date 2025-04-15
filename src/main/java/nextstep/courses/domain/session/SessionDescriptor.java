@@ -13,20 +13,20 @@ public class SessionDescriptor {
 
     private final SessionPeriod period;
 
-    private final SessionEnrollPolicy property;
+    private final SessionEnrollPolicy policy;
 
     public SessionDescriptor() {
         this(null, null, null);
     }
 
-    public SessionDescriptor(SessionImage image, SessionPeriod period, SessionEnrollPolicy property) {
+    public SessionDescriptor(SessionImage image, SessionPeriod period, SessionEnrollPolicy policy) {
         this.image = image;
         this.period = period;
-        this.property = property;
+        this.policy = policy;
     }
 
     public boolean canEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {
-        return property.canEnroll(sessionConstraint, enrollCount, amount);
+        return policy.canEnroll(sessionConstraint, enrollCount, amount);
     }
 
     public BufferedImage image() {

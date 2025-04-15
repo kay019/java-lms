@@ -6,7 +6,7 @@ public class SessionPeriod {
 
     private final LocalDateTime startDate;
 
-    private LocalDateTime endDate;
+    private final LocalDateTime endDate;
 
     public SessionPeriod() {
         this(LocalDateTime.now(), LocalDateTime.now());

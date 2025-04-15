@@ -55,7 +55,9 @@ public class Session extends BaseDomain {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Session session = (Session) o;
-        return Objects.equals(course, session.course) && Objects.equals(constraint, session.constraint) && Objects.equals(descriptor, session.descriptor);
+        return Objects.equals(course, session.course) &&
+            Objects.equals(constraint, session.constraint) &&
+            Objects.equals(descriptor, session.descriptor);
     }
 
     @Override
