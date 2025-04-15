@@ -16,7 +16,7 @@ public class Period {
     }
 
     private boolean validate(LocalDate startDate, LocalDate endDate) {
-        return startDate.isBefore(endDate);
+        return startDate.isBefore(endDate) || startDate.isEqual(endDate);
     }
 
     @Override
