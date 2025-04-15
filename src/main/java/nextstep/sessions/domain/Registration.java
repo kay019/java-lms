@@ -9,13 +9,13 @@ public class Registration {
     private final RegistrationType registrationType;
     private final Long fee;
     private final int maxStudentNumber;
-    private final Set<Long> registeredUserIds;
+    private final Set<NsUser> registeredUsers;
 
     public Registration(RegistrationType registrationType, Long fee, int maxStudentNumber) {
         this.registrationType = registrationType;
         this.fee = fee;
         this.maxStudentNumber = maxStudentNumber;
-        this.registeredUserIds = new HashSet<>();
+        this.registeredUsers = new HashSet<>();
     }
 
     public static Registration createFreeRegistration(RegistrationType registrationType) {
@@ -33,15 +33,15 @@ public class Registration {
     }
 
     public void register(NsUser user, Long amount) {
-        if (registeredUserIds.contains(user.getId())) {
+        if (registeredUsers.contains(user)) {
             return;
         }
         checkRegister(amount);
-        registeredUserIds.add(user.getId());
+        registeredUsers.add(user);
     }
 
     private void checkRegister(Long amount) {
-        if (registeredUserIds.size() == maxStudentNumber) {
+        if (registeredUsers.size() == maxStudentNumber) {
             throw new IllegalStateException();
         }
         if (registrationType == RegistrationType.PAID && !amount.equals(fee)) {
