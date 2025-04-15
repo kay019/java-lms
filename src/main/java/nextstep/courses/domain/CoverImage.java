@@ -1,9 +1,13 @@
 package nextstep.courses.domain;
 
-import static nextstep.courses.domain.ImageType.SESSION_ALLOWED_IMAGE_TYPES;
+import java.util.List;
+
+import static nextstep.courses.domain.ImageType.*;
 
 public class CoverImage {
-    private static final int SIZE_LIMIT = 1024 * 1024;
+    public static final List<ImageType> SESSION_ALLOWED_IMAGE_TYPES = List.of(GIF, JPG, JPEG, PNG, SVG);
+
+    private static final int SIZE_LIMIT_IN_BYTES = 1024 * 1024;
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 200;
     private static final int WIDTH_RATIO = 3;
@@ -29,7 +33,7 @@ public class CoverImage {
     }
 
     private void validateSize(int size) {
-        if (size > SIZE_LIMIT) {
+        if (size > SIZE_LIMIT_IN_BYTES) {
             throw new IllegalArgumentException("이미지의 용량은 1MB를 넘을 수 없습니다.");
         }
     }
