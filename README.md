@@ -88,3 +88,26 @@
 - 유료 강의의 경우 **결제 완료된 상태로 가정**하고 구현
 - [x] 결제 정보는 외부 `payments` 모듈에서 관리됩니다.
 - [x] 결제 정보는 `Payment` 객체 형태로 제공됩니다.
+
+## 구현 결과
+
+### 객체별 역할
+
+- **Course**: 강의 정보 관리 및 여러 세션 포함
+- **Session**: 강의 기수를 나타내는 추상 클래스
+- **FreeSession**: 무료로 수강 가능한 세션
+- **PaidSession**: 최대 참여자 수와 가격이 설정된 유료 세션
+- **Sessions**: Course 내 여러 Session 객체 관리 컬렉션
+- **SessionStatus**: 세션 상태(준비 중, 모집 중, 마감) 관리 열거형
+- **Period**: 세션 시작일과 종료일 관리 값 객체
+- **Image**: 세션 커버 이미지 정보 관리 값 객체
+- **CourseRepository**: Course 저장 및 조회 인터페이스
+- **SessionRepository**: Session 조회 인터페이스
+- **EnrollService**: 사용자 세션 수강 신청 처리 서비스
+
+### 객체 간 관계
+
+- Course → Sessions → Session
+- Session ← FreeSession, PaidSession(상속)
+- Session → Image, Period, SessionStatus
+- EnrollService → SessionRepository → Session
