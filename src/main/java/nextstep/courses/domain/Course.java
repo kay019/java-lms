@@ -15,7 +15,7 @@ public class Course extends BaseDomain {
     }
 
     public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
+        this(null, title, creatorId, LocalDateTime.now(), null);
     }
 
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -34,6 +34,11 @@ public class Course extends BaseDomain {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void delete() {
+        this.deleted = true;
+        this.updatedAt = LocalDateTime.now();
     }
 
     @Override
