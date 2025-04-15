@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
@@ -28,6 +27,13 @@ class SessionRepositoryTest {
     @BeforeEach
     void setUp() {
         sessionRepository = new JdbcSessionRepository(jdbcTemplate);
+        try {
+            jdbcTemplate.execute("DELETE FROM session");
+            jdbcTemplate.execute("ALTER TABLE session ALTER COLUMN id RESTART WITH 1");
+            System.out.println("테이블 초기화 성공");
+        } catch (Exception e) {
+            System.err.println("테이블 초기화 실패: " + e.getMessage());
+        }
     }
 
     @Test
@@ -42,11 +48,7 @@ class SessionRepositoryTest {
         Session session = new Session(LocalDate.of(2025, 4, 15), LocalDate.of(2025, 5, 15), new CoverImage(20 * 1024, "PNG", 600, 400), SessionStatus.READY);
         sessionRepository.save(session);
         Session savedSession;
-        try {
-            savedSession = sessionRepository.findById(1L);
-        } catch (EmptyResultDataAccessException e) {
-            savedSession = sessionRepository.findById(2L);
-        }
+        savedSession = sessionRepository.findById(1L);
         assertThat(session.getStartDate()).isEqualTo(savedSession.getStartDate());
         assertThat(session.getEndDate()).isEqualTo(savedSession.getEndDate());
         assertThat(session.getCoverImage().getSize()).isEqualTo(savedSession.getCoverImage().getSize());
