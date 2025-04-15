@@ -6,8 +6,4 @@ public enum SessionStatus {
     public boolean canEnroll() {
         return this == ENROLLING;
     }
-
-    public boolean canNotEnroll() {
-        return !canEnroll();
-    }
 }

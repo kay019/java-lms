@@ -8,17 +8,13 @@ public enum SessionType {
         sessionConstraint.isGreaterThenCapacity(enrollmentCount) && sessionConstraint.isSameFee(amount)
     );
 
-    private final SessionTypeEnrollStrategy sessionTypeEnrollStrategy;
+    private final EnrollStrategy enrollStrategy;
 
-    SessionType(SessionTypeEnrollStrategy sessionTypeEnrollStrategy) {
-        this.sessionTypeEnrollStrategy = sessionTypeEnrollStrategy;
+    SessionType(EnrollStrategy enrollStrategy) {
+        this.enrollStrategy = enrollStrategy;
     }
 
     public boolean canEnroll(SessionConstraint sessionConstraint, int enrollmentCount, long amount) {
-        return sessionTypeEnrollStrategy.canEnroll(sessionConstraint, enrollmentCount, amount);
-    }
-
-    public boolean canNotEnroll(SessionConstraint sessionConstraint, int enrollmentCount, long amount) {
-        return !canEnroll(sessionConstraint, enrollmentCount, amount);
+        return enrollStrategy.canEnroll(sessionConstraint, enrollmentCount, amount);
     }
 }

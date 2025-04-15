@@ -2,7 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.domain.session.image.SessionImage;
-import nextstep.courses.domain.session.property.SessionProperty;
+import nextstep.courses.domain.session.property.SessionEnrollPolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +31,6 @@ class SessionDescriptorTest {
             }
         };
 
-        assertDoesNotThrow(() -> new SessionDescriptor(new SessionImage(imageHandlerStub), new SessionPeriod(), new SessionProperty()));
+        assertDoesNotThrow(() -> new SessionDescriptor(new SessionImage(imageHandlerStub), new SessionPeriod(), new SessionEnrollPolicy()));
     }
 }
