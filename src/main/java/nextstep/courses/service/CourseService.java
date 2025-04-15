@@ -7,7 +7,6 @@ import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionDescriptor;
 import nextstep.courses.domain.session.Sessions;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
-import nextstep.payments.domain.PaymentRepository;
 import nextstep.payments.service.PaymentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +23,6 @@ public class CourseService {
 
     @Resource(name = "paymentService")
     private PaymentService paymentService;
-
-    @Resource(name = "paymentRepository")
-    private PaymentRepository paymentRepository;
 
     public void createCourse(String title, Long creatorId) {
         Course course = new Course(title, creatorId);
