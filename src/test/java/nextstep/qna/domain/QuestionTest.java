@@ -13,8 +13,9 @@ public class QuestionTest {
     @Test
     void 질문자와_사용자가_같은경우_답변없음_삭제() {
         Question question = new Question(NsUserTest.SANJIGI, "제목", "내용");
+        question.delete(NsUserTest.SANJIGI);
 
-        assertThatCode(() -> question.delete(NsUserTest.SANJIGI)).doesNotThrowAnyException();
+        assertThat(question.isDeleted()).isTrue();
     }
 
     @Test
@@ -23,7 +24,8 @@ public class QuestionTest {
         Answer answer = new Answer(NsUserTest.JAVAJIGI, question, "답변");
         question.addAnswer(answer);
 
-        assertThatCode(() -> question.delete(NsUserTest.JAVAJIGI)).doesNotThrowAnyException();
+        question.delete(NsUserTest.JAVAJIGI);
+        assertThat(question.isDeleted()).isTrue();
     }
 
     @Test

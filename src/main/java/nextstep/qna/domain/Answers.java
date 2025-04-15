@@ -15,6 +15,6 @@ public class Answers {
 
     public List<DeleteHistory> deleteAll(NsUser loginUser) {
         return answers.stream()
-                .map(a -> a.delete(loginUser)).collect(Collectors.toList());
+                .map(answer -> answer.delete(loginUser)).collect(Collectors.toList());
     }
 }

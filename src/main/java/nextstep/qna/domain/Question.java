@@ -41,7 +41,7 @@ public class Question {
         setDeleted(true);
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
+        deleteHistories.add(DeleteHistory.fromQuestion(id, writer));
         deleteHistories.addAll(answers.deleteAll(loginUser));
         return deleteHistories;
     }
