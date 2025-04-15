@@ -1,14 +1,14 @@
 package nextstep.payments.domain;
 
 import nextstep.courses.domain.Course;
-import nextstep.session.domain.Session;
-import nextstep.session.domain.SessionDescriptor;
-import nextstep.session.domain.SessionPeriod;
-import nextstep.session.domain.image.SessionImage;
-import nextstep.session.domain.constraint.SessionConstraint;
-import nextstep.session.domain.property.SessionProperty;
-import nextstep.session.domain.property.SessionStatus;
-import nextstep.session.domain.property.SessionType;
+import nextstep.courses.domain.session.Session;
+import nextstep.courses.domain.session.SessionDescriptor;
+import nextstep.courses.domain.session.SessionPeriod;
+import nextstep.courses.domain.session.image.SessionImage;
+import nextstep.courses.domain.session.constraint.SessionConstraint;
+import nextstep.courses.domain.session.property.SessionProperty;
+import nextstep.courses.domain.session.property.SessionStatus;
+import nextstep.courses.domain.session.property.SessionType;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
