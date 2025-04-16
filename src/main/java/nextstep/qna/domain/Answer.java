@@ -78,6 +78,6 @@ public class Answer {
     }
 
     public DeleteHistory toAnswerDeleteHistory() {
-        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        return DeleteHistory.createAnswerDeleteHistory(id, writer);
     }
 }
