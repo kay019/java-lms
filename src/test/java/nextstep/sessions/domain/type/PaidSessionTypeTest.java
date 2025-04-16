@@ -21,7 +21,7 @@ class PaidSessionTypeTest {
         PaidSessionType paidSessionType = new PaidSessionType(10L, 10000L);
         Payment payment = new Payment("1", 1L, 1L, 9999L);
 
-        assertThatThrownBy(() -> paidSessionType.isRegisterable(payment, 10L))
+        assertThatThrownBy(() -> paidSessionType.register(payment, 10L))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("payment amount is not same as session amount");
     }
@@ -32,15 +32,8 @@ class PaidSessionTypeTest {
         PaidSessionType paidSessionType = new PaidSessionType(10L, 10000L);
         Payment payment = new Payment("1", 1L, 1L, 10000L);
 
-        assertThatThrownBy(() -> paidSessionType.isRegisterable(payment, 11L))
+        assertThatThrownBy(() -> paidSessionType.register(payment, 11L))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("member count is over limit");
-    }
-
-    @Test
-    void isRegisterableTest() {
-        PaidSessionType paidSessionType = new PaidSessionType(10L, 10000L);
-
-        assertThat(paidSessionType.isRegisterable(new Payment("1", 1L, 1L, 10000L), 10L)).isTrue();
     }
 }

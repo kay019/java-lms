@@ -37,9 +37,9 @@ public class Session {
         this.currentMemberCount = currentMemberCount;
     }
 
-    public boolean isRegisterable(Payment payment) {
+    public void register(Payment payment) {
         validateSessionInProgress();
-        return sessionType.isRegisterable(payment, currentMemberCount);
+        sessionType.register(payment, currentMemberCount);
     }
 
     private void validateSessionInProgress() {

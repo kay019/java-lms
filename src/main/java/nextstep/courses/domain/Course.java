@@ -32,6 +32,16 @@ public class Course {
         this.updatedAt = updatedAt;
     }
 
+    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt,
+                  List<Session> sessions) {
+        this.id = id;
+        this.title = title;
+        this.creatorId = creatorId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.sessions = sessions;
+    }
+
     public String getTitle() {
         return title;
     }

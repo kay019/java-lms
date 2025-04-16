@@ -38,7 +38,7 @@ class SessionTest {
     void validateSessionInProgressInvalidTest(SessionStatus sessionStatus) {
         Session session = new Session(sessionStatus);
 
-        assertThatThrownBy(() -> session.isRegisterable(new Payment()))
+        assertThatThrownBy(() -> session.register(new Payment()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("session is not in progress");
     }
@@ -48,14 +48,7 @@ class SessionTest {
     void validateSessionInProgressTest() {
         Session session = new Session(SessionStatus.ONGOING);
 
-        assertThatCode(() -> session.isRegisterable(new Payment()))
+        assertThatCode(() -> session.register(new Payment()))
                 .doesNotThrowAnyException();
-    }
-
-    @Test
-    void isRegisterableTest() {
-        Session session = new Session(SessionStatus.ONGOING);
-
-        assertThat(session.isRegisterable(new Payment())).isTrue();
     }
 }

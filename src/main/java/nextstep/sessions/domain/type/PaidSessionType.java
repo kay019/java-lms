@@ -14,10 +14,9 @@ public class PaidSessionType implements SessionType {
     }
 
     @Override
-    public boolean isRegisterable(Payment payment, Long memberCount) {
+    public void register(Payment payment, Long memberCount) {
         validatePayment(payment);
         validateMemberLimit(memberCount);
-        return true;
     }
 
     private void validatePayment(Payment payment) {
