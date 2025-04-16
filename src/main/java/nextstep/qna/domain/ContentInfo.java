@@ -20,10 +20,8 @@ public class ContentInfo {
     return writer.equals(loginUser);
   }
 
-  public void addDeleteHistory(ContentType contentType, List<DeleteHistory> deleteHistories,
-      Long id) {
-    deleteHistories.add(new DeleteHistory(contentType, id, writer, LocalDateTime
-        .now()));
+  public DeleteHistory addDeleteHistory(ContentType contentType, Long id) {
+    return new DeleteHistory(contentType, id, writer, LocalDateTime.now());
   }
 
   public void validWriter() {

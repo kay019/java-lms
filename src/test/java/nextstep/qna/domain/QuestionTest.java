@@ -20,13 +20,13 @@ public class QuestionTest {
   public static final Answer A1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
 
   @Test
-  void answers_유효성_검사_정상() throws CannotDeleteException {
+  void question_글쓴이와_answers_글쓴이_일치하는지_유효성_검사_정상() throws CannotDeleteException {
     Q1.addAnswer(A1);
     Q1.checkAllAnswersByUser(NsUserTest.JAVAJIGI);
   }
 
   @Test
-  void answers_유효성_검사_실패() {
+  void question_글쓴이와_answers_글쓴이_일치하는지_유효성_검사_실패() {
     Q1.addAnswer(A1);
     assertThatThrownBy(() -> {
       Q1.checkAllAnswersByUser(NsUserTest.SANJIGI);
@@ -34,8 +34,8 @@ public class QuestionTest {
   }
 
   @Test
-  void question_delete_상태변경() {
-    Q1.delete();
+  void question_delete_상태변경() throws CannotDeleteException {
+    Q1.delete(NsUserTest.JAVAJIGI);
     assertTrue(Q1.isDeleted());
   }
 

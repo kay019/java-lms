@@ -39,8 +39,9 @@ public class Answer {
         return id;
     }
 
-    public void delete() {
+    public DeleteHistory delete() {
         this.deleted = true;
+        return contentInfo.addDeleteHistory(ContentType.ANSWER, id);
     }
 
     public boolean isDeleted() {
@@ -58,9 +59,5 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer [id=" + getId() + ", contentInfo=" + contentInfo + "]";
-    }
-
-    public void addDeleteHistory(List<DeleteHistory> deleteHistories) {
-        contentInfo.addDeleteHistory(ContentType.ANSWER, deleteHistories, id);
     }
 }

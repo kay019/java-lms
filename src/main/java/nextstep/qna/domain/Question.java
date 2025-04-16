@@ -53,7 +53,10 @@ public class Question {
     return contentInfo.isOwner(loginUser);
   }
 
-  public void delete() {
+  public void delete(NsUser loginUser) throws CannotDeleteException {
+    if (!isOwner(loginUser)) {
+      throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+    }
     this.deleted = true;
   }
 
@@ -74,7 +77,7 @@ public class Question {
     answers.deleteAnswersAndRecordHistory(deleteHistories);
   }
 
-  public void addDeleteHistory(List<DeleteHistory> deleteHistories) {
-    contentInfo.addDeleteHistory(ContentType.QUESTION, deleteHistories, id);
+  public DeleteHistory addDeleteHistory() {
+    return contentInfo.addDeleteHistory(ContentType.QUESTION, id);
   }
 }

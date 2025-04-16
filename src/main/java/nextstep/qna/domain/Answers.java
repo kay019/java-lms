@@ -24,8 +24,7 @@ public class Answers {
 
   public void deleteAnswersAndRecordHistory(List<DeleteHistory> deleteHistories) {
     for (Answer answer : answers) {
-      answer.delete();
-      answer.addDeleteHistory(deleteHistories);
+      deleteHistories.add(answer.delete());
     }
   }
 }
