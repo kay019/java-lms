@@ -10,4 +10,8 @@ public enum SessionStatus {
     SessionStatus(String desc) {
         this.desc = desc;
     }
+
+    public boolean isSameAs(SessionStatus sessionStatus) {
+        return this == sessionStatus;
+    }
 }

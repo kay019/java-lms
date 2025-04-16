@@ -13,11 +13,21 @@ public class Session {
 
     private final SessionStatus sessionStatus;
 
+    public Session(SessionStatus sessionStatus) {
+        this(null, null, null, sessionStatus);
+    }
+
     public Session(LocalDateTime startAt, LocalDateTime endAt, SessionCover cover, SessionStatus sessionStatus) {
         this.startAt = startAt;
         this.endAt = endAt;
         this.cover = cover;
         this.sessionStatus = sessionStatus;
+    }
+
+    public void validateSessionInProgress() {
+        if (!sessionStatus.isSameAs(SessionStatus.ONGOING)) {
+            throw new IllegalStateException("session is not in progress");
+        }
     }
 
     @Override
