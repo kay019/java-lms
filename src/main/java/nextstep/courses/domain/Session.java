@@ -55,12 +55,7 @@ public class Session {
     if (!isRecruiting()) {
       throw new IllegalStateException("모집중인 상태가 아닙니다.");
     }
-    try {
-      enrollmentPolicy.checkEnrollAvailability(this);
-    } catch (IllegalStateException e) {
-      closeEnrollment();
-      throw e;
-    }
+    enrollmentPolicy.checkEnrollAvailability(this);
   }
 
   private void checkPayment(Payment payment) {
@@ -68,22 +63,10 @@ public class Session {
   }
 
   public void openForEnrollment() {
-    if (isRecruiting()) {
-      throw new IllegalStateException("이미 모집중입니다.");
-    }
-    if (isClosed()) {
-      throw new IllegalStateException("모집이 종료된 상태입니다.");
-    }
     this.status = SessionStatus.RECRUITING;
   }
 
   private void closeEnrollment() {
-    if (isPreparing()) {
-      throw new IllegalStateException("모집이 시작되지 않은 상태입니다.");
-    }
-    if (isClosed()) {
-      throw new IllegalStateException("이미 모집이 종료되었습니다.");
-    }
     this.status = SessionStatus.CLOSED;
   }
 
