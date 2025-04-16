@@ -13,7 +13,7 @@ public class DeleteHistoriesTest {
 
     @Test
     void add(){
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()));
+        deleteHistories.add(DeleteHistory.forQuestion(1L, NsUserTest.JAVAJIGI));
         assertThat(deleteHistories.getDeleteHistories().size()).isEqualTo(1);
     }
 

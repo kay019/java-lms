@@ -16,9 +16,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 public class AnswersTest {
 
     Answers answers = new Answers();
+    Answer A1;
+    Answer A2;
 
     @BeforeEach
     void setUp(){
+        A1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        A2 = new Answer(NsUserTest.SANJIGI, QuestionTest.Q1, "Answers Contents2");
         answers.add(A1);
     }
 
@@ -44,11 +48,11 @@ public class AnswersTest {
     }
 
     @Test
-    void delete_답변작성자가아닌답변이포함() throws CannotDeleteException {
+    void delete_답변작성자가아닌답변이포함() {
         answers.add(A2);
 
         assertThatThrownBy(() -> answers.delete(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
-        assertThat(A1.isDeleted()).isFalse();
+        assertThat(A1.isDeleted()).isTrue();
         assertThat(A2.isDeleted()).isFalse();
 
     }

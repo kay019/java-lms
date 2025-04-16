@@ -69,7 +69,7 @@ public class Question {
 
         this.deleted = true;
         DeleteHistories deleteHistories = new DeleteHistories();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        deleteHistories.add(DeleteHistory.forQuestion(id, writer));
         deleteHistories.add(answers.delete(loginUser));
         return deleteHistories;
     }
