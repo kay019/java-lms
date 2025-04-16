@@ -25,4 +25,22 @@ class PaidSessionTypeTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("payment amount is not same as session amount");
     }
+
+    @DisplayName("유료 강의는 강의 최대 수강 인원을 초과할 수 없다.")
+    @Test
+    void validateMemberLimitTest() {
+        PaidSessionType paidSessionType = new PaidSessionType(10L, 10000L);
+        Payment payment = new Payment("1", 1L, 1L, 10000L);
+
+        assertThatThrownBy(() -> paidSessionType.isRegisterable(payment, 11L))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("member count is over limit");
+    }
+
+    @Test
+    void isRegisterableTest() {
+        PaidSessionType paidSessionType = new PaidSessionType(10L, 10000L);
+
+        assertThat(paidSessionType.isRegisterable(new Payment("1", 1L, 1L, 10000L), 10L)).isTrue();
+    }
 }
