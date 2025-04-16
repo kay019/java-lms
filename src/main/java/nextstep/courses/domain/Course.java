@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import nextstep.common.domian.BaseDomain;
+import nextstep.courses.domain.session.Sessions;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,17 +12,24 @@ public class Course extends BaseDomain {
 
     private Long creatorId;
 
+    private Sessions sessions;
+
     public Course() {
     }
 
     public Course(String title, Long creatorId) {
-        this(null, title, creatorId, LocalDateTime.now(), null);
+        this(null, title, creatorId, new Sessions(), LocalDateTime.now(), null);
     }
 
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(id, title, creatorId, new Sessions(), createdAt, updatedAt);
+    }
+
+    public Course(Long id, String title, Long creatorId, Sessions sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, createdAt, updatedAt);
         this.title = title;
         this.creatorId = creatorId;
+        this.sessions = sessions;
     }
 
     public String getTitle() {
@@ -38,6 +46,7 @@ public class Course extends BaseDomain {
 
     public void delete() {
         this.deleted = true;
+        sessions.delete();
         this.updatedAt = LocalDateTime.now();
     }
 
