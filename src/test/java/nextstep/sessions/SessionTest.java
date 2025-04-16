@@ -5,9 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
+import nextstep.payments.domain.Payment;
 import nextstep.sessions.domain.Session;
 import nextstep.sessions.domain.SessionStatus;
 import nextstep.sessions.domain.cover.SessionCover;
+import nextstep.sessions.domain.type.FreeSessionType;
+import nextstep.sessions.domain.type.SessionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,11 +22,14 @@ class SessionTest {
         LocalDateTime startAt = LocalDateTime.of(2025, 3, 15, 0, 0, 0);
         LocalDateTime endAt = LocalDateTime.of(2025, 4, 22, 0, 0, 0);
         SessionCover sessionCover = new SessionCover(1_048_576, "png", 300, 200);
+        SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
+        Long currentMembers = 10L;
 
-        Session session = new Session(startAt, endAt, sessionCover, sessionStatus);
+        Session session = new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, currentMembers);
 
-        assertThat(session).isEqualTo(new Session(startAt, endAt, sessionCover, SessionStatus.READY));
+        assertThat(session).isEqualTo(
+                new Session(1L, startAt, endAt, sessionCover, sessionType, SessionStatus.READY, 10L));
     }
 
     @DisplayName("강의 수강신청은 강의 상태가 모집중일 때만 가능하다.")
@@ -32,7 +38,7 @@ class SessionTest {
     void validateSessionInProgressInvalidTest(SessionStatus sessionStatus) {
         Session session = new Session(sessionStatus);
 
-        assertThatThrownBy(session::validateSessionInProgress)
+        assertThatThrownBy(() -> session.isRegisterable(new Payment()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("session is not in progress");
     }
@@ -42,8 +48,14 @@ class SessionTest {
     void validateSessionInProgressTest() {
         Session session = new Session(SessionStatus.ONGOING);
 
-        assertThatCode(session::validateSessionInProgress)
+        assertThatCode(() -> session.isRegisterable(new Payment()))
                 .doesNotThrowAnyException();
     }
 
+    @Test
+    void isRegisterableTest() {
+        Session session = new Session(SessionStatus.ONGOING);
+
+        assertThat(session.isRegisterable(new Payment())).isTrue();
+    }
 }
