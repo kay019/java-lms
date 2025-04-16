@@ -4,15 +4,15 @@ import nextstep.courses.InvalidNaturalNumberException;
 
 import java.util.Objects;
 
-public class NaturalNumber implements Comparable<NaturalNumber> {
+public class PositiveNumber implements Comparable<PositiveNumber> {
     private final Long value;
-    public NaturalNumber(Long value) {
+    public PositiveNumber(Long value) {
         validateValue(value);
         this.value = value;
     }
 
     private void validateValue(Long value) {
-        if (value <= 0) {
+        if (value < 0) {
             throw new InvalidNaturalNumberException("0보다 큰 수 여야 합니다.");
         }
     }
@@ -22,7 +22,7 @@ public class NaturalNumber implements Comparable<NaturalNumber> {
     }
 
     @Override
-    public int compareTo(NaturalNumber number) {
+    public int compareTo(PositiveNumber number) {
         return (int)(number.value - this.value);
     }
 
@@ -33,7 +33,7 @@ public class NaturalNumber implements Comparable<NaturalNumber> {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        NaturalNumber that = (NaturalNumber) o;
+        PositiveNumber that = (PositiveNumber) o;
         return Objects.equals(value, that.value);
     }
 

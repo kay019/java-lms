@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class NaturalNumberTest {
-    @DisplayName("음수, 0은 생성 불가능")
+public class PositiveNumberTest {
+    @DisplayName("음수는 생성 불가능")
     @Test
-    public void create_natural_number() {
-        assertThatThrownBy(() -> new NaturalNumber(0L))
+    public void create_positive_number() {
+        assertThatThrownBy(() -> new PositiveNumber(-1L))
                 .isInstanceOf(InvalidNaturalNumberException.class);
     }
 }

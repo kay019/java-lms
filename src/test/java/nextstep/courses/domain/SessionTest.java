@@ -18,7 +18,8 @@ public class SessionTest {
                         , LocalDateTime.of(2025, Month.APRIL, 15, 15, 30)
                         , SessionState.RECRUTING
                         , new FreePayStrategy()
-                        , new Image(1000L, ImageType.GIF, 300L, 200L))
+                        , new Image(1000L, ImageType.GIF, 300L, 200L)
+                        , 10L)
         );
     }
 }

@@ -11,17 +11,15 @@ import java.util.List;
 public class Session {
     private Long id;
     private Period sessionPeriod;
-    private SessionState sessionState;
-    private PayStrategy registerStrategy;
     private Image coverImage;
     private List<NsStudent> students = new ArrayList<>();
+    private Registry registry;
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy registerStrategy, Image coverImage) {
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
         this.id = id;
         this.sessionPeriod = new Period(startDate, endDate);
-        this.sessionState = sessionState;
-        this.registerStrategy = registerStrategy;
         this.coverImage = coverImage;
+        this.registry = new Registry(payStrategy, sessionState, new PositiveNumber(capacity));
     }
 
     private void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
@@ -30,9 +28,7 @@ public class Session {
         }
     }
 
-    public NsStudent register(NsUser user, NaturalNumber money) {
-        NsStudent student = Registry.registerSession(user, id, money, sessionState, registerStrategy, students);
-        students.add(student);
-        return student;
+    public void register(NsUser user, PositiveNumber money) {
+        registry.register(user, id, money);
     }
 }

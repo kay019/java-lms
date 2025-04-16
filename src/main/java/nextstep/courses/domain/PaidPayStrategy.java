@@ -5,18 +5,15 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 public class PaidPayStrategy implements PayStrategy {
-    private final NaturalNumber price;
-    private final NaturalNumber capacity;
+    private final PositiveNumber price;
 
-    public PaidPayStrategy(Long price, Long capacity) {
-        this.price = new NaturalNumber(price);
-        this.capacity = new NaturalNumber(capacity);
+    public PaidPayStrategy(Long price) {
+        this.price = new PositiveNumber(price);
     }
 
     @Override
-    public void pay(NsUser user, Long sessionId, int studentCount, NaturalNumber money) {
+    public void pay(NsUser user, Long sessionId, PositiveNumber money) {
         validateMoney(money);
-        validateStudentCapacity(studentCount);
 
         Payment payment = new Payment("", sessionId, user.getId(), money.value());
         if (!payment.isPaid()) {
@@ -24,13 +21,7 @@ public class PaidPayStrategy implements PayStrategy {
         }
     }
 
-    private void validateStudentCapacity(int studentCount) {
-        if (capacity.compareTo(studentCount) >= 0) {
-            throw new CannotRegisterException("해당 강의의 수강 정원이 모두 마감되었습니다.");
-        }
-    }
-
-    private void validateMoney(NaturalNumber money) {
+    private void validateMoney(PositiveNumber money) {
         if (!money.equals(this.price)) {
             throw new CannotRegisterException("결제 금액이 강의의 가격과 같지 않습니다.");
         }

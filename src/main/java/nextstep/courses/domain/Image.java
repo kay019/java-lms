@@ -8,10 +8,10 @@ public class Image {
     public static final int MIN_IMAGE_HEIGHT = 200;
     public static final double IMAGE_RATIO = 1.5;
 
-    private NaturalNumber size;
+    private PositiveNumber size;
     private ImageType imageType;
-    private NaturalNumber width;
-    private NaturalNumber height;
+    private PositiveNumber width;
+    private PositiveNumber height;
 
     public Image(Long size, String imageType, Long width, Long height) {
         this(size, ImageType.of(imageType), width, height);
@@ -20,10 +20,10 @@ public class Image {
     public Image(Long size, ImageType imageType, Long width, Long height) {
         validateSize(size);
         validateWidthHeight(width, height);
-        this.size = new NaturalNumber(size);
+        this.size = new PositiveNumber(size);
         this.imageType = imageType;
-        this.width = new NaturalNumber(width);
-        this.height = new NaturalNumber(height);
+        this.width = new PositiveNumber(width);
+        this.height = new PositiveNumber(height);
     }
 
     private void validateSize(Long size){
