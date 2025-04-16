@@ -11,13 +11,13 @@ public class NsStudentTest {
     @Test
     public void create_student() {
         assertThatNoException().isThrownBy(() ->
-                new NsStudent(NsUserTest.JAVAJIGI, 0L)
+                new NsStudent(NsUserTest.JAVAJIGI.getId(), 0L)
         );
     }
 
     @DisplayName("학생 생성한 유저가 동일한지 비교")
     @Test
     public void compare_student_user() {
-        assertThat(new NsStudent(NsUserTest.JAVAJIGI, 0L).isSameUser(NsUserTest.JAVAJIGI)).isTrue();
+        assertThat(new NsStudent(NsUserTest.JAVAJIGI.getId(), 0L).isSameUser(NsUserTest.JAVAJIGI)).isTrue();
     }
 }

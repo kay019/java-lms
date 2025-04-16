@@ -6,12 +6,12 @@ import nextstep.users.domain.NsUser;
 
 import java.util.List;
 
-public class Register {
+public class Registry {
     public static NsStudent registerSession(NsUser user, Long sessionId, NaturalNumber money, SessionState sessionState, PayStrategy registerStrategy, List<NsStudent> students) {
         validateSessionState(sessionState);
         validateDuplicateUser(students, user);
         registerStrategy.pay(user, sessionId, students.size(), money);
-        return new NsStudent(user, sessionId);
+        return new NsStudent(user.getId(), sessionId);
     }
 
     private static void validateSessionState(SessionState sessionState) {

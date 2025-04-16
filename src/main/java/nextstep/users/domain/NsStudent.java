@@ -3,7 +3,8 @@ package nextstep.users.domain;
 import java.util.Objects;
 
 public class NsStudent {
-    private final NsUser user;
+    private NsUser user;
+    private Long userId;
     private final Long registeredSessionId;
 
     public NsStudent(NsUser user, Long sessionId) {
@@ -11,19 +12,24 @@ public class NsStudent {
         this.registeredSessionId = sessionId;
     }
 
+    public NsStudent(Long userId, Long sessionId) {
+        this.userId = userId;
+        this.registeredSessionId = sessionId;
+    }
+
     public boolean isSameUser(NsUser user) {
-        return this.user == user;
+        return this.userId == user.getId();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         NsStudent student = (NsStudent) o;
-        return Objects.equals(user, student.user) && Objects.equals(registeredSessionId, student.registeredSessionId);
+        return Objects.equals(userId, student.userId) && Objects.equals(registeredSessionId, student.registeredSessionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, registeredSessionId);
+        return Objects.hash(userId, registeredSessionId);
     }
 }

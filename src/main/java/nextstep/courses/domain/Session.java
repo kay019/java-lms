@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotCreateSessionException;
-import nextstep.courses.CannotRegisterException;
 import nextstep.users.domain.NsStudent;
 import nextstep.users.domain.NsUser;
 
@@ -32,7 +31,7 @@ public class Session {
     }
 
     public NsStudent register(NsUser user, NaturalNumber money) {
-        NsStudent student = Register.registerSession(user, id, money, sessionState, registerStrategy, students);
+        NsStudent student = Registry.registerSession(user, id, money, sessionState, registerStrategy, students);
         students.add(student);
         return student;
     }
