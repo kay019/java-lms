@@ -77,7 +77,7 @@ public class Session {
     this.status = SessionStatus.RECRUITING;
   }
 
-  public void closeEnrollment() {
+  private void closeEnrollment() {
     if (isPreparing()) {
       throw new IllegalStateException("모집이 시작되지 않은 상태입니다.");
     }
