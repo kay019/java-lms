@@ -11,10 +11,13 @@ public class Session {
 
     private final SessionCover cover;
 
-    public Session(LocalDateTime startAt, LocalDateTime endAt, SessionCover cover) {
+    private final SessionStatus sessionStatus;
+
+    public Session(LocalDateTime startAt, LocalDateTime endAt, SessionCover cover, SessionStatus sessionStatus) {
         this.startAt = startAt;
         this.endAt = endAt;
         this.cover = cover;
+        this.sessionStatus = sessionStatus;
     }
 
     @Override
@@ -24,11 +27,11 @@ public class Session {
         }
         Session session = (Session) o;
         return Objects.equals(startAt, session.startAt) && Objects.equals(endAt, session.endAt)
-                && Objects.equals(cover, session.cover);
+                && Objects.equals(cover, session.cover) && sessionStatus == session.sessionStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startAt, endAt, cover);
+        return Objects.hash(startAt, endAt, cover, sessionStatus);
     }
 }
