@@ -25,12 +25,6 @@ public class Registry {
         this.students = new NsStudents(students);
     }
 
-    public static NsStudent registerSession(NsUser user, Long sessionId, PositiveNumber money, SessionState sessionState, PayStrategy payStrategy, List<NsStudent> students) {
-        validateSessionState(sessionState);
-        payStrategy.pay(user, sessionId, money);
-        return new NsStudent(user.getId(), sessionId);
-    }
-
     public void register(NsUser user, Long sessionId, PositiveNumber money) {
         validateSessionState(sessionState);
         payStrategy.pay(user, sessionId, money);
@@ -38,7 +32,7 @@ public class Registry {
         students.enroll(student, capacity);
     }
 
-    private static void validateSessionState(SessionState sessionState) {
+    private void validateSessionState(SessionState sessionState) {
         if (SessionState.canNotRegister(sessionState)) {
             throw new CannotRegisterException("강의는 모집 중일 때만 등록할 수 있습니다.");
         };
