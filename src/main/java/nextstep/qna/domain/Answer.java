@@ -1,5 +1,7 @@
 package nextstep.qna.domain;
 
+import nextstep.common.domian.BaseDomain;
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -7,20 +9,13 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Answer {
-    private Long id;
+public class Answer  extends BaseDomain {
 
-    private NsUser writer;
+    private final NsUser writer;
 
-    private Question question;
+    private final String contents;
 
-    private String contents;
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
+    private final Question question;
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
@@ -37,23 +32,22 @@ public class Answer {
         this.contents = contents;
     }
 
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
 
-    public DeleteHistory delete() {
-        this.deleted = true;
-        this.updatedDate = LocalDateTime.now();
-        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
+    public boolean isNotOwner(NsUser loginUser) {
+        return !writer.equals(loginUser);
     }
 
-    public void link(Question question) {
-        this.question = question;
-        question.addAnswer(this);
+    public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
+        if (isNotOwner(loginUser)) {
+            throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
+        }
+
+        this.deleted = true;
+        this.updatedAt = LocalDateTime.now();
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
     }
 
     @Override
@@ -70,11 +64,6 @@ public class Answer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, writer, question, contents, deleted, createdDate, updatedDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
+        return Objects.hash(super.hashCode(), writer, question, contents);
     }
 }

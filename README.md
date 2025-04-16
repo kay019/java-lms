@@ -17,3 +17,26 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 - [x] 도메인 객체에 get, set 메서드를 최대한 제거
 - [x] Question Answers 필드 일급 컬렉션으로 추가
 
+## Step2 요구사항
+수강 신청 기능 추가
+- [x] Course은 기수 단위로 운영되며 여러개의 Session를 가질 수 있다.
+  - [x] Course에 Session 등록 기능
+- [X] Session은 시작일과 종료일을 가진다.
+- [x] Session은 강의 커버 이미지 (Image)를 가진다.
+  - [x] Image의 크기는 1MB 이하여야 한다.
+  - [x] 이미지의 width는 300픽셀, height는 200픽셀 이상이어야 하며, width와 height의 비율은 3:2여야 한다.
+  - [x] Image는 타입을 가진다.
+  - [x] Image 타입은 gif, jpg(jpeg 포함),, png, svg만 허용한다.
+- [x] Session은 강의 타입(SessionType)을 가진다.
+  - [x] SessionType은 무료 강의(Free)와 유료 강의(Paid)로 나뉜다.
+  - [x] 무료강의는 최대 수강 인원 제한이 없다.
+  - [x] 유료 강의는 강의 최대 수강 인원을 초과할 수 없다.
+- [x] Session은 Payments를 가진다.
+  - [x] Payments는 동일한 유저가 같은 강의를 두번 결재할 수는 없다.
+  - [x] 유료 강의는 수강생이 결제한 금액과 수강료가 일치할 때 수강 신청이 가능하다.
+- [x] Session은 상태(Status)를 가진다.
+  - [x] 준비중, 모집중, 종료 3가지 상태를 가진다.
+  - [x] 강의 수강신청은 강의 상태가 모집중일 때만 가능하다.
+- [x] Session은 수강신청 유저 정보를 가지고 있다.
+- [x] Session의 필드 값은 3개로 관리한다.
+

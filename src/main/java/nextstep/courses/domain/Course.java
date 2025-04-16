@@ -1,31 +1,27 @@
 package nextstep.courses.domain;
 
-import java.time.LocalDateTime;
+import nextstep.common.domian.BaseDomain;
 
-public class Course {
-    private Long id;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+public class Course extends BaseDomain {
 
     private String title;
 
     private Long creatorId;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     public Course() {
     }
 
     public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
+        this(null, title, creatorId, LocalDateTime.now(), null);
     }
 
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+        super(id, createdAt, updatedAt);
         this.title = title;
         this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public String getTitle() {
@@ -40,14 +36,36 @@ public class Course {
         return createdAt;
     }
 
+    public void delete() {
+        this.deleted = true;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(id, course.id) &&
+            Objects.equals(title, course.title) &&
+            Objects.equals(creatorId, course.creatorId) &&
+            Objects.equals(createdAt, course.createdAt) &&
+            Objects.equals(updatedAt, course.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, creatorId, createdAt, updatedAt);
+    }
+
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", creatorId=" + creatorId +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            '}';
     }
 }
