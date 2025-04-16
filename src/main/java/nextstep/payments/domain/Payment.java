@@ -26,4 +26,10 @@ public class Payment {
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void checkMatchFee(Long fee) {
+        if (!amount.equals(fee)) {
+            throw new IllegalArgumentException("결제금액과 수강료가 일치하지 않습니다.");
+        }
+    }
 }

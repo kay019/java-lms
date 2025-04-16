@@ -18,4 +18,8 @@ public class Enrollments {
             throw new IllegalArgumentException("수강 인원이 초과되었습니다.");
         }
     }
+
+    public int size() {
+        return enrollments.size();
+    }
 }
