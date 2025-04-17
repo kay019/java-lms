@@ -41,6 +41,7 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 - [x] Session의 필드 값은 3개로 관리한다.
 
 ## Step3 요구사항
+- [x] session table 스키마 정의
 - [] Session Repository 만들기
   - [] save 로직 추가
   - [] findById 로직 추가
