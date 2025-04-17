@@ -25,41 +25,24 @@ public class SessionStudentApprovalService {
     }
 
     public SessionStudent approve(long sessionStudentId, NsUser nsUser) {
-        validate(sessionStudentId, nsUser);
+        ApprovalContext context = createApprovalContext(sessionStudentId, nsUser);
         SessionStudent sessionStudent = sessionStudentService.findById(sessionStudentId);
-        sessionStudent.approved();
+        sessionStudent.approved(context);
         return sessionStudent;
     }
 
     public SessionStudent cancel(long sessionStudentId, NsUser nsUser) {
-        validate(sessionStudentId, nsUser);
+        ApprovalContext context = createApprovalContext(sessionStudentId, nsUser);
         SessionStudent sessionStudent = sessionStudentService.findById(sessionStudentId);
-        sessionStudent.cancelled();
+        sessionStudent.cancelled(context);
         return sessionStudent;
     }
 
-    private void validate(long sessionStudentId, NsUser creator) {
+    private ApprovalContext createApprovalContext(long sessionStudentId, NsUser creator) {
         SessionStudent sessionStudent = sessionStudentService.findById(sessionStudentId);
-
-        if (sessionStudent == null) {
-            throw new IllegalStateException("세션 수강신청이 존재하지 않습니다.");
-        }
-
-        if (!sessionStudent.isPending()) {
-            throw new IllegalStateException("세션 수강신청이 대기 상태가 아닙니다.");
-        }
-
         Session session = sessionService.findById(sessionStudent.getSessionId());
-
-        if (!session.isSelectionRequired()) {
-            throw new IllegalStateException("선발 가능한 세션이 아닙니다.");
-        }
-
         Course course = courseService.findById(session.getCourseId());
-
-        if (!course.isOwner(creator)) {
-            throw new IllegalStateException("세션 수강신청을 승인/거절할 권한이 없습니다.");
-        }
+        return new ApprovalContext(course, session, creator);
     }
 
 }

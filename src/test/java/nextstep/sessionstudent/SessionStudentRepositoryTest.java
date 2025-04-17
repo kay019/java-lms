@@ -39,7 +39,7 @@ class SessionStudentRepositoryTest {
     @Test
     void updateTest() {
         SessionStudent sessionStudent = sessionStudentRepository.findById(1L);
-        sessionStudent.cancelled();
+        sessionStudent.cancelled(new ApprovalContext(true, true));
         sessionStudentRepository.save(sessionStudent);
 
         SessionStudent newSessionStudent = sessionStudentRepository.findById(1L);
