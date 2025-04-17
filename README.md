@@ -7,3 +7,21 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+## Step 2 - 수강신청(도메인 모델)
+### 기존 구현되어 있는 도메인 모델
+* Course
+* Payment
+* NsUser
+### 새로 구현이 필요한 도메인 모델
+* Session : 강의
+  * 시작일, 종료일 : SessionPeriod
+  * 강의 커버 이미지 : NsImage
+  * 강의 타입 : 유료/무료 : SessionType
+  * 최대 수강인원 : Capacity
+  * 강의료 : Price
+  * 강의 상태 : 준비중/모집중/종료 : SessionStatus
+* NsImage : 강의 커버 이미지
+  * size
+  * type
+  * width / height
