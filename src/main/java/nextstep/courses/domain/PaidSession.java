@@ -1,13 +1,65 @@
 package nextstep.courses.domain;
 
+import nextstep.exception.PaidSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
 public class PaidSession extends Session {
-    private int maxCapacity;
-    private int fee;
+    private final int maxCapacity;
+    private final int fee;
+
+    public static class Builder extends Session.Builder<Builder> {
+        private int maxCapacity;
+        private int fee;
+
+        public Builder maxCapacity(int maxCapacity) {
+            this.maxCapacity = maxCapacity;
+            return this;
+        }
+
+        public Builder fee(int fee) {
+            this.fee = fee;
+            return this;
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        public PaidSession build() {
+            return new PaidSession(this);
+        }
+    }
+
+    private PaidSession(Builder builder) {
+        super(builder);
+        this.maxCapacity = builder.maxCapacity;
+        this.fee = builder.fee;
+    }
 
     @Override
     public void enroll(Student student, Payment payment) {
+        if (student == null || payment == null) {
+            throw new PaidSessionIllegalArgumentException();
+        }
 
+        if (payment.getAmount() != fee) {
+            throw new PaidSessionIllegalArgumentException();
+        }
+
+        if (getStudents().size() >= maxCapacity) {
+            throw new PaidSessionIllegalArgumentException();
+        }
+
+        getStudents().add(student);
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public int getFee() {
+        return fee;
     }
 }
