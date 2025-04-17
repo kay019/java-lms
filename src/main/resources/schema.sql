@@ -28,6 +28,7 @@ create table session (
     fee bigint,
     capacity int,
     image_url varchar(100) not null,
+    image_type varchar(20) not null,
     start_date timestamp not null,
     end_date timestamp not null,
     type varchar(20) not null,

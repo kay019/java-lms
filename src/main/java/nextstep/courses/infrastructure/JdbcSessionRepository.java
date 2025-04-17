@@ -24,11 +24,12 @@ public class JdbcSessionRepository implements SessionRepository {
             "fee," +
             "capacity," +
             "image_url," +
+            "image_type," +
             "start_date," +
             "end_date," +
             "type," +
             "status" +
-            ") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            ") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(
             sql,
             session.createdAt(),
@@ -37,6 +38,7 @@ public class JdbcSessionRepository implements SessionRepository {
             session.fee(),
             session.capacity(),
             session.imageUrl(),
+            session.imageType(),
             session.startDate(),
             session.endDate(),
             session.type(),
