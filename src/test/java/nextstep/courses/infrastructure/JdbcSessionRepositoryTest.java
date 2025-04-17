@@ -30,12 +30,9 @@ class JdbcSessionRepositoryTest {
 
     private SessionRepository sessionRepository;
 
-    private CourseRepository courseRepository;
-
     @BeforeEach
     void setUp() {
         sessionRepository = new JdbcSessionRepository(jdbcTemplate);
-        courseRepository = new JdbcCourseRepository(jdbcTemplate);
     }
 
     @DisplayName("강의 저장 테스트")
