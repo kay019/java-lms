@@ -1,4 +1,4 @@
-package nextstep.courses.domain.enroll;
+package nextstep.courses.domain;
 
 public enum SessionFeePolicy {
     FREE("무료"),

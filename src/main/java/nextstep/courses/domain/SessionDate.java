@@ -3,8 +3,8 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class SessionDate {
-    private LocalDateTime startedAt;
-    private LocalDateTime endedAt;
+    private final LocalDateTime startedAt;
+    private final LocalDateTime endedAt;
 
     public SessionDate(LocalDateTime startedAt, LocalDateTime endedAt) {
         validate(startedAt, endedAt);
