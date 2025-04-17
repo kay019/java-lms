@@ -1,0 +1,7 @@
+package nextstep.exception;
+
+public class SessionDateIllegalArgumentException extends RuntimeException {
+    public SessionDateIllegalArgumentException() {
+        super();
+    }
+}
