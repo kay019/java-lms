@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import nextstep.exception.FreeSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
+import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -20,7 +21,7 @@ class FreeSessionTest {
 
     @BeforeEach
     void setUp() {
-        student = new Student(1, "홍길동");
+        student = new Student(JAVAJIGI);
         coverImage = new SessionCoverImage(1, new ImageFileSize(1024), ImageType.JPG, new ImageSize(300, 200));
         status = SessionStatus.ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
