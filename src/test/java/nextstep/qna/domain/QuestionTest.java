@@ -1,8 +1,78 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUserTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class QuestionTest {
     public static final Question Q1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
     public static final Question Q2 = new Question(NsUserTest.SANJIGI, "title2", "contents2");
+
+    @DisplayName("isDeletable 테스트, 작성자가 같아야 삭제 가능")
+    @Test
+    public void deletableTest() throws Exception {
+        assertThat(Q1.isDeletable(NsUserTest.JAVAJIGI))
+                .isTrue();
+
+        assertThat(Q1.isDeletable(NsUserTest.SANJIGI))
+                .isFalse();
+    }
+
+    @DisplayName("deleteBy 테스트")
+    @Test
+    public void deleteBy() throws Exception {
+        Question question1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        Answer answer1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        question1.addAnswer(answer1);
+        question1.deleteBy(NsUserTest.JAVAJIGI);
+        assertThat(question1.isDeleted())
+                .isTrue();
+
+        Question question2 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        assertThatThrownBy(() -> question2.deleteBy(NsUserTest.SANJIGI))
+                .isInstanceOf(CannotDeleteException.class)
+                .hasMessageStartingWith("질문을 삭제할 권한이 없습니다.");
+        assertThat(question2.isDeleted())
+                .isFalse();
+
+        Answer answer2 = new Answer(NsUserTest.SANJIGI, QuestionTest.Q1, "Answers Contents1");
+        question2.addAnswer(answer2);
+        assertThatThrownBy(() -> question2.deleteBy(NsUserTest.JAVAJIGI))
+                .isInstanceOf(CannotDeleteException.class)
+                .hasMessageStartingWith("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        assertThat(question2.isDeleted())
+                .isFalse();
+    }
+
+    @DisplayName("DeleteHistory 생성 테스트")
+    @Test
+    public void createDeleteHistory() throws Exception {
+        Question question1 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        Answer answer1 = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
+        question1.addAnswer(answer1);
+        question1.deleteBy(NsUserTest.JAVAJIGI);
+        assertThat(question1.isDeleted())
+                .isTrue();
+
+        assertThat(question1.getDeleteHistories())
+                .hasSize(2)
+                .contains(new DeleteHistory(ContentType.QUESTION, 0L, NsUserTest.JAVAJIGI, LocalDateTime.now()),
+                        new DeleteHistory(ContentType.ANSWER, null, NsUserTest.JAVAJIGI, LocalDateTime.now()));
+
+        Question question2 = new Question(NsUserTest.JAVAJIGI, "title1", "contents1");
+        assertThatThrownBy(() -> question2.deleteBy(NsUserTest.SANJIGI))
+                .isInstanceOf(CannotDeleteException.class)
+                .hasMessageStartingWith("질문을 삭제할 권한이 없습니다.");
+        assertThat(question2.isDeleted())
+                .isFalse();
+
+        assertThat(question2.getDeleteHistories())
+                .isEmpty();
+    }
 }
