@@ -42,4 +42,8 @@ public class NsStudents {
             throw new CannotRegisterException("최대 수강 인원을 초과하였습니다.");
         }
     }
+
+    public List<NsStudent> getStudents() {
+        return students;
+    }
 }

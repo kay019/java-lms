@@ -44,4 +44,20 @@ public class Image {
             throw new CannotUploadImageException("이미지의 width와 height의 비율은 3:2여야 합니다.");
         }
     }
+
+    public Long getSize() {
+        return size.value();
+    }
+
+    public Long getHeight() {
+        return height.value();
+    }
+
+    public Long getWidth() {
+        return width.value();
+    }
+
+    public String getImageType() {
+        return imageType.name();
+    }
 }

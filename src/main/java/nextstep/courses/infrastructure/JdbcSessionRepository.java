@@ -8,6 +8,7 @@ import nextstep.users.domain.NsUser;
 import nextstep.users.domain.UserRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -27,9 +28,30 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public int save(Course course) {
-        String sql = "insert into course (title, creator_id, created_at) values(?, ?, ?)";
-        return jdbcTemplate.update(sql, course.getTitle(), course.getCreatorId(), course.getCreatedAt());
+    public int save(Session session) {
+        // session 저장
+        String sql_session = "insert into session (start_at, end_at, image_size, image_type, image_width, image_height) values(?, ?, ?, ?, ?, ?)";
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(sql_session, session.getStartDate(), session.getEndDate(), session.getImageSize(), session.getImageType(), session.getImageWidth(), session.getImageHeight(), generatedKeyHolder);
+
+        Long sessionId = generatedKeyHolder.getKey().longValue();
+        Registry registry = session.getRegistry();
+
+        // registry 저장
+        String sql_registry = "insert into registry (session_id, session_state, pay_strategy, capacity) values(?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql_registry, sessionId, registry.getSessionState(), registry.getPayStrategy(), registry.getCapacity());
+
+        List<NsStudent> students = registry.getStudents();
+
+        // students 저장
+        String sql_students = "insert into ns_students (session_id, user_id) values(?, ?)";
+        for(NsStudent student: students) {
+            jdbcTemplate.update(sql_students, sessionId, student.getUserId());
+        }
+
+        return 1;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package nextstep.courses.domain;
 
 public interface SessionRepository {
-    int save(Course course);
+    int save(Session session);
 
     Session findById(Long id);
 }

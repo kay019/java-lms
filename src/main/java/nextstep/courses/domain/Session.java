@@ -37,4 +37,36 @@ public class Session {
     public void register(NsUser user, PositiveNumber money) {
         registry.register(user, id, money);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getStartDate() {
+        return sessionPeriod.getStartDate();
+    }
+
+    public LocalDateTime getEndDate() {
+        return sessionPeriod.getEndDate();
+    }
+
+    public Long getImageSize() {
+        return coverImage.getSize();
+    }
+
+    public Long getImageHeight() {
+        return coverImage.getHeight();
+    }
+
+    public Long getImageWidth() {
+        return coverImage.getWidth();
+    }
+
+    public String getImageType() {
+        return coverImage.getImageType();
+    }
+
+    public Registry getRegistry() {
+        return registry;
+    }
 }

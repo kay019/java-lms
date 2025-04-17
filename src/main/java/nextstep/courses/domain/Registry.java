@@ -14,7 +14,6 @@ public class Registry {
     private PositiveNumber capacity;
     private PayStrategy payStrategy;
     private SessionState sessionState;
-    private PayStrategyFactory payStrategyFactory;
 
     public Registry(List<NsStudent> students, PayStrategy payStrategy, String sessionState, Long capacity) {
         this(students, payStrategy, SessionState.valueOf(sessionState), new PositiveNumber(capacity));
@@ -42,5 +41,21 @@ public class Registry {
         if (SessionState.canNotRegister(sessionState)) {
             throw new CannotRegisterException("강의는 모집 중일 때만 등록할 수 있습니다.");
         };
+    }
+
+    public String getSessionState() {
+        return sessionState.name();
+    }
+
+    public PayStrategy getPayStrategy() {
+        return payStrategy;
+    }
+
+    public Long getCapacity() {
+        return capacity.value();
+    }
+
+    public List<NsStudent> getStudents() {
+        return students.getStudents();
     }
 }

@@ -30,4 +30,8 @@ public class NsStudent {
     public int hashCode() {
         return Objects.hash(userId, registeredSessionId);
     }
+
+    public Long getUserId() {
+        return userId;
+    }
 }
