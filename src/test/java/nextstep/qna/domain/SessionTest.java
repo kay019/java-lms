@@ -1,9 +1,6 @@
 package nextstep.qna.domain;
 
-import nextstep.courses.domain.FreeSession;
-import nextstep.courses.domain.LectureStatus;
-import nextstep.courses.domain.PaidSession;
-import nextstep.courses.domain.Session;
+import nextstep.courses.domain.*;
 import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +17,9 @@ public class SessionTest {
         Session session = new FreeSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.CLOSED
+                SessionStatus.CLOSED
         );
         assertThatThrownBy(() -> {
             session.register(1L, new Payment());
@@ -35,10 +31,9 @@ public class SessionTest {
         Session session = new FreeSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.RECRUITING
+                SessionStatus.RECRUITING
         );
         session.register(1L, new Payment());
         assertThat(session.isRegistered(1L)).isTrue();
@@ -50,19 +45,24 @@ public class SessionTest {
         Session session = new PaidSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.RECRUITING,
-                0,
-                10000L
+                SessionStatus.RECRUITING,
+                1,
+                10000
         );
         assertThatThrownBy(() -> {
             session.register(11L, new Payment(
                     "1",
                     1L,
                     11L,
-                    10000L
+                    10000
+            ));
+            session.register(11L, new Payment(
+                    "1",
+                    1L,
+                    11L,
+                    10000
             ));
         }).isInstanceOf(IllegalStateException.class).hasMessage("수강 인원을 초과하였습니다.");
     }
@@ -73,12 +73,11 @@ public class SessionTest {
         Session session = new PaidSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.RECRUITING,
+                SessionStatus.RECRUITING,
                 10,
-                10000L
+                10000
         );
         assertThatThrownBy(() -> {
             session.register(11L, null);
@@ -91,19 +90,18 @@ public class SessionTest {
         Session session = new PaidSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.RECRUITING,
+                SessionStatus.RECRUITING,
                 10,
-                10000L
+                10000
         );
         assertThatThrownBy(() -> {
             session.register(11L, new Payment(
                     "1",
                     2L,
                     11L,
-                    10000L
+                    10000
             ));
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("결제한 강의와 일치하지 않습니다.");
     }
@@ -114,19 +112,18 @@ public class SessionTest {
         Session session = new PaidSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.RECRUITING,
+                SessionStatus.RECRUITING,
                 10,
-                10000L
+                10000
         );
         assertThatThrownBy(() -> {
             session.register(11L, new Payment(
                     "1",
                     1L,
                     12L,
-                    10000L
+                    10000
             ));
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("결제한 사용자와 일치하지 않습니다.");
     }
@@ -137,20 +134,20 @@ public class SessionTest {
         Session session = new PaidSession(
                 1L,
                 "자바지기",
-                LocalDate.now(),
-                LocalDate.now(),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 null,
-                LectureStatus.RECRUITING,
+                SessionStatus.RECRUITING,
                 10,
-                10000L
+                10000
         );
         assertThatThrownBy(() -> {
             session.register(11L, new Payment(
                     "1",
                     1L,
                     11L,
-                    20000L
+                    20000
             ));
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("결제 금액과 일치하지 않습니다.");
     }
+
 }

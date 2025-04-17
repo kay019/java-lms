@@ -2,22 +2,20 @@ package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
 
-import java.time.LocalDate;
-
 public class PaidSession extends Session {
     private Capacity maxCapacity;
     private TuitionFee tuitionFee;
 
-    public PaidSession(Long id, String name, LocalDate startDate, LocalDate endDate, Image coverImage,
-                       LectureStatus status, int maxCapacity, Long tuitionFee) {
-        super(id, name, startDate, endDate, coverImage, status);
+    public PaidSession(Long id, String name, Period period, Image coverImage,
+                       SessionStatus status, int maxCapacity, int tuitionFee) {
+        super(id, name, period, coverImage, status);
         this.maxCapacity = new Capacity(maxCapacity);
         this.tuitionFee = new TuitionFee(tuitionFee);
     }
 
     @Override
     protected void validateRegistration(Long studentId, Payment payment) {
-        if (registeredStudents.size() >= maxCapacity) {
+        if (registeredStudents.size() >= maxCapacity.getValue()) {
             throw new IllegalStateException("수강 인원을 초과하였습니다.");
         }
         if (payment == null) {
