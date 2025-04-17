@@ -8,10 +8,11 @@ public class Image {
     public static final int MIN_IMAGE_HEIGHT = 200;
     public static final double IMAGE_RATIO = 1.5;
 
-    private PositiveNumber size;
     private ImageType imageType;
+    private PositiveNumber size;
     private PositiveNumber width;
     private PositiveNumber height;
+
 
     public Image(Long size, String imageType, Long width, Long height) {
         this(size, ImageType.of(imageType), width, height);
