@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class SessionsTest {
 
-    private final Image image = new Image(500f, "png", 600, 400);
+    private final Image image = new Image(500f, "png", "cdn.com", 600, 400);
 
     private Session createSessionWithId(int id) {
         return new Session(
@@ -18,7 +18,7 @@ class SessionsTest {
                 id,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7),
-                0,
+                0L,
                 0,
                 0,
                 image,

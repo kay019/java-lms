@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class SessionTest {
 
-    private final Image validImage = new Image(500f, "png", 600, 400);
+    private final Image validImage = new Image(500f, "png", "cdn.com", 600, 400);
 
     @Test
     @DisplayName("모집중 상태의 무료 강의는 수강 신청 가능하다")
@@ -19,7 +20,7 @@ class SessionTest {
                 1,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7),
-                0,             // tuition
+                0L,             // tuition
                 0,             // currentCount
                 0,             // capacity (무제한이지만 그냥 0으로 둠)
                 validImage,
@@ -27,7 +28,7 @@ class SessionTest {
                 new FreeJoinStrategy()
         );
 
-        assertThat(session.joinable(0)).isTrue();
+        assertThat(session.joinable(new Payment())).isTrue();
     }
 
     @Test
@@ -38,7 +39,7 @@ class SessionTest {
                 1,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7),
-                0,
+                0L,
                 0,
                 0,
                 validImage,
@@ -46,7 +47,7 @@ class SessionTest {
                 new FreeJoinStrategy()
         );
 
-        assertThat(session.joinable(0)).isFalse();
+        assertThat(session.joinable(new Payment())).isFalse();
     }
 
     @Test
@@ -57,7 +58,7 @@ class SessionTest {
                 1,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7),
-                10000,   // tuition
+                10000L,   // tuition
                 29,      // currentCount
                 30,      // capacity
                 validImage,
@@ -65,7 +66,7 @@ class SessionTest {
                 new PaidJoinStrategy()
         );
 
-        assertThat(session.joinable(10000)).isTrue();
+        assertThat(session.joinable(new Payment(10000L))).isTrue();
     }
 
     @Test
@@ -76,7 +77,7 @@ class SessionTest {
                 1,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7),
-                10000,
+                10000L,
                 10,
                 30,
                 validImage,
@@ -84,7 +85,7 @@ class SessionTest {
                 new PaidJoinStrategy()
         );
 
-        assertThat(session.joinable(8000)).isFalse();
+        assertThat(session.joinable(new Payment(8000L))).isFalse();
     }
 
     @Test
@@ -95,7 +96,7 @@ class SessionTest {
                 1,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7),
-                10000,
+                10000L,
                 30,
                 30,
                 validImage,
@@ -103,6 +104,6 @@ class SessionTest {
                 new PaidJoinStrategy()
         );
 
-        assertThat(session.joinable(10000)).isFalse();
+        assertThat(session.joinable(new Payment(10000L))).isFalse();
     }
 }
