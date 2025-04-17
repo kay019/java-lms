@@ -12,7 +12,6 @@ public class Session {
     private Long id;
     private Period sessionPeriod;
     private Image coverImage;
-    private List<NsStudent> students = new ArrayList<>();
     private Registry registry;
 
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
