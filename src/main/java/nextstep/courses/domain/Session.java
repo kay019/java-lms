@@ -37,5 +37,5 @@ public abstract class Session {
 
     protected abstract void validateRegistration(Long studentId, Payment payment);
 
-    public abstract LectureType getType();
+    public abstract SessionType getType();
 }

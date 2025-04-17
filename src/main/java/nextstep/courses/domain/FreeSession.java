@@ -15,7 +15,7 @@ public class FreeSession extends Session {
     }
 
     @Override
-    public LectureType getType() {
-        return LectureType.FREE;
+    public SessionType getType() {
+        return SessionType.FREE;
     }
 }

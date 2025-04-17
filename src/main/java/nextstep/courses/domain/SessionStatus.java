@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-public enum LectureStatus {
+public enum SessionStatus {
     PREPARING,
     RECRUITING,
     CLOSED,

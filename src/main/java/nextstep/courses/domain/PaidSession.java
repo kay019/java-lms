@@ -27,7 +27,7 @@ public class PaidSession extends Session {
     }
 
     @Override
-    public LectureType getType() {
-        return LectureType.PAID;
+    public SessionType getType() {
+        return SessionType.PAID;
     }
 }
