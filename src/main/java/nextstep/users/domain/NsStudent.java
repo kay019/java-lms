@@ -3,12 +3,10 @@ package nextstep.users.domain;
 import java.util.Objects;
 
 public class NsStudent {
-    private NsUser user;
     private Long userId;
     private final Long registeredSessionId;
 
     public NsStudent(NsUser user, Long sessionId) {
-        this.user = user;
         this.registeredSessionId = sessionId;
     }
 
