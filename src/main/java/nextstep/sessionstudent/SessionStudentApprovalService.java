@@ -2,33 +2,47 @@ package nextstep.sessionstudent;
 
 import org.springframework.stereotype.Service;
 
+import nextstep.courses.domain.Course;
+import nextstep.courses.service.CourseService;
+import nextstep.session.domain.Session;
+import nextstep.session.service.SessionService;
 import nextstep.users.domain.NsUser;
 
 @Service
 public class SessionStudentApprovalService {
 
-    private final SessionStudentApprovalPolicy sessionStudentApprovalPolicy;
+    private final CourseService courseService;
+    private final SessionService sessionService;
     private final SessionStudentService sessionStudentService;
 
     public SessionStudentApprovalService(
-        SessionStudentApprovalPolicy sessionStudentApprovalPolicy,
+        CourseService courseService,
+        SessionService sessionService,
         SessionStudentService sessionStudentService) {
-        this.sessionStudentApprovalPolicy = sessionStudentApprovalPolicy;
+        this.courseService = courseService;
+        this.sessionService = sessionService;
         this.sessionStudentService = sessionStudentService;
     }
 
     public SessionStudent approve(long sessionStudentId, NsUser nsUser) {
+        ApprovalContext context = createApprovalContext(sessionStudentId, nsUser);
         SessionStudent sessionStudent = sessionStudentService.findById(sessionStudentId);
-        sessionStudentApprovalPolicy.validate(sessionStudent, nsUser);
-        sessionStudent.approve();
+        sessionStudent.approved(context);
         return sessionStudent;
     }
 
     public SessionStudent cancel(long sessionStudentId, NsUser nsUser) {
+        ApprovalContext context = createApprovalContext(sessionStudentId, nsUser);
         SessionStudent sessionStudent = sessionStudentService.findById(sessionStudentId);
-        sessionStudentApprovalPolicy.validate(sessionStudent, nsUser);
-        sessionStudent.cancel();
+        sessionStudent.cancelled(context);
         return sessionStudent;
+    }
+
+    private ApprovalContext createApprovalContext(long sessionStudentId, NsUser creator) {
+        SessionStudent sessionStudent = sessionStudentService.findById(sessionStudentId);
+        Session session = sessionService.findById(sessionStudent.getSessionId());
+        Course course = courseService.findById(session.getCourseId());
+        return new ApprovalContext(course, session, creator);
     }
 
 }

@@ -3,6 +3,8 @@ package nextstep.sessionstudent;
 import java.time.LocalDateTime;
 
 import nextstep.Identifiable;
+import nextstep.courses.domain.Course;
+import nextstep.session.domain.Session;
 
 public class SessionStudent implements Identifiable {
 
@@ -22,25 +24,33 @@ public class SessionStudent implements Identifiable {
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
         this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    private void changeStatus(SessionStudentStatus status) {
+    private void changeStatus(SessionStudentStatus status, ApprovalContext context) {
         if (!isPending()) {
             throw new IllegalStateException("세션 수강신청이 대기 상태가 아닙니다.");
+        }
+
+        if (!context.isSessionSelectionRequired()) {
+            throw new IllegalStateException("선발 가능한 세션이 아닙니다.");
+        }
+
+        if (!context.isCourseOwner()) {
+            throw new IllegalStateException("세션 수강신청을 승인/거절할 권한이 없습니다.");
         }
 
         this.status = status;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void approve() {
-        changeStatus(SessionStudentStatus.APPROVED);
+    public void approved(ApprovalContext context) {
+        changeStatus(SessionStudentStatus.APPROVED, context);
     }
 
-    public void cancel() {
-        changeStatus(SessionStudentStatus.CANCELLED);
+    public void cancelled(ApprovalContext context) {
+        changeStatus(SessionStudentStatus.CANCELLED, context);
     }
 
     public Long getId() {
