@@ -54,17 +54,14 @@ public class SessionBuilder {
     }
 
     public Session build() {
-        Session session = new Session(
+        return new Session(
                 id,
                 courseId,
+                coverImages,
                 progressStatus,
                 recruitmentStatus,
                 registrationPolicy,
                 sessionPeriod,
                 selectionRequired);
-
-        session.addCoverImages(coverImages);
-
-        return session;
     }
 }

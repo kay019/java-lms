@@ -28,9 +28,13 @@ import java.time.LocalDateTime;
 public class JdbcSessionRepository implements SessionRepository {
 
     private final JdbcOperations jdbcTemplate;
+    private final CoverImageRepository coverImageRepository;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate,
+                                 CoverImageRepository coverImageRepository,
+                                 PaymentRepository paymentRepository) {
         this.jdbcTemplate = jdbcTemplate;
+        this.coverImageRepository = coverImageRepository;
     }
 
     @Override
@@ -39,6 +43,10 @@ public class JdbcSessionRepository implements SessionRepository {
 
         if (session.isUnsaved()) {
             result = saveInternal(session);
+        }
+
+        for (CoverImage coverImage : session.getCoverImages().getCoverImages()) {
+            coverImageRepository.save(coverImage);
         }
 
         return result;
@@ -77,6 +85,7 @@ public class JdbcSessionRepository implements SessionRepository {
         return jdbcTemplate.queryForObject(sql, (rs, rn) -> {
             long sessionId = rs.getLong("id");
             long courseId = rs.getLong("course_id");
+            CoverImages coverImages = new CoverImages(coverImageRepository.findBySessionId(sessionId));
             SessionProgressStatus progressStatus = SessionProgressStatus.valueOf(rs.getString("progress_status"));
             RecruitmentStatus recruitmentStatus = RecruitmentStatus.valueOf(rs.getString("recruitment_status"));
             RegistrationPolicyType type = RegistrationPolicyType.valueOf(rs.getString("registration_policy_type"));
@@ -90,7 +99,7 @@ public class JdbcSessionRepository implements SessionRepository {
             RegistrationPolicy policy = type.createPolicy(sessionFee, maxStudentCount);
             SessionPeriod period = new SessionPeriod(startedAt, endedAt);
 
-            return new Session(sessionId, courseId, progressStatus, recruitmentStatus, policy, period, selectionRequired);
+            return new Session(sessionId, courseId, coverImages, progressStatus, recruitmentStatus, policy, period, selectionRequired);
         }, id);
     }
 

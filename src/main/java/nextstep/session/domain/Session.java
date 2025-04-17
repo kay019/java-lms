@@ -13,16 +13,17 @@ import java.util.List;
 public class Session implements Identifiable {
     private Long id;
     private Long courseId;
-    private final CoverImages coverImages = new CoverImages();
+    private final CoverImages coverImages;
     private final SessionProgressStatus progressStatus;
     private final RecruitmentStatus recruitmentStatus;
     private final RegistrationPolicy registrationPolicy;
     private final SessionPeriod sessionPeriod;
     private final boolean selectionRequired;
 
-    public Session(Long id, Long courseId, SessionProgressStatus progressStatus, RecruitmentStatus recruitmentStatus, RegistrationPolicy registrationPolicy, SessionPeriod sessionPeriod, boolean selectionRequired) {
+    public Session(Long id, Long courseId, CoverImages coverImages, SessionProgressStatus progressStatus, RecruitmentStatus recruitmentStatus, RegistrationPolicy registrationPolicy, SessionPeriod sessionPeriod, boolean selectionRequired) {
         this.id = id;
         this.courseId = courseId;
+        this.coverImages = coverImages;
         this.progressStatus = progressStatus;
         this.recruitmentStatus = recruitmentStatus;
         this.registrationPolicy = registrationPolicy;
@@ -83,12 +84,6 @@ public class Session implements Identifiable {
     public void addCoverImage(CoverImage coverImage) {
         coverImage.setSessionId(getId());
         coverImages.add(coverImage);
-    }
-
-    public void addCoverImages(CoverImages coverImages) {
-        for (CoverImage image : coverImages.getCoverImages()) {
-            addCoverImage(image);
-        }
     }
 
     public SessionStudent register(NsUser nsUser, Money paymentAmount, int currentStudentCount) {
