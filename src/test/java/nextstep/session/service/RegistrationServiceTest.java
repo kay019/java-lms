@@ -3,8 +3,9 @@ package nextstep.session.service;
 import nextstep.session.domain.RecruitmentStatus;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionBuilder;
+import nextstep.session.domain.SessionRepository;
 import nextstep.sessionstudent.SessionStudent;
-import nextstep.sessionstudent.SessionStudentService;
+import nextstep.sessionstudent.SessionStudentRepository;
 import nextstep.sessionstudent.SessionStudentStatus;
 import nextstep.sessionstudent.SessionStudents;
 import nextstep.users.domain.NsUser;
@@ -24,10 +25,10 @@ import static org.mockito.Mockito.when;
 class RegistrationServiceTest {
 
     @Mock
-    private SessionService sessionService;
+    private SessionRepository sessionRepository;
 
     @Mock
-    private SessionStudentService sessionStudentService;
+    private SessionStudentRepository sessionStudentRepository;
 
     @InjectMocks
     private RegistrationService registrationService;
@@ -45,8 +46,8 @@ class RegistrationServiceTest {
             .selectionRequired(false)
             .build();
 
-        when(sessionService.findById(sessionId)).thenReturn(session);
-        when(sessionStudentService.findBySessionId(sessionId)).thenReturn(new SessionStudents());
+        when(sessionRepository.findById(sessionId)).thenReturn(session);
+        when(sessionStudentRepository.findBySessionId(sessionId)).thenReturn(new SessionStudents());
 
         SessionStudent sessionStudent
             = registrationService.registerSession(sessionId, javajigi, amount);

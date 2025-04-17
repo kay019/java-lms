@@ -11,7 +11,7 @@ import nextstep.courses.domain.Course;
 import nextstep.courses.domain.CourseRepository;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionBuilder;
-import nextstep.session.service.SessionService;
+import nextstep.session.domain.SessionRepository;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 
@@ -26,10 +26,10 @@ class SessionStudentApprovalServiceTest {
     private CourseRepository courseRepository;
 
     @Mock
-    private SessionService sessionService;
+    private SessionRepository sessionRepository;
 
     @Mock
-    private SessionStudentService sessionStudentService;
+    private SessionStudentRepository sessionStudentRepository;
 
     @InjectMocks
     private SessionStudentApprovalService sessionStudentApprovalService;
@@ -55,8 +55,8 @@ class SessionStudentApprovalServiceTest {
         sessionStudent = new SessionStudent(sessionId, 29381239L, true);
 
         when(courseRepository.findById(courseId)).thenReturn(course);
-        when(sessionService.findById(sessionId)).thenReturn(session);
-        when(sessionStudentService.findById(sessionStudentId))
+        when(sessionRepository.findById(sessionId)).thenReturn(session);
+        when(sessionStudentRepository.findById(sessionStudentId))
             .thenReturn(sessionStudent);
     }
 
