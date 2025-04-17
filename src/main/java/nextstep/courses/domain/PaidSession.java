@@ -21,7 +21,15 @@ public class PaidSession extends Session {
         if (payment == null) {
             throw new IllegalArgumentException("결제 정보가 없습니다.");
         }
-        payment.isValidatePayment(id, studentId, tuitionFee);
+        if (!this.id.equals(payment.getSessionId())) {
+            throw new IllegalArgumentException("결제한 강의와 일치하지 않습니다.");
+        }
+        if (!studentId.equals(payment.getNsUserId())) {
+            throw new IllegalArgumentException("결제한 사용자와 일치하지 않습니다.");
+        }
+        if (this.tuitionFee.getAmount() != payment.getAmount()) {
+            throw new IllegalArgumentException("결제 금액과 일치하지 않습니다.");
+        }
     }
 
     @Override

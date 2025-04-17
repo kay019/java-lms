@@ -4,7 +4,16 @@ import java.util.List;
 
 public class Sessions {
     private final List<Session> sessions;
+
     public Sessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public void add(Session session) {
+        sessions.add(session);
+    }
+
+    public void remove(Session session) {
+        sessions.remove(session);
     }
 }

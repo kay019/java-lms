@@ -12,14 +12,14 @@ public class Payment {
     private Long nsUserId;
 
     // 결제 금액
-    private Long amount;
+    private int amount;
 
     private LocalDateTime createdAt;
 
     public Payment() {
     }
 
-    public Payment(String id, Long sessionId, Long nsUserId, Long amount) {
+    public Payment(String id, Long sessionId, Long nsUserId, int amount) {
         this.id = id;
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
@@ -27,15 +27,15 @@ public class Payment {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void isValidatePayment(Long sessionId, Long nsUserId, Long amount) {
-        if (this.sessionId != sessionId) {
-            throw new IllegalArgumentException("결제한 강의와 일치하지 않습니다.");
-        }
-        if (this.nsUserId != nsUserId) {
-            throw new IllegalArgumentException("결제한 사용자와 일치하지 않습니다.");
-        }
-        if (this.amount != amount) {
-            throw new IllegalArgumentException("결제 금액과 일치하지 않습니다.");
-        }
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getNsUserId() {
+        return nsUserId;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 }

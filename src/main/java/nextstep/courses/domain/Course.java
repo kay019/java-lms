@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Course {
     private Long id;
@@ -40,6 +41,20 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void addSession(Session session) {
+        if (sessions == null) {
+            sessions = new Sessions(new ArrayList<>());
+        }
+        sessions.add(session);
+    }
+
+    public void removeSession(Session session) {
+        if (sessions == null) {
+            return;
+        }
+        sessions.remove(session);
     }
 
     @Override
