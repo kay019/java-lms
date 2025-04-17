@@ -30,13 +30,7 @@ class SessionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        CoverImageRepository coverImageRepository = new JdbcCoverImageRepository(jdbcTemplate);
-
-        this.sessionRepository = new JdbcSessionRepository(
-                jdbcTemplate,
-            coverImageRepository,
-                new JdbcPaymentRepository(jdbcTemplate)
-        );
+        this.sessionRepository = new JdbcSessionRepository(jdbcTemplate);
     }
 
     @Test
@@ -47,17 +41,12 @@ class SessionRepositoryTest {
                 .recruitmentStatus(RecruitmentStatus.RECRUITING)
                 .build();
 
-        session.addCoverImage(CoverImageTest.createCoverImage1());
-        session.addCoverImage(CoverImageTest.createCoverImage2());
-
         sessionRepository.save(session);
 
         Session newSession = sessionRepository.findById(session.getId());
 
         assertThat(newSession.getId()).isEqualTo(session.getId());
         assertThat(newSession.getCourseId()).isEqualTo(session.getCourseId());
-        assertThat(newSession.getCoverImages().getIds())
-            .containsExactlyInAnyOrderElementsOf(session.getCoverImages().getIds());
         assertThat(newSession.getProgressStatus()).isEqualTo(session.getProgressStatus());
         assertThat(newSession.getRecruitmentStatus()).isEqualTo(session.getRecruitmentStatus());
         assertThat(newSession.getRegistrationPolicyType()).isEqualTo(session.getRegistrationPolicyType());
