@@ -5,14 +5,14 @@ import nextstep.payments.domain.Payment;
 import java.time.LocalDate;
 
 public class PaidSession extends Session {
-    private int maxCapacity;
-    private Long tuitionFee;
+    private Capacity maxCapacity;
+    private TuitionFee tuitionFee;
 
     public PaidSession(Long id, String name, LocalDate startDate, LocalDate endDate, Image coverImage,
                        LectureStatus status, int maxCapacity, Long tuitionFee) {
         super(id, name, startDate, endDate, coverImage, status);
-        this.maxCapacity = maxCapacity;
-        this.tuitionFee = tuitionFee;
+        this.maxCapacity = new Capacity(maxCapacity);
+        this.tuitionFee = new TuitionFee(tuitionFee);
     }
 
     @Override
