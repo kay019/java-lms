@@ -8,8 +8,8 @@ public class Image {
     public static final int MIN_IMAGE_HEIGHT = 200;
     public static final double IMAGE_RATIO = 1.5;
 
-    private ImageType imageType;
     private PositiveNumber size;
+    private ImageType imageType;
     private PositiveNumber width;
     private PositiveNumber height;
 

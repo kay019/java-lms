@@ -55,10 +55,11 @@ create table session (
     start_at timestamp not null,
     end_at timestamp not null,
 
+    image_size bigint not null,
     image_type varchar(10) not null,
     image_width bigint not null,
     image_height bigint not null,
-    image_size bigint not null,
+
     primary key (id)
 );
 
@@ -67,7 +68,7 @@ CREATE TABLE registry (
     session_state VARCHAR(10) NOT NULL,
     pay_strategy VARCHAR(10) NOT NULL,
     capacity BIGINT NOT NULL,
-    FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
+    FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE
 );
 
 create table ns_students (

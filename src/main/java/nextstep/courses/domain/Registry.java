@@ -14,6 +14,10 @@ public class Registry {
     private PayStrategy payStrategy;
     private SessionState sessionState;
 
+    public Registry(List<NsStudent> students, String payStrategy, String sessionState, Long capacity) {
+        this(students, PayStrategyFactory.getStrategy(payStrategy), SessionState.valueOf(sessionState), new PositiveNumber(capacity));
+    }
+
     public Registry(PayStrategy payStrategy, SessionState sessionState, PositiveNumber capacity) {
         this(new ArrayList<>(), payStrategy, sessionState, capacity);
     }

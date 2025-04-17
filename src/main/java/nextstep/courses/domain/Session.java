@@ -14,6 +14,13 @@ public class Session {
     private Image coverImage;
     private Registry registry;
 
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage) {
+        this.id = id;
+        this.sessionPeriod = new Period(startDate, endDate);
+        this.coverImage = coverImage;
+        this.registry = registry;
+    }
+
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
         this.id = id;
         this.sessionPeriod = new Period(startDate, endDate);
