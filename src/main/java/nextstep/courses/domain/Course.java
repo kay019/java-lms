@@ -21,6 +21,10 @@ public class Course extends BaseDomain {
         this(null, title, creatorId, new Sessions(), LocalDateTime.now(), null);
     }
 
+    public Course(Long id, String title, Long creatorId) {
+        this(id, title, creatorId, new Sessions(), LocalDateTime.now(), null);
+    }
+
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this(id, title, creatorId, new Sessions(), createdAt, updatedAt);
     }
@@ -32,16 +36,12 @@ public class Course extends BaseDomain {
         this.sessions = sessions;
     }
 
-    public String getTitle() {
+    public String title() {
         return title;
     }
 
-    public Long getCreatorId() {
+    public Long creatorId() {
         return creatorId;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
     public void delete() {

@@ -26,8 +26,20 @@ public class BaseDomain {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
+    public Long id() {
         return id;
+    }
+
+    public LocalDateTime createdAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime updatedAt() {
+        return updatedAt;
+    }
+
+    public boolean deleted() {
+        return deleted;
     }
 
     @Override

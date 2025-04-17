@@ -32,10 +32,6 @@ public class NsUser extends BaseDomain {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getUserId() {
         return userId;
     }

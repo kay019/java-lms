@@ -20,4 +20,12 @@ public class SessionEnrollPolicy {
     public boolean canEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {
         return type.canEnroll(sessionConstraint, enrollCount, amount) && status.canEnroll();
     }
+
+    public String type() {
+        return type.toString();
+    }
+
+    public String status() {
+        return status.toString();
+    }
 }

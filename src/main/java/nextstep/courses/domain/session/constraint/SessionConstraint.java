@@ -19,6 +19,14 @@ public class SessionConstraint {
         this.capacity = capacity;
     }
 
+    public long fee() {
+        return fee.value();
+    }
+
+    public long capacity() {
+        return capacity.value();
+    }
+
     public boolean isSameFee(long amount) {
         return fee.isSame(amount);
     }

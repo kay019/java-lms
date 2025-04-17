@@ -36,6 +36,42 @@ public class Session extends BaseDomain {
         return descriptor.image();
     }
 
+    public long courseId() {
+        return course.id();
+    }
+
+    public String imageUrl() {
+        return descriptor.imageUrl();
+    }
+
+    public String imageType() {
+        return descriptor.imageType();
+    }
+
+    public LocalDateTime startDate() {
+        return descriptor.startDate();
+    }
+
+    public LocalDateTime endDate() {
+        return descriptor.endDate();
+    }
+
+    public String status() {
+        return descriptor.status();
+    }
+
+    public String type() {
+        return descriptor.type();
+    }
+
+    public long fee() {
+        return constraint.fee();
+    }
+
+    public long capacity() {
+        return constraint.capacity();
+    }
+
     public void delete() {
         this.deleted = true;
         this.updatedAt = LocalDateTime.now();

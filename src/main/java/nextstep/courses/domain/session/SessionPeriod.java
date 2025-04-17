@@ -16,4 +16,12 @@ public class SessionPeriod {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    public LocalDateTime startDate() {
+        return startDate;
+    }
+
+    public LocalDateTime endDate() {
+        return endDate;
+    }
 }

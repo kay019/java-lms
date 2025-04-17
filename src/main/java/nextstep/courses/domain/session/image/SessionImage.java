@@ -36,6 +36,14 @@ public class SessionImage {
         this.type = type;
     }
 
+    public String url() {
+        return url;
+    }
+
+    public String type() {
+        return type.toString();
+    }
+
     public BufferedImage image() {
         return imageHandler.image();
     }

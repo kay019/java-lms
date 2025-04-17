@@ -10,6 +10,10 @@ public class SessionCapacity {
         this.value = capacity;
     }
 
+    public int value() {
+        return value;
+    }
+
     public boolean isGreaterThan(int value) {
         return value > this.value;
     }

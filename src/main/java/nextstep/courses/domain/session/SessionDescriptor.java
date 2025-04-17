@@ -6,6 +6,7 @@ import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class SessionDescriptor {
 
@@ -23,6 +24,30 @@ public class SessionDescriptor {
         this.image = image;
         this.period = period;
         this.policy = policy;
+    }
+
+    public String imageUrl() {
+        return image.url();
+    }
+
+    public String imageType() {
+        return image.type();
+    }
+
+    public LocalDateTime startDate() {
+        return period.startDate();
+    }
+
+    public LocalDateTime endDate() {
+        return period.endDate();
+    }
+
+    public String status() {
+        return policy.status();
+    }
+
+    public String type() {
+        return policy.type();
     }
 
     public boolean canEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {

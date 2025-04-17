@@ -10,6 +10,10 @@ public class SessionFee {
         this.value = fee;
     }
 
+    public long value() {
+        return value;
+    }
+
     public boolean isSame(long value) {
         return this.value == value;
     }
