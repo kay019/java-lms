@@ -19,6 +19,10 @@ public class NsStudent {
         return this.userId == user.getId();
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -29,9 +33,5 @@ public class NsStudent {
     @Override
     public int hashCode() {
         return Objects.hash(userId, registeredSessionId);
-    }
-
-    public Long getUserId() {
-        return userId;
     }
 }
