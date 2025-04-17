@@ -3,7 +3,9 @@ package nextstep.courses.domain;
 import nextstep.courses.CannotRegisterException;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PaidPayStrategy implements PayStrategy {
     private final PositiveNumber price;
 
@@ -25,5 +27,10 @@ public class PaidPayStrategy implements PayStrategy {
         if (!money.equals(this.price)) {
             throw new CannotRegisterException("결제 금액이 강의의 가격과 같지 않습니다.");
         }
+    }
+
+    @Override
+    public String getType() {
+        return "PAID";
     }
 }

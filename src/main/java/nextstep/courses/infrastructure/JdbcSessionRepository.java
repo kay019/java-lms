@@ -1,5 +1,7 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.InvalidNaturalNumberException;
+import nextstep.courses.PayStrategyFactory;
 import nextstep.courses.domain.*;
 import nextstep.users.domain.NsStudent;
 import nextstep.users.domain.NsUser;
@@ -16,10 +18,12 @@ import java.util.List;
 public class JdbcSessionRepository implements SessionRepository {
     private JdbcOperations jdbcTemplate;
     private UserRepository userRepository;
+    private final PayStrategyFactory payStrategyFactory;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate, UserRepository userRepository) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate, UserRepository userRepository, PayStrategyFactory payStrategyFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.userRepository = userRepository;
+        this.payStrategyFactory = payStrategyFactory;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class JdbcSessionRepository implements SessionRepository {
         Registry registry = jdbcTemplate.queryForObject(sql_repository, (rs, rowNum) ->
                 new Registry(
                         students,
-                        rs.getString(1),
+                        payStrategyFactory.getStrategy(rs.getString(1)),
                         rs.getString(2),
                         rs.getLong(3)
                 ), id);

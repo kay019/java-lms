@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotRegisterException;
+import nextstep.courses.PayStrategyFactory;
 import nextstep.users.domain.NsStudent;
 import nextstep.users.domain.NsStudents;
 import nextstep.users.domain.NsUser;
@@ -13,9 +14,10 @@ public class Registry {
     private PositiveNumber capacity;
     private PayStrategy payStrategy;
     private SessionState sessionState;
+    private PayStrategyFactory payStrategyFactory;
 
-    public Registry(List<NsStudent> students, String payStrategy, String sessionState, Long capacity) {
-        this(students, PayStrategyFactory.getStrategy(payStrategy), SessionState.valueOf(sessionState), new PositiveNumber(capacity));
+    public Registry(List<NsStudent> students, PayStrategy payStrategy, String sessionState, Long capacity) {
+        this(students, payStrategy, SessionState.valueOf(sessionState), new PositiveNumber(capacity));
     }
 
     public Registry(PayStrategy payStrategy, SessionState sessionState, PositiveNumber capacity) {
