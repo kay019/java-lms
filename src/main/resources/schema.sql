@@ -60,6 +60,7 @@ create table session (
     image_width bigint not null,
     image_height bigint not null,
 
+    price bigint not null,
     primary key (id)
 );
 

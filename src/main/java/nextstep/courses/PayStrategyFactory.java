@@ -1,19 +1,25 @@
 package nextstep.courses;
 
+import nextstep.courses.domain.FreePayStrategy;
+import nextstep.courses.domain.PaidPayStrategy;
 import nextstep.courses.domain.PayStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-@Component
 public class PayStrategyFactory {
     private final Map<String, PayStrategy> strategies = new HashMap<>();
 
-    @Autowired
-    public PayStrategyFactory(List<PayStrategy> strategyList) {
+    public PayStrategyFactory() {
+        List<PayStrategy> strategyList = Arrays.asList(
+                new FreePayStrategy(),
+                new PaidPayStrategy()
+        );
+
         for (PayStrategy strategy : strategyList) {
             strategies.put(strategy.getType(), strategy);
         }

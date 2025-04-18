@@ -10,7 +10,11 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,10 +34,20 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public int save(Session session) {
         // session 저장
-        String sql_session = "insert into session (start_at, end_at, image_size, image_type, image_width, image_height) values(?, ?, ?, ?, ?, ?)";
+        String sql_session = "insert into session (start_at, end_at, image_size, image_type, image_width, image_height, price) values(?, ?, ?, ?, ?, ?, ?)";
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(sql_session, session.getStartDate(), session.getEndDate(), session.getImageSize(), session.getImageType(), session.getImageWidth(), session.getImageHeight(), generatedKeyHolder);
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql_session, Statement.RETURN_GENERATED_KEYS);
+            ps.setTimestamp(1, Timestamp.valueOf(session.getStartDate()));
+            ps.setTimestamp(2, Timestamp.valueOf(session.getEndDate()));
+            ps.setLong(3, session.getImageSize());
+            ps.setString(4, session.getImageType());
+            ps.setLong(5, session.getImageWidth());
+            ps.setLong(6, session.getImageHeight());
+            ps.setLong(7, session.getPrice()); // 가격 필드가 있다고 가정
+            return ps;
+        }, generatedKeyHolder);
 
         Long sessionId = generatedKeyHolder.getKey().longValue();
         Registry registry = session.getRegistry();
@@ -66,7 +80,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 ), id);
 
         // registry 찾기
-        String sql_repository = "SELECT pay_strategy session_state capacity FROM registry WHERE session_id = ?";
+        String sql_repository = "SELECT pay_strategy, session_state, capacity FROM registry WHERE session_id = ?";
         Registry registry = jdbcTemplate.queryForObject(sql_repository, (rs, rowNum) ->
                 new Registry(
                         students,
@@ -76,7 +90,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 ), id);
 
         // session 찾기
-        String sql_session = "SELECT id start_at end_at image_size image_type image_width image_height FROM ns_students WHERE session_id = ?";
+        String sql_session = "SELECT id, start_at, end_at, image_size, image_type, image_width, image_height, price FROM session WHERE id = ?";
         return jdbcTemplate.queryForObject(sql_session, (rs, rowNum) ->
                 new Session(
                         rs.getLong(1),
@@ -88,7 +102,8 @@ public class JdbcSessionRepository implements SessionRepository {
                                 rs.getString(5),
                                 rs.getLong(6),
                                 rs.getLong(7)
-                        )
+                        ),
+                        rs.getLong(8)
                 ),id);
     }
 

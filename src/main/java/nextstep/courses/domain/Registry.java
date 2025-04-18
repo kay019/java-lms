@@ -30,9 +30,9 @@ public class Registry {
         this.students = new NsStudents(students);
     }
 
-    public void register(NsUser user, Long sessionId, PositiveNumber money) {
+    public void register(NsUser user, Long sessionId, PositiveNumber money, PositiveNumber price) {
         validateSessionState(sessionState);
-        payStrategy.pay(user, sessionId, money);
+        payStrategy.pay(user, sessionId, money, price);
         NsStudent student = new NsStudent(user, sessionId);
         students.enroll(student, capacity);
     }
@@ -47,8 +47,8 @@ public class Registry {
         return sessionState.name();
     }
 
-    public PayStrategy getPayStrategy() {
-        return payStrategy;
+    public String getPayStrategy() {
+        return payStrategy.getType();
     }
 
     public Long getCapacity() {

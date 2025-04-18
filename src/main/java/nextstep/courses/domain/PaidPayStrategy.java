@@ -5,17 +5,10 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Component;
 
-@Component
 public class PaidPayStrategy implements PayStrategy {
-    private final PositiveNumber price;
-
-    public PaidPayStrategy(Long price) {
-        this.price = new PositiveNumber(price);
-    }
-
     @Override
-    public void pay(NsUser user, Long sessionId, PositiveNumber money) {
-        validateMoney(money);
+    public void pay(NsUser user, Long sessionId, PositiveNumber money, PositiveNumber price) {
+        validateMoney(money, price);
 
         Payment payment = new Payment("", sessionId, user.getId(), money.value());
         if (!payment.isPaid()) {
@@ -23,8 +16,8 @@ public class PaidPayStrategy implements PayStrategy {
         }
     }
 
-    private void validateMoney(PositiveNumber money) {
-        if (!money.equals(this.price)) {
+    private void validateMoney(PositiveNumber money, PositiveNumber price) {
+        if (!money.equals(price)) {
             throw new CannotRegisterException("결제 금액이 강의의 가격과 같지 않습니다.");
         }
     }

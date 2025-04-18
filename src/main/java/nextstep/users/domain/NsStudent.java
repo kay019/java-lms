@@ -7,7 +7,7 @@ public class NsStudent {
     private final Long registeredSessionId;
 
     public NsStudent(NsUser user, Long sessionId) {
-        this.registeredSessionId = sessionId;
+        this(user.getId(), sessionId);
     }
 
     public NsStudent(Long userId, Long sessionId) {

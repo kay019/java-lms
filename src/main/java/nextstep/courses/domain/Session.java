@@ -13,19 +13,26 @@ public class Session {
     private Period sessionPeriod;
     private Image coverImage;
     private Registry registry;
+    private PositiveNumber price;
+
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionState, new PositiveNumber(capacity)), coverImage, 0L);
+    }
+
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionState, new PositiveNumber(capacity)), coverImage, price);
+    }
 
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage) {
+        this(id, startDate, endDate, registry, coverImage, 0L);
+    }
+
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price) {
         this.id = id;
         this.sessionPeriod = new Period(startDate, endDate);
         this.coverImage = coverImage;
         this.registry = registry;
-    }
-
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
-        this.id = id;
-        this.sessionPeriod = new Period(startDate, endDate);
-        this.coverImage = coverImage;
-        this.registry = new Registry(payStrategy, sessionState, new PositiveNumber(capacity));
+        this.price = new PositiveNumber(price);
     }
 
     private void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
@@ -35,7 +42,7 @@ public class Session {
     }
 
     public void register(NsUser user, PositiveNumber money) {
-        registry.register(user, id, money);
+        registry.register(user, id, money, price);
     }
 
     public Long getId() {
@@ -68,5 +75,9 @@ public class Session {
 
     public Registry getRegistry() {
         return registry;
+    }
+
+    public Long getPrice() {
+        return price.value();
     }
 }
