@@ -81,7 +81,7 @@ public class Answer {
     public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
         validDelete(loginUser);
         this.deleted = true;
-        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        return DeleteHistory.forAnswer(id, writer);
     }
 
     private void validDelete(NsUser loginUser) throws CannotDeleteException {
