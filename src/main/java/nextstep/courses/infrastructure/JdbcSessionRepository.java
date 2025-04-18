@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Repository("sessionRepository")
@@ -51,21 +52,9 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public SessionEntity findById(Long id) {
-        String sessionSql = "select " +
-            "id," +
-            "created_at," +
-            "updated_at," +
-            "deleted," +
-            "course_id," +
-            "fee," +
-            "capacity," +
-            "image_url," +
-            "image_type," +
-            "start_date," +
-            "end_date," +
-            "type," +
-            "status " +
-            "from session where id = ?";
+        String sessionSql = "SELECT id, created_at, updated_at, deleted, course_id, " +
+            "fee, capacity, image_url, image_type, start_date, end_date, type, status " +
+            "FROM session WHERE id = ?";
 
         RowMapper<SessionEntity> rowMapper = (rs, rowNum) -> SessionEntity.builder()
             .id(rs.getLong("id"))
@@ -84,6 +73,31 @@ public class JdbcSessionRepository implements SessionRepository {
             .build();
 
         return jdbcTemplate.queryForObject(sessionSql, rowMapper, id);
+    }
+
+    @Override
+    public List<SessionEntity> findAllByCourseId(Long courseId) {
+        String sql = "SELECT id, created_at, updated_at, deleted, course_id, " +
+            "fee, capacity, image_url, image_type, start_date, end_date, type, status " +
+            "FROM session WHERE course_id = ?";
+
+        RowMapper<SessionEntity> rowMapper = (rs, rowNum) -> SessionEntity.builder()
+            .id(rs.getLong("id"))
+            .createdAt(toLocalDateTime(rs.getTimestamp("created_at")))
+            .updatedAt(toLocalDateTime(rs.getTimestamp("updated_at")))
+            .deleted(rs.getBoolean("deleted"))
+            .courseId(rs.getLong("course_id"))
+            .fee(rs.getLong("fee"))
+            .capacity(rs.getInt("capacity"))
+            .imageUrl(rs.getString("image_url"))
+            .imageType(rs.getString("image_type"))
+            .startDate(toLocalDateTime(rs.getTimestamp("start_date")))
+            .endDate(toLocalDateTime(rs.getTimestamp("end_date")))
+            .type(rs.getString("type"))
+            .status(rs.getString("status"))
+            .build();
+
+        return jdbcTemplate.query(sql, rowMapper, courseId);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {

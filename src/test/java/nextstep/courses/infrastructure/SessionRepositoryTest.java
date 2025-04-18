@@ -1,11 +1,15 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.session.*;
+import nextstep.courses.domain.session.Session;
+import nextstep.courses.domain.session.SessionDescriptor;
+import nextstep.courses.domain.session.SessionPeriod;
+import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
 import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.image.SessionImageType;
 import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
+import nextstep.courses.entity.SessionEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,10 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -53,6 +54,22 @@ class SessionRepositoryTest {
         assertThat(sessionRepository.findById(generatedId)).isNotNull();
     }
 
+    @DisplayName("과정 ID로 모든 강의 찾기 테스트")
+    @Test
+    void testFindAllByCourseId() {
+        Long courseId = 1L;
+        Session session1 = createSampleSession();
+        Session session2 = createSampleSession();
+
+        sessionRepository.save(session1.toSessionEntity(courseId));
+        sessionRepository.save(session2.toSessionEntity(courseId));
+
+        List<SessionEntity> sessions = sessionRepository.findAllByCourseId(courseId);
+
+        assertThat(sessions).isNotNull();
+        assertThat(sessions).hasSize(2);
+    }
+
     private Session createSampleSession() {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
@@ -61,7 +78,8 @@ class SessionRepositoryTest {
             }
 
             @Override
-            public void updateImage() { }
+            public void updateImage() {
+            }
 
             @Override
             public long byteSize() {
