@@ -3,18 +3,19 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class Course {
-    private Long id;
+    private final Long id;
 
-    private String title;
+    private final String title;
 
-    private Long creatorId;
+    private final Long creatorId;
 
-    private LocalDateTime createdAt;
+    //private final Long generation;
 
-    private LocalDateTime updatedAt;
+    private final Sessions sessions;
 
-    public Course() {
-    }
+    private final LocalDateTime createdAt;
+
+    private final LocalDateTime updatedAt;
 
     public Course(String title, Long creatorId) {
         this(0L, title, creatorId, LocalDateTime.now(), null);
@@ -26,6 +27,7 @@ public class Course {
         this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.sessions = new Sessions();
     }
 
     public String getTitle() {
