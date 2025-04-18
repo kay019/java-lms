@@ -1,6 +1,5 @@
 package nextstep.payments.infrastructor;
 
-import nextstep.payments.domain.Payment;
 import nextstep.payments.domain.PaymentRepository;
 import nextstep.payments.entity.PaymentEntity;
 import org.springframework.jdbc.core.JdbcOperations;
