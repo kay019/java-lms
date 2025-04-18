@@ -66,6 +66,9 @@ public abstract class CourseSession {
         private final LocalDateTime endDate;
         
         public SessionPeriod(final LocalDateTime startDate, final LocalDateTime endDate) {
+            if (endDate.isBefore(startDate)) {
+                throw new IllegalArgumentException("종료일은 시작일보다 이전일 수 없습니다.");
+            }
             this.startDate = startDate;
             this.endDate = endDate;
         }
