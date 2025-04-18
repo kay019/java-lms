@@ -13,7 +13,6 @@ public class BaseDomain {
     protected boolean deleted = false;
 
     public BaseDomain() {
-
     }
 
     public BaseDomain(Long id) {
@@ -24,22 +23,6 @@ public class BaseDomain {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public Long id() {
-        return id;
-    }
-
-    public LocalDateTime createdAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime updatedAt() {
-        return updatedAt;
-    }
-
-    public boolean deleted() {
-        return deleted;
     }
 
     @Override

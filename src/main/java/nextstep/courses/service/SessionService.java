@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @Service("sessionService")
 public class SessionService {
@@ -22,13 +23,13 @@ public class SessionService {
 
     public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {
         Course course = courseRepository.findById(courseId);
-        Session newSession = new Session(course, constraint, descriptor);
-        sessionRepository.save(newSession);
+        Session newSession = new Session(constraint, descriptor);
+        sessionRepository.save(newSession, 1L);
     }
 
     @Transactional
-    public void deleteSession(long sessionId) {
-        Session session = sessionRepository.findById(sessionId);
+    public void deleteSession(long sessionId) throws IOException {
+        Session session = Session.from(sessionRepository.findById(sessionId));
         session.delete();
     }
 }

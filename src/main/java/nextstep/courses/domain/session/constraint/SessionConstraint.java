@@ -23,7 +23,7 @@ public class SessionConstraint {
         return fee.value();
     }
 
-    public long capacity() {
+    public int capacity() {
         return capacity.value();
     }
 

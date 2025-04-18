@@ -24,84 +24,6 @@ public class Session extends BaseDomain {
 
     private final SessionDescriptor descriptor;
 
-    public Session() {
-        this(null, null);
-    }
-
-    public Session(SessionConstraint constraint, SessionDescriptor descriptor) {
-        this(null, constraint, descriptor);
-    }
-
-    public Session(Long id, SessionConstraint constraint, SessionDescriptor descriptor) {
-        super(id);
-        this.descriptor = descriptor;
-        this.constraint = constraint;
-    }
-
-    public BufferedImage image() {
-        return descriptor.image();
-    }
-
-    public String imageUrl() {
-        return descriptor.imageUrl();
-    }
-
-    public String imageType() {
-        return descriptor.imageType();
-    }
-
-    public LocalDateTime startDate() {
-        return descriptor.startDate();
-    }
-
-    public LocalDateTime endDate() {
-        return descriptor.endDate();
-    }
-
-    public String status() {
-        return descriptor.status();
-    }
-
-    public String type() {
-        return descriptor.type();
-    }
-
-    public long fee() {
-        return constraint.fee();
-    }
-
-    public long capacity() {
-        return constraint.capacity();
-    }
-
-    public void delete() {
-        this.deleted = true;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public boolean canEnroll(int enrollCount, long amount) {
-        return descriptor.canEnroll(constraint, enrollCount, amount);
-    }
-
-    public void updateImage() throws IOException {
-        descriptor.updateImage();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Session session = (Session) o;
-        return Objects.equals(constraint, session.constraint) &&
-            Objects.equals(descriptor, session.descriptor);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), constraint, descriptor);
-    }
-
     public static Session from(SessionEntity sessionEntity) throws IOException {
         return from(sessionEntity, new URLImageHandler(sessionEntity.getImageUrl()));
     }
@@ -122,5 +44,69 @@ public class Session extends BaseDomain {
             resultList.add(from(sessionEntity));
         }
         return resultList;
+    }
+
+    public Session() {
+        this(null, null);
+    }
+
+    public Session(SessionConstraint constraint, SessionDescriptor descriptor) {
+        this(null, constraint, descriptor);
+    }
+
+    public Session(Long id, SessionConstraint constraint, SessionDescriptor descriptor) {
+        super(id);
+        this.descriptor = descriptor;
+        this.constraint = constraint;
+    }
+
+    public BufferedImage image() {
+        return descriptor.image();
+    }
+
+    public void delete() {
+        this.deleted = true;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public boolean canEnroll(int enrollCount, long amount) {
+        return descriptor.canEnroll(constraint, enrollCount, amount);
+    }
+
+    public void updateImage() throws IOException {
+        descriptor.updateImage();
+    }
+
+    public SessionEntity to(Long courseId) {
+        return SessionEntity.builder()
+            .id(id)
+            .createdAt(createdAt)
+            .updatedAt(updatedAt)
+            .deleted(deleted)
+            .courseId(courseId)
+            .fee(constraint.fee())
+            .capacity(constraint.capacity())
+            .imageUrl(descriptor.imageUrl())
+            .imageType(descriptor.imageType())
+            .startDate(descriptor.startDate())
+            .endDate(descriptor.endDate())
+            .type(descriptor.type())
+            .status(descriptor.status())
+            .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Session session = (Session) o;
+        return Objects.equals(constraint, session.constraint) &&
+            Objects.equals(descriptor, session.descriptor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), constraint, descriptor);
     }
 }

@@ -34,5 +34,4 @@ public class SessionEntity {
     private String type;
 
     private String status;
-
 }

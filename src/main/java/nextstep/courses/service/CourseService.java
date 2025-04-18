@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @Service("courseService")
 public class CourseService {
@@ -22,7 +23,7 @@ public class CourseService {
         courseRepository.save(course);
     }
 
-    public boolean enroll(String newPaymentId, long sessionId) {
+    public boolean enroll(String newPaymentId, long sessionId) throws IOException {
         return paymentService.save(newPaymentId, sessionId);
     }
 

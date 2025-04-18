@@ -52,18 +52,25 @@ public class Course extends BaseDomain {
         this.deleted = deleted;
     }
 
-    public String title() {
-        return title;
-    }
-
-    public Long creatorId() {
-        return creatorId;
-    }
-
     public void delete() {
         this.deleted = true;
         sessions.delete();
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public CourseEntity toCourseEntity() {
+        return CourseEntity.builder()
+            .id(id)
+            .title(title)
+            .creatorId(creatorId)
+            .createdAt(createdAt)
+            .updatedAt(updatedAt)
+            .deleted(deleted)
+            .build();
+    }
+
+    public List<SessionEntity> toSessionEntity() {
+        return sessions.to(id);
     }
 
     @Override

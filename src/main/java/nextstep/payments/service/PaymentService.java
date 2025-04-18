@@ -8,6 +8,7 @@ import nextstep.payments.domain.Payments;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @Service("paymentService")
 public class PaymentService {
@@ -23,9 +24,9 @@ public class PaymentService {
         return new Payment();
     }
 
-    public boolean save(String newPaymentId, long sessionId) {
+    public boolean save(String newPaymentId, long sessionId) throws IOException {
         Payment newPayment = payment(newPaymentId);
-        Session session = sessionRepository.findById(sessionId);
+        Session session = Session.from(sessionRepository.findById(sessionId));
         Payments sessionPayments = new Payments(paymentRepository.findBySession(sessionId));
         if (sessionPayments.canEnroll(session, newPayment)) {
             paymentRepository.save(newPayment);
