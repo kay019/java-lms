@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,5 +55,24 @@ public class FreeSessionTest {
         assertThatThrownBy(() -> freeSession.addRegistration(freeSession, user, payments))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("강의 상태가 모집중일 때만 수강 신청이 가능합니다");
+    }
+    
+    @Test
+    @DisplayName("무료 세션은 수강 인원 제한이 없는 테스트")
+    public void freeSessionHasNoParticipantLimit() {
+        // given
+        FreeSession freeSession = new FreeSession(SessionStatus.RECRUITING);
+        List<Payment> payments = Collections.emptyList();
+        
+        // Register a large number of users (e.g., 100) to verify no limit
+        int largeNumberOfUsers = 100;
+        
+        // when & then
+        IntStream.range(0, largeNumberOfUsers)
+                .forEach(i -> {
+                    NsUser user = new NsUser((long) i, "user" + i, "password", "User " + i, "user" + i + "@example.com");
+                    Registration registration = freeSession.addRegistration(freeSession, user, payments);
+                    assertThat(registration).isNotNull();
+                });
     }
 }

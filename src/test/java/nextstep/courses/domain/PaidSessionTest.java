@@ -51,6 +51,29 @@ public class PaidSessionTest {
     }
     
     @Test
+    @DisplayName("여러 결제의 합계가 수강료와 일치하는 경우 수강 신청 성공 테스트")
+    public void addRegistrationSuccessWithMultiplePayments() {
+        // given
+        int maxParticipants = 20;
+        Long fee = 50000L;
+        List<Registration> registrations = new ArrayList<>();
+        
+        PaidSession paidSession = new PaidSession(maxParticipants, fee, registrations, SessionStatus.RECRUITING);
+        
+        NsUser user = new NsUser(1L, "user1", "password", "User One", "user1@example.com");
+        List<Payment> payments = List.of(
+            new Payment("payment1", 1L, user.getId(), 30000L),
+            new Payment("payment2", 1L, user.getId(), 20000L)
+        );
+        
+        // when
+        Registration registration = paidSession.addRegistration(paidSession, user, payments);
+        
+        // then
+        assertThat(registration).isNotNull();
+    }
+    
+    @Test
     @DisplayName("모집중 상태가 아닌 경우 수강 신청 실패 테스트")
     public void addRegistrationFailsWhenNotRecruiting() {
         // given
