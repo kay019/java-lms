@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.exception.FreeSessionIllegalArgumentException;
-import nextstep.payments.domain.Payment;
 
 public class FreeSession extends Session {
     public static final int FREE = 0;
@@ -23,15 +22,15 @@ public class FreeSession extends Session {
     }
 
     @Override
-    public void enroll(Student student, Payment payment) {
-        if (student == null || payment == null) {
+    public void enroll(Enrollment enrollment) {
+        if (enrollment == null) {
             throw new FreeSessionIllegalArgumentException();
         }
 
-        if (payment.getAmount() != FREE) {
+        if (enrollment.isNotValid(FREE)) {
             throw new FreeSessionIllegalArgumentException();
         }
 
-        getStudents().add(student);
+        getStudents().add(enrollment.getStudent());
     }
 }

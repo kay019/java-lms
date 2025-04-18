@@ -3,8 +3,6 @@ package nextstep.courses.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import nextstep.payments.domain.Payment;
-
 public abstract class Session {
     private final long id;
     private final SessionCoverImage coverImage;
@@ -51,7 +49,7 @@ public abstract class Session {
         this.students = new ArrayList<>();
     }
 
-    public abstract void enroll(Student student, Payment payment);
+    public abstract void enroll(Enrollment enrollment);
 
     public long getId() {
         return id;

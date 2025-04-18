@@ -56,7 +56,7 @@ class FreeSessionTest {
 
         Payment freePayment = createPayment(0);
 
-        session.enroll(student, freePayment);
+        session.enroll(new Enrollment(student, freePayment));
 
         assertThat(session.getStudents())
             .hasSize(1)
@@ -75,7 +75,7 @@ class FreeSessionTest {
 
         Payment paidPayment = createPayment(1000);
 
-        assertThatThrownBy(() -> session.enroll(student, paidPayment))
+        assertThatThrownBy(() -> session.enroll(new Enrollment(student, paidPayment)))
             .isInstanceOf(FreeSessionIllegalArgumentException.class);
     }
 

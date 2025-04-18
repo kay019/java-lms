@@ -56,22 +56,11 @@ class PaidSessionTest {
 
         Payment correctPayment = createPayment(30000);
 
-        session.enroll(student, correctPayment);
+        session.enroll(new Enrollment(student, correctPayment));
 
         assertThat(session.getStudents())
             .hasSize(1)
             .containsExactly(student);
-    }
-
-    @Test
-    @DisplayName("결제가 null이면 예외가 발생한다")
-    void enroll_null_결제시_예외발생() {
-        PaidSession session = new PaidSession.Builder()
-            .fee(30000)
-            .build();
-
-        assertThatThrownBy(() -> session.enroll(student, null))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
     }
 
     @Test
@@ -83,7 +72,7 @@ class PaidSessionTest {
 
         Payment wrongAmountPayment = createPayment(25000);
 
-        assertThatThrownBy(() -> session.enroll(student, wrongAmountPayment))
+        assertThatThrownBy(() -> session.enroll(new Enrollment(student, wrongAmountPayment)))
             .isInstanceOf(PaidSessionIllegalArgumentException.class);
     }
 
@@ -98,9 +87,9 @@ class PaidSessionTest {
         Student secondStudent = new Student(SANJIGI);
         Payment payment = createPayment(30000);
 
-        session.enroll(student, payment);
+        session.enroll(new Enrollment(student, payment));
 
-        assertThatThrownBy(() -> session.enroll(secondStudent, payment))
+        assertThatThrownBy(() -> session.enroll(new Enrollment(secondStudent, payment)))
             .isInstanceOf(PaidSessionIllegalArgumentException.class);
     }
 

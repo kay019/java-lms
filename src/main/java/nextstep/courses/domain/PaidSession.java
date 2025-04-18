@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.exception.PaidSessionIllegalArgumentException;
-import nextstep.payments.domain.Payment;
 
 public class PaidSession extends Session {
     private final int maxCapacity;
@@ -39,12 +38,12 @@ public class PaidSession extends Session {
     }
 
     @Override
-    public void enroll(Student student, Payment payment) {
-        if (student == null || payment == null) {
+    public void enroll(Enrollment enrollment) {
+        if (enrollment == null) {
             throw new PaidSessionIllegalArgumentException();
         }
 
-        if (payment.getAmount() != fee) {
+        if (enrollment.isNotValid(fee)) {
             throw new PaidSessionIllegalArgumentException();
         }
 
@@ -52,7 +51,7 @@ public class PaidSession extends Session {
             throw new PaidSessionIllegalArgumentException();
         }
 
-        getStudents().add(student);
+        getStudents().add(enrollment.getStudent());
     }
 
     public int getMaxCapacity() {
