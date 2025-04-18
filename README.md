@@ -42,11 +42,9 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 
 ## Step3 요구사항
 - [x] session table 스키마 정의
-- [] Session Repository 만들기
-  - [] save 로직 추가
-  - [] findById 로직 추가
-  - [] findByCourse 로직 추가
-- [] Payment Repository 만들기
-  - [] save 로직 추가
-  - [] findBySession 로직 추가
-- [] Course Repository에 Session 정보 가져오는 로직 추가
+- [x] Session Repository 만들기
+  - [x] save 로직 추가
+  - [x] findById 로직 추가
+- [x] Payment Repository 만들기
+  - [x] save 로직 추가
+  - [x] findBySession 로직 추가
