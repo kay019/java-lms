@@ -1,0 +1,38 @@
+package nextstep.courses.entity;
+
+
+import lombok.Builder;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Builder
+public class SessionEntity {
+    private Long id;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private boolean deleted;
+
+    private Long courseId;
+
+    private Long fee;
+
+    private int capacity;
+
+    private String imageUrl;
+
+    private String imageType;
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
+
+    private String type;
+
+    private String status;
+
+}
