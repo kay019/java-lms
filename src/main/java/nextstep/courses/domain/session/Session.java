@@ -50,6 +50,10 @@ public class Session extends BaseDomain {
         this(null, null);
     }
 
+    public Session(Long id) {
+        this(id, null, null);
+    }
+
     public Session(SessionConstraint constraint, SessionDescriptor descriptor) {
         this(null, constraint, descriptor);
     }

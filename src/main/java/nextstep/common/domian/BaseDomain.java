@@ -25,6 +25,17 @@ public class BaseDomain {
         this.updatedAt = updatedAt;
     }
 
+    public BaseDomain(Long id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deleted = deleted;
+    }
+
+    public Long id() {
+        return id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

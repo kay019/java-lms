@@ -45,11 +45,10 @@ public class Course extends BaseDomain {
     }
 
     public Course(Long id, boolean deleted, String title, Long creatorId, Sessions sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(id, createdAt, updatedAt);
+        super(id, deleted, createdAt, updatedAt);
         this.title = title;
         this.creatorId = creatorId;
         this.sessions = sessions;
-        this.deleted = deleted;
     }
 
     public void delete() {
@@ -67,10 +66,6 @@ public class Course extends BaseDomain {
             .updatedAt(updatedAt)
             .deleted(deleted)
             .build();
-    }
-
-    public List<SessionEntity> toSessionEntity() {
-        return sessions.to(id);
     }
 
     @Override

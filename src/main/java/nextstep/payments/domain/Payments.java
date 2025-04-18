@@ -1,6 +1,7 @@
 package nextstep.payments.domain;
 
 import nextstep.courses.domain.session.Session;
+import nextstep.payments.entity.PaymentEntity;
 
 import java.util.ArrayList;
 import java.util.List;

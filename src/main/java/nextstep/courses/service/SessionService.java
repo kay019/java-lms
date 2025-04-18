@@ -22,7 +22,6 @@ public class SessionService {
     private SessionRepository sessionRepository;
 
     public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {
-        Course course = courseRepository.findById(courseId);
         Session newSession = new Session(constraint, descriptor);
         sessionRepository.save(newSession, 1L);
     }
