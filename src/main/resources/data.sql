@@ -11,9 +11,10 @@ INSERT INTO question (id, writer_id, title, contents, created_at, deleted) VALUE
 
 INSERT INTO course (id, title, creator_id, created_at) VALUES (1, 'title', 1, CURRENT_TIMESTAMP());
 
-INSERT INTO cover_image (id, size, type, width, height) VALUES (1, 1024, 'GIF', 300, 200);
+INSERT INTO cover_image (id, session_id, size, type, width, height) VALUES (1, 1, 1024, 'GIF', 300, 200);
 
-INSERT INTO session (id, course_id, cover_image_id, session_status, registration_policy_type, session_fee, max_student_count, started_at, ended_at) VALUES (1, 1, 1, 'PREPARING', 'PAID', 5000, 20, '2025-04-09 10:00:00', '2025-04-09 12:00:00');
+INSERT INTO session (id, course_id, progress_status, recruitment_status, registration_policy_type, session_fee, max_student_count, selection_required, started_at, ended_at) VALUES (1, 1, 'ONGOING', 'RECRUITING', 'PAID', 5000, 20, true, '2025-04-09 10:00:00', '2025-04-09 12:00:00');
+INSERT INTO session_student (id, session_id, ns_user_id, status, created_at, updated_at) VALUES (1, 1, 1, 'PENDING', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into payment (id, session_id, ns_user_id, amount, created_at) values (1, 1, 1, 5000, CURRENT_TIMESTAMP());
 insert into payment (id, session_id, ns_user_id, amount, created_at) values (2, 1, 2, 5000, CURRENT_TIMESTAMP());
