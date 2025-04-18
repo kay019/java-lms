@@ -24,8 +24,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
     }
 
     @Override
-    public long save(Payment payment) {
-        PaymentEntity paymentEntity = payment.toPaymentEntity();
+    public long save(PaymentEntity paymentEntity) {
         String sql = "INSERT INTO payment (deleted, created_at, user_id, session_id, amount) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();

@@ -29,14 +29,14 @@ public class CourseRepositoryTest {
     @Test
     void testSave() {
         Course course = new Course("TDD, 클린 코드 with Java", 1L);
-        assertDoesNotThrow(() -> courseRepository.save(course));
+        assertDoesNotThrow(() -> courseRepository.save(course.toCourseEntity()));
     }
 
     @DisplayName("강좌 조회 테스트")
     @Test
     void testFindById() {
         Course course = new Course("TDD, 클린 코드 with Java 2", 2L);
-        long generatedId = courseRepository.save(course);
+        long generatedId = courseRepository.save(course.toCourseEntity());
         assertThat(courseRepository.findById(generatedId)).isNotNull();
     }
 }

@@ -1,8 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionRepository;
-import nextstep.courses.domain.session.Sessions;
 import nextstep.courses.entity.SessionEntity;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
@@ -27,13 +22,12 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public Long save(Session session, Long courseId) {
+    public Long save(SessionEntity sessionEntity) {
         String sql = "INSERT INTO session ("
             + "created_at, deleted, course_id, fee, capacity, "
             + "image_url, image_type, start_date, end_date, type, status"
             + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        SessionEntity sessionEntity = session.to(courseId);
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -53,44 +47,6 @@ public class JdbcSessionRepository implements SessionRepository {
         }, keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
-    }
-
-    @Override
-    public int saveAll(Sessions sessions, Long courseId) {
-        String sql = "insert into session (" +
-            "created_at," +
-            "deleted," +
-            "course_id," +
-            "fee," +
-            "capacity," +
-            "image_url," +
-            "image_type," +
-            "start_date," +
-            "end_date," +
-            "type," +
-            "status" +
-            ") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        List<SessionEntity> sessionEntities = sessions.to(courseId);
-
-        List<Object[]> batchArgs = sessionEntities.stream()
-            .map(sessionEntity -> new Object[]{
-                sessionEntity.getCreatedAt(),
-                sessionEntity.isDeleted(),
-                sessionEntity.getCourseId(),
-                sessionEntity.getFee(),
-                sessionEntity.getCapacity(),
-                sessionEntity.getImageUrl(),
-                sessionEntity.getImageType(),
-                sessionEntity.getStartDate(),
-                sessionEntity.getEndDate(),
-                sessionEntity.getType(),
-                sessionEntity.getStatus()
-            })
-            .collect(Collectors.toList());
-
-        int[] result = jdbcTemplate.batchUpdate(sql, batchArgs);
-        return Arrays.stream(result).sum();
     }
 
     @Override

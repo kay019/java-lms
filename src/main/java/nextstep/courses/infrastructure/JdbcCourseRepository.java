@@ -23,8 +23,7 @@ public class JdbcCourseRepository implements CourseRepository {
     }
 
     @Override
-    public Long save(Course course) {
-        CourseEntity courseEntity = course.toCourseEntity();
+    public Long save(CourseEntity courseEntity) {
         String sql = "INSERT INTO course (title, deleted, creator_id, created_at) VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();

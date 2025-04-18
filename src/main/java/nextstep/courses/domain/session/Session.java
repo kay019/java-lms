@@ -77,7 +77,7 @@ public class Session extends BaseDomain {
         descriptor.updateImage();
     }
 
-    public SessionEntity to(Long courseId) {
+    public SessionEntity toSessionEntity(Long courseId) {
         return SessionEntity.builder()
             .id(id)
             .createdAt(createdAt)

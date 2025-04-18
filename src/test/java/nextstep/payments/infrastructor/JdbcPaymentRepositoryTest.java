@@ -31,7 +31,7 @@ class JdbcPaymentRepositoryTest {
     @Test
     void testSave() {
         Payment payment = new Payment(new Session(1L), NsUserTest.JAVAJIGI, 300_000L);
-        assertDoesNotThrow(() -> paymentRepository.save(payment));
+        assertDoesNotThrow(() -> paymentRepository.save(payment.toPaymentEntity()));
     }
 
     @DisplayName("결재 저장 테스트")
@@ -39,8 +39,8 @@ class JdbcPaymentRepositoryTest {
     void testFindBySession() {
         Payment javajigiPayment = new Payment(new Session(2L), NsUserTest.JAVAJIGI, 300_000L);
         Payment sanjigiPayment = new Payment(new Session(2L), NsUserTest.SANJIGI, 300_000L);
-        paymentRepository.save(javajigiPayment);
-        paymentRepository.save(sanjigiPayment);
+        paymentRepository.save(javajigiPayment.toPaymentEntity());
+        paymentRepository.save(sanjigiPayment.toPaymentEntity());
 
         assertThat(paymentRepository.findBySession(2L).size()).isEqualTo(2);
     }

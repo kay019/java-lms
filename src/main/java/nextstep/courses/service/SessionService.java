@@ -22,7 +22,7 @@ public class SessionService {
 
     public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {
         Session newSession = new Session(constraint, descriptor);
-        sessionRepository.save(newSession, 1L);
+        sessionRepository.save(newSession.toSessionEntity(courseId));
     }
 
     @Transactional

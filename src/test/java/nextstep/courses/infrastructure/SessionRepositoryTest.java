@@ -41,7 +41,7 @@ class SessionRepositoryTest {
     void testSave() {
         Session session = createSampleSession();
 
-        assertDoesNotThrow(() -> sessionRepository.save(session, 1L));
+        assertDoesNotThrow(() -> sessionRepository.save(session.toSessionEntity(1L)));
     }
 
     @DisplayName("강의 조회 테스트")
@@ -49,18 +49,8 @@ class SessionRepositoryTest {
     void testFindById() {
         Session session = createSampleSession();
 
-        long generatedId = sessionRepository.save(session, 1L);
+        long generatedId = sessionRepository.save(session.toSessionEntity(1L));
         assertThat(sessionRepository.findById(generatedId)).isNotNull();
-    }
-
-    @DisplayName("여러 강의 저장 테스트")
-    @Test
-    void testSaveAll() {
-        int size = 2;
-        Sessions sessions = createSampleSessions(size);
-
-        int insertedCount = sessionRepository.saveAll(sessions, 1L);
-        assertThat(insertedCount).isEqualTo(size);
     }
 
     private Session createSampleSession() {
