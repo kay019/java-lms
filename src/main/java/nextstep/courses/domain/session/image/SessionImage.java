@@ -18,6 +18,10 @@ public class SessionImage {
         this(null, imageHandler, null);
     }
 
+    public SessionImage(String url, SessionImageType type) throws IOException {
+        this(url, new URLImageHandler(url), type);
+    }
+
     public SessionImage(String url, ImageHandler imageHandler, SessionImageType type) {
         BufferedImage res = imageHandler.image();
         if ((WIDTH_RATIO * res.getHeight()) != (HEIGHT_RATIO * res.getWidth())) {

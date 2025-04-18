@@ -26,7 +26,7 @@ public class Session extends BaseDomain {
     public static Session from(SessionEntity sessionEntity) throws IOException {
         SessionConstraint sessionConstraint = new SessionConstraint(sessionEntity.getFee(), sessionEntity.getCapacity());
         SessionDescriptor sessionDescriptor = new SessionDescriptor(
-            new SessionImage(sessionEntity.getImageUrl(), new URLImageHandler(sessionEntity.getImageUrl()), SessionImageType.fromString(sessionEntity.getImageType())),
+            new SessionImage(sessionEntity.getImageUrl(), SessionImageType.fromString(sessionEntity.getImageType())),
             new SessionPeriod(sessionEntity.getStartDate(), sessionEntity.getEndDate()),
             new SessionEnrollPolicy(SessionStatus.fromString(sessionEntity.getStatus()), SessionType.fromString(sessionEntity.getType()))
         );
