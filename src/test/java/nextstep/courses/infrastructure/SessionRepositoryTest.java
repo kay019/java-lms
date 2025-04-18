@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @JdbcTest
@@ -66,7 +67,6 @@ class SessionRepositoryTest {
 
         List<SessionEntity> sessions = sessionRepository.findAllByCourseId(courseId);
 
-        assertThat(sessions).isNotNull();
         assertThat(sessions).hasSize(2);
     }
 
