@@ -14,10 +14,6 @@ public class SessionImage {
 
     private final SessionImageType type;
 
-    public SessionImage(String url, SessionImageType type) throws IOException {
-        this(url, new URLImageHandler(url), type);
-    }
-
     public SessionImage(ImageHandler imageHandler) {
         this(null, imageHandler, null);
     }

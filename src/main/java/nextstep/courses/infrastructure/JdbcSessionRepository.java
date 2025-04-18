@@ -11,12 +11,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {

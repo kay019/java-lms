@@ -21,7 +21,7 @@ public enum SessionType {
     }
 
     public static SessionType fromString(String sessionType) {
-        return Stream.of( SessionType.values())
+        return Stream.of(SessionType.values())
             .filter(type -> type.name().equalsIgnoreCase(sessionType))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Unknown session type: " + sessionType));

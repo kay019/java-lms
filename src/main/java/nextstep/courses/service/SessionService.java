@@ -1,6 +1,5 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.Course;
 import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionDescriptor;

@@ -25,13 +25,9 @@ public class Session extends BaseDomain {
     private final SessionDescriptor descriptor;
 
     public static Session from(SessionEntity sessionEntity) throws IOException {
-        return from(sessionEntity, new URLImageHandler(sessionEntity.getImageUrl()));
-    }
-
-    public static Session from(SessionEntity sessionEntity, ImageHandler imageHandler) throws IOException {
         SessionConstraint sessionConstraint = new SessionConstraint(sessionEntity.getFee(), sessionEntity.getCapacity());
         SessionDescriptor sessionDescriptor = new SessionDescriptor(
-            new SessionImage(sessionEntity.getImageUrl(), imageHandler, SessionImageType.fromString(sessionEntity.getImageType())),
+            new SessionImage(sessionEntity.getImageUrl(),  new URLImageHandler(sessionEntity.getImageUrl()), SessionImageType.fromString(sessionEntity.getImageType())),
             new SessionPeriod(sessionEntity.getStartDate(), sessionEntity.getEndDate()),
             new SessionEnrollPolicy(SessionStatus.fromString(sessionEntity.getStatus()), SessionType.fromString(sessionEntity.getType()))
         );
