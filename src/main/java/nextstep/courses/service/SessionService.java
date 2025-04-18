@@ -14,9 +14,6 @@ import java.io.IOException;
 @Service("sessionService")
 public class SessionService {
 
-    @Resource(name = "courseRepository")
-    private CourseRepository courseRepository;
-
     @Resource(name = "sessionRepository")
     private SessionRepository sessionRepository;
 

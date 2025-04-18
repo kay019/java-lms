@@ -16,10 +16,6 @@ public class SessionDescriptor {
 
     private final SessionEnrollPolicy policy;
 
-    public SessionDescriptor() {
-        this(null, null, null);
-    }
-
     public SessionDescriptor(SessionImage image, SessionPeriod period, SessionEnrollPolicy policy) {
         this.image = image;
         this.period = period;
