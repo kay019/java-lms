@@ -41,14 +41,16 @@ public class JdbcCourseRepository implements CourseRepository {
     }
 
     @Override
-    public Course findById(Long id) {
+    public CourseEntity findById(Long id) {
         String sql = "select id, title, creator_id, created_at, updated_at from course where id = ?";
-        RowMapper<Course> rowMapper = (rs, rowNum) -> new Course(
-            rs.getLong(1),
-            rs.getString(2),
-            rs.getLong(3),
-            toLocalDateTime(rs.getTimestamp(4)),
-            toLocalDateTime(rs.getTimestamp(5)));
+        RowMapper<CourseEntity> rowMapper = (rs, rowNum) -> CourseEntity.builder()
+            .id(rs.getLong(1))
+            .title(rs.getString(2))
+            .creatorId(rs.getLong(3))
+            .createdAt(toLocalDateTime(rs.getTimestamp(4)))
+            .updatedAt(toLocalDateTime(rs.getTimestamp(5)))
+            .build();
+
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
