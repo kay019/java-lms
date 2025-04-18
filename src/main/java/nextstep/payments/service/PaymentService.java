@@ -42,7 +42,7 @@ public class PaymentService {
             }).collect(Collectors.toList()));
 
         if (payments.canEnroll(session, newPayment)) {
-            paymentRepository.save(newPayment);
+            paymentRepository.save(newPayment.toPaymentEntity());
             return true;
         }
 
