@@ -1,6 +1,5 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionDescriptor;
 import nextstep.courses.domain.session.SessionPeriod;
@@ -11,13 +10,11 @@ import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.image.SessionImageType;
 import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import nextstep.courses.entity.SessionEntity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.awt.image.BufferedImage;
