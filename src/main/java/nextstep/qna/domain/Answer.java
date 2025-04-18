@@ -43,8 +43,8 @@ public class Answer {
 
     public DeleteHistory delete(NsUser questionWriter) {
         valid(questionWriter);
-        setDeleted(true);
-        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
+        this.deleted = true;
+        return DeleteHistory.fromAnswer(id, writer);
     }
 
     private void valid(NsUser questionWriter) {
@@ -55,10 +55,6 @@ public class Answer {
 
     public Long getId() {
         return id;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public boolean isDeleted() {
