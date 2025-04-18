@@ -37,23 +37,15 @@ public class Image {
     }
     
     public Image(final int width, final int height, final String type, final long size) {
-        validateImage(width, height, size);
+        validateSize(size);
         this.dimension = new Dimension(width, height);
         this.type = ImageType.fromString(type);
         this.size = size;
     }
     
-    private void validateImage(final int width, final int height, final long size) {
+    private void validateSize(final long size) {
         if (size > 1024 * 1024) {
             throw new IllegalArgumentException("이미지 크기는 1MB 이하여야 합니다");
-        }
-
-        if (width < 300 || height < 200) {
-            throw new IllegalArgumentException("이미지 크기는 최소 300x200 픽셀 이상이어야 합니다");
-        }
-
-        if (width * 2 != height * 3) {
-            throw new IllegalArgumentException("이미지의 가로와 세로 비율은 3:2여야 합니다");
         }
     }
     
@@ -62,8 +54,19 @@ public class Image {
         private final int height;
         
         public Dimension(int width, int height) {
+            validateDimension(width, height);
             this.width = width;
             this.height = height;
+        }
+        
+        private void validateDimension(int width, int height) {
+            if (width < 300 || height < 200) {
+                throw new IllegalArgumentException("이미지 크기는 최소 300x200 픽셀 이상이어야 합니다");
+            }
+
+            if (width * 2 != height * 3) {
+                throw new IllegalArgumentException("이미지의 가로와 세로 비율은 3:2여야 합니다");
+            }
         }
     }
 } 
