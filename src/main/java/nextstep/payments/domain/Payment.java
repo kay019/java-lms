@@ -26,4 +26,27 @@ public class Payment {
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
     }
+
+    public Payment(Long sessionId, Long nsUserId, long amount) {
+        this.sessionId = sessionId;
+        this.nsUserId = nsUserId;
+        this.amount = amount;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getNsUserId() {
+        return nsUserId;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

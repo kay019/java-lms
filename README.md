@@ -7,3 +7,10 @@
 
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
+
+### To Do
+- [ ] 강의 객체 만들기
+    - [ ] 시작일과 종료일 
+    - [ ] 커버 이미지 정보(이미지 타입, 크기(width, height), 유효성 체크) -> 객체로 뽑기
+    - [ ] 유료 강의인지, 무료 강의인지
+    - [ ] 강의 상태
