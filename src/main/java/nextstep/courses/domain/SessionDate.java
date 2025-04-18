@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import nextstep.exception.SessionDateIllegalArgumentException;
 
@@ -27,5 +28,18 @@ public class SessionDate {
 
     public LocalDate getEndDate() {
         return endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionDate that = (SessionDate) o;
+        return Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDate, endDate);
     }
 }
