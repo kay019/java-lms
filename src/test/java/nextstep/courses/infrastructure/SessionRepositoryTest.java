@@ -79,11 +79,4 @@ class SessionRepositoryTest {
 
         return new Session(constraint, descriptor);
     }
-
-    private Sessions createSampleSessions(int size) {
-        List<Session> sessionList = Stream.generate(this::createSampleSession)
-            .limit(size)
-            .collect(Collectors.toList());
-        return new Sessions(sessionList);
-    }
 }
