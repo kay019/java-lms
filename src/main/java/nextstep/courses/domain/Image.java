@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class Image {
     private Dimension dimension;
     private ImageType type;
-    private long size;
+    private ImageSize size;
     
     public enum ImageType {
         GIF, JPG, JPEG, PNG, SVG;
@@ -37,15 +37,23 @@ public class Image {
     }
     
     public Image(final int width, final int height, final String type, final long size) {
-        validateSize(size);
         this.dimension = new Dimension(width, height);
         this.type = ImageType.fromString(type);
-        this.size = size;
+        this.size = new ImageSize(size);
     }
     
-    private void validateSize(final long size) {
-        if (size > 1024 * 1024) {
-            throw new IllegalArgumentException("이미지 크기는 1MB 이하여야 합니다");
+    public static class ImageSize {
+        private final long value;
+        
+        public ImageSize(long value) {
+            validateSize(value);
+            this.value = value;
+        }
+        
+        private void validateSize(final long size) {
+            if (size > 1024 * 1024) {
+                throw new IllegalArgumentException("이미지 크기는 1MB 이하여야 합니다");
+            }
         }
     }
     
