@@ -31,7 +31,8 @@ public class PaymentService {
         return new Payment();
     }
 
-    public boolean save(Payment newPayment, long sessionId) throws IOException {
+    public boolean save(String newPaymentId, long sessionId) throws IOException {
+        Payment newPayment = payment(newPaymentId);
         Session session = Session.from(sessionRepository.findById(sessionId));
         Payments payments = new Payments(paymentRepository.findBySession(sessionId).stream()
             .map(paymentEntity -> {
