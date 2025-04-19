@@ -6,15 +6,21 @@ import nextstep.users.domain.NsUser;
 
 public class Student {
     private final long id;
+    private final long sessionId;
     private final String name;
 
-    public Student(NsUser user) {
+    public Student(NsUser user, long sessionId) {
         this.id = user.getId();
         this.name = user.getName();
+        this.sessionId = sessionId;
     }
 
     public long getId() {
         return id;
+    }
+
+    public long getSessionId() {
+        return sessionId;
     }
 
     public String getName() {

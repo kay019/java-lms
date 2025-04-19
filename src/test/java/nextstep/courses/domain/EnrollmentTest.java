@@ -14,7 +14,7 @@ class EnrollmentTest {
     @Test
     @DisplayName("학생과 결제 정보로 Enrollment를 생성할 수 있다")
     void createEnrollmentSuccess() {
-        Student student = new Student(JAVAJIGI);
+        Student student = new Student(JAVAJIGI, 1);
         Payment payment = createPayment(1000);
 
         Enrollment enrollment = new Enrollment(student, payment);
@@ -34,7 +34,7 @@ class EnrollmentTest {
     @Test
     @DisplayName("결제 정보가 null이면 EnrollmentIllegalArgumentException이 발생한다")
     void nullPaymentThrowsException() {
-        Student student = new Student(JAVAJIGI);
+        Student student = new Student(JAVAJIGI, 1);
 
         assertThatThrownBy(() -> new Enrollment(student, null))
             .isInstanceOf(EnrollmentIllegalArgumentException.class);
