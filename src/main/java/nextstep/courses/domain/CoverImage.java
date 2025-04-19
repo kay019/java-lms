@@ -3,7 +3,7 @@ package nextstep.courses.domain;
 public class CoverImage {
 
     private static final String ERROR_INVALID_IMAGE_WIDTH = "이미지 너비는 300픽셀 이상이어야 합니다: ";
-    private static final String ERROR_INVALID_IMAGE_HEIGHT = "이미지 높이는 200픽셀 이상이어야 합니다:";
+    private static final String ERROR_INVALID_IMAGE_HEIGHT = "이미지 높이는 200픽셀 이상이어야 합니다: ";
     private static final String ERROR_INVALID_RATIO = "이미지 비율은 3:2이어야 합니다.";
     private static final String ERROR_NOT_SUPPORTED_TYPE = "지원하지 않는 이미지 타입입니다.";
     private static final String ERROR_INVALID_SIZE = "이미지 크기는 1MB 이하여야 합니다: ";
@@ -35,7 +35,7 @@ public class CoverImage {
         }
 
         if (height < IMAGE_HEIGHT_LOWER_BOUND) {
-            throw new IllegalArgumentException(ERROR_INVALID_IMAGE_HEIGHT + " " + height);
+            throw new IllegalArgumentException(ERROR_INVALID_IMAGE_HEIGHT + height);
         }
 
         if (isInValidRatio(width, height)) {
