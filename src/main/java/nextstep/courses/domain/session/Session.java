@@ -4,7 +4,6 @@ import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
 import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.image.SessionImageType;
-import nextstep.courses.domain.session.image.URLImageHandler;
 import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import nextstep.courses.domain.session.policy.SessionStatus;
 import nextstep.courses.domain.session.policy.SessionType;
@@ -45,7 +44,7 @@ public class Session extends BaseDomain {
         this(null, null);
     }
 
-    public Session(Long id) {
+    public Session(String id) {
         this(id, null, null);
     }
 
@@ -53,7 +52,7 @@ public class Session extends BaseDomain {
         this(null, constraint, descriptor);
     }
 
-    public Session(Long id, SessionConstraint constraint, SessionDescriptor descriptor) {
+    public Session(String id, SessionConstraint constraint, SessionDescriptor descriptor) {
         super(id);
         this.descriptor = descriptor;
         this.constraint = constraint;
@@ -78,7 +77,7 @@ public class Session extends BaseDomain {
 
     public SessionEntity toSessionEntity(Long courseId) {
         return SessionEntity.builder()
-            .id(id)
+            .id(id())
             .createdAt(createdAt)
             .updatedAt(updatedAt)
             .deleted(deleted)

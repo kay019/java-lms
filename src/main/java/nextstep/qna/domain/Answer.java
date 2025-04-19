@@ -9,7 +9,7 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Answer  extends BaseDomain {
+public class Answer extends BaseDomain {
 
     private final NsUser writer;
 
@@ -17,7 +17,7 @@ public class Answer  extends BaseDomain {
 
     private final Question question;
 
-    public Answer(Long id, NsUser writer, Question question, String contents) {
+    public Answer(String id, NsUser writer, Question question, String contents) {
         this.id = id;
         if (writer == null) {
             throw new UnAuthorizedException();
@@ -47,7 +47,7 @@ public class Answer  extends BaseDomain {
 
         this.deleted = true;
         this.updatedAt = LocalDateTime.now();
-        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, LocalDateTime.now());
+        return new DeleteHistory(ContentType.ANSWER, id(), this.writer, LocalDateTime.now());
     }
 
     @Override

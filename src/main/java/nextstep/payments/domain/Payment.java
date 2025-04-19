@@ -35,14 +35,14 @@ public class Payment extends BaseDomain {
         this(null, session, user, amount);
     }
 
-    public Payment(Long id, Session session, NsUser user, Long amount) {
+    public Payment(String id, Session session, NsUser user, Long amount) {
         super(id, LocalDateTime.now(), LocalDateTime.now());
         this.session = session;
         this.user = user;
         this.amount = amount;
     }
 
-    public Payment(Long id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt, Session session, NsUser user, Long amount) {
+    public Payment(String id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt, Session session, NsUser user, Long amount) {
         super(id, deleted, createdAt, updatedAt);
         this.session = session;
         this.user = user;
@@ -63,7 +63,7 @@ public class Payment extends BaseDomain {
 
     public PaymentEntity toPaymentEntity() {
         return PaymentEntity.builder()
-            .id(id)
+            .id(id())
             .userId(user.id())
             .sessionId(session.id())
             .amount(amount)

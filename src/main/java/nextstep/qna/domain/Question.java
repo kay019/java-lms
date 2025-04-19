@@ -15,7 +15,7 @@ public class Question extends BaseDomain {
 
     private final NsUser writer;
 
-    public Question(Long id, NsUser writer, String title, String contents) {
+    public Question(String id, NsUser writer, String title, String contents) {
         super(id);
         this.id = id;
         this.writer = writer;
@@ -39,7 +39,7 @@ public class Question extends BaseDomain {
         this.deleted = true;
         this.updatedAt = LocalDateTime.now();
 
-        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+        return new DeleteHistory(ContentType.QUESTION, id(), writer, LocalDateTime.now());
     }
 
     @Override

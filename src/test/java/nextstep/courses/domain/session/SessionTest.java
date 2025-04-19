@@ -41,6 +41,6 @@ public class SessionTest {
             new SessionEnrollPolicy()
         );
 
-        assertDoesNotThrow(() -> new Session(1L, constraint, descriptor));
+        assertDoesNotThrow(() -> new Session("1", constraint, descriptor));
     }
 }

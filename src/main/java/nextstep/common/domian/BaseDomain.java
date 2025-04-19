@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class BaseDomain {
-    protected Long id;
+    protected String id;
 
     protected LocalDateTime createdAt;
 
@@ -15,17 +15,17 @@ public class BaseDomain {
     public BaseDomain() {
     }
 
-    public BaseDomain(Long id) {
+    public BaseDomain(String id) {
         this(id, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public BaseDomain(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public BaseDomain(String id, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public BaseDomain(Long id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public BaseDomain(String id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -33,7 +33,10 @@ public class BaseDomain {
     }
 
     public Long id() {
-        return id;
+        if (id == null) {
+            return null;
+        }
+        return Long.valueOf(id);
     }
 
     @Override

@@ -21,4 +21,8 @@ public class PaymentEntity {
     private LocalDateTime updatedAt;
 
     private boolean deleted;
+
+    public String getId() {
+        return id.toString();
+    }
 }

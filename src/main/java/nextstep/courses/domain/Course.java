@@ -36,15 +36,15 @@ public class Course extends BaseDomain {
         this(null, title, creatorId, new Sessions(), LocalDateTime.now(), null);
     }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(String id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this(id, title, creatorId, new Sessions(), createdAt, updatedAt);
     }
 
-    public Course(Long id, String title, Long creatorId, Sessions sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(String id, String title, Long creatorId, Sessions sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this(id, false, title, creatorId, sessions, createdAt, updatedAt);
     }
 
-    public Course(Long id, boolean deleted, String title, Long creatorId, Sessions sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(String id, boolean deleted, String title, Long creatorId, Sessions sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, deleted, createdAt, updatedAt);
         this.title = title;
         this.creatorId = creatorId;
@@ -59,7 +59,7 @@ public class Course extends BaseDomain {
 
     public CourseEntity toCourseEntity() {
         return CourseEntity.builder()
-            .id(id)
+            .id(id())
             .title(title)
             .creatorId(creatorId)
             .createdAt(createdAt)
