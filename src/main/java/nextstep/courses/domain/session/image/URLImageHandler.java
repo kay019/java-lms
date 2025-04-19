@@ -1,11 +1,14 @@
 package nextstep.courses.domain.session.image;
 
+import org.springframework.stereotype.Component;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 
+@Component("urlImageHandler")
 public class URLImageHandler implements ImageHandler {
 
     @Override

@@ -17,6 +17,9 @@ public class SessionService {
     @Resource
     private SessionRepository sessionRepository;
 
+    @Resource
+    private SessionFactory sessionFactory;
+
     public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {
         Session newSession = new Session(constraint, descriptor);
         sessionRepository.save(newSession.toSessionEntity(courseId));
@@ -24,7 +27,6 @@ public class SessionService {
 
     @Transactional
     public void deleteSession(long sessionId) throws IOException {
-        SessionFactory sessionFactory = new SessionFactory();
         Session session = sessionFactory.create(sessionRepository.findById(sessionId));
         session.delete();
     }

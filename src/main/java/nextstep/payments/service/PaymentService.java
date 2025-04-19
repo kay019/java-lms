@@ -27,13 +27,15 @@ public class PaymentService {
     @Resource
     private UserRepository userRepository;
 
+    @Resource
+    private SessionFactory sessionFactory;
+
     public Payment payment(String id) {
         // PG사 API를 통해 id에 해당하는 결제 정보를 반환
         return new Payment();
     }
 
     public boolean save(String newPaymentId, long sessionId) throws IOException {
-        SessionFactory sessionFactory = new SessionFactory();
         Payment newPayment = payment(newPaymentId);
         Session session = sessionFactory.create(sessionRepository.findById(sessionId));
         Payments payments = new Payments(paymentRepository.findBySession(sessionId).stream()
