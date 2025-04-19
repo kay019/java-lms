@@ -14,20 +14,16 @@ public class SessionImage {
 
     private final SessionImageType type;
 
-    public SessionImage(ImageHandler imageHandler) {
+    public SessionImage(ImageHandler imageHandler) throws IOException {
         this(null, imageHandler, null);
     }
 
-    public SessionImage(String url, SessionImageType type) throws IOException {
-        this(url, new URLImageHandler(url), type);
-    }
-
-    public SessionImage(String url, ImageHandler imageHandler, SessionImageType type) {
-        BufferedImage res = imageHandler.image();
+    public SessionImage(String url, ImageHandler imageHandler, SessionImageType type) throws IOException {
+        BufferedImage res = imageHandler.image(url);
         if ((WIDTH_RATIO * res.getHeight()) != (HEIGHT_RATIO * res.getWidth())) {
             throw new IllegalArgumentException("width와 height의 비율은 3:2 이여야 합니다.");
         }
-        if (imageHandler.byteSize() > MAX_BYTE_SIZE) {
+        if (imageHandler.byteSize(url) > MAX_BYTE_SIZE) {
             throw new IllegalArgumentException("크기가 1MB를 초과했습니다.");
         }
 
@@ -44,11 +40,7 @@ public class SessionImage {
         return type.toString();
     }
 
-    public BufferedImage image() {
-        return imageHandler.image();
-    }
-
-    public void updateImage() throws IOException {
-        imageHandler.updateImage();
+    public BufferedImage image() throws IOException {
+        return imageHandler.image(url);
     }
 }

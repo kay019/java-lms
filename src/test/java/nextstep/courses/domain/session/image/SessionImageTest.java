@@ -17,16 +17,12 @@ class SessionImageTest {
     public void testConstructor() {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage image() {
+            public BufferedImage image(String url) {
                 return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
             }
 
             @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
+            public long byteSize(String url) {
                 return 1024L * 866L;
             }
         };
@@ -39,16 +35,12 @@ class SessionImageTest {
     public void testImage_throwExceptionByRatio() throws IOException {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage image() {
+            public BufferedImage image(String url) {
                 return new BufferedImage(300, 201, BufferedImage.TYPE_INT_ARGB);
             }
 
             @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
+            public long byteSize(String url) {
                 return 1024L * 866L;
             }
         };
@@ -63,16 +55,12 @@ class SessionImageTest {
     public void testImage_throwExceptionBySize() throws IOException {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage image() {
+            public BufferedImage image(String url) {
                 return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
             }
 
             @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
+            public long byteSize(String url) {
                 return 1024L * 1025L;
             }
         };

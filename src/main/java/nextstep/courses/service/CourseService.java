@@ -3,6 +3,7 @@ package nextstep.courses.service;
 import nextstep.courses.domain.Course;
 import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.session.SessionRepository;
+import nextstep.courses.factory.CourseFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,8 @@ public class CourseService {
 
     @Transactional
     public void deleteCourse(long courseId) throws IOException {
-        Course course = Course.from(courseRepository.findById(courseId), sessionRepository.findAllByCourseId(courseId));
+        CourseFactory courseFactory = new CourseFactory();
+        Course course = courseFactory.create(courseRepository.findById(courseId), sessionRepository.findAllByCourseId(courseId));
         course.delete();
     }
 }

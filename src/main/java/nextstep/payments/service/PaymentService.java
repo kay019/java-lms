@@ -2,6 +2,7 @@ package nextstep.payments.service;
 
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionRepository;
+import nextstep.courses.factory.SessionFactory;
 import nextstep.payments.domain.Payment;
 import nextstep.payments.domain.PaymentRepository;
 import nextstep.payments.domain.Payments;
@@ -32,8 +33,9 @@ public class PaymentService {
     }
 
     public boolean save(String newPaymentId, long sessionId) throws IOException {
+        SessionFactory sessionFactory = new SessionFactory();
         Payment newPayment = payment(newPaymentId);
-        Session session = Session.from(sessionRepository.findById(sessionId));
+        Session session = sessionFactory.create(sessionRepository.findById(sessionId));
         Payments payments = new Payments(paymentRepository.findBySession(sessionId).stream()
             .map(paymentEntity -> {
                 NsUser user = userRepository.findByUserId(paymentEntity.getUserId().toString())

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -17,19 +18,15 @@ public class SessionTest {
 
     @DisplayName("Session 인스턴스 생성")
     @Test
-    public void testConstructor() {
+    public void testConstructor() throws IOException {
         ImageHandler imageHandlerStub = new ImageHandler() {
             @Override
-            public BufferedImage image() {
+            public BufferedImage image(String url) {
                 return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
             }
 
             @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
+            public long byteSize(String url) {
                 return 1024L * 866L;
             }
         };

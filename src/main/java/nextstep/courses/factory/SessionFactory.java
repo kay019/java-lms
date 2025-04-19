@@ -1,0 +1,51 @@
+package nextstep.courses.factory;
+
+import nextstep.courses.domain.session.Session;
+import nextstep.courses.domain.session.SessionDescriptor;
+import nextstep.courses.domain.session.SessionPeriod;
+import nextstep.courses.domain.session.Sessions;
+import nextstep.courses.domain.session.constraint.SessionConstraint;
+import nextstep.courses.domain.session.image.ImageHandler;
+import nextstep.courses.domain.session.image.SessionImage;
+import nextstep.courses.domain.session.image.SessionImageType;
+import nextstep.courses.domain.session.image.URLImageHandler;
+import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
+import nextstep.courses.domain.session.policy.SessionStatus;
+import nextstep.courses.domain.session.policy.SessionType;
+import nextstep.courses.entity.SessionEntity;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SessionFactory {
+
+    private final ImageHandler imageHandler;
+
+    public SessionFactory() {
+        this.imageHandler = new URLImageHandler();
+    }
+
+    public SessionFactory(ImageHandler imageHandler) {
+        this.imageHandler = imageHandler;
+    }
+
+    public Session create(SessionEntity sessionEntity) throws IOException {
+        SessionConstraint sessionConstraint = new SessionConstraint(sessionEntity.getFee(), sessionEntity.getCapacity());
+        SessionDescriptor sessionDescriptor = new SessionDescriptor(
+            new SessionImage(sessionEntity.getImageUrl(), imageHandler, SessionImageType.fromString(sessionEntity.getImageType())),
+            new SessionPeriod(sessionEntity.getStartDate(), sessionEntity.getEndDate()),
+            new SessionEnrollPolicy(SessionStatus.fromString(sessionEntity.getStatus()), SessionType.fromString(sessionEntity.getType()))
+        );
+        return new Session(sessionEntity.getId(), sessionConstraint, sessionDescriptor);
+    }
+
+    public Sessions create(List<SessionEntity> sessionEntities) throws IOException {
+        List<Session> resultList = new ArrayList<>();
+        for (SessionEntity sessionEntity : sessionEntities) {
+            resultList.add(create(sessionEntity));
+        }
+        return new Sessions(resultList);
+    }
+
+}

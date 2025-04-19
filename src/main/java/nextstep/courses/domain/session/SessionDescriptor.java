@@ -50,11 +50,7 @@ public class SessionDescriptor {
         return policy.canEnroll(sessionConstraint, enrollCount, amount);
     }
 
-    public BufferedImage image() {
+    public BufferedImage image() throws IOException {
         return image.image();
-    }
-
-    public void updateImage() throws IOException {
-        image.updateImage();
     }
 }

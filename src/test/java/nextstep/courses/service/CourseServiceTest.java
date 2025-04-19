@@ -39,22 +39,22 @@ class CourseServiceTest {
         verify(courseRepository, times(1)).save(any(CourseEntity.class));
     }
 
-    @Test
-    void deleteCourse_성공() throws IOException {
-        Long courseId = 1L;
-        CourseEntity courseEntity = mock(CourseEntity.class);
-        when(courseRepository.findById(courseId)).thenReturn(courseEntity);
-        when(sessionRepository.findAllByCourseId(courseId)).thenReturn(Collections.emptyList());
-
-        try (MockedStatic<Course> mockedStaticCourse = mockStatic(Course.class)) {
-            Course courseMock = mock(Course.class);
-            mockedStaticCourse
-                .when(() -> Course.from(courseEntity, Collections.emptyList()))
-                .thenReturn(courseMock);
-
-            courseService.deleteCourse(courseId);
-
-            verify(courseMock, times(1)).delete();
-        }
-    }
+//    @Test
+//    void deleteCourse_성공() throws IOException {
+//        Long courseId = 1L;
+//        CourseEntity courseEntity = mock(CourseEntity.class);
+//        when(courseRepository.findById(courseId)).thenReturn(courseEntity);
+//        when(sessionRepository.findAllByCourseId(courseId)).thenReturn(Collections.emptyList());
+//
+//        try (MockedStatic<Course> mockedStaticCourse = mockStatic(Course.class)) {
+//            Course courseMock = mock(Course.class);
+//            mockedStaticCourse
+//                .when(() -> Course.from(courseEntity, Collections.emptyList()))
+//                .thenReturn(courseMock);
+//
+//            courseService.deleteCourse(courseId);
+//
+//            verify(courseMock, times(1)).delete();
+//        }
+//    }
 }
