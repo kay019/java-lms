@@ -44,9 +44,7 @@ public class Session {
     }
 
     public static Session register(Long id, CoverImage coverImage, SessionType sessionType, Long sessionPrice, Long capacity) {
-        if (sessionType.isPaid() && capacity == null || capacity <= 0) {
-            throw new IllegalStateException(ERROR_PAID_SESSION_REQUIRES_CAPACITY);
-        }
+        validateSessionType(sessionType, capacity);
 
         if (sessionType.isFree()) {
             capacity = null;
@@ -62,6 +60,12 @@ public class Session {
                 sessionPrice,
                 capacity
         );
+    }
+
+    private static void validateSessionType(SessionType sessionType, Long capacity) {
+        if (sessionType.isPaid() && capacity == null || capacity <= 0) {
+            throw new IllegalStateException(ERROR_PAID_SESSION_REQUIRES_CAPACITY);
+        }
     }
 
     public void close() {
