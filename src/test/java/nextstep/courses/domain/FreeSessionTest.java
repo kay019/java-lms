@@ -32,12 +32,14 @@ class FreeSessionTest {
     void FreeSession_생성_빌더_정상작동() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
+            .courseID(1L)
             .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
             .build();
 
         assertThat(session.getId()).isEqualTo(1L);
+        assertThat(session.getCourseId()).isEqualTo(1L);
         assertThat(session.getCoverImage()).isEqualTo(coverImage);
         assertThat(session.getStatus()).isEqualTo(status);
         assertThat(session.getSessionDate()).isEqualTo(sessionDate);
@@ -49,6 +51,7 @@ class FreeSessionTest {
     void enroll_정상_등록() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
+            .courseID(1L)
             .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
@@ -68,6 +71,7 @@ class FreeSessionTest {
     void enroll_유료_결제시_예외발생() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
+            .courseID(1L)
             .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)

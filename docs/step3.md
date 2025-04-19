@@ -25,7 +25,7 @@
 - Payment는 테이블 매핑을 고려하지 않아도 된다.
 
 ## 기능 구현 목록
-- [ ] Session 도메인에서 courseId 를 갖도록 변경한다.
+- [x] Session 도메인에서 courseId 를 갖도록 변경한다.
 - [ ] DB 테이블 설계 (schema.sql 구현)
   - [ ] Session table 설계
   - [ ] SessionCoverImage table 설계

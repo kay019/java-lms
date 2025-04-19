@@ -33,6 +33,7 @@ class PaidSessionTest {
     void PaidSession_생성_빌더_정상작동() {
         PaidSession session = new PaidSession.Builder()
             .id(2L)
+            .courseID(1L)
             .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
@@ -41,6 +42,7 @@ class PaidSessionTest {
             .build();
 
         assertThat(session.getId()).isEqualTo(2L);
+        assertThat(session.getCourseId()).isEqualTo(1L);
         assertThat(session.getMaxCapacity()).isEqualTo(50);
         assertThat(session.getFee()).isEqualTo(30000);
         assertThat(session.getStudents()).isEmpty();

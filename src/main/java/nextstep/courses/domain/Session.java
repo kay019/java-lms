@@ -5,6 +5,7 @@ import java.util.List;
 
 public abstract class Session {
     private final long id;
+    private final long courseId;
     private final SessionCoverImage coverImage;
     private final SessionStatus status;
     private final SessionDate sessionDate;
@@ -13,12 +14,18 @@ public abstract class Session {
 
     public abstract static class Builder<T extends Builder<T>> {
         protected long id;
+        protected long courseId;
         protected SessionCoverImage coverImage;
         protected SessionStatus status;
         protected SessionDate sessionDate;
 
         public T id(long id) {
             this.id = id;
+            return self();
+        }
+
+        public T courseID(long courseId) {
+            this.courseId = courseId;
             return self();
         }
 
@@ -43,6 +50,7 @@ public abstract class Session {
 
     protected Session(Builder<?> builder) {
         this.id = builder.id;
+        this.courseId = builder.courseId;
         this.coverImage = builder.coverImage;
         this.status = builder.status;
         this.sessionDate = builder.sessionDate;
@@ -53,6 +61,10 @@ public abstract class Session {
 
     public long getId() {
         return id;
+    }
+
+    public long getCourseId() {
+        return courseId;
     }
 
     public SessionCoverImage getCoverImage() {
