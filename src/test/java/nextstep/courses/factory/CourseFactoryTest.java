@@ -1,9 +1,7 @@
 package nextstep.courses.factory;
 
-import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.entity.CourseEntity;
-import nextstep.courses.entity.SessionEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
