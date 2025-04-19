@@ -12,11 +12,11 @@ import java.util.List;
 @Component
 public class CourseFactory {
 
-    private final SessionFactory sessionFactory;
+    private final SessionsFactory sessionsFactory;
 
     @Autowired
-    public CourseFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public CourseFactory(SessionsFactory sessionsFactory) {
+        this.sessionsFactory = sessionsFactory;
     }
 
     public Course create(CourseEntity courseEntity, List<SessionEntity> sessionEntities) throws IOException {
@@ -25,7 +25,7 @@ public class CourseFactory {
             courseEntity.isDeleted(),
             courseEntity.getTitle(),
             courseEntity.getCreatorId(),
-            sessionFactory.create(sessionEntities),
+            sessionsFactory.create(sessionEntities),
             courseEntity.getCreatedAt(),
             courseEntity.getUpdatedAt()
         );

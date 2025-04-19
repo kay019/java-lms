@@ -1,12 +1,14 @@
 package nextstep.payments.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@EqualsAndHashCode
 public class PaymentEntity {
     private Long id;
 

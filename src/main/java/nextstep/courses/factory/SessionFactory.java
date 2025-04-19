@@ -40,12 +40,4 @@ public class SessionFactory {
         return new Session(sessionEntity.getId(), sessionConstraint, sessionDescriptor);
     }
 
-    public Sessions create(List<SessionEntity> sessionEntities) throws IOException {
-        List<Session> resultList = new ArrayList<>();
-        for (SessionEntity sessionEntity : sessionEntities) {
-            resultList.add(create(sessionEntity));
-        }
-        return new Sessions(resultList);
-    }
-
 }

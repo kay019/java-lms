@@ -4,16 +4,16 @@ import nextstep.courses.domain.Course;
 import nextstep.courses.entity.CourseEntity;
 import nextstep.courses.entity.SessionEntity;
 import nextstep.courses.factory.CourseFactory;
-import nextstep.courses.factory.SessionFactory;
+import nextstep.courses.factory.SessionsFactory;
 
 import java.util.List;
 
-public class TestCourseFactory extends CourseFactory  {
+public class TestCourseFactory extends CourseFactory {
     int createCalled = 0;
     Course createResult;
 
-    public TestCourseFactory(SessionFactory sessionFactory, Course createResult) {
-        super(sessionFactory);
+    public TestCourseFactory(SessionsFactory sessionsFactory, Course createResult) {
+        super(sessionsFactory);
         this.createResult = createResult;
     }
 

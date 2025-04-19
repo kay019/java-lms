@@ -27,14 +27,17 @@ class SessionServiceTest {
     @Test
     void testCreateSession() throws IOException {
         TestSessionRepository sessionRepository = new TestSessionRepository(1L, null, List.of());
-        TestImageHandler imageHandler = new TestImageHandler(300, 200, 1024L * 1024L);
-        TestSessionFactory sessionFactory = new TestSessionFactory(imageHandler, new Sessions());
+        TestSessionFactory sessionFactory = new TestSessionFactory();
 
         SessionService sessionService = new SessionService(sessionRepository, sessionFactory);
 
         SessionConstraint constraint = new SessionConstraint(200_000, 1);
         SessionDescriptor descriptor = new SessionDescriptor(
-            new SessionImage("http://test", imageHandler, SessionImageType.JPEG),
+            new SessionImage(
+                "http://test",
+                new TestImageHandler(300, 200, 1024L * 1024L),
+                SessionImageType.JPEG
+            ),
             new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(1)),
             new SessionEnrollPolicy()
         );

@@ -24,13 +24,7 @@ class CourseServiceTest {
         CourseService courseService = new CourseService(
             courseRepository,
             new TestSessionRepository(1L, null, List.of()),
-            new TestCourseFactory(
-                new TestSessionFactory(
-                    new TestImageHandler(300, 200, 1024L * 866L),
-                    new Sessions()
-                ),
-                course
-            )
+            new TestCourseFactory(new TestSessionsFactory(), course)
         );
 
         courseService.createCourse("test-title", 1L);
@@ -45,13 +39,8 @@ class CourseServiceTest {
         Course course = new Course("1", "test-course", 3L, testLocalDateTime, testLocalDateTime);
 
         TestCourseRepository courseRepository = new TestCourseRepository(1L, null);
-        TestCourseFactory courseFactory = new TestCourseFactory(
-            new TestSessionFactory(
-                new TestImageHandler(300, 200, 1024L * 866L),
-                new Sessions()
-            ),
-            course
-        );
+        TestCourseFactory courseFactory = new TestCourseFactory(new TestSessionsFactory(), course);
+
         CourseService courseService = new CourseService(
             courseRepository,
             new TestSessionRepository(1L, null, List.of()),
