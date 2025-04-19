@@ -22,7 +22,7 @@ class FreeSessionTest {
 
     @BeforeEach
     void setUp() {
-        student = new Student(JAVAJIGI, 1);
+        student = new Student(1, JAVAJIGI, 1);
         coverImage = new SessionCoverImage(1, 1, new ImageFileSize(1024), ImageType.JPG, new ImageSize(300, 200));
         status = SessionStatus.ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
