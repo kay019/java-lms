@@ -1,8 +1,6 @@
 package nextstep.courses.factory;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.session.Sessions;
-import nextstep.courses.domain.session.image.URLImageHandler;
 import nextstep.courses.entity.CourseEntity;
 import nextstep.courses.entity.SessionEntity;
 

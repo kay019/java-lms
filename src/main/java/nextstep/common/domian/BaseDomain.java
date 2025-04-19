@@ -39,6 +39,7 @@ public class BaseDomain {
         return Long.valueOf(id);
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
