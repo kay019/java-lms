@@ -21,21 +21,21 @@ public class Session {
 
     private SessionStatus sessionStatus;
 
-    private Long sessionPrice;
+    private Long price;
 
     private Long capacity;
 
     private final List<EnrollmentHistory> enrollments = new ArrayList<>();
 
 
-    private Session(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, CoverImage coverImage, SessionType sessionType, SessionStatus sessionStatus, Long sessionPrice, Long capacity) {
+    private Session(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, CoverImage coverImage, SessionType sessionType, SessionStatus sessionStatus, Long price, Long capacity) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.coverImage = coverImage;
         this.sessionType = sessionType;
         this.sessionStatus = sessionStatus;
-        this.sessionPrice = sessionPrice;
+        this.price = price;
         this.capacity = capacity;
     }
 
@@ -73,7 +73,7 @@ public class Session {
             throw new IllegalStateException("모집 중이 아닙니다");
         }
 
-        if (sessionType.isPaid() && !Objects.equals(this.sessionPrice, amount)) {
+        if (sessionType.isPaid() && !Objects.equals(this.price, amount)) {
             throw new IllegalArgumentException("결제 금액이 수강료와 일치하지 않습니다.");
         }
 
