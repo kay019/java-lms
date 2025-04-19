@@ -1,22 +1,21 @@
 package nextstep.courses.entity;
 
-import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionStatus;
 
 import java.time.LocalDateTime;
 
 public class SessionEntity {
 
-  private Long id;
-  private Long courseId;
-  private Long coverImageId;
-  private String title;
-  private SessionStatus status;
-  private long price;
-  private int maxCapacity;
-  private int enrolledCnt;
-  private LocalDateTime startDate;
-  private LocalDateTime endDate;
+  private final Long id;
+  private final Long courseId;
+  private final Long coverImageId;
+  private final String title;
+  private final SessionStatus status;
+  private final long price;
+  private final int maxCapacity;
+  private final int enrolledCnt;
+  private final LocalDateTime startDate;
+  private final LocalDateTime endDate;
 
   public SessionEntity(Long id, Long courseId, Long coverImageId, String title, SessionStatus status, long price, int maxCapacity, int enrolledCnt, LocalDateTime startDate, LocalDateTime endDate) {
     this.id = id;

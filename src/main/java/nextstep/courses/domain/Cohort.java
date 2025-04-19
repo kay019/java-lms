@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.entity.CohortEntity;
-import nextstep.courses.utils.IdGenerator;
 
 import java.util.Objects;
 
@@ -10,11 +9,11 @@ public class Cohort {
   private final String name;
 
   public Cohort() {
-    this(IdGenerator.generate(), null);
+    this(0L, null);
   }
 
   public Cohort(String name) {
-    this(IdGenerator.generate(), name);
+    this(0L, name);
   }
 
   public Cohort(Long id, String name) {

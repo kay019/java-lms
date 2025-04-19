@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.entity.ImageEntity;
-import nextstep.courses.utils.IdGenerator;
 
 public class Image {
   private static final long MAX_SIZE_IN_BYTES = 1_000_000L;
@@ -15,7 +14,7 @@ public class Image {
   private final int heightInPixel;
 
   public Image(String filename) {
-    this(IdGenerator.generate(), filename, 1000, 300, 200);
+    this(filename, 1000, 300, 200);
   }
 
   public Image(Long id, String filename) {
@@ -23,7 +22,7 @@ public class Image {
   }
 
   public Image (String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
-    this(IdGenerator.generate(), filename, sizeInBytes, widthInPixel, heightInPixel);
+    this(0L, filename, sizeInBytes, widthInPixel, heightInPixel);
   }
 
   public Image (Long id, String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {

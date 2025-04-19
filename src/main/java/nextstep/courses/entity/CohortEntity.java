@@ -3,9 +3,9 @@ package nextstep.courses.entity;
 import nextstep.courses.domain.Cohort;
 
 public class CohortEntity {
-  private Long id;
-  private Long courseId;
-  private String name;
+  private final Long id;
+  private final Long courseId;
+  private final String name;
 
   public CohortEntity(Long id, Long courseId, String name) {
     this.id = id;

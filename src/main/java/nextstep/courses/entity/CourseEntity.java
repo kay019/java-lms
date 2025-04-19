@@ -7,12 +7,12 @@ import nextstep.courses.domain.Sessions;
 import java.time.LocalDateTime;
 
 public class CourseEntity {
-  private Long id;
-  private String title;
-  private Long creatorId;
-  private Long cohortId;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+  private final Long id;
+  private final String title;
+  private final Long creatorId;
+  private final Long cohortId;
+  private final LocalDateTime createdAt;
+  private final LocalDateTime updatedAt;
 
   public CourseEntity(Long id, String title, Long creatorId, Long cohortId, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;

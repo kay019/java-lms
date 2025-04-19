@@ -4,11 +4,11 @@ import nextstep.courses.domain.Image;
 
 public class ImageEntity {
 
-  private Long id;
-  private String filename;
-  private long sizeInBytes;
-  private int widthInPixel;
-  private int heightInPixel;
+  private final Long id;
+  private final String filename;
+  private final long sizeInBytes;
+  private final int widthInPixel;
+  private final int heightInPixel;
 
   public ImageEntity(Long id, String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
     this.id = id;

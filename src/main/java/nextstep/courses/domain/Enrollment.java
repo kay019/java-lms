@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.entity.EnrollmentEntity;
-import nextstep.courses.utils.IdGenerator;
 import nextstep.users.domain.NsUser;
 
 import java.util.Objects;
@@ -12,7 +11,7 @@ public class Enrollment {
   private final Long sessionId;
 
   public Enrollment(NsUser student, Long sessionId) {
-    this(IdGenerator.generate(), student, sessionId);
+    this(0L, student, sessionId);
   }
 
   public Enrollment(Long id, NsUser student, Long sessionId) {
