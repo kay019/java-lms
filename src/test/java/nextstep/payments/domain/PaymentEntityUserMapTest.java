@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class PaymentEntityUserMapTest {
 

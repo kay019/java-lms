@@ -128,12 +128,12 @@ public class NsUser extends BaseDomain {
     @Override
     public String toString() {
         return "NsUser{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+            "id=" + id +
+            ", userId='" + userId + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            '}';
     }
 }

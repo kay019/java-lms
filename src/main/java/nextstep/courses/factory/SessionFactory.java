@@ -3,12 +3,10 @@ package nextstep.courses.factory;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionDescriptor;
 import nextstep.courses.domain.session.SessionPeriod;
-import nextstep.courses.domain.session.Sessions;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
 import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.image.SessionImageType;
-import nextstep.courses.domain.session.image.URLImageHandler;
 import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import nextstep.courses.domain.session.policy.SessionStatus;
 import nextstep.courses.domain.session.policy.SessionType;
@@ -17,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class SessionFactory {

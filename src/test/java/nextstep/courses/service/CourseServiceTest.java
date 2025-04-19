@@ -1,8 +1,10 @@
 package nextstep.courses.service;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.session.Sessions;
-import nextstep.stub.*;
+import nextstep.stub.TestCourseFactory;
+import nextstep.stub.TestCourseRepository;
+import nextstep.stub.TestSessionRepository;
+import nextstep.stub.TestSessionsFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +37,7 @@ class CourseServiceTest {
     @DisplayName("course 삭제")
     @Test
     void testDeleteCourse() throws IOException {
-        LocalDateTime testLocalDateTime  = LocalDateTime.now();
+        LocalDateTime testLocalDateTime = LocalDateTime.now();
         Course course = new Course("1", "test-course", 3L, testLocalDateTime, testLocalDateTime);
 
         TestCourseRepository courseRepository = new TestCourseRepository(1L, null);

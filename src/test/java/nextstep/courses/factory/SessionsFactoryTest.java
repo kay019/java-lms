@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class SessionsFactoryTest {
     @DisplayName("Session DB 정보들로 Sessions 인스턴스 생성")
@@ -25,7 +25,7 @@ class SessionsFactoryTest {
             sessionFactory, new Sessions()
         );
 
-        assertDoesNotThrow(() ->  sessionsFactory.create(sessionEntities));
+        assertDoesNotThrow(() -> sessionsFactory.create(sessionEntities));
     }
 
     private SessionEntity createSessionEntity(Long id) {
