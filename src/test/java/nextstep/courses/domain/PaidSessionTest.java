@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import nextstep.exception.PaidSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
+import static nextstep.courses.domain.SessionStatus.ENROLLING;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static nextstep.users.domain.NsUserTest.SANJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +25,7 @@ class PaidSessionTest {
     void setUp() {
         student = new Student(1, JAVAJIGI, 1);
         coverImage = new SessionCoverImage(1, 1,  new ImageFileSize(1024), ImageType.JPG, new ImageSize(300, 200));
-        status = SessionStatus.ENROLLING;
+        status = ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
 
@@ -53,6 +54,7 @@ class PaidSessionTest {
     void enroll_정상_등록() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
+            .status(ENROLLING)
             .fee(30000)
             .build();
 
@@ -83,6 +85,7 @@ class PaidSessionTest {
     void enroll_정원초과_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
+            .status(ENROLLING)
             .fee(30000)
             .build();
 
