@@ -2,12 +2,12 @@ package nextstep.courses.domain;
 
 public class CoverImage {
 
-    private final long size;
+    private final int size;
     private final ImageType imageType;
-    private final long width;
-    private final long height;
+    private final int width;
+    private final int height;
 
-    public CoverImage(long size, ImageType imageType, long width, long height) {
+    public CoverImage(int size, ImageType imageType, int width, int height) {
         validateSize(size);
         validateImageType(imageType);
         validateImageResolution(width, height);

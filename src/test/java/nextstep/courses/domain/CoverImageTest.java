@@ -15,36 +15,36 @@ class CoverImageTest {
 
     @Test
     @DisplayName("이미지 크기가 1MB를 초과하면 에러를 던진다.")
-    void imageSizeTest() {
+    void sizeTest() {
         // given
-        long imageSize = 1_048_577; // 1MB + 1byte
+        int size = 1_048_577; // 1MB + 1byte
         ImageType imageType = ImageType.SVG;
-        long width = 300;
-        long height = 200;
+        int width = 300;
+        int height = 200;
 
 
         // when & then
         Assertions.assertThatIllegalArgumentException()
-                .isThrownBy(() -> new CoverImage(imageSize, imageType, width, height));
+                .isThrownBy(() -> new CoverImage(size, imageType, width, height));
     }
 
     @Test
     @DisplayName("커버 이미지를 정상적으로 생성한다.")
     void imageTest() {
         // given
-        long imageSize = 1_048_576; // 1MB
+        int size = 1_048_576; // 1MB
         ImageType imageType = ImageType.SVG;
-        long width = 300;
-        long height = 200;
+        int width = 300;
+        int height = 200;
 
 
         // when
-        CoverImage coverImage = new CoverImage(imageSize, imageType, width, height);
+        CoverImage coverImage = new CoverImage(size, imageType, width, height);
 
         // & then
         Assertions.assertThat(coverImage)
-                .extracting("imageSize", "imageType", "width", "height")
-                .containsExactly(imageSize, imageType, width, height);
+                .extracting("size", "imageType", "width", "height")
+                .containsExactly(size, imageType, width, height);
     }
 
     @ParameterizedTest
@@ -52,18 +52,18 @@ class CoverImageTest {
     @MethodSource("provideValidImageTypes")
     void imageTypeTest(ImageType imageType) {
         // given
-        long imageSize = 1_048_576; // 1MB
-        long width = 300;
-        long height = 200;
+        int size = 1_048_576; // 1MB
+        int width = 300;
+        int height = 200;
 
 
         // when
-        CoverImage coverImage = new CoverImage(imageSize, imageType, width, height);
+        CoverImage coverImage = new CoverImage(size, imageType, width, height);
 
         // & then
         Assertions.assertThat(coverImage)
-                .extracting("imageSize", "imageType", "width", "height")
-                .containsExactly(imageSize, imageType, width, height);
+                .extracting("size", "imageType", "width", "height")
+                .containsExactly(size, imageType, width, height);
     }
 
     static Stream<ImageType> provideValidImageTypes() {
@@ -76,7 +76,7 @@ class CoverImageTest {
             "300, 199", // 높이 부족
             "400, 200"  // 비율 틀림
     })
-    void invalidSizeCombination(long width, long height) {
+    void invalidSizeCombination(int width, int height) {
         Assertions.assertThatThrownBy(() -> new CoverImage(1_000_000, ImageType.SVG, width, height))
                 .isInstanceOf(IllegalArgumentException.class);
     }
