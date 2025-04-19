@@ -26,7 +26,7 @@
 
 ## 기능 구현 목록
 - [x] Session 도메인에서 courseId 를 갖도록 변경한다.
-- [ ] SessionCoverImage 도메인에서 sessionId 를 갖도록 필드를 추가한다.
+- [x] SessionCoverImage 도메인에서 sessionId 를 갖도록 필드를 추가한다.
 - [ ] DB 테이블 설계 (schema.sql 구현)
   - [ ] Session table 설계
   - [ ] SessionCoverImage table 설계

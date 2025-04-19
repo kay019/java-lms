@@ -28,9 +28,10 @@ class SessionCoverImageTest {
         ImageType type = createValidImageType();
         ImageSize imageSize = createValidImageSize();
 
-        SessionCoverImage coverImage = new SessionCoverImage(1L, fileSize, type, imageSize);
+        SessionCoverImage coverImage = new SessionCoverImage(1L, 1L, fileSize, type, imageSize);
 
         assertThat(coverImage.getId()).isEqualTo(1L);
+        assertThat(coverImage.getCourseId()).isEqualTo(1L);
         assertThat(coverImage.getFileSize()).isEqualTo(fileSize);
         assertThat(coverImage.getType()).isEqualTo(type);
         assertThat(coverImage.getImageSize()).isEqualTo(imageSize);
@@ -42,7 +43,7 @@ class SessionCoverImageTest {
         ImageType type = createValidImageType();
         ImageSize imageSize = createValidImageSize();
 
-        assertThatThrownBy(() -> new SessionCoverImage(1L, null, type, imageSize))
+        assertThatThrownBy(() -> new SessionCoverImage(1L, 1L, null, type, imageSize))
             .isInstanceOf(SessionCoverImageIllegalArgumentException.class);
     }
 
@@ -52,7 +53,7 @@ class SessionCoverImageTest {
         ImageFileSize fileSize = createValidFileSize();
         ImageSize imageSize = createValidImageSize();
 
-        assertThatThrownBy(() -> new SessionCoverImage(1L, fileSize, null, imageSize))
+        assertThatThrownBy(() -> new SessionCoverImage(1L, 1L, fileSize, null, imageSize))
             .isInstanceOf(SessionCoverImageIllegalArgumentException.class);
     }
 
@@ -62,14 +63,14 @@ class SessionCoverImageTest {
         ImageFileSize fileSize = createValidFileSize();
         ImageType type = createValidImageType();
 
-        assertThatThrownBy(() -> new SessionCoverImage(1L, fileSize, type, null))
+        assertThatThrownBy(() -> new SessionCoverImage(1L, 1L, fileSize, type, null))
             .isInstanceOf(SessionCoverImageIllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("모든 필드가 null일 때 예외 발생")
     void throwExceptionWhenAllFieldsAreNull() {
-        assertThatThrownBy(() -> new SessionCoverImage(1L, null, null, null))
+        assertThatThrownBy(() -> new SessionCoverImage(1L, 1L, null, null, null))
             .isInstanceOf(SessionCoverImageIllegalArgumentException.class);
     }
 }
