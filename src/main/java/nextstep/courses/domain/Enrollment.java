@@ -21,8 +21,8 @@ public class Enrollment {
     this.sessionId = sessionId;
   }
 
-  public EnrollmentEntity toEnrollmentEntity() {
-    return new EnrollmentEntity(this.id, this.student.userId(), this.sessionId);
+  public EnrollmentEntity toEnrollmentEntity(Long sessionId) {
+    return new EnrollmentEntity(this.id, this.student.userId(), sessionId);
   }
 
   @Override

@@ -18,6 +18,10 @@ public class Image {
     this(IdGenerator.generate(), filename, 1000, 300, 200);
   }
 
+  public Image(Long id, String filename) {
+    this(id, filename, 1000, 300, 200);
+  }
+
   public Image (String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
     this(IdGenerator.generate(), filename, sizeInBytes, widthInPixel, heightInPixel);
   }

@@ -30,6 +30,10 @@ public class Session {
     this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), new Image("temp.jpeg"));
   }
 
+  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, Image coverImage, EnrollmentPolicy enrollmentPolicy) {
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), coverImage);
+  }
+
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments, Image coverImage) {
     this.id = id;
     this.course = course;

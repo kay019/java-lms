@@ -42,10 +42,10 @@ public class Enrollments {
     return Collections.unmodifiableList(enrollments);
   }
 
-  public List<EnrollmentEntity> toEnrollmentEntities() {
+  public List<EnrollmentEntity> toEnrollmentEntities(long sessionId) {
     List<EnrollmentEntity> enrollmentEntities = new ArrayList<>();
     for (Enrollment enrollment : enrollments) {
-      enrollmentEntities.add(enrollment.toEnrollmentEntity());
+      enrollmentEntities.add(enrollment.toEnrollmentEntity(sessionId));
     }
     return enrollmentEntities;
   }

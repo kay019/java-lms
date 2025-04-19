@@ -21,8 +21,11 @@ public class PaidEnrollmentPolicy implements EnrollmentPolicy {
 
   @Override
   public void checkPayment(Payment payment) {
-    if (payment == null || !payment.isSameAmount(this.price)) {
+    if (payment == null) {
       throw new IllegalStateException("결제 정보가 유효하지 않습니다.");
+    }
+    if (!payment.isSameAmount(this.price)) {
+      throw new IllegalStateException("결제 금액이 일치하지 않습니다.");
     }
   }
 

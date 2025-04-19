@@ -3,6 +3,8 @@ package nextstep.courses.domain;
 import nextstep.courses.entity.CohortEntity;
 import nextstep.courses.utils.IdGenerator;
 
+import java.util.Objects;
+
 public class Cohort {
   private final Long id;
   private final String name;
@@ -26,5 +28,18 @@ public class Cohort {
 
   public CohortEntity toCohortEntity(Long courseId) {
     return new CohortEntity(id, courseId, name);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Cohort cohort = (Cohort) o;
+    return Objects.equals(id, cohort.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }

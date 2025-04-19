@@ -41,7 +41,7 @@ public class EnrollmentRepositoryTest {
                     new Enrollment(user2, sessionId)
             )
     );
-    enrollmentRepository.saveAll(enrollments.toEnrollmentEntities());
+    enrollmentRepository.saveAll(enrollments.toEnrollmentEntities(sessionId));
 
     List<EnrollmentEntity> enrollmentEntities = enrollmentRepository.findBySessionId(sessionId);
     for (EnrollmentEntity enrollmentEntity : enrollmentEntities) {

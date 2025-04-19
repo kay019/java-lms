@@ -36,7 +36,7 @@ class PaidEnrollmentPolicyTest {
 
     assertThatThrownBy(() -> policy.checkPayment(wrongPayment))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("결제 정보가 유효하지 않습니다.");
+        .hasMessage("결제 금액이 일치하지 않습니다.");
   }
 
   @Test

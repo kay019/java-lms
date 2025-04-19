@@ -20,6 +20,10 @@ public class Course {
     this(0L, title, creatorId, LocalDateTime.now(), LocalDateTime.now(), new Cohort());
   }
 
+  public Course(String title, Long creatorId, Cohort cohort) {
+    this(0L, title, creatorId, LocalDateTime.now(), LocalDateTime.now(), cohort);
+  }
+
   public Course (Long id, String title, Long createId, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this(id, title, createId, createdAt, updatedAt, new Cohort());
   }
