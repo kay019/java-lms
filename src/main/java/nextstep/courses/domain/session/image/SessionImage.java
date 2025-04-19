@@ -37,7 +37,7 @@ public class SessionImage {
     }
 
     public String type() {
-        return type.toString();
+        return type.getImage();
     }
 
     public BufferedImage image() throws IOException {

@@ -22,10 +22,10 @@ public class SessionEnrollPolicy {
     }
 
     public String type() {
-        return type.toString();
+        return type.getType();
     }
 
     public String status() {
-        return status.toString();
+        return status.getStatus();
     }
 }

@@ -1,14 +1,27 @@
 package nextstep.courses.domain.session.image;
 
+import lombok.Getter;
+
 import java.util.stream.Stream;
 
+@Getter
 public enum SessionImageType {
-    GIF, JPG, JPEG, PNG, SVG;
+    GIF("gif"),
+    JPG("jpg"),
+    JPEG("jpeg"),
+    PNG("png"),
+    SVG("svg");
 
-    public static SessionImageType fromString(String imageType) {
+    private final String image;
+
+    SessionImageType(String image) {
+        this.image = image;
+    }
+
+    public static SessionImageType fromString(String image) {
         return Stream.of(SessionImageType.values())
-            .filter(type -> type.name().equalsIgnoreCase(imageType))
+            .filter(type -> type.image.equalsIgnoreCase(image))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Unknown image type: " + imageType));
+            .orElseThrow(() -> new IllegalArgumentException(String.format("알 수 없는 이미지 유형: '%s'", image)));
     }
 }
