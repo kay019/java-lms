@@ -2,6 +2,8 @@ package nextstep.courses.domain;
 
 import nextstep.exception.PaidSessionIllegalArgumentException;
 
+import static nextstep.courses.domain.SessionStatus.ENROLLING;
+
 public class PaidSession extends Session {
     private final int maxCapacity;
     private final int fee;
@@ -40,6 +42,10 @@ public class PaidSession extends Session {
     @Override
     public void enroll(Enrollment enrollment) {
         if (enrollment == null) {
+            throw new PaidSessionIllegalArgumentException();
+        }
+
+        if (!ENROLLING.equals(getStatus())) {
             throw new PaidSessionIllegalArgumentException();
         }
 

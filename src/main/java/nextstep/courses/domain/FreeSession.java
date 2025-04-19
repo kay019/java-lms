@@ -2,6 +2,8 @@ package nextstep.courses.domain;
 
 import nextstep.exception.FreeSessionIllegalArgumentException;
 
+import static nextstep.courses.domain.SessionStatus.ENROLLING;
+
 public class FreeSession extends Session {
     public static final int FREE = 0;
 
@@ -24,6 +26,10 @@ public class FreeSession extends Session {
     @Override
     public void enroll(Enrollment enrollment) {
         if (enrollment == null) {
+            throw new FreeSessionIllegalArgumentException();
+        }
+
+        if (!ENROLLING.equals(getStatus())) {
             throw new FreeSessionIllegalArgumentException();
         }
 

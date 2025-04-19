@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import nextstep.exception.FreeSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
+import static nextstep.courses.domain.SessionStatus.CLOSED;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -80,6 +81,21 @@ class FreeSessionTest {
         Payment paidPayment = createPayment(1000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, paidPayment)))
+            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("상태가 ENROLLING이 아니면 예외가 발생한다")
+    void enroll_NullEnrollment_예외발생() {
+        FreeSession session = new FreeSession.Builder()
+            .id(1L)
+            .courseID(1L)
+            .coverImage(coverImage)
+            .status(CLOSED)
+            .sessionDate(sessionDate)
+            .build();
+
+        assertThatThrownBy(() -> session.enroll(new Enrollment(student, createPayment(0))))
             .isInstanceOf(FreeSessionIllegalArgumentException.class);
     }
 

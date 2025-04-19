@@ -95,6 +95,20 @@ class PaidSessionTest {
             .isInstanceOf(PaidSessionIllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("상태가 ENROLLING이 아니면 예외가 발생한다")
+    void enroll_상태가_ENROLLING이_아닐때_예외발생() {
+        PaidSession session = new PaidSession.Builder()
+            .status(SessionStatus.CLOSED)
+            .fee(30000)
+            .build();
+
+        Payment payment = createPayment(30000);
+
+        assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
+            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+    }
+
     private Payment createPayment(long amount) {
         return new Payment("1", 1L, 1L, amount);
     }
