@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.IOException;
 
-@Service("courseService")
+@Service
 public class CourseService {
 
-    @Resource(name = "courseRepository")
+    @Resource
     private CourseRepository courseRepository;
 
-    @Resource(name = "sessionRepository")
+    @Resource
     private SessionRepository sessionRepository;
 
     public void createCourse(String title, Long creatorId) {

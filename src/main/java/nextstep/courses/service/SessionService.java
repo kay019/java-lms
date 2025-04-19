@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.IOException;
 
-@Service("sessionService")
+@Service
 public class SessionService {
 
-    @Resource(name = "sessionRepository")
+    @Resource
     private SessionRepository sessionRepository;
 
     public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {

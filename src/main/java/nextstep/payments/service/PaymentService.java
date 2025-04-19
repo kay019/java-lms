@@ -15,16 +15,16 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@Service("paymentService")
+@Service
 public class PaymentService {
 
-    @Resource(name = "sessionRepository")
+    @Resource
     private SessionRepository sessionRepository;
 
-    @Resource(name = "paymentRepository")
+    @Resource
     private PaymentRepository paymentRepository;
 
-    @Resource(name = "userRepository")
+    @Resource
     private UserRepository userRepository;
 
     public Payment payment(String id) {
