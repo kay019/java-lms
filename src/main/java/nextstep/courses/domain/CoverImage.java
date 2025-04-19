@@ -10,7 +10,15 @@ public class CoverImage {
     public CoverImage(long size, ImageType imageType, long width, long height) {
         validateSize(size);
         validateImageType(imageType);
+        validateImageResolution(width, height);
 
+        this.size = size;
+        this.imageType = imageType;
+        this.width = width;
+        this.height = height;
+    }
+
+    private void validateImageResolution(long width, long height) {
         if (width < 300) {
             throw new IllegalArgumentException("이미지 너비는 300픽셀 이상이어야 합니다: " + width);
         }
@@ -22,11 +30,6 @@ public class CoverImage {
         if (isInValidRatio(width, height)) {
             throw new IllegalArgumentException("이미지 비율은 3:2이어야 합니다.");
         }
-
-        this.size = size;
-        this.imageType = imageType;
-        this.width = width;
-        this.height = height;
     }
 
     private static void validateImageType(ImageType imageType) {
