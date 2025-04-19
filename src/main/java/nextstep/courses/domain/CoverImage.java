@@ -2,15 +2,13 @@ package nextstep.courses.domain;
 
 public class CoverImage {
 
-    private final long imageSize;
+    private final long size;
     private final ImageType imageType;
     private final long width;
     private final long height;
 
-    public CoverImage(long imageSize, ImageType imageType, long width, long height) {
-        if (imageSize > 1_048_576) {
-            throw new IllegalArgumentException("이미지 크기는 1MB 이하여야 합니다: " + imageSize);
-        }
+    public CoverImage(long size, ImageType imageType, long width, long height) {
+        validateSize(size);
 
         if (imageType == ImageType.UNSUPPORTED) {
             throw new IllegalArgumentException("지원하지 않는 이미지 타입입니다.");
@@ -28,10 +26,16 @@ public class CoverImage {
             throw new IllegalArgumentException("이미지 비율은 3:2이어야 합니다.");
         }
 
-        this.imageSize = imageSize;
+        this.size = size;
         this.imageType = imageType;
         this.width = width;
         this.height = height;
+    }
+
+    private static void validateSize(long imageSize) {
+        if (imageSize > 1_048_576) {
+            throw new IllegalArgumentException("이미지 크기는 1MB 이하여야 합니다: " + imageSize);
+        }
     }
 
     private boolean isInValidRatio(long width, long height) {
