@@ -1,9 +1,9 @@
 package nextstep.courses.domain.session.image;
 
+import nextstep.stub.TestImageHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -15,45 +15,21 @@ class SessionImageTest {
     @DisplayName("SessionImage 인스턴스 생성")
     @Test
     public void testConstructor() {
-        ImageHandler imageHandlerStub = new ImageHandler() {
-            @Override
-            public BufferedImage image() {
-                return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
-            }
-
-            @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
-                return 1024L * 866L;
-            }
-        };
-
-        assertDoesNotThrow(() -> new SessionImage(testImageUrl, imageHandlerStub, SessionImageType.JPEG));
+        assertDoesNotThrow(() -> new SessionImage(
+            testImageUrl,
+            new TestImageHandler(300, 200, 1024L * 866L),
+            SessionImageType.JPEG)
+        );
     }
 
     @DisplayName("SessionImage 인스턴스 생성 - width와 height의 비율은 3:2 가 아니면 예외를 던짐")
     @Test
-    public void testImage_throwExceptionByRatio() throws IOException {
-        ImageHandler imageHandlerStub = new ImageHandler() {
-            @Override
-            public BufferedImage image() {
-                return new BufferedImage(300, 201, BufferedImage.TYPE_INT_ARGB);
-            }
-
-            @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
-                return 1024L * 866L;
-            }
-        };
-
-        assertThatThrownBy(() -> new SessionImage(testImageUrl, imageHandlerStub, SessionImageType.JPEG))
+    public void testImage_throwExceptionByRatio() {
+        assertThatThrownBy(() -> new SessionImage(
+            testImageUrl,
+            new TestImageHandler(300, 201, 1024L * 866L),
+            SessionImageType.JPEG)
+        )
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("width와 height의 비율은 3:2 이여야 합니다.");
     }
@@ -61,23 +37,11 @@ class SessionImageTest {
     @DisplayName("이미지 가져오기 - 크기가 1MB를 초과하면 예외를 던짐")
     @Test
     public void testImage_throwExceptionBySize() throws IOException {
-        ImageHandler imageHandlerStub = new ImageHandler() {
-            @Override
-            public BufferedImage image() {
-                return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
-            }
-
-            @Override
-            public void updateImage() {
-            }
-
-            @Override
-            public long byteSize() {
-                return 1024L * 1025L;
-            }
-        };
-
-        assertThatThrownBy(() -> new SessionImage(testImageUrl, imageHandlerStub, SessionImageType.JPEG))
+        assertThatThrownBy(() -> new SessionImage(
+            testImageUrl,
+            new TestImageHandler(300, 200, 1024L * 1025L),
+            SessionImageType.JPEG)
+        )
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("크기가 1MB를 초과했습니다.");
     }

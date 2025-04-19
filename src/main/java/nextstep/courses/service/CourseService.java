@@ -3,53 +3,35 @@ package nextstep.courses.service;
 import nextstep.courses.domain.Course;
 import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.session.SessionRepository;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionDescriptor;
-import nextstep.courses.domain.session.Sessions;
-import nextstep.courses.domain.session.constraint.SessionConstraint;
-import nextstep.payments.service.PaymentService;
+import nextstep.courses.factory.CourseFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import java.io.IOException;
 
-@Service("courseService")
+@Service
 public class CourseService {
-    @Resource(name = "courseRepository")
-    private CourseRepository courseRepository;
 
-    @Resource(name = "sessionRepository")
-    private SessionRepository sessionRepository;
+    private final CourseRepository courseRepository;
+    private final SessionRepository sessionRepository;
+    private final CourseFactory courseFactory;
 
-    @Resource(name = "paymentService")
-    private PaymentService paymentService;
+    @Autowired
+    public CourseService(CourseRepository courseRepository, SessionRepository sessionRepository, CourseFactory courseFactory) {
+        this.courseRepository = courseRepository;
+        this.sessionRepository = sessionRepository;
+        this.courseFactory = courseFactory;
+    }
 
     public void createCourse(String title, Long creatorId) {
         Course course = new Course(title, creatorId);
-        courseRepository.save(course);
-    }
-
-    public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {
-        Course course = courseRepository.findById(courseId);
-        Session newSession = new Session(course, constraint, descriptor);
-        sessionRepository.save(newSession);
-    }
-
-    public boolean enroll(String newPaymentId, long sessionId) {
-        return paymentService.save(newPaymentId, sessionId);
+        courseRepository.save(course.toCourseEntity());
     }
 
     @Transactional
-    public void deleteSession(long sessionId) {
-        Session session = sessionRepository.findById(sessionId);
-        session.delete();
-    }
-
-    @Transactional
-    public void deleteCourse(long courseId) {
-        Course course = courseRepository.findById(courseId);
-        Sessions sessions = new Sessions(sessionRepository.findByCourse(courseId));
+    public void deleteCourse(long courseId) throws IOException {
+        Course course = courseFactory.create(courseRepository.findById(courseId), sessionRepository.findAllByCourseId(courseId));
         course.delete();
-        sessions.delete();
     }
 }

@@ -30,7 +30,11 @@ public class Payments {
     }
 
     public boolean canEnroll(Session session, Payment other) {
-        Payments filtered = new Payments(value.stream().filter(other::isSameSession).collect(Collectors.toList()));
+        Payments filtered = new Payments(
+            value.stream()
+                .filter(other::isSameSession)
+                .collect(Collectors.toList())
+        );
         return other.canEnroll(session, filtered.size());
     }
 }

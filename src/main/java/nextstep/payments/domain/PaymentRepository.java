@@ -1,9 +1,11 @@
 package nextstep.payments.domain;
 
+import nextstep.payments.entity.PaymentEntity;
+
 import java.util.List;
 
 public interface PaymentRepository {
-    int save(Payment payment);
+    long save(PaymentEntity paymentEntity);
 
-    List<Payment> findBySession(Long sessionId);
+    List<PaymentEntity> findBySession(Long sessionId);
 }

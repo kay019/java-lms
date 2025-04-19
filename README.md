@@ -40,3 +40,11 @@ QnAService의 deleteQuestion() 메서드 리펙토링
 - [x] Session은 수강신청 유저 정보를 가지고 있다.
 - [x] Session의 필드 값은 3개로 관리한다.
 
+## Step3 요구사항
+- [x] session table 스키마 정의
+- [x] Session Repository 만들기
+  - [x] save 로직 추가
+  - [x] findById 로직 추가
+- [x] Payment Repository 만들기
+  - [x] save 로직 추가
+  - [x] findBySession 로직 추가

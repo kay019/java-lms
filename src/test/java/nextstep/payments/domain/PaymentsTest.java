@@ -19,7 +19,7 @@ class PaymentsTest {
     @DisplayName("payment 추가")
     @Test
     public void testAdd() {
-        Payment payment = new Payment(1L, new Session(), NsUserTest.JAVAJIGI, 200_000L);
+        Payment payment = new Payment("1", new Session(), NsUserTest.JAVAJIGI, 200_000L);
         Payments payments = new Payments();
         assertDoesNotThrow(() -> payments.add(payment));
     }
@@ -28,8 +28,8 @@ class PaymentsTest {
     @Test
     public void testAdd_throwException() {
         Session session = new Session();
-        Payment payment1 = new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L);
-        Payment payment2 = new Payment(2L, session, NsUserTest.JAVAJIGI, 200_000L);
+        Payment payment1 = new Payment("1", session, NsUserTest.JAVAJIGI, 200_000L);
+        Payment payment2 = new Payment("2", session, NsUserTest.JAVAJIGI, 200_000L);
 
         Payments payments = new Payments();
         payments.add(payment1);

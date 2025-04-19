@@ -13,15 +13,15 @@ public class PaymentTest {
     @DisplayName("Payment 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new Payment(1L, new Session(), NsUserTest.JAVAJIGI, 300_000L));
+        assertDoesNotThrow(() -> new Payment("1", new Session(), NsUserTest.JAVAJIGI, 300_000L));
     }
 
     @DisplayName("강의와 유저 정보가 동일")
     @Test
     public void testEqualsSessionUser_Ture() {
         Session session = new Session();
-        assertThat(new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L)
-            .equalsSessionUser(new Payment(2L, session, NsUserTest.JAVAJIGI, 200_000L))
+        assertThat(new Payment("1", session, NsUserTest.JAVAJIGI, 200_000L)
+            .equalsSessionUser(new Payment("2", session, NsUserTest.JAVAJIGI, 200_000L))
         ).isTrue();
     }
 
@@ -29,8 +29,8 @@ public class PaymentTest {
     @Test
     public void testEqualsSessionUser_False() {
         Session session = new Session();
-        assertThat(new Payment(1L, session, NsUserTest.JAVAJIGI, 200_000L)
-            .equalsSessionUser(new Payment(3L, session, NsUserTest.SANJIGI, 200_000L))
+        assertThat(new Payment("1", session, NsUserTest.JAVAJIGI, 200_000L)
+            .equalsSessionUser(new Payment("3", session, NsUserTest.SANJIGI, 200_000L))
         ).isFalse();
     }
 }

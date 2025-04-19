@@ -20,20 +20,16 @@ public class NsUser extends BaseDomain {
     public NsUser() {
     }
 
-    public NsUser(Long id, String userId, String password, String name, String email) {
+    public NsUser(String id, String userId, String password, String name, String email) {
         this(id, userId, password, name, email, LocalDateTime.now(), null);
     }
 
-    public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public NsUser(String id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, createdAt, updatedAt);
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getUserId() {
@@ -132,12 +128,12 @@ public class NsUser extends BaseDomain {
     @Override
     public String toString() {
         return "NsUser{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+            "id=" + id +
+            ", userId='" + userId + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            '}';
     }
 }

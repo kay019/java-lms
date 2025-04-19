@@ -1,8 +1,8 @@
 package nextstep.courses.domain.session;
 
 import nextstep.common.domian.BaseDomain;
-import nextstep.courses.domain.Course;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
+import nextstep.courses.entity.SessionEntity;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -11,28 +11,36 @@ import java.util.Objects;
 
 public class Session extends BaseDomain {
 
-    private final Course course;
-
     private final SessionConstraint constraint;
 
     private final SessionDescriptor descriptor;
 
     public Session() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public Session(Course course, SessionConstraint constraint, SessionDescriptor descriptor) {
-        this(null, course, constraint, descriptor);
+    public Session(String id) {
+        this(id, null, null);
     }
 
-    public Session(Long id, Course course, SessionConstraint constraint, SessionDescriptor descriptor) {
+    public Session(SessionConstraint constraint, SessionDescriptor descriptor) {
+        this(null, constraint, descriptor);
+    }
+
+    public Session(String id, SessionConstraint constraint, SessionDescriptor descriptor) {
         super(id);
-        this.course = course;
         this.descriptor = descriptor;
         this.constraint = constraint;
     }
 
-    public BufferedImage image() {
+    public Session(String id, boolean deleted, SessionConstraint constraint, SessionDescriptor descriptor) {
+        super(id);
+        this.descriptor = descriptor;
+        this.constraint = constraint;
+        this.deleted = deleted;
+    }
+
+    public BufferedImage image() throws IOException {
         return descriptor.image();
     }
 
@@ -45,8 +53,22 @@ public class Session extends BaseDomain {
         return descriptor.canEnroll(constraint, enrollCount, amount);
     }
 
-    public void updateImage() throws IOException {
-        descriptor.updateImage();
+    public SessionEntity toSessionEntity(Long courseId) {
+        return SessionEntity.builder()
+            .id(id())
+            .createdAt(createdAt)
+            .updatedAt(updatedAt)
+            .deleted(deleted)
+            .courseId(courseId)
+            .fee(constraint.fee())
+            .capacity(constraint.capacity())
+            .imageUrl(descriptor.imageUrl())
+            .imageType(descriptor.imageType())
+            .startDate(descriptor.startDate())
+            .endDate(descriptor.endDate())
+            .type(descriptor.type())
+            .status(descriptor.status())
+            .build();
     }
 
     @Override
@@ -55,13 +77,12 @@ public class Session extends BaseDomain {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Session session = (Session) o;
-        return Objects.equals(course, session.course) &&
-            Objects.equals(constraint, session.constraint) &&
+        return Objects.equals(constraint, session.constraint) &&
             Objects.equals(descriptor, session.descriptor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), course, constraint, descriptor);
+        return Objects.hash(super.hashCode(), constraint, descriptor);
     }
 }

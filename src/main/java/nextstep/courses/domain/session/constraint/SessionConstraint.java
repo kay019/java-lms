@@ -1,14 +1,12 @@
 package nextstep.courses.domain.session.constraint;
 
+import java.util.Objects;
+
 public class SessionConstraint {
 
     private final SessionFee fee;
 
     private final SessionCapacity capacity;
-
-    public SessionConstraint() {
-        this(null, null);
-    }
 
     public SessionConstraint(long fee, int capacity) {
         this(new SessionFee(fee), new SessionCapacity(capacity));
@@ -19,11 +17,32 @@ public class SessionConstraint {
         this.capacity = capacity;
     }
 
+    public long fee() {
+        return fee.value();
+    }
+
+    public int capacity() {
+        return capacity.value();
+    }
+
     public boolean isSameFee(long amount) {
         return fee.isSame(amount);
     }
 
     public boolean isGreaterThenCapacity(int value) {
         return capacity.isGreaterThan(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionConstraint that = (SessionConstraint) o;
+        return Objects.equals(fee, that.fee) && Objects.equals(capacity, that.capacity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fee, capacity);
     }
 }

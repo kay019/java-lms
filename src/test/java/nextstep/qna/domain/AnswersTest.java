@@ -18,7 +18,7 @@ class AnswersTest {
     @DisplayName("Answers 인스턴스 생성")
     @Test
     public void testConstructor() {
-        assertDoesNotThrow(() -> new Answers(List.of(new Answer(1L, NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1"))));
+        assertDoesNotThrow(() -> new Answers(List.of(new Answer("1", NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1"))));
     }
 
     @DisplayName("삭제 후 삭제 히스토리 목록들을 가져옴")

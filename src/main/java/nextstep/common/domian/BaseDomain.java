@@ -1,33 +1,45 @@
 package nextstep.common.domian;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class BaseDomain {
-    protected Long id;
+    protected String id;
 
     protected LocalDateTime createdAt;
 
     protected LocalDateTime updatedAt;
 
+    @Getter
     protected boolean deleted = false;
 
     public BaseDomain() {
-
     }
 
-    public BaseDomain(Long id) {
+    public BaseDomain(String id) {
         this(id, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public BaseDomain(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public BaseDomain(String id, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
+    public BaseDomain(String id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deleted = deleted;
+    }
+
+    public Long id() {
+        if (id == null) {
+            return null;
+        }
+        return Long.valueOf(id);
     }
 
     @Override
@@ -35,7 +47,9 @@ public class BaseDomain {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseDomain that = (BaseDomain) o;
-        return Objects.equals(id, that.id) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(id, that.id) &&
+            Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
