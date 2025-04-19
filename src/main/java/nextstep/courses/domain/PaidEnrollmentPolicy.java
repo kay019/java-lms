@@ -30,4 +30,14 @@ public class PaidEnrollmentPolicy implements EnrollmentPolicy {
   public boolean isFull(Enrollments enrollments) {
     return enrollments.size() == capacity;
   }
+
+  @Override
+  public long price() {
+    return price;
+  }
+
+  @Override
+  public int capacity() {
+    return capacity;
+  }
 }

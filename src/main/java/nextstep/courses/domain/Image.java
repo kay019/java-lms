@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.entity.ImageEntity;
 import nextstep.courses.utils.IdGenerator;
 
 public class Image {
@@ -51,5 +52,19 @@ public class Image {
     if (widthInPixel * 2 != heightInPixel * 3) {
       throw new IllegalArgumentException("가로 세로 비율이 유효하지 않습니다.");
     }
+  }
+
+  public long id() {
+    return id;
+  }
+
+  public ImageEntity toImageEntity() {
+    return new ImageEntity(
+            this.id,
+            this.filename,
+            this.sizeInBytes,
+            this.widthInPixel,
+            this.heightInPixel
+    );
   }
 }

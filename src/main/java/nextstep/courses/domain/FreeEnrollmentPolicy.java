@@ -16,4 +16,14 @@ public class FreeEnrollmentPolicy implements EnrollmentPolicy {
   public boolean isFull(Enrollments enrollments) {
     return false;
   }
+
+  @Override
+  public long price() {
+    return 0;
+  }
+
+  @Override
+  public int capacity() {
+    return 0;
+  }
 }
