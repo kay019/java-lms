@@ -2,6 +2,7 @@ package nextstep.courses.domain.session.image;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class SessionImage {
     private static final double WIDTH_RATIO = 3;
@@ -42,5 +43,18 @@ public class SessionImage {
 
     public BufferedImage image() throws IOException {
         return imageHandler.image(url);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionImage that = (SessionImage) o;
+        return Objects.equals(url, that.url) && Objects.equals(imageHandler, that.imageHandler) && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, imageHandler, type);
     }
 }

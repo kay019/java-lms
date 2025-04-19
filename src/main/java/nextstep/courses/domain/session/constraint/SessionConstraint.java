@@ -1,5 +1,7 @@
 package nextstep.courses.domain.session.constraint;
 
+import java.util.Objects;
+
 public class SessionConstraint {
 
     private final SessionFee fee;
@@ -29,5 +31,18 @@ public class SessionConstraint {
 
     public boolean isGreaterThenCapacity(int value) {
         return capacity.isGreaterThan(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionConstraint that = (SessionConstraint) o;
+        return Objects.equals(fee, that.fee) && Objects.equals(capacity, that.capacity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fee, capacity);
     }
 }

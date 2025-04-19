@@ -33,6 +33,13 @@ public class Session extends BaseDomain {
         this.constraint = constraint;
     }
 
+    public Session(String id, boolean deleted, SessionConstraint constraint, SessionDescriptor descriptor) {
+        super(id);
+        this.descriptor = descriptor;
+        this.constraint = constraint;
+        this.deleted = deleted;
+    }
+
     public BufferedImage image() throws IOException {
         return descriptor.image();
     }

@@ -7,6 +7,7 @@ import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class SessionDescriptor {
 
@@ -52,5 +53,18 @@ public class SessionDescriptor {
 
     public BufferedImage image() throws IOException {
         return image.image();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionDescriptor that = (SessionDescriptor) o;
+        return Objects.equals(image, that.image) && Objects.equals(period, that.period) && Objects.equals(policy, that.policy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(image, period, policy);
     }
 }

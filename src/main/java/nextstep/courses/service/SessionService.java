@@ -8,17 +8,18 @@ import nextstep.courses.factory.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 
 @Service
 public class SessionService {
 
-    @Resource
-    private SessionRepository sessionRepository;
+    private final SessionRepository sessionRepository;
+    private final SessionFactory sessionFactory;
 
-    @Resource
-    private SessionFactory sessionFactory;
+    public SessionService(SessionRepository sessionRepository, SessionFactory sessionFactory) {
+        this.sessionRepository = sessionRepository;
+        this.sessionFactory = sessionFactory;
+    }
 
     public void createSession(Long courseId, SessionConstraint constraint, SessionDescriptor descriptor) {
         Session newSession = new Session(constraint, descriptor);

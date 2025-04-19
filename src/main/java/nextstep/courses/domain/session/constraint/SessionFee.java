@@ -1,5 +1,7 @@
 package nextstep.courses.domain.session.constraint;
 
+import java.util.Objects;
+
 public class SessionFee {
     private final long value;
 
@@ -16,5 +18,18 @@ public class SessionFee {
 
     public boolean isSame(long value) {
         return this.value == value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionFee that = (SessionFee) o;
+        return value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }

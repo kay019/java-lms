@@ -41,7 +41,8 @@ class CourseServiceTest {
     @DisplayName("course 삭제")
     @Test
     void testDeleteCourse() throws IOException {
-        Course course = new Course("1", "test-course", 3L, LocalDateTime.now(), LocalDateTime.now());
+        LocalDateTime testLocalDateTime  = LocalDateTime.now();
+        Course course = new Course("1", "test-course", 3L, testLocalDateTime, testLocalDateTime);
 
         TestCourseRepository courseRepository = new TestCourseRepository(1L, null);
         TestCourseFactory courseFactory = new TestCourseFactory(
@@ -58,6 +59,7 @@ class CourseServiceTest {
         );
 
         courseService.deleteCourse(1L);
+
         assertAll(
             () -> assertThat(courseFactory.getCreateCalled()).isEqualTo(1),
             () -> assertThat(course.isDeleted()).isTrue()

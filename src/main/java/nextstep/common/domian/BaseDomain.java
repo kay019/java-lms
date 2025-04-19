@@ -47,7 +47,9 @@ public class BaseDomain {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseDomain that = (BaseDomain) o;
-        return Objects.equals(id, that.id) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(id, that.id) &&
+            Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override

@@ -3,6 +3,7 @@ package nextstep.stub;
 import nextstep.courses.domain.session.image.ImageHandler;
 
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class TestImageHandler implements ImageHandler {
     private int width;
@@ -23,5 +24,18 @@ public class TestImageHandler implements ImageHandler {
     @Override
     public long byteSize(String url) {
         return byteSize;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestImageHandler that = (TestImageHandler) o;
+        return width == that.width && height == that.height && byteSize == that.byteSize;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(width, height, byteSize);
     }
 }
