@@ -9,10 +9,7 @@ public class CoverImage {
 
     public CoverImage(long size, ImageType imageType, long width, long height) {
         validateSize(size);
-
-        if (imageType == ImageType.UNSUPPORTED) {
-            throw new IllegalArgumentException("지원하지 않는 이미지 타입입니다.");
-        }
+        validateImageType(imageType);
 
         if (width < 300) {
             throw new IllegalArgumentException("이미지 너비는 300픽셀 이상이어야 합니다: " + width);
@@ -30,6 +27,12 @@ public class CoverImage {
         this.imageType = imageType;
         this.width = width;
         this.height = height;
+    }
+
+    private static void validateImageType(ImageType imageType) {
+        if (imageType == ImageType.UNSUPPORTED) {
+            throw new IllegalArgumentException("지원하지 않는 이미지 타입입니다.");
+        }
     }
 
     private static void validateSize(long imageSize) {
