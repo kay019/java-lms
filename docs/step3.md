@@ -28,10 +28,10 @@
 - [x] Session 도메인에서 courseId 를 갖도록 변경한다.
 - [x] SessionCoverImage 도메인에서 sessionId 를 갖도록 필드를 추가한다.
 - [x] Student 도메인에서 수강신청한 강의 목록을 갖도록 필드를 추가한다.
-- [ ] DB 테이블 설계 (schema.sql 구현)
-  - [ ] Session table 설계
-  - [ ] SessionCoverImage table 설계
-  - [ ] Enrollment(등록 현황) table 설계
+- [x] DB 테이블 설계 (schema.sql 구현)
+  - [x] Session table 설계
+  - [x] SessionCoverImage table 설계
+  - [x] Enrollment(등록 현황) table 설계
 - [ ] DB 테이블에 따른 엔티티를 구현한다.
 - [ ] DB에 데이터를 저장하는 repository method 를 구현한다.
 - [ ] 도메인을 커멘드 객체로 변환하는 mapper 를 구현한다.
