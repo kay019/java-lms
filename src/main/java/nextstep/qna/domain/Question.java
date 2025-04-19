@@ -6,6 +6,7 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
@@ -59,23 +60,41 @@ public class Question {
     }
     
     public List<DeleteHistory> delete(final NsUser loginUser) throws CannotDeleteException {
+        validateDeletionPermission(loginUser);
+        this.deleted = true;
+        return createDeleteHistories(loginUser);
+    }
+
+    private void validateDeletionPermission(final NsUser loginUser) throws CannotDeleteException {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
 
-        List<Answer> answers = getAnswers();
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
+        if (hasAnswerFromOtherUser(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
+    }
 
-        this.deleted = true;
+    private boolean hasAnswerFromOtherUser(final NsUser loginUser) {
+        return answers.stream()
+                .anyMatch(answer -> !answer.isOwner(loginUser));
+    }
 
+    private List<DeleteHistory> createDeleteHistories(final NsUser loginUser) {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.getId(), this.getWriter(), LocalDateTime.now()));
-        answers.forEach(answer -> deleteHistories.add(answer.delete(loginUser)));
+        deleteHistories.add(createQuestionDeleteHistory());
+        deleteHistories.addAll(deleteAnswers(loginUser));
         return deleteHistories;
+    }
+
+    private DeleteHistory createQuestionDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, this.getId(), this.getWriter(), LocalDateTime.now());
+    }
+
+    private List<DeleteHistory> deleteAnswers(final NsUser loginUser) {
+        return answers.stream()
+                .map(answer -> answer.delete(loginUser))
+                .collect(Collectors.toList());
     }
 
     @Override
