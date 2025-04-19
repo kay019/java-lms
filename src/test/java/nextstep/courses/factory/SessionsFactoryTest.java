@@ -14,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class SessionsFactoryTest {
+
     @DisplayName("Session DB 정보들로 Sessions 인스턴스 생성")
     @Test
     public void testCreateSessions() {
