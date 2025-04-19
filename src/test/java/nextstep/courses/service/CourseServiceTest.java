@@ -1,60 +1,66 @@
 package nextstep.courses.service;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
-import nextstep.courses.domain.session.SessionRepository;
-import nextstep.courses.entity.CourseEntity;
+import nextstep.courses.domain.session.Sessions;
+import nextstep.stub.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ExtendWith(MockitoExtension.class)
 class CourseServiceTest {
 
-    @Mock
-    private CourseRepository courseRepository;
-
-    @Mock
-    private SessionRepository sessionRepository;
-
-    @InjectMocks
-    private CourseService courseService;
-
+    @DisplayName("course 만들기")
     @Test
-    void createCourse_성공() {
-        String title = "Java Programming";
-        Long creatorId = 1L;
+    void testCreateCourse() {
+        Course course = new Course("1", "test-course", 3L, LocalDateTime.now(), LocalDateTime.now());
 
-        courseService.createCourse(title, creatorId);
+        TestCourseRepository courseRepository = new TestCourseRepository(1L, null);
+        CourseService courseService = new CourseService(
+            courseRepository,
+            new TestSessionRepository(1L, null, List.of()),
+            new TestCourseFactory(
+                new TestSessionFactory(
+                    new TestImageHandler(300, 200, 1024L * 866L),
+                    new Sessions()
+                ),
+                course
+            )
+        );
 
-        verify(courseRepository, times(1)).save(any(CourseEntity.class));
+        courseService.createCourse("test-title", 1L);
+
+        assertThat(courseRepository.getSaveCalled()).isEqualTo(1);
     }
 
-//    @Test
-//    void deleteCourse_성공() throws IOException {
-//        Long courseId = 1L;
-//        CourseEntity courseEntity = mock(CourseEntity.class);
-//        when(courseRepository.findById(courseId)).thenReturn(courseEntity);
-//        when(sessionRepository.findAllByCourseId(courseId)).thenReturn(Collections.emptyList());
-//
-//        try (MockedStatic<Course> mockedStaticCourse = mockStatic(Course.class)) {
-//            Course courseMock = mock(Course.class);
-//            mockedStaticCourse
-//                .when(() -> Course.from(courseEntity, Collections.emptyList()))
-//                .thenReturn(courseMock);
-//
-//            courseService.deleteCourse(courseId);
-//
-//            verify(courseMock, times(1)).delete();
-//        }
-//    }
+    @DisplayName("course 삭제")
+    @Test
+    void testDeleteCourse() throws IOException {
+        Course course = new Course("1", "test-course", 3L, LocalDateTime.now(), LocalDateTime.now());
+
+        TestCourseRepository courseRepository = new TestCourseRepository(1L, null);
+        TestCourseFactory courseFactory = new TestCourseFactory(
+            new TestSessionFactory(
+                new TestImageHandler(300, 200, 1024L * 866L),
+                new Sessions()
+            ),
+            course
+        );
+        CourseService courseService = new CourseService(
+            courseRepository,
+            new TestSessionRepository(1L, null, List.of()),
+            courseFactory
+        );
+
+        courseService.deleteCourse(1L);
+        assertAll(
+            () -> assertThat(courseFactory.getCreateCalled()).isEqualTo(1),
+            () -> assertThat(course.isDeleted()).isTrue()
+        );
+    }
 }

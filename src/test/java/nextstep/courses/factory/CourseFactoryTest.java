@@ -1,11 +1,12 @@
 package nextstep.courses.factory;
 
-import nextstep.courses.domain.session.image.ImageHandler;
+import nextstep.courses.domain.session.Sessions;
 import nextstep.courses.entity.CourseEntity;
+import nextstep.stub.TestImageHandler;
+import nextstep.stub.TestSessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,17 +17,10 @@ class CourseFactoryTest {
     @DisplayName("Course, Session DB 정보로 Course 인스턴스 생성")
     @Test
     public void testCreateCourse() {
-        SessionFactory sessionFactory = new SessionFactory(new ImageHandler() {
-            @Override
-            public BufferedImage image(String url) {
-                return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
-            }
-
-            @Override
-            public long byteSize(String url) {
-                return 1024L * 866L;
-            }
-        });
+        SessionFactory sessionFactory = new TestSessionFactory(
+            new TestImageHandler(300, 200, 1024L * 866L),
+            new Sessions()
+        );
 
         CourseFactory courseFactory = new CourseFactory(sessionFactory);
 

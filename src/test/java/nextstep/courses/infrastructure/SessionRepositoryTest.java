@@ -5,11 +5,11 @@ import nextstep.courses.domain.session.SessionDescriptor;
 import nextstep.courses.domain.session.SessionPeriod;
 import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
-import nextstep.courses.domain.session.image.ImageHandler;
 import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.image.SessionImageType;
 import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import nextstep.courses.entity.SessionEntity;
+import nextstep.stub.TestImageHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,22 +70,10 @@ class SessionRepositoryTest {
     }
 
     private Session createSampleSession() throws IOException {
-        ImageHandler imageHandlerStub = new ImageHandler() {
-            @Override
-            public BufferedImage image(String url) {
-                return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
-            }
-
-            @Override
-            public long byteSize(String url) {
-                return 1024L * 866L;
-            }
-        };
-
         SessionConstraint constraint = new SessionConstraint(1000L, 50);
 
         SessionDescriptor descriptor = new SessionDescriptor(
-            new SessionImage("http://test", imageHandlerStub, SessionImageType.JPEG),
+            new SessionImage("http://test", new TestImageHandler(300, 200, 1024L * 866L), SessionImageType.JPEG),
             new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(1)),
             new SessionEnrollPolicy()
         );

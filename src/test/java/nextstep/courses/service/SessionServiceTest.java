@@ -9,6 +9,7 @@ import nextstep.courses.domain.session.image.SessionImage;
 import nextstep.courses.domain.session.image.SessionImageType;
 import nextstep.courses.domain.session.policy.SessionEnrollPolicy;
 import nextstep.courses.entity.SessionEntity;
+import nextstep.stub.TestImageHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,19 +35,8 @@ class SessionServiceTest {
     void createSession_성공() throws IOException {
         Long courseId = 1L;
         SessionConstraint constraint = new SessionConstraint(100, 80);
-        ImageHandler imageHandlerStub = new ImageHandler() {
-            @Override
-            public BufferedImage image(String url) {
-                return new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
-            }
-
-            @Override
-            public long byteSize(String url) {
-                return 1024L * 866L;
-            }
-        };
         SessionDescriptor descriptor = new SessionDescriptor(
-            new SessionImage("http://test", imageHandlerStub, SessionImageType.JPEG),
+            new SessionImage("http://test", new TestImageHandler(300, 200, 1024L * 866L), SessionImageType.JPEG),
             new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(1)),
             new SessionEnrollPolicy()
         );

@@ -1,5 +1,7 @@
 package nextstep.common.domian;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -10,6 +12,7 @@ public class BaseDomain {
 
     protected LocalDateTime updatedAt;
 
+    @Getter
     protected boolean deleted = false;
 
     public BaseDomain() {
@@ -38,7 +41,6 @@ public class BaseDomain {
         }
         return Long.valueOf(id);
     }
-
 
     @Override
     public boolean equals(Object o) {
