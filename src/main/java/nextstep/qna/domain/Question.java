@@ -78,10 +78,6 @@ public class Question {
         return this;
     }
 
-    public boolean isDeletable(NsUser loginUser) {
-        return isOwner(loginUser);
-    }
-
     public void deleteBy(NsUser loginUser) throws CannotDeleteException {
         if (!isDeletable(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
@@ -125,6 +121,10 @@ public class Question {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    private boolean isDeletable(NsUser loginUser) {
+        return isOwner(loginUser);
     }
 
     @Override
