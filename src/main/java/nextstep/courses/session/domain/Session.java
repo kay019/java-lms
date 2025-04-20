@@ -6,6 +6,8 @@ import nextstep.users.domain.NsUser;
 import java.util.ArrayList;
 
 public class Session {
+    private Long id;
+    private final Long courseId;
     private final SessionDate sessionDate;
     private final SessionCoverImage sessionCoverImage;
     private final SessionStatus sessionStatus;
@@ -14,8 +16,10 @@ public class Session {
     private final int maxParticipants;
     private final Long fee;
 
-    private Session(SessionDate sessionDate, SessionCoverImage sessionCoverImage, SessionStatus sessionStatus,
-                    SessionType sessionType, int maxParticipants, Long fee, Enrollments enrollments) {
+    public Session(Long id, Long courseId, SessionDate sessionDate, SessionCoverImage sessionCoverImage, SessionStatus sessionStatus,
+                   SessionType sessionType, int maxParticipants, Long fee, Enrollments enrollments) {
+        this.id = id;
+        this.courseId = courseId;
         this.sessionDate = sessionDate;
         this.sessionCoverImage = sessionCoverImage;
         this.sessionStatus = sessionStatus;
@@ -25,12 +29,12 @@ public class Session {
         this.enrollments = enrollments;
     }
 
-    public static Session free(SessionDate date, SessionCoverImage image, SessionStatus status, Enrollments enrollments) {
-        return new Session(date, image, status, SessionType.FREE, 0, 0L, enrollments);
+    public static Session free(Long id, Long courseId, SessionDate date, SessionCoverImage image, SessionStatus status, Enrollments enrollments) {
+        return new Session(id, courseId, date, image, status, SessionType.FREE, 0, 0L, enrollments);
     }
 
-    public static Session paid(SessionDate date, SessionCoverImage image, SessionStatus status, Enrollments enrollments, int maxParticipants, Long fee) {
-        return new Session(date, image, status, SessionType.PAID, maxParticipants, fee, enrollments);
+    public static Session paid(Long id, Long courseId, SessionDate date, SessionCoverImage image, SessionStatus status, Enrollments enrollments, int maxParticipants, Long fee) {
+        return new Session(id, courseId, date, image, status, SessionType.PAID, maxParticipants, fee, enrollments);
     }
 
 
@@ -41,5 +45,37 @@ public class Session {
         sessionType.getStrategy().validate(enrollments, payment, maxParticipants, fee);
         Enrollment enrollment = new Enrollment(this, nsUser, payment);
         enrollments.add(enrollment);
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public SessionDate getSessionDate() {
+        return sessionDate;
+    }
+
+    public SessionCoverImage getSessionCoverImage() {
+        return sessionCoverImage;
+    }
+
+    public SessionStatus getSessionStatus() {
+        return sessionStatus;
+    }
+
+    public Enrollments getEnrollments() {
+        return enrollments;
+    }
+
+    public SessionType getSessionType() {
+        return sessionType;
+    }
+
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public Long getFee() {
+        return fee;
     }
 }

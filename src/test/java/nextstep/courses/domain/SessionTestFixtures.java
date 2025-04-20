@@ -14,10 +14,10 @@ public class SessionTestFixtures {
             new SessionCoverImage(1, SessionImageType.from("gif"), 300, 200);
 
     public static Session paidSession(int max, long fee) {
-        return Session.paid(DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, max, fee);
+        return Session.paid(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, max, fee);
     }
 
     public static Session freeSession() {
-        return Session.free(DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS);
+        return Session.free(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS);
     }
 }

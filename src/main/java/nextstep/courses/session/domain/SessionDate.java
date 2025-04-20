@@ -17,4 +17,12 @@ public class SessionDate {
             throw new IllegalArgumentException("시작일은 종료일보다 이후일 수 없습니다.");
         }
     }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
 }

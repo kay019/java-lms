@@ -34,4 +34,19 @@ public class SessionCoverImage {
         }
     }
 
+    public double getSize() {
+        return size;
+    }
+
+    public SessionImageType getType() {
+        return type;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
