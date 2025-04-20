@@ -1,9 +1,9 @@
 package nextstep.courses.session.domain;
 
+import nextstep.courses.enrollment.domain.Enrollment;
+import nextstep.courses.enrollment.domain.Enrollments;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
-
-import java.util.ArrayList;
 
 public class Session {
     private Long id;

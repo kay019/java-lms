@@ -1,5 +1,6 @@
-package nextstep.courses.session.domain;
+package nextstep.courses.enrollment.domain;
 
+import nextstep.courses.session.domain.Session;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 

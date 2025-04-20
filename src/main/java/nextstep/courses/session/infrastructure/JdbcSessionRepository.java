@@ -1,5 +1,6 @@
 package nextstep.courses.session.infrastructure;
 
+import nextstep.courses.enrollment.domain.Enrollments;
 import nextstep.courses.session.domain.*;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
