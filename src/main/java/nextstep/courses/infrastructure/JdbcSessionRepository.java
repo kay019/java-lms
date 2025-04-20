@@ -32,37 +32,4 @@ public class JdbcSessionRepository implements SessionRepository {
         return Optional.ofNullable(session);
     }
 
-    @Override
-    public int save(Session session) {
-        // save image
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO image (url, width, height, format, size) VALUES (?, ?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS
-            );
-            ps.setString(1, session.getCoverImage().getUrl());
-            ps.setInt(2, session.getCoverImage().getWidth());
-            ps.setInt(3, session.getCoverImage().getHeight());
-            ps.setString(4, session.getCoverImage().getFormat());
-            ps.setLong(5, session.getCoverImage().getSize());
-            return ps;
-        }, keyHolder);
-
-        Long imageId = keyHolder.getKey().longValue();
-
-        String sql = "INSERT INTO session (image_id, start_at, end_at, price, max_participants, status) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
-
-        return jdbcTemplate.update(
-            sql,
-            imageId,
-            session.getPeriod().getStartDate(),
-            session.getPeriod().getEndDate(),
-            null,
-            null,
-            session.getStatus().name()
-        );
-    }
-
 }

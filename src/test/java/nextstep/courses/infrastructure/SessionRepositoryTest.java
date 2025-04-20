@@ -40,15 +40,4 @@ public class SessionRepositoryTest {
         assertThat(savedSession).isPresent();
         LOGGER.debug("Session: {}", savedSession);
     }
-
-    @Transactional
-    @Test
-    @DisplayName("session을 저장할 수 있다.")
-    void save() {
-        Image image = new Image("https://example.com/image.jpg", 300, 200, "jpg", 1000);
-        Period period = new Period(LocalDate.now(), LocalDate.now().plusDays(1));
-        Session session = new FreeSession(image, period);
-        int save = sessionRepository.save(session);
-        assertThat(save).isEqualTo(1);
-    }
 }

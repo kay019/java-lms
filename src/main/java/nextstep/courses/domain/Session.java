@@ -78,19 +78,4 @@ public abstract class Session {
         return participants.contains(new Participant(userId));
     }
 
-    public Image getCoverImage() {
-        return coverImage;
-    }
-
-    public Period getPeriod() {
-        return period;
-    }
-
-    public List<Participant> getParticipants() {
-        return participants;
-    }
-
-    public SessionStatus getStatus() {
-        return status;
-    }
 }
