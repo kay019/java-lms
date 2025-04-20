@@ -31,7 +31,7 @@ class SessionCoverImageTest {
         SessionCoverImage coverImage = new SessionCoverImage(1L, 1L, fileSize, type, imageSize);
 
         assertThat(coverImage.getId()).isEqualTo(1L);
-        assertThat(coverImage.getCourseId()).isEqualTo(1L);
+        assertThat(coverImage.getSessionId()).isEqualTo(1L);
         assertThat(coverImage.getFileSize()).isEqualTo(fileSize);
         assertThat(coverImage.getType()).isEqualTo(type);
         assertThat(coverImage.getImageSize()).isEqualTo(imageSize);

@@ -4,13 +4,13 @@ import nextstep.exception.SessionCoverImageIllegalArgumentException;
 
 public class SessionCoverImage {
     private final long id;
-    private final long courseId;
+    private final long sessionId;
     private final ImageFileSize fileSize;
     private final ImageType type;
     private final ImageSize imageSize;
 
-    public SessionCoverImage(long id, long courseId, ImageFileSize fileSize, ImageType type, ImageSize imageSize) {
-        this.courseId = courseId;
+    public SessionCoverImage(long id, long sessionId, ImageFileSize fileSize, ImageType type, ImageSize imageSize) {
+        this.sessionId = sessionId;
         validate(fileSize, type, imageSize);
 
         this.id = id;
@@ -29,8 +29,8 @@ public class SessionCoverImage {
         return id;
     }
 
-    public long getCourseId() {
-        return courseId;
+    public long getSessionId() {
+        return sessionId;
     }
 
     public ImageFileSize getFileSize() {
