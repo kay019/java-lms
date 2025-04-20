@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.session.domain;
 
 import java.time.LocalDate;
 
@@ -6,10 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import nextstep.enrollment.domain.Enrollment;
+import nextstep.session.image.domain.ImageFileSize;
+import nextstep.session.image.domain.ImageSize;
+import nextstep.session.image.domain.ImageType;
+import nextstep.session.image.domain.SessionCoverImage;
+import nextstep.enrollment.domain.Student;
 import nextstep.exception.FreeSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
-import static nextstep.courses.domain.SessionStatus.CLOSED;
+import static nextstep.session.domain.SessionStatus.CLOSED;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

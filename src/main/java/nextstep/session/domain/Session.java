@@ -1,7 +1,11 @@
-package nextstep.courses.domain;
+package nextstep.session.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nextstep.enrollment.domain.Enrollment;
+import nextstep.session.image.domain.SessionCoverImage;
+import nextstep.enrollment.domain.Student;
 
 public abstract class Session {
     private final long id;

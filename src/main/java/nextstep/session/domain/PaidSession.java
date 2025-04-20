@@ -1,8 +1,9 @@
-package nextstep.courses.domain;
+package nextstep.session.domain;
 
+import nextstep.enrollment.domain.Enrollment;
 import nextstep.exception.PaidSessionIllegalArgumentException;
 
-import static nextstep.courses.domain.SessionStatus.ENROLLING;
+import static nextstep.session.domain.SessionStatus.ENROLLING;
 
 public class PaidSession extends Session {
     private final int maxCapacity;
