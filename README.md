@@ -119,7 +119,7 @@
 1. DB 테이블 설계
 
    - session 테이블: 강의 세션 정보 저장
-   - session_course 테이블: 강의와 세션의 관계
+   - course_session 테이블: 강의와 세션의 관계
    - image 테이블: 세션의 이미지 정보
    - participants 테이블: 세션 참여자 정보
 
