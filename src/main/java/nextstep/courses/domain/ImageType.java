@@ -3,10 +3,22 @@ package nextstep.courses.domain;
 import java.util.Arrays;
 
 public enum ImageType {
-    gif, jpg, jpeg, png, svg;
+    GIF("gif"),
+    JPG("jpg"),
+    JPEG("jpeg"),
+    PNG("png"),
+    SVG("svg");
 
-    public static boolean contains(String value) {
-        return Arrays.stream(values())
-                .anyMatch(type -> type.name().equals(value));
+    private final String value;
+
+    ImageType(String value) {
+        this.value = value;
     }
+
+    public static boolean isApplyType(String value) {
+        ImageType[] imageTypes = values();
+        return Arrays.stream(values())
+                .anyMatch(type -> type.value.equals(value));
+    }
+
 }

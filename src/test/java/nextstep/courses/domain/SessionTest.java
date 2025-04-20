@@ -1,9 +1,7 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,15 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SessionTest {
 
     public static final CoverImage coverImage = new CoverImage("gif", 1024 * 1024, 300, 200);
-    public static final Session FREE_SESSION = new Session(1L, coverImage, true, 0, 1, SessionStatus.모집중);
-    public static final Session PAID_SESSION = new Session(2L, coverImage, false, 1000L, 1, SessionStatus.모집중);
+    public static final Session FREE_SESSION = new Session(1L, coverImage, true, 0, 1, SessionStatus.OPEM);
+    public static final Session PAID_SESSION = new Session(2L, coverImage, false, 1000L, 1, SessionStatus.OPEM);
 
 
     @Test
     void 무료_강의_정원_무제한() {
         FREE_SESSION.enroll(new Payment("p1", NsUserTest.JAVAJIGI.getId(), FREE_SESSION.getId(), 0L));
         FREE_SESSION.enroll(new Payment("p2", NsUserTest.SANJIGI.getId(), FREE_SESSION.getId(), 0L));
-        assertThat(FREE_SESSION.getEnrolledUserCount()).isEqualTo(2);
+        assertThat(FREE_SESSION.getEnrolledCount()).isEqualTo(2);
     }
 
     @Test
@@ -44,7 +42,7 @@ public class SessionTest {
     @Test
     void 유료_강의_수강신청_성공() {
         PAID_SESSION.enroll(new Payment("p1", NsUserTest.JAVAJIGI.getId(), PAID_SESSION.getId(), 1000L));
-        assertThat(PAID_SESSION.getEnrolledUserCount()).isEqualTo(1);
+        assertThat(PAID_SESSION.getEnrolledCount()).isEqualTo(1);
 
     }
 
