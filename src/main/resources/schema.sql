@@ -48,7 +48,7 @@ create table ns_user (
     primary key (id)
 );
 
-create table participants (
+create table participant (
     session_id bigint not null,
     user_id bigint not null,
     primary key (session_id, user_id),

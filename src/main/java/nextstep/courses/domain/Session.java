@@ -13,7 +13,7 @@ public abstract class Session {
 
     private final Period period;
 
-    private final List<Long> participants = new ArrayList<>();
+    private final List<Participant> participants = new ArrayList<>();
 
     private SessionStatus status = SessionStatus.PREPARING;
 
@@ -59,10 +59,13 @@ public abstract class Session {
         status = status.closeEnrollment();
     }
 
-    public void enroll(Long userId, Payment payment) {
+    public Participant enroll(Long userId, Payment payment) {
         status.assertCanEnroll();
         validateEnrollment(payment);
-        participants.add(userId);
+
+        Participant participant = new Participant(userId);
+        participants.add(participant);
+        return participant;
     }
 
     protected abstract void validateEnrollment(Payment payment);
@@ -72,7 +75,7 @@ public abstract class Session {
     }
 
     public boolean isParticipant(Long userId) {
-        return participants.contains(userId);
+        return participants.contains(new Participant(userId));
     }
 
     public Image getCoverImage() {
@@ -83,7 +86,7 @@ public abstract class Session {
         return period;
     }
 
-    public List<Long> getParticipants() {
+    public List<Participant> getParticipants() {
         return participants;
     }
 
