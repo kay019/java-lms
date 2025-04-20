@@ -78,4 +78,8 @@ public abstract class Session {
         return participants.contains(new Participant(userId));
     }
 
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
+
 }

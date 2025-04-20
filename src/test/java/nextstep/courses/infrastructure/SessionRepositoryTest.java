@@ -1,7 +1,8 @@
 package nextstep.courses.infrastructure;
 
-import java.time.LocalDate;
 import java.util.Optional;
+import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,10 +15,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import nextstep.courses.domain.FreeSession;
-import nextstep.courses.domain.Image;
-import nextstep.courses.domain.Period;
-import org.springframework.transaction.annotation.Transactional;
 
 @JdbcTest
 public class SessionRepositoryTest {
@@ -38,6 +35,15 @@ public class SessionRepositoryTest {
     void findById() {
         Optional<Session> savedSession = sessionRepository.findById(1L);
         assertThat(savedSession).isPresent();
+        assertThat(savedSession.get()).isInstanceOf(FreeSession.class);
+
+        Optional<Session> savedSession2 = sessionRepository.findById(2L);
+        assertThat(savedSession2).isPresent();
+        assertThat(savedSession2.get()).isInstanceOf(PaidSession.class);
+        assertThat(savedSession2.get().isParticipant(1L)).isTrue();
+        assertThat(savedSession2.get().isParticipant(2L)).isTrue();
+
         LOGGER.debug("Session: {}", savedSession);
+        LOGGER.debug("Session: {}", savedSession2);
     }
 }

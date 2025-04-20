@@ -11,7 +11,16 @@ INSERT INTO question (id, writer_id, title, contents, created_at, deleted) VALUE
 
 INSERT INTO image (url, width, height, format, size) VALUES ('https://example.com/image.jpg', 300, 200, 'jpg', 1000);
 
-INSERT INTO session (image_id, start_at, end_at, price, max_participants, status) VALUES (1, CURRENT_TIMESTAMP(),  DATEADD('DAY', 1, CURRENT_TIMESTAMP()), null, null, 'PREPARING');
+INSERT INTO image (url, width, height, format, size) VALUES ('https://example.com/image.jpg', 300, 200, 'jpg', 1000);
+
+INSERT INTO session (session_type, image_id, start_at, end_at, price, max_participants, status) VALUES ('FREE', 1, CURRENT_TIMESTAMP(),  DATEADD('DAY', 1, CURRENT_TIMESTAMP()), null, null, 'PREPARING');
+
+INSERT INTO session (session_type, image_id, start_at, end_at, price, max_participants, status) VALUES ('PAID', 2, CURRENT_TIMESTAMP(),  DATEADD('DAY', 1, CURRENT_TIMESTAMP()), 10000, 10, 'PREPARING');
+
+INSERT INTO participant (user_id, session_id) VALUES (1, 2);
+
+INSERT INTO participant (user_id, session_id) VALUES (2, 2);
+
 
 INSERT INTO course (title, creator_id, created_at) VALUES ('초보자를 위한 자바 강의', 1, CURRENT_TIMESTAMP());
 
