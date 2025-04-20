@@ -43,7 +43,7 @@ public class Session {
             throw new IllegalStateException("모집 중인 상태에서만 수강 신청이 가능합니다.");
         }
         sessionType.getStrategy().validate(enrollments, payment, maxParticipants, fee);
-        Enrollment enrollment = new Enrollment(this, nsUser, payment);
+        Enrollment enrollment = new Enrollment(id, nsUser, payment);
         enrollments.add(enrollment);
     }
 
@@ -61,10 +61,6 @@ public class Session {
 
     public SessionStatus getSessionStatus() {
         return sessionStatus;
-    }
-
-    public Enrollments getEnrollments() {
-        return enrollments;
     }
 
     public SessionType getSessionType() {
