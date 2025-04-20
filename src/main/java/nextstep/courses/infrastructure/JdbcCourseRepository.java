@@ -1,13 +1,14 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import nextstep.courses.domain.Course;
+import nextstep.courses.repository.CourseRepository;
 
 @Repository("courseRepository")
 public class JdbcCourseRepository implements CourseRepository {
