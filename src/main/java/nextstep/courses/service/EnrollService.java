@@ -17,5 +17,6 @@ public class EnrollService {
             .orElseThrow(() -> new IllegalArgumentException("Session not found"));
 
         session.enroll(userId, payment);
+        sessionRepository.save(session);
     }
 }

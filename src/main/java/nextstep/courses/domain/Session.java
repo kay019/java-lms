@@ -7,6 +7,8 @@ import nextstep.payments.domain.Payment;
 
 public abstract class Session {
 
+    private final Long id;
+
     private final Image coverImage;
 
     private final Period period;
@@ -15,11 +17,16 @@ public abstract class Session {
 
     private SessionStatus status = SessionStatus.PREPARING;
 
-    protected Session(Image coverImage, Period period) {
+    private Session(Long id, Image coverImage, Period period) {
         validate(coverImage, period);
 
+        this.id = id;
         this.coverImage = coverImage;
         this.period = period;
+    }
+    
+    protected Session(Image coverImage, Period period) {
+        this(null, coverImage, period);
     }
 
     private void validate(Image coverImage, Period period) {
@@ -68,4 +75,19 @@ public abstract class Session {
         return participants.contains(userId);
     }
 
+    public Image getCoverImage() {
+        return coverImage;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public List<Long> getParticipants() {
+        return participants;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
 }
