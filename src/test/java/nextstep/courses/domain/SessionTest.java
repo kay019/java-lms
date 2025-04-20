@@ -24,13 +24,13 @@ public class SessionTest {
 
     @Test
     void 유료강의_인원초과() {
-        PaidSession session = SessionTestFixtures.paidSession(2, 10000L);
+        Session session = SessionTestFixtures.paidSession(2, 10000L);
         Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
     }
 
     @Test
     void 유료강의_금액_다름() {
-        PaidSession session = SessionTestFixtures.paidSession(2, 20000L);
+        Session session = SessionTestFixtures.paidSession(2, 20000L);
         Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
     }
 

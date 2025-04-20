@@ -13,15 +13,11 @@ public class SessionTestFixtures {
     private static final SessionCoverImage DEFAULT_IMAGE =
             new SessionCoverImage(1, SessionImageType.from("gif"), 300, 200);
 
-    public static Payment payment(long amount) {
-        return new Payment("1", 1L, NsUserTest.JAVAJIGI.getId(), amount);
-    }
-
-    public static PaidSession paidSession(int max, long fee) {
-        return new PaidSession(DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, max, fee);
+    public static Session paidSession(int max, long fee) {
+        return Session.paid(DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, max, fee);
     }
 
     public static Session freeSession() {
-        return new Session(DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS);
+        return Session.free(DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS);
     }
 }
