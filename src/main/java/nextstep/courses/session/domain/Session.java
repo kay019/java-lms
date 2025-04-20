@@ -27,7 +27,7 @@ public class Session {
             throw new IllegalStateException("모집 중인 상태에서만 수강 신청이 가능합니다.");
         }
         preEnrollValidation(payment, nsUser);
-        Enrollment enrollment = new Enrollment(nsUser, payment);
+        Enrollment enrollment = new Enrollment(this, nsUser, payment);
         enrollments.add(enrollment);
     }
 

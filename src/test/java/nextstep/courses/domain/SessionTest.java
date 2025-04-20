@@ -24,19 +24,19 @@ public class SessionTest {
 
     @Test
     void 유료강의_인원초과() {
-        Session session = new PaidSession(sessionDate, sessionCoverImage, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, 2, 10000L);
+        PaidSession session = SessionTestFixtures.paidSession(2, 10000L);
         Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
     }
 
     @Test
     void 유료강의_금액_다름() {
-        Session session = new PaidSession(sessionDate, sessionCoverImage, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, 2, 20000L);
+        PaidSession session = SessionTestFixtures.paidSession(2, 20000L);
         Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
     }
 
     @Test
     void 무료강의_신청() {
-        Session session = new Session(sessionDate, sessionCoverImage, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS);
+        Session session = SessionTestFixtures.freeSession();
         int initSize = EnrollmentTest.ENROLLMENTS.size();
 
         session.enroll(payment, NsUserTest.JAVAJIGI);
