@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.enrollment.domain;
 
 import nextstep.exception.MoneyIllegalArgumentException;
 
