@@ -1,5 +1,10 @@
 package nextstep.courses.domain;
 
 public enum SessionStatus {
-    준비중, 모집중, 종료
+    PREPARING("준비중"),
+    OPEM("모집중"),
+    CLOSED("종료");
+
+    SessionStatus(String value) {
+    }
 }
