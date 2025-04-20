@@ -1,24 +1,47 @@
 package nextstep.courses.domain;
 
+import lombok.Getter;
 import nextstep.payments.domain.Payment;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+@Entity
 public class Session {
-    private final List<Long> enrolledUserIds = new ArrayList<>();// 준비중, 모집중, 종료
+    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private LocalDateTime startDate;
+
+    @Column(nullable = false)
     private LocalDateTime endDate;
-    private CoverImage coverImaage;
+
+    @Embedded
+    private CoverImage coverImage;
+
+    @Column(nullable = false)
     private boolean free;
+
+    @Column(nullable = false)
     private long amount;
+
+    @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
+
+    @Getter
+    @Column(name = "enrolled_count", nullable = false)
     private int enrolledCount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SessionStatus status;
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, CoverImage coverImaage, boolean free, long amount, int maxCapacity, SessionStatus status) {
+    protected Session() {
+    }
+
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, CoverImage coverImage, boolean free, long amount, int maxCapacity, SessionStatus status) {
         this.id = id;
         this.startDate = startDate;
@@ -31,8 +54,8 @@ public class Session {
         this.enrolledCount = 0;
     }
 
-    public Session(Long id, CoverImage coverImaage, boolean free, long amount, int maxCapacity, SessionStatus status) {
-        this(id, LocalDateTime.now(), LocalDateTime.now(), coverImaage, free, amount, maxCapacity, status);
+    public Session(Long id, CoverImage coverImage, boolean free, long amount, int maxCapacity, SessionStatus status) {
+        this(id, LocalDateTime.now(), LocalDateTime.now(), coverImage, free, amount, maxCapacity, status);
     }
 
     public void enroll(Payment payment) {
