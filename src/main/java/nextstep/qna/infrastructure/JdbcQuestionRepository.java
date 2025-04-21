@@ -12,4 +12,7 @@ public class JdbcQuestionRepository implements QuestionRepository {
     public Optional<Question> findById(Long id) {
         return Optional.empty();
     }
+
+    @Override
+    public void delete(Long id) {}
 }
