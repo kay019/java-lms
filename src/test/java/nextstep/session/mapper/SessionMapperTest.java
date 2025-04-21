@@ -37,6 +37,7 @@ class SessionMapperTest {
             .sessionDate(sessionDate)
             .maxCapacity(50)
             .fee(30000)
+            .students(List.of())
             .build();
 
         SessionEntity entity = sessionMapper.toEntity(paidSession);
@@ -72,6 +73,7 @@ class SessionMapperTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(List.of())
             .build();
 
         SessionEntity entity = sessionMapper.toEntity(session);

@@ -1,6 +1,7 @@
 package nextstep.session.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,7 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         assertThat(session.getId()).isEqualTo(1L);
@@ -53,6 +55,7 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         Payment freePayment = createPayment(0);
@@ -72,6 +75,7 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         Payment paidPayment = createPayment(1000);
@@ -102,6 +106,7 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         Payment freePayment = createPayment(0);

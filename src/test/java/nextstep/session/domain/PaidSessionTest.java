@@ -1,6 +1,7 @@
 package nextstep.session.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +40,7 @@ class PaidSessionTest {
             .sessionDate(sessionDate)
             .maxCapacity(50)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         assertThat(session.getId()).isEqualTo(2L);
@@ -55,6 +57,7 @@ class PaidSessionTest {
             .maxCapacity(1)
             .status(ENROLLING)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         Payment correctPayment = createPayment(30000);
@@ -86,6 +89,7 @@ class PaidSessionTest {
             .maxCapacity(1)
             .status(ENROLLING)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         Student secondStudent = new Student(1, SANJIGI.getId(), 1, SANJIGI.getName());
@@ -118,6 +122,7 @@ class PaidSessionTest {
             .maxCapacity(1)
             .status(ENROLLING)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         Payment payment = createPayment(30000);
