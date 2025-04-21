@@ -4,6 +4,7 @@ import nextstep.courses.domain.Cohort;
 import nextstep.courses.domain.Course;
 import nextstep.courses.entity.CohortEntity;
 import nextstep.courses.entity.CourseEntity;
+import nextstep.courses.repository.CohortRepository;
 import nextstep.courses.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,10 +23,12 @@ public class CourseRepositoryTest {
   @Autowired
   private JdbcTemplate jdbcTemplate;
   private CourseRepository courseRepository;
+  private CohortRepository cohortRepository;
 
   @BeforeEach
   void setUp() {
     courseRepository = new JdbcCourseRepository(jdbcTemplate);
+    cohortRepository = new JdbcCohortRepository(jdbcTemplate);
   }
 
   @Test
@@ -43,9 +46,9 @@ public class CourseRepositoryTest {
   void crudCohort() {
     Cohort cohort = new Cohort("1기");
     long courseId = 2L;
-    courseRepository.saveCohort(cohort.toCohortEntity(courseId));
+    cohortRepository.saveCohort(cohort.toCohortEntity(courseId));
 
-    CohortEntity savedCohort = courseRepository.findCohortByCourseId(courseId);
+    CohortEntity savedCohort = cohortRepository.findByCourseId(courseId);
     assertThat(savedCohort.name()).isEqualTo("1기");
     assertThat(savedCohort.courseId()).isEqualTo(courseId);
   }

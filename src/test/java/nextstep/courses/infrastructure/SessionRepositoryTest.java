@@ -24,12 +24,14 @@ class SessionRepositoryTest {
   private JdbcTemplate jdbcTemplate;
 
   private JdbcCourseRepository courseRepository = new JdbcCourseRepository(jdbcTemplate);
+  private JdbcCohortRepository cohortRepository = new JdbcCohortRepository(jdbcTemplate);
   private JdbcSessionRepository sessionRepository = new JdbcSessionRepository(jdbcTemplate);
   private JdbcImageRepository imageRepository = new JdbcImageRepository(jdbcTemplate);
 
   @BeforeEach
   void setUp() {
     sessionRepository = new JdbcSessionRepository(jdbcTemplate);
+    cohortRepository = new JdbcCohortRepository(jdbcTemplate);
     courseRepository = new JdbcCourseRepository(jdbcTemplate);
     imageRepository = new JdbcImageRepository(jdbcTemplate);
   }
@@ -37,7 +39,7 @@ class SessionRepositoryTest {
   @Test
   void crud() {
     String title = "TDD, 클린 코드 with Java";
-    Cohort cohort = courseRepository.findCohortByCourseId(1L).toCohort();
+    Cohort cohort = cohortRepository.findByCourseId(1L).toCohort();
     Course course = courseRepository.findById(1L).toCourse(cohort);
     Image coverImage = imageRepository.findById(1L).toImage();
     Session session = new Session(course, title,

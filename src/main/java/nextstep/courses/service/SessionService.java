@@ -10,6 +10,7 @@ import nextstep.courses.entity.CourseEntity;
 import nextstep.courses.entity.EnrollmentEntity;
 import nextstep.courses.entity.ImageEntity;
 import nextstep.courses.entity.SessionEntity;
+import nextstep.courses.repository.CohortRepository;
 import nextstep.courses.repository.CourseRepository;
 import nextstep.courses.repository.EnrollmentRepository;
 import nextstep.courses.repository.ImageRepository;
@@ -29,17 +30,20 @@ public class SessionService {
 
   private final SessionRepository sessionRepository;
   private final CourseRepository courseRepository;
+  private final CohortRepository cohortRepository;
   private final ImageRepository imageRepository;
   private final EnrollmentRepository enrollmentRepository;
   private final UserRepository userRepository;
 
   public SessionService(SessionRepository sessionRepository,
                         CourseRepository courseRepository,
+                        CohortRepository cohortRepository,
                         ImageRepository imageRepository,
                         EnrollmentRepository enrollmentRepository,
                         UserRepository userRepository) {
     this.sessionRepository = sessionRepository;
     this.courseRepository = courseRepository;
+    this.cohortRepository = cohortRepository;
     this.imageRepository = imageRepository;
     this.enrollmentRepository = enrollmentRepository;
     this.userRepository = userRepository;
@@ -59,7 +63,7 @@ public class SessionService {
   public Session findById(Long id){
     SessionEntity sessionEntity = sessionRepository.findById(id);
     CourseEntity courseEntity = courseRepository.findById(sessionEntity.courseId());
-    CohortEntity cohortEntity = courseRepository.findCohortByCourseId(courseEntity.id());
+    CohortEntity cohortEntity = cohortRepository.findByCourseId(courseEntity.id());
     ImageEntity imageEntity = imageRepository.findById(sessionEntity.coverImageId());
     List<EnrollmentEntity> enrollmentEntities = enrollmentRepository.findBySessionId(id);
     Enrollments enrollments = new Enrollments(enrollmentEntities.stream()
