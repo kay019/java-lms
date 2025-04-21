@@ -1,4 +1,6 @@
-package nextstep.courses.domain.images;
+package nextstep.images.domain;
+
+import nextstep.images.exception.InvalidImageSizeException;
 
 public class ImageSizeKb {
     private double value;
@@ -16,5 +18,9 @@ public class ImageSizeKb {
         if (value > 1000) {
             throw new InvalidImageSizeException("Image size must be less than or equal to 1000");
         }
+    }
+
+    public double getValue() {
+        return value;
     }
 }

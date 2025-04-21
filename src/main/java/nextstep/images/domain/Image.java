@@ -1,6 +1,8 @@
-package nextstep.courses.domain.images;
+package nextstep.images.domain;
 
 public class Image {
+
+    private Long id;
 
     private ImageType type;
 
@@ -9,25 +11,39 @@ public class Image {
 
     private ImageDimension dimension;
 
-    public Image() {
-    }
-
     public Image(Builder builder) {
+        this.id = builder.id;
         this.type = builder.type;
         this.size = builder.size;
         this.dimension = builder.dimension;
     }
 
-    public Image(ImageType type, double size, double width, double height) {
-        this.type = type;
-        this.size = new ImageSizeKb(size);
-        this.dimension = new ImageDimension(width, height);
+    public Long getId() {
+        return id;
+    }
+
+    public ImageType getType() {
+        return type;
+    }
+
+    public ImageSizeKb getSize() {
+        return size;
+    }
+
+    public ImageDimension getDimension() {
+        return dimension;
     }
 
     public static class Builder {
+        private Long id;
         private ImageType type;
         private ImageSizeKb size;
         private ImageDimension dimension;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder type(ImageType type) {
             this.type = type;

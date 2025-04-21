@@ -1,25 +1,17 @@
-package nextstep.courses.domain.sessions;
+package nextstep.sessions.domain;
 
-import nextstep.courses.domain.Course;
-import nextstep.courses.domain.images.Image;
-import nextstep.payments.domain.Payment;
-import nextstep.payments.domain.Payments;
+import nextstep.sessions.exception.AttendeeException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static nextstep.courses.domain.sessions.SessionStatus.OPEN;
-import static nextstep.courses.domain.sessions.SessionType.PAID;
 
 public class Session {
 
     private Long id;
 
-    private Course course;
+    private Long courseId;
 
-    private Image image;
+    private Long imageId;
 
     private LocalDateTime startDate;
 
@@ -27,62 +19,42 @@ public class Session {
 
     private int maxAttendees;
 
+    private int currentAttendees;
+
     private SessionType type;
 
     private SessionStatus status;
 
     private Long price;
 
-    private List<NsUser> attendees = new ArrayList<>();
-
-    private Payments payments = new Payments();
-
-    public Session() {
-    }
-
     public Session(Builder builder) {
         this.id = builder.id;
-        this.course = builder.course;
-        this.image = builder.image;
+        this.courseId = builder.courseId;
+        this.imageId = builder.imageId;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
         this.maxAttendees = builder.maxAttendees;
+        this.currentAttendees = builder.currentAttendees;
         this.type = builder.type;
         this.status = builder.status;
         this.price = builder.price;
     }
 
-    public Session(Long id, Course course, Image image, LocalDateTime startDate, LocalDateTime endDate,
-                   int maxAttendees, SessionType type, SessionStatus status, Long price) {
-        this.id = id;
-        this.course = course;
-        this.image = image;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.maxAttendees = maxAttendees;
-        this.type = type;
-        this.status = status;
-        this.price = price;
-    }
-
     public void addAttendee(NsUser attendee) {
         if (isNotOpen()) {
-            throw new IllegalStateException("Session is not open for registration");
+            throw new AttendeeException("Session is not open for registration");
         }
 
         if (exceedMaxAttendees()) {
-            throw new IllegalStateException("Maximum number of attendees reached");
+            throw new AttendeeException("Maximum number of attendees reached");
         }
 
-        if (payments.paidIncorrectly(attendee.getId(), this.price)) {
-            throw new IllegalStateException("Payment not completed");
-        }
-
-        attendees.add(attendee);
+        this.currentAttendees++;
+        attendee.enroll(this.id);
     }
 
     private boolean isOpen() {
-        return OPEN.equals(this.status);
+        return SessionStatus.OPEN.equals(this.status);
     }
 
     private boolean isNotOpen() {
@@ -90,28 +62,61 @@ public class Session {
     }
 
     private boolean exceedMaxAttendees() {
-        return isPaid() && getAttendeesSize() >= maxAttendees;
+        return isPaid() && currentAttendees >= maxAttendees;
     }
 
     private boolean isPaid() {
-        return PAID.equals(this.type);
+        return SessionType.PAID.equals(this.type);
     }
 
-    public void addPayment(Payment payment) {
-        payments.add(payment);
+    public Long getId() {
+        return id;
     }
 
-    public int getAttendeesSize() {
-        return attendees.size();
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public int getMaxAttendees() {
+        return maxAttendees;
+    }
+
+    public int getCurrentAttendees() {
+        return currentAttendees;
+    }
+
+    public SessionType getType() {
+        return type;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 
     public static class Builder {
         private Long id;
-        private Course course;
-        private Image image;
+        private Long courseId;
+        private Long imageId;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
         private int maxAttendees;
+        private int currentAttendees;
         private SessionType type;
         private SessionStatus status;
         private Long price;
@@ -121,13 +126,13 @@ public class Session {
             return this;
         }
 
-        public Builder course(Course course) {
-            this.course = course;
+        public Builder courseId(Long courseId) {
+            this.courseId = courseId;
             return this;
         }
 
-        public Builder image(Image image) {
-            this.image = image;
+        public Builder imageId(Long imageId) {
+            this.imageId = imageId;
             return this;
         }
 
@@ -143,6 +148,11 @@ public class Session {
 
         public Builder maxAttendees(int maxAttendees) {
             this.maxAttendees = maxAttendees;
+            return this;
+        }
+
+        public Builder currentAttendees(int currentAttendees) {
+            this.currentAttendees = currentAttendees;
             return this;
         }
 
