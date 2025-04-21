@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nextstep.enrollment.domain.Enrollment;
-import nextstep.session.image.domain.SessionCoverImage;
 import nextstep.enrollment.domain.Student;
 
 public abstract class Session {
     private final long id;
     private final long courseId;
-    private final SessionCoverImage coverImage;
     private final SessionStatus status;
     private final SessionDate sessionDate;
 
@@ -19,7 +17,6 @@ public abstract class Session {
     public abstract static class Builder<T extends Builder<T>> {
         protected long id;
         protected long courseId;
-        protected SessionCoverImage coverImage;
         protected SessionStatus status;
         protected SessionDate sessionDate;
 
@@ -30,11 +27,6 @@ public abstract class Session {
 
         public T courseID(long courseId) {
             this.courseId = courseId;
-            return self();
-        }
-
-        public T coverImage(SessionCoverImage coverImage) {
-            this.coverImage = coverImage;
             return self();
         }
 
@@ -55,7 +47,6 @@ public abstract class Session {
     protected Session(Builder<?> builder) {
         this.id = builder.id;
         this.courseId = builder.courseId;
-        this.coverImage = builder.coverImage;
         this.status = builder.status;
         this.sessionDate = builder.sessionDate;
         this.students = new ArrayList<>();
@@ -71,10 +62,6 @@ public abstract class Session {
         return courseId;
     }
 
-    public SessionCoverImage getCoverImage() {
-        return coverImage;
-    }
-
     public SessionStatus getStatus() {
         return status;
     }
@@ -85,5 +72,11 @@ public abstract class Session {
 
     public List<Student> getStudents() {
         return students;
+    }
+
+    protected boolean isDuplicateStudent(Enrollment enrollment) {
+        return getStudents()
+            .stream()
+            .anyMatch(student -> student.equals(enrollment.getStudent()));
     }
 }

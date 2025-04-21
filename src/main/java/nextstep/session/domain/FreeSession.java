@@ -34,6 +34,10 @@ public class FreeSession extends Session {
             throw new FreeSessionIllegalArgumentException();
         }
 
+        if (isDuplicateStudent(enrollment)) {
+            throw new FreeSessionIllegalArgumentException();
+        }
+
         if (enrollment.isNotValid(FREE)) {
             throw new FreeSessionIllegalArgumentException();
         }

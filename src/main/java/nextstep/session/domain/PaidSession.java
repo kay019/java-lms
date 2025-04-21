@@ -42,6 +42,11 @@ public class PaidSession extends Session {
 
     @Override
     public void enroll(Enrollment enrollment) {
+        validateEnroll(enrollment);
+        getStudents().add(enrollment.getStudent());
+    }
+
+    private void validateEnroll(Enrollment enrollment) {
         if (enrollment == null) {
             throw new PaidSessionIllegalArgumentException();
         }
@@ -54,11 +59,13 @@ public class PaidSession extends Session {
             throw new PaidSessionIllegalArgumentException();
         }
 
-        if (getStudents().size() >= maxCapacity) {
+        if (isDuplicateStudent(enrollment)) {
             throw new PaidSessionIllegalArgumentException();
         }
 
-        getStudents().add(enrollment.getStudent());
+        if (getStudents().size() >= maxCapacity) {
+            throw new PaidSessionIllegalArgumentException();
+        }
     }
 
     public int getMaxCapacity() {

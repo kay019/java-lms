@@ -7,10 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import nextstep.enrollment.domain.Enrollment;
-import nextstep.session.image.domain.ImageFileSize;
-import nextstep.session.image.domain.ImageSize;
-import nextstep.session.image.domain.ImageType;
-import nextstep.session.image.domain.SessionCoverImage;
 import nextstep.enrollment.domain.Student;
 import nextstep.exception.FreeSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
@@ -22,14 +18,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FreeSessionTest {
     private Student student;
-    private SessionCoverImage coverImage;
     private SessionStatus status;
     private SessionDate sessionDate;
 
     @BeforeEach
     void setUp() {
         student = new Student(1, JAVAJIGI, 1);
-        coverImage = new SessionCoverImage(1, 1, new ImageFileSize(1024), ImageType.JPG, new ImageSize(300, 200));
         status = SessionStatus.ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
@@ -40,14 +34,12 @@ class FreeSessionTest {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
             .courseID(1L)
-            .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
             .build();
 
         assertThat(session.getId()).isEqualTo(1L);
         assertThat(session.getCourseId()).isEqualTo(1L);
-        assertThat(session.getCoverImage()).isEqualTo(coverImage);
         assertThat(session.getStatus()).isEqualTo(status);
         assertThat(session.getSessionDate()).isEqualTo(sessionDate);
         assertThat(session.getStudents()).isEmpty();
@@ -59,7 +51,6 @@ class FreeSessionTest {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
             .courseID(1L)
-            .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
             .build();
@@ -79,7 +70,6 @@ class FreeSessionTest {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
             .courseID(1L)
-            .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
             .build();
@@ -96,12 +86,28 @@ class FreeSessionTest {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
             .courseID(1L)
-            .coverImage(coverImage)
             .status(CLOSED)
             .sessionDate(sessionDate)
             .build();
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, createPayment(0))))
+            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("이미 등록한 학생이 Enrollment로 등록하면 예외가 발생한다")
+    void enroll_학생이_중복으로_등록할때_예외발생() {
+        FreeSession session = new FreeSession.Builder()
+            .id(1L)
+            .courseID(1L)
+            .status(status)
+            .sessionDate(sessionDate)
+            .build();
+
+        Payment freePayment = createPayment(0);
+        session.enroll(new Enrollment(student, freePayment));
+
+        assertThatThrownBy(() -> session.enroll(new Enrollment(student, freePayment)))
             .isInstanceOf(FreeSessionIllegalArgumentException.class);
     }
 

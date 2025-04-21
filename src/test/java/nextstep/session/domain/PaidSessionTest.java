@@ -7,10 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import nextstep.enrollment.domain.Enrollment;
-import nextstep.session.image.domain.ImageFileSize;
-import nextstep.session.image.domain.ImageSize;
-import nextstep.session.image.domain.ImageType;
-import nextstep.session.image.domain.SessionCoverImage;
 import nextstep.enrollment.domain.Student;
 import nextstep.exception.PaidSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
@@ -23,14 +19,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PaidSessionTest {
     private Student student;
-    private SessionCoverImage coverImage;
     private SessionStatus status;
     private SessionDate sessionDate;
 
     @BeforeEach
     void setUp() {
         student = new Student(1, JAVAJIGI, 1);
-        coverImage = new SessionCoverImage(1, 1,  new ImageFileSize(1024), ImageType.JPG, new ImageSize(300, 200));
         status = ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
@@ -41,7 +35,6 @@ class PaidSessionTest {
         PaidSession session = new PaidSession.Builder()
             .id(2L)
             .courseID(1L)
-            .coverImage(coverImage)
             .status(status)
             .sessionDate(sessionDate)
             .maxCapacity(50)
@@ -114,6 +107,21 @@ class PaidSessionTest {
 
         Payment payment = createPayment(30000);
 
+        assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
+            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("이미 등록한 학생이 Enrollment로 등록하면 예외가 발생한다")
+    void enroll_학생이_중복으로_등록할때_예외발생() {
+        PaidSession session = new PaidSession.Builder()
+            .maxCapacity(1)
+            .status(ENROLLING)
+            .fee(30000)
+            .build();
+
+        Payment payment = createPayment(30000);
+        session.enroll(new Enrollment(student, payment));
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
             .isInstanceOf(PaidSessionIllegalArgumentException.class);
     }
