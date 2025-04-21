@@ -34,6 +34,6 @@
   - [x] Enrollment(등록 현황) table 설계
 - [ ] DB 테이블에 따른 엔티티를 구현한다.
 - [ ] DB에 데이터를 저장하는 repository method 를 구현한다.
-- [ ] 도메인을 커멘드 객체로 변환하는 mapper 를 구현한다.
+- [ ] 도메인을 엔티티 객체로 변환하는 mapper 를 구현한다.
 - [ ] repository 에 조회하는 method 를 구현한다.
-- [ ] 엔티티와 도메인 간 mapper 를 구현한다.
+- [ ] 엔티티를 도메인으로 변환하는 mapper 를 구현한다.
