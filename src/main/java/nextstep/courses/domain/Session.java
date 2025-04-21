@@ -81,7 +81,7 @@ public class Session {
     }
   }
 
-  public void enroll(NsUser userId, long amount) {
+  public synchronized void enroll(NsUser userId, long amount) {
     if (status != SessionStatus.RECRUITING) {
       throw new IllegalStateException("강의 상태가 모집중일 때만 수강 신청이 가능합니다.");
     }

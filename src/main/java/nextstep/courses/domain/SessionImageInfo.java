@@ -2,6 +2,7 @@ package nextstep.courses.domain;
 
 public class SessionImageInfo {
 
+  public static final int IMAGE_SIZE = 1_000_000;
   private ImageType imageType;
   private int imageSize;
   private int width;
@@ -32,7 +33,7 @@ public class SessionImageInfo {
   }
 
   private void validate(ImageType type, int size, int width, int height) {
-    if (size > 1_000_000) {
+    if (size > IMAGE_SIZE) {
       throw new IllegalArgumentException("이미지 크기는 1MB 이하여야 합니다.");
     }
     if (!type.isSupported()) {
