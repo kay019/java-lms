@@ -3,13 +3,11 @@ package nextstep.users.domain;
 import java.util.Objects;
 
 public class NsStudent {
-    private NsUser user;
     private Long userId;
     private final Long registeredSessionId;
 
     public NsStudent(NsUser user, Long sessionId) {
-        this.user = user;
-        this.registeredSessionId = sessionId;
+        this(user.getId(), sessionId);
     }
 
     public NsStudent(Long userId, Long sessionId) {
@@ -19,6 +17,10 @@ public class NsStudent {
 
     public boolean isSameUser(NsUser user) {
         return this.userId == user.getId();
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     @Override

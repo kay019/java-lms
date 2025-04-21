@@ -13,6 +13,7 @@ public class Image {
     private PositiveNumber width;
     private PositiveNumber height;
 
+
     public Image(Long size, String imageType, Long width, Long height) {
         this(size, ImageType.of(imageType), width, height);
     }
@@ -42,5 +43,21 @@ public class Image {
         if (width != height * IMAGE_RATIO) {
             throw new CannotUploadImageException("이미지의 width와 height의 비율은 3:2여야 합니다.");
         }
+    }
+
+    public Long getSize() {
+        return size.value();
+    }
+
+    public Long getHeight() {
+        return height.value();
+    }
+
+    public Long getWidth() {
+        return width.value();
+    }
+
+    public String getImageType() {
+        return imageType.name();
     }
 }
