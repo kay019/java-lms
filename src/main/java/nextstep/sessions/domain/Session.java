@@ -1,11 +1,11 @@
 package nextstep.sessions.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
-import nextstep.payments.domain.Payment;
 import nextstep.sessions.domain.cover.SessionCover;
-import nextstep.sessions.domain.type.FreeSessionType;
 import nextstep.sessions.domain.type.SessionType;
+import nextstep.users.domain.NsUser;
 
 public class Session {
     private final Long id;
@@ -18,34 +18,21 @@ public class Session {
 
     private final SessionType sessionType;
 
-    private final SessionStatus sessionStatus;
-
-    private final Long currentMemberCount;
-
-    public Session(SessionStatus sessionStatus) {
-        this(null, null, null, null, new FreeSessionType(), sessionStatus, 0L);
-    }
+    private final Enrollment enrollment;
 
     public Session(Long id, LocalDateTime startAt, LocalDateTime endAt, SessionCover cover, SessionType sessionType,
-                   SessionStatus sessionStatus, Long currentMemberCount) {
+                   SessionStatus sessionStatus, Long capacity, List<Student> students) {
         this.id = id;
         this.startAt = startAt;
         this.endAt = endAt;
         this.cover = cover;
         this.sessionType = sessionType;
-        this.sessionStatus = sessionStatus;
-        this.currentMemberCount = currentMemberCount;
+        this.enrollment = new Enrollment(sessionStatus, new Students(capacity, students));
     }
 
-    public void register(Payment payment) {
-        validateSessionInProgress();
-        sessionType.register(payment, currentMemberCount);
-    }
-
-    private void validateSessionInProgress() {
-        if (!sessionStatus.isSameAs(SessionStatus.ONGOING)) {
-            throw new IllegalStateException("session is not in progress");
-        }
+    public Student enroll(NsUser nsUser) {
+        enrollment.enroll(nsUser);
+        return new Student(nsUser.getId(), this.id);
     }
 
     @Override
@@ -56,12 +43,12 @@ public class Session {
         Session session = (Session) o;
         return Objects.equals(id, session.id) && Objects.equals(startAt, session.startAt)
                 && Objects.equals(endAt, session.endAt) && Objects.equals(cover, session.cover)
-                && Objects.equals(sessionType, session.sessionType) && sessionStatus == session.sessionStatus
-                && Objects.equals(currentMemberCount, session.currentMemberCount);
+                && Objects.equals(sessionType, session.sessionType) && Objects.equals(enrollment,
+                session.enrollment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startAt, endAt, cover, sessionType, sessionStatus, currentMemberCount);
+        return Objects.hash(id, startAt, endAt, cover, sessionType, enrollment);
     }
 }

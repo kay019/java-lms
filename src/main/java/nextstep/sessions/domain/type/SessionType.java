@@ -4,7 +4,6 @@ import java.util.Objects;
 import nextstep.payments.domain.Payment;
 
 public abstract class SessionType {
-
     protected final Long maxMemberCount;
     protected final Long price;
 
