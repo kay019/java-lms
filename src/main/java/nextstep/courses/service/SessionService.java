@@ -18,11 +18,13 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("sessionService")
+@Transactional
 public class SessionService {
 
   private final SessionRepository sessionRepository;
