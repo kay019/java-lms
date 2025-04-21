@@ -27,6 +27,6 @@ QnaService의 deleteQuestion() 메서드에 대한 단위 테스트는 src/test/
 - [x] 검증 코드 Question 도메인으로 이동
   - [x] question.isOwner
   - [x] answer.isOwner
-- [ ] 삭제 코드 Question 도메인으로 이동
-  - [ ] question.setDeleted
-  - [ ] question.deleteHistories
+- [x] 삭제 코드 Question 도메인으로 이동
+  - [x] question.setDeleted
+  - [x] question.deleteHistories

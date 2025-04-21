@@ -6,6 +6,7 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
@@ -73,10 +74,6 @@ public class Question {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
 
     public boolean isDeleted() {
         return deleted;
@@ -102,5 +99,31 @@ public class Question {
             }
         }
 
+    }
+
+    public List<DeleteHistory> deletedHistories(NsUser user) throws CannotDeleteException {
+        List<DeleteHistory> deleteHistories = answerDeleteHistories(user);
+        deleteHistories.add(deleteHistory(user));
+        return deleteHistories;
+    }
+
+    private DeleteHistory deleteHistory(NsUser user) throws CannotDeleteException {
+        if (!deleted) {
+            throw new CannotDeleteException("삭제되지 않은 질문입니다.");
+        }
+        return new DeleteHistory(ContentType.QUESTION, id, user, LocalDateTime.now());
+    }
+
+    private List<DeleteHistory> answerDeleteHistories(NsUser user) throws CannotDeleteException {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        for (Answer answer : answers) {
+            deleteHistories.add(answer.deleteHistory(user));
+        }
+        return deleteHistories;
+    }
+
+    public void markAsDeleted() {
+        deleted = true;
+        answers.forEach(Answer::markAsDeleted);
     }
 }
