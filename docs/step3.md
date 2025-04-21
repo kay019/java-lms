@@ -33,7 +33,7 @@
   - [x] SessionCoverImage table 설계
   - [x] Enrollment(등록 현황) table 설계
 - [x] DB 테이블에 따른 엔티티를 구현한다.
-- [ ] 도메인과 엔티티 객체 간 변환하는 mapper 를 구현한다.
+- [x] 도메인과 엔티티 객체 간 변환하는 mapper 를 구현한다.
 - [ ] DB에 데이터를 저장하는 repository method 를 구현한다.
 - [ ] repository 에 저장하는 method 를 구현한다.
 - [ ] repository 에 조회하는 method 를 구현한다.
