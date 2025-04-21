@@ -33,7 +33,7 @@ class FreeSessionTest {
     void FreeSession_생성_빌더_정상작동() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
-            .courseID(1L)
+            .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
             .build();
@@ -50,7 +50,7 @@ class FreeSessionTest {
     void enroll_정상_등록() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
-            .courseID(1L)
+            .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
             .build();
@@ -69,7 +69,7 @@ class FreeSessionTest {
     void enroll_유료_결제시_예외발생() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
-            .courseID(1L)
+            .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
             .build();
@@ -85,7 +85,7 @@ class FreeSessionTest {
     void enroll_NullEnrollment_예외발생() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
-            .courseID(1L)
+            .courseId(1L)
             .status(CLOSED)
             .sessionDate(sessionDate)
             .build();
@@ -99,7 +99,7 @@ class FreeSessionTest {
     void enroll_학생이_중복으로_등록할때_예외발생() {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
-            .courseID(1L)
+            .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
             .build();

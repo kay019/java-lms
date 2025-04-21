@@ -34,7 +34,7 @@ class PaidSessionTest {
     void PaidSession_생성_빌더_정상작동() {
         PaidSession session = new PaidSession.Builder()
             .id(2L)
-            .courseID(1L)
+            .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
             .maxCapacity(50)

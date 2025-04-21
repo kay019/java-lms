@@ -1,6 +1,5 @@
 package nextstep.session.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import nextstep.enrollment.domain.Enrollment;
@@ -11,7 +10,6 @@ public abstract class Session {
     private final long courseId;
     private final SessionStatus status;
     private final SessionDate sessionDate;
-
     private final List<Student> students;
 
     public abstract static class Builder<T extends Builder<T>> {
@@ -19,13 +17,14 @@ public abstract class Session {
         protected long courseId;
         protected SessionStatus status;
         protected SessionDate sessionDate;
+        protected List<Student> students;
 
         public T id(long id) {
             this.id = id;
             return self();
         }
 
-        public T courseID(long courseId) {
+        public T courseId(long courseId) {
             this.courseId = courseId;
             return self();
         }
@@ -40,6 +39,11 @@ public abstract class Session {
             return self();
         }
 
+        public T students(List<Student> students) {
+            this.students = students;
+            return self();
+        }
+
         protected abstract T self();
         public abstract Session build();
     }
@@ -49,7 +53,7 @@ public abstract class Session {
         this.courseId = builder.courseId;
         this.status = builder.status;
         this.sessionDate = builder.sessionDate;
-        this.students = new ArrayList<>();
+        this.students = builder.students;
     }
 
     public abstract void enroll(Enrollment enrollment);
