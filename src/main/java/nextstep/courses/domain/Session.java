@@ -25,6 +25,7 @@ public class Session {
 
   private List<NsUser> users = new ArrayList<>();
 
+
   public Session(LocalDateTime startDate, LocalDateTime endDate,
       SessionImageInfo sessionImageInfo, boolean isFree, int fee, int maxCapacity, SessionStatus status) {
     this.startDate = startDate;
@@ -36,6 +37,43 @@ public class Session {
     this.status = status;
     validate();
   }
+
+  public Long getId() {
+    return id;
+  }
+
+  public LocalDateTime getStartDate() {
+    return startDate;
+  }
+
+  public LocalDateTime getEndDate() {
+    return endDate;
+  }
+
+  public SessionImageInfo getSessionImageInfo() {
+    return sessionImageInfo;
+  }
+
+  public boolean isFree() {
+    return isFree;
+  }
+
+  public int getMaxCapacity() {
+    return maxCapacity;
+  }
+
+  public int getFee() {
+    return fee;
+  }
+
+  public SessionStatus getStatus() {
+    return status;
+  }
+
+  public List<NsUser> getUsers() {
+    return users;
+  }
+
 
   private void validate() {
     if (startDate.isAfter(endDate)) {
