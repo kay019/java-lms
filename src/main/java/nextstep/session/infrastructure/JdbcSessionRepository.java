@@ -80,10 +80,6 @@ public class JdbcSessionRepository implements SessionRepository {
         List<Student> students = selectStudents(id);
         SessionEntity sessionEntity = selectSession(id, students);
 
-        if (sessionEntity == null) {
-            return null;
-        }
-
         SessionMapper sessionMapper = new SessionMapper();
         return sessionMapper.toDomain(sessionEntity);
     }
