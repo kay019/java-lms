@@ -38,11 +38,11 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return id == student.id && userId == student.userId && sessionId == student.sessionId && Objects.equals(name, student.name);
+        return userId == student.userId && sessionId == student.sessionId && Objects.equals(name, student.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, sessionId, name);
+        return Objects.hash(userId, sessionId, name);
     }
 }
