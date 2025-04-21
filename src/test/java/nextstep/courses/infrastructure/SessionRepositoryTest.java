@@ -39,7 +39,8 @@ public class SessionRepositoryTest {
         Session session = new Session(1L,
                 LocalDateTime.of(2025, Month.APRIL, 10, 15, 27),
                 LocalDateTime.of(2025, Month.APRIL, 10, 15, 29),
-                SessionState.RECRUTING,
+                SessionProgressState.INPROGRESS,
+                SessionRecruitmentState.RECRUTING,
                 new PaidPayStrategy(),
                 new Image(
                         1000L,

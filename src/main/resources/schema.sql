@@ -61,6 +61,7 @@ create table session (
     image_height bigint not null,
 
     price bigint not null,
+    session_progress_state varchar(10) not null,
     primary key (id)
 );
 

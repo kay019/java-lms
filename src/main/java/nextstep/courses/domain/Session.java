@@ -1,12 +1,9 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotCreateSessionException;
-import nextstep.users.domain.NsStudent;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Session {
     private Long id;
@@ -14,31 +11,27 @@ public class Session {
     private Image coverImage;
     private Registry registry;
     private PositiveNumber price;
+    private SessionProgressState sessionState;
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
-        this(id, startDate, endDate, new Registry(payStrategy, sessionState, new PositiveNumber(capacity)), coverImage, 0L);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity)), coverImage, 0L, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price) {
-        this(id, startDate, endDate, new Registry(payStrategy, sessionState, new PositiveNumber(capacity)), coverImage, price);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity)), coverImage, price, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage) {
-        this(id, startDate, endDate, registry, coverImage, 0L);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, SessionProgressState sessionState) {
+        this(id, startDate, endDate, registry, coverImage, 0L, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price) {
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price, SessionProgressState sessionState) {
         this.id = id;
         this.sessionPeriod = new Period(startDate, endDate);
         this.coverImage = coverImage;
         this.registry = registry;
         this.price = new PositiveNumber(price);
-    }
-
-    private void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
-        if (startDate.isAfter(endDate)) {
-            throw new CannotCreateSessionException("강의의 시작 날짜가 끝나는 날짜보다 뒤입니다.");
-        }
+        this.sessionState = sessionState;
     }
 
     public void register(NsUser user, PositiveNumber money) {
@@ -79,5 +72,9 @@ public class Session {
 
     public Long getPrice() {
         return price.value();
+    }
+
+    public SessionProgressState getSessionState() {
+        return sessionState;
     }
 }

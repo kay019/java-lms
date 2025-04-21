@@ -26,7 +26,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public int save(Session session) {
         // session 저장
-        String sql_session = "insert into session (start_at, end_at, image_size, image_type, image_width, image_height, price) values(?, ?, ?, ?, ?, ?, ?)";
+        String sql_session = "insert into session (start_at, end_at, image_size, image_type, image_width, image_height, price, session_progress_state) values(?, ?, ?, ?, ?, ?, ?, ?)";
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(con -> {
@@ -38,6 +38,7 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.setLong(5, session.getImageWidth());
             ps.setLong(6, session.getImageHeight());
             ps.setLong(7, session.getPrice());
+            ps.setString(8, session.getSessionState().name());
             return ps;
         }, generatedKeyHolder);
 
@@ -47,7 +48,7 @@ public class JdbcSessionRepository implements SessionRepository {
         // registry 저장
         String sql_registry = "insert into registry (session_id, session_state, pay_strategy, capacity) values(?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql_registry, sessionId, registry.getSessionState(), registry.getPayStrategy(), registry.getCapacity());
+        jdbcTemplate.update(sql_registry, sessionId, registry.getSessionRecruitmentState(), registry.getPayStrategy(), registry.getCapacity());
 
         List<NsStudent> students = registry.getStudents();
 
@@ -79,7 +80,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 ), id);
 
         // session 찾기
-        String sql_session = "SELECT id, start_at, end_at, image_size, image_type, image_width, image_height, price FROM session WHERE id = ?";
+        String sql_session = "SELECT id, start_at, end_at, image_size, image_type, image_width, image_height, price, session_progress_state FROM session WHERE id = ?";
         return jdbcTemplate.queryForObject(sql_session, (rs, rowNum) ->
                 new Session(
                         rs.getLong(1),
@@ -92,7 +93,8 @@ public class JdbcSessionRepository implements SessionRepository {
                                 rs.getLong(6),
                                 rs.getLong(7)
                         ),
-                        rs.getLong(8)
+                        rs.getLong(8),
+                        SessionProgressState.valueOf(rs.getString(9))
                 ),id);
     }
 
