@@ -75,5 +75,6 @@ create table enrollment (
     user_id bigint not null,
     session_id bigint not null,
     name bigint not null,
-    primary key (id)
+    primary key (id),
+    unique (user_id, session_id)
 );
