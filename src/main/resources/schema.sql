@@ -55,11 +55,6 @@ create table session (
     start_at timestamp not null,
     end_at timestamp not null,
 
-    image_size bigint not null,
-    image_type varchar(10) not null,
-    image_width bigint not null,
-    image_height bigint not null,
-
     price bigint not null,
     session_progress_state varchar(10) not null,
     primary key (id)
@@ -79,4 +74,16 @@ create table ns_students (
     user_id BIGINT NOT NULL,
     FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES ns_user(id) ON DELETE CASCADE
+);
+
+create table images (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    session_id BIGINT NOT NULL,
+
+    image_size bigint not null,
+    image_type varchar(10) not null,
+    image_width bigint not null,
+    image_height bigint not null,
+
+    FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE
 );

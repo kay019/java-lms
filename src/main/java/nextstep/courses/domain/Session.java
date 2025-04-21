@@ -4,11 +4,14 @@ import nextstep.courses.CannotCreateSessionException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Session {
     private Long id;
     private Period sessionPeriod;
-    private Image coverImage;
+    private List<Image> coverImages = new ArrayList<>();
     private Registry registry;
     private PositiveNumber price;
     private SessionProgressState sessionState;
@@ -26,9 +29,13 @@ public class Session {
     }
 
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price, SessionProgressState sessionState) {
+        this(id, startDate, endDate, registry, Arrays.asList(coverImage), price, sessionState);
+    }
+
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, List<Image> coverImages, Long price, SessionProgressState sessionState) {
         this.id = id;
         this.sessionPeriod = new Period(startDate, endDate);
-        this.coverImage = coverImage;
+        this.coverImages = coverImages;
         this.registry = registry;
         this.price = new PositiveNumber(price);
         this.sessionState = sessionState;
@@ -50,20 +57,8 @@ public class Session {
         return sessionPeriod.getEndDate();
     }
 
-    public Long getImageSize() {
-        return coverImage.getSize();
-    }
-
-    public Long getImageHeight() {
-        return coverImage.getHeight();
-    }
-
-    public Long getImageWidth() {
-        return coverImage.getWidth();
-    }
-
-    public String getImageType() {
-        return coverImage.getImageType();
+    public List<Image> getCoverImages() {
+        return coverImages;
     }
 
     public Registry getRegistry() {
