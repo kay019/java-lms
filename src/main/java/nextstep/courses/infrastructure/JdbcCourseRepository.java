@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-@Repository("courseRepository")
+@Repository
 public class JdbcCourseRepository implements CourseRepository {
   private final JdbcOperations jdbcTemplate;
 

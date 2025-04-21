@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 
-@Repository("sessionRepository")
+@Repository
 public class JdbcSessionRepository implements SessionRepository {
   private final JdbcOperations jdbcTemplate;
 

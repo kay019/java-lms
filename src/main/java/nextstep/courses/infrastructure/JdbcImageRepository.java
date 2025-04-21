@@ -7,7 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-@Repository("imageRepository")
+@Repository
 public class JdbcImageRepository implements ImageRepository {
   private JdbcOperations jdbcTemplate;
 
