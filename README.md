@@ -41,8 +41,33 @@
   - [x] SessionStatus 단위 테스트 추가
   - [x] ImageSizeTest 가로가 작은 경우, 세로가 작은 경우 독립적으로 테스트
   - [x] SessionThumbnailTest 중복 테스트 제거
-- [ ] 2차 피드백
+- [x] 2차 피드백
   - [x] Enrollment
     - [x] 인터페이스로 분리
     - [x] 수강신청 validation 을 Enrollment 내부에서 수행
   - [x] 도메인 패키지 분리
+## 3단계
+- [x] 테이블 설계
+- [x] ImageRepository 구현
+- [x] SessionRepository 구현
+  - [x] JdbcSessionRepository 구현
+  - [x] Session 리팩토링
+    - [x] SessionDto 구현
+    - [x] SessionEnrollmentDto 구현
+    - [x] SessionId 리팩토링
+      - [x] courseId 필드 추가
+      - [x] getter 추가
+  - [x] getter 추가
+    - [x] SessionInfo
+    - [x] SessionBasicInfo
+    - [x] SessionThumbnail
+    - [x] SessionDetailInfo
+- [x] SessionService 구현
+  - [x] SessionDto 매핑
+- [x] Enrollment 리팩토링 
+  - [x] 생성자에 List<NsUser> 추가
+  - [x] EnrollmentManager 추가
+- [ ] 피드백
+  - [x] SessionRepository.update 제거
+  - [x] Enrollment.isFull 리팩토링
+  - [x] Enrollment.hasEnrolledUser 제거
