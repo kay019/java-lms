@@ -16,7 +16,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
 
   @Override
   public int save(Payment payment) {
-    String sql = "insert into payment (session_id, user_id, amount, created_at) values(?, ?, ?, ?)";
+    String sql = "insert into payment (session_id, ns_user_id, amount, created_at) values(?, ?, ?, ?)";
     return jdbcTemplate
         .update(sql, payment.getSessionId(), payment.getNsUserId(), payment.getAmount(),
             payment.getCreatedAt());

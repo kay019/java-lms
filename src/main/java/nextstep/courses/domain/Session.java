@@ -25,6 +25,7 @@ public class Session {
 
   private List<NsUser> users = new ArrayList<>();
 
+
   public Session(LocalDateTime startDate, LocalDateTime endDate,
       SessionImageInfo sessionImageInfo, boolean isFree, int fee, int maxCapacity, SessionStatus status) {
     this.startDate = startDate;
@@ -37,13 +38,50 @@ public class Session {
     validate();
   }
 
+  public Long getId() {
+    return id;
+  }
+
+  public LocalDateTime getStartDate() {
+    return startDate;
+  }
+
+  public LocalDateTime getEndDate() {
+    return endDate;
+  }
+
+  public SessionImageInfo getSessionImageInfo() {
+    return sessionImageInfo;
+  }
+
+  public boolean isFree() {
+    return isFree;
+  }
+
+  public int getMaxCapacity() {
+    return maxCapacity;
+  }
+
+  public int getFee() {
+    return fee;
+  }
+
+  public SessionStatus getStatus() {
+    return status;
+  }
+
+  public List<NsUser> getUsers() {
+    return users;
+  }
+
+
   private void validate() {
     if (startDate.isAfter(endDate)) {
       throw new IllegalArgumentException("시작일은 종료일보다 빠르거나 같아야 합니다.");
     }
   }
 
-  public void enroll(NsUser userId, long amount) {
+  public synchronized void enroll(NsUser userId, long amount) {
     if (status != SessionStatus.RECRUITING) {
       throw new IllegalStateException("강의 상태가 모집중일 때만 수강 신청이 가능합니다.");
     }
