@@ -24,7 +24,7 @@ class PaidSessionTest {
 
     @BeforeEach
     void setUp() {
-        student = new Student(1, JAVAJIGI, 1);
+        student = new Student(1, JAVAJIGI.getId(), 1, JAVAJIGI.getName());
         status = ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
@@ -88,7 +88,7 @@ class PaidSessionTest {
             .fee(30000)
             .build();
 
-        Student secondStudent = new Student(1, SANJIGI, 1);
+        Student secondStudent = new Student(1, SANJIGI.getId(), 1, SANJIGI.getName());
         Payment payment = createPayment(30000);
 
         session.enroll(new Enrollment(student, payment));

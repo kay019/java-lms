@@ -2,19 +2,17 @@ package nextstep.enrollment.domain;
 
 import java.util.Objects;
 
-import nextstep.users.domain.NsUser;
-
 public class Student {
     private final long id;
     private final long userId;
     private final long sessionId;
     private final String name;
 
-    public Student(long id, NsUser user, long sessionId) {
+    public Student(long id, long userId, long sessionId, String name) {
         this.id = id;
-        this.userId = user.getId();
-        this.name = user.getName();
+        this.userId = userId;
         this.sessionId = sessionId;
+        this.name = name;
     }
 
     public long getId() {

@@ -23,7 +23,7 @@ class FreeSessionTest {
 
     @BeforeEach
     void setUp() {
-        student = new Student(1, JAVAJIGI, 1);
+        student = new Student(1, JAVAJIGI.getId(), 1, JAVAJIGI.getName());
         status = SessionStatus.ENROLLING;
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
