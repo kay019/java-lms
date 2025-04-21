@@ -32,4 +32,8 @@ public class Payment {
             throw new IllegalArgumentException("결제금액과 수강료가 일치하지 않습니다.");
         }
     }
+
+    public String getId() {
+        return id;
+    }
 }

@@ -1,7 +1,7 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.session.domain.Enrollment;
-import nextstep.courses.session.domain.Enrollments;
+import nextstep.courses.enrollment.domain.Enrollment;
+import nextstep.courses.enrollment.domain.Enrollments;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnrollmentTest {
-    public static final Enrollment ENROLLMENT1 = new Enrollment(NsUserTest.JAVAJIGI, new Payment());
-    public static final Enrollment ENROLLMENT2 = new Enrollment(NsUserTest.SANJIGI, new Payment());
+    public static final Enrollment ENROLLMENT1 = new Enrollment(1L, NsUserTest.JAVAJIGI, new Payment());
+    public static final Enrollment ENROLLMENT2 = new Enrollment(1L, NsUserTest.SANJIGI, new Payment());
     public static final Enrollments ENROLLMENTS = new Enrollments(new ArrayList<>(List.of(ENROLLMENT1, ENROLLMENT2)));
 }
