@@ -1,7 +1,6 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.PayStrategyFactory;
-import nextstep.courses.SessionDto;
 import nextstep.courses.domain.*;
 import nextstep.users.domain.UserRepository;
 import nextstep.users.infrastructure.JdbcUserRepository;
@@ -32,7 +31,7 @@ public class SessionRepositoryTest {
     @BeforeEach
     void setUp() {
         userRepository = new JdbcUserRepository(jdbcTemplate);
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate, new PayStrategyFactory());
     }
 
     @Test
@@ -51,9 +50,12 @@ public class SessionRepositoryTest {
                 10L,
                 1000L);
         session.register(userRepository.findByUserId("javajigi").get(), new PositiveNumber(1000L));
+        LOGGER.debug("Student: {}", userRepository.findByUserId("javajigi").get());
+        LOGGER.debug("Student Registry: {}", session.getRegistry().getStudents().get(0).getUserId());
         int count = sessionRepository.save(session);
         assertThat(count).isEqualTo(1);
-        SessionDto savedSessionDto = sessionRepository.findSessionDtoById(1L);
-        assertThat(session.getPrice()).isEqualTo(savedSessionDto.getPrice());
+        Session savedSession = sessionRepository.findById(1L);
+        assertThat(session.getPrice()).isEqualTo(savedSession.getPrice());
+        LOGGER.debug("Session: {}", savedSession);
     }
 }

@@ -1,7 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.RegistryDto;
-import nextstep.courses.SessionDto;
+import nextstep.courses.PayStrategyFactory;
 import nextstep.courses.domain.*;
 import nextstep.users.domain.NsStudent;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -17,9 +16,11 @@ import java.util.List;
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
     private JdbcOperations jdbcTemplate;
+    private final PayStrategyFactory payStrategyFactory;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate, PayStrategyFactory payStrategyFactory) {
         this.jdbcTemplate = jdbcTemplate;
+        this.payStrategyFactory = payStrategyFactory;
     }
 
     @Override
@@ -60,34 +61,39 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public SessionDto findSessionDtoById(Long id) {
-        String sql = "SELECT id, start_at, end_at, image_size, image_type, image_width, image_height, price FROM session WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new SessionDto(
-                rs.getLong(1),
-                toLocalDateTime(rs.getTimestamp(2)),
-                toLocalDateTime(rs.getTimestamp(3)),
-                rs.getLong(4),
-                rs.getString(5),
-                rs.getLong(6),
-                rs.getLong(7),
-                rs.getLong(8)
-        ), id);
-    }
+    public Session findById(Long id) {
+        // students 찾기
+        String sql_students = "SELECT user_id FROM ns_students WHERE session_id = ?";
+        List<NsStudent> students = jdbcTemplate.query(sql_students, (rs, rowNum) ->
+                new NsStudent(rs.getLong(1), id), id);
 
-    @Override
-    public RegistryDto findRegistryDtoBySessionId(Long sessionId) {
-        String sql = "SELECT pay_strategy, session_state, capacity FROM registry WHERE session_id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RegistryDto(
-                rs.getString(1),
-                rs.getString(2),
-                rs.getLong(3)
-        ), sessionId);
-    }
+        // registry 찾기
+        String sql_repository = "SELECT pay_strategy, session_state, capacity FROM registry WHERE session_id = ?";
 
-    @Override
-    public List<Long> findStudentIdBySessionId(Long sessionId) {
-        String sql = "SELECT user_id FROM ns_students WHERE session_id = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong(1), sessionId);
+        Registry registry = jdbcTemplate.queryForObject(sql_repository, (rs, rowNum) ->
+                new Registry(
+                        students,
+                        payStrategyFactory.getStrategy(rs.getString(1)),
+                        rs.getString(2),
+                        rs.getLong(3)
+                ), id);
+
+        // session 찾기
+        String sql_session = "SELECT id, start_at, end_at, image_size, image_type, image_width, image_height, price FROM session WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql_session, (rs, rowNum) ->
+                new Session(
+                        rs.getLong(1),
+                        toLocalDateTime(rs.getTimestamp(2)),
+                        toLocalDateTime(rs.getTimestamp(3)),
+                        registry,
+                        new Image(
+                                rs.getLong(4),
+                                rs.getString(5),
+                                rs.getLong(6),
+                                rs.getLong(7)
+                        ),
+                        rs.getLong(8)
+                ),id);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {
