@@ -23,7 +23,7 @@ class PaidSessionTypeTest {
 
         assertThatThrownBy(() -> paidSessionType.register(payment, 10L))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("payment amount is not same as session amount");
+                .hasMessage("payment price is not same as session price");
     }
 
     @DisplayName("유료 강의는 강의 최대 수강 인원을 초과할 수 없다.")

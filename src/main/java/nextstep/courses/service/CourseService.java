@@ -6,7 +6,7 @@ import nextstep.courses.domain.Course;
 import nextstep.sessions.domain.Session;
 import org.springframework.stereotype.Service;
 
-@Service("courseService")
+@Service
 public class CourseService {
 
     public void createCourse(long id, String title, long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt,

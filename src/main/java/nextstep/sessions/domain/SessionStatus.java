@@ -5,10 +5,10 @@ public enum SessionStatus {
     ONGOING("모집중"),
     CLOSED("종료");
 
-    private final String desc;
+    private final String description;
 
-    SessionStatus(String desc) {
-        this.desc = desc;
+    SessionStatus(String description) {
+        this.description = description;
     }
 
     public boolean isSameAs(SessionStatus sessionStatus) {

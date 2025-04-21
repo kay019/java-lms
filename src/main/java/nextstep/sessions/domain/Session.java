@@ -23,7 +23,7 @@ public class Session {
     private final Long currentMemberCount;
 
     public Session(SessionStatus sessionStatus) {
-        this(null, null, null, null, new FreeSessionType(), sessionStatus, null);
+        this(null, null, null, null, new FreeSessionType(), sessionStatus, 0L);
     }
 
     public Session(Long id, LocalDateTime startAt, LocalDateTime endAt, SessionCover cover, SessionType sessionType,

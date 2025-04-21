@@ -1,47 +1,31 @@
 package nextstep.sessions.domain.type;
 
-import java.util.Objects;
 import nextstep.payments.domain.Payment;
 
-public class PaidSessionType implements SessionType {
-    private final Long maxMember;
-
-    private final Long amount;
-
-    public PaidSessionType(Long maxMember, Long amount) {
-        this.maxMember = maxMember;
-        this.amount = amount;
+public class PaidSessionType extends SessionType {
+    public PaidSessionType(Long maxMember, Long price) {
+        super(maxMember, price);
     }
 
     @Override
-    public void register(Payment payment, Long memberCount) {
+    public void register(Payment payment, Long currentMemberCount) {
         validatePayment(payment);
-        validateMemberLimit(memberCount);
+        validateMemberLimit(currentMemberCount);
     }
 
-    private void validatePayment(Payment payment) {
-        if (!payment.isSameAmountAs(amount)) {
-            throw new IllegalArgumentException("payment amount is not same as session amount");
+    @Override
+    protected void validatePayment(Payment payment) {
+        if (!payment.isSameAmountAs(price)) {
+            throw new IllegalArgumentException("payment price is not same as session price");
         }
     }
 
-    private void validateMemberLimit(Long memberCount) {
-        if (memberCount > maxMember) {
+    @Override
+    protected void validateMemberLimit(Long currentMemberCount) {
+        if (currentMemberCount > maxMemberCount) {
             throw new IllegalArgumentException("member count is over limit");
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        PaidSessionType that = (PaidSessionType) o;
-        return Objects.equals(maxMember, that.maxMember) && Objects.equals(amount, that.amount);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(maxMember, amount);
-    }
 }
