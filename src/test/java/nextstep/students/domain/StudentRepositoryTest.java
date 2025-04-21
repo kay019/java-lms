@@ -25,6 +25,13 @@ class StudentRepositoryTest {
     @BeforeEach
     void setup() {
         studentRepository = new JdbcStudentRepository(jdbcTemplate);
+        try {
+            jdbcTemplate.execute("DELETE FROM student");
+            jdbcTemplate.execute("ALTER TABLE student ALTER COLUMN id RESTART WITH 1");
+            System.out.println("테이블 초기화 성공");
+        } catch (Exception e) {
+            System.err.println("테이블 초기화 실패: " + e.getMessage());
+        }
     }
 
     @Test

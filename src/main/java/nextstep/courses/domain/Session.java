@@ -82,10 +82,6 @@ public class Session {
         return type;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public Integer getCapacity() {
         return capacity;
     }
