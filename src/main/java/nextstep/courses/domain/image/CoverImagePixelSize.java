@@ -31,4 +31,12 @@ public class CoverImagePixelSize {
             throw new IllegalArgumentException("width와 height의 비율은 3:2여야 합니다.");
         }
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

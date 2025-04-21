@@ -10,4 +10,16 @@ public class CoverImage {
         this.extension = extension;
         this.pixelSize = pixelSize;
     }
+
+    public CoverImageFileSize getFileSize() {
+        return fileSize;
+    }
+
+    public CoverImageExtension getExtension() {
+        return extension;
+    }
+
+    public CoverImagePixelSize getPixelSize() {
+        return pixelSize;
+    }
 }

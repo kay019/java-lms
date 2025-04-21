@@ -4,7 +4,15 @@ import nextstep.courses.domain.image.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.time.LocalDateTime;
+
 public class FreeSession extends Session {
+
+    public FreeSession(Long id, SessionStatus status, SessionDate date,
+                       LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(id, status, date, createdAt, updatedAt);
+    }
+
     public FreeSession(Long id, CoverImage coverImage, SessionStatus status, SessionDate date) {
         super(id, coverImage, status, date);
     }
@@ -16,7 +24,8 @@ public class FreeSession extends Session {
     }
 
     private void enrollStudent(NsUser user) {
-        students.add(user);
+        Student student = new Student(user);
+        students.add(student);
     }
 
 }
