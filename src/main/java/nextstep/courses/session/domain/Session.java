@@ -60,16 +60,18 @@ public class Session {
     }
 
 
-    public void enrollToSelectedCourse(Payment payment, NsUser user) {
+    public Enrollment enrollToSelectedCourse(Payment payment, NsUser user) {
         validate(payment);
         Enrollment enrollment = Enrollment.enrollToSelectedCourse(this.id, user, payment);
         enrollments.add(enrollment);
+        return enrollment;
     }
 
-    public void enrollToGeneralCourse(Payment payment, NsUser user) {
+    public Enrollment enrollToGeneralCourse(Payment payment, NsUser user) {
         validate(payment);
         Enrollment enrollment = Enrollment.enrollToGeneralCourse(this.id, user, payment);
         enrollments.add(enrollment);
+        return enrollment;
     }
 
     private void validate(Payment payment) {

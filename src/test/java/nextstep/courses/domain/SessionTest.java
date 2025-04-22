@@ -1,11 +1,16 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.enrollment.domain.Enrollment;
+import nextstep.courses.enrollment.domain.EnrollmentStatus;
 import nextstep.courses.session.domain.*;
 import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class SessionTest {
 
@@ -42,5 +47,16 @@ public class SessionTest {
         Session session = SessionTestFixtures.nonRecruitSession();
         Assertions.assertThatIllegalArgumentException()
                 .isThrownBy(() -> session.enrollToGeneralCourse(payment, NsUserTest.JAVAJIGI));
+    }
+
+    @Test
+    void 선발된_유저는_신청_상태() {
+        Session session = SessionTestFixtures.freeSession();
+        NsUser user = NsUserTest.JAVAJIGI;
+        Payment payment = new Payment();
+
+        Enrollment enrollment = session.enrollToSelectedCourse(payment, user);
+
+        assertThat(enrollment.getStatus()).isEqualTo(EnrollmentStatus.APPLIED);
     }
 }
