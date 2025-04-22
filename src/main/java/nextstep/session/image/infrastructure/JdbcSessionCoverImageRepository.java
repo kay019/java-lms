@@ -1,12 +1,14 @@
 package nextstep.session.image.infrastructure;
 
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.stereotype.Repository;
 
 import nextstep.session.image.domain.SessionCoverImage;
 import nextstep.session.image.entity.SessionCoverImageEntity;
 import nextstep.session.image.mapper.SessionCoverImageMapper;
 import nextstep.session.image.repository.SessionCoverImageRepository;
 
+@Repository("sessionCoverImageRepository")
 public class JdbcSessionCoverImageRepository implements SessionCoverImageRepository {
     private final JdbcOperations jdbcTemplate;
 
