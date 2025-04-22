@@ -70,7 +70,6 @@ create table session (
     type varchar(20) not null,
     capacity int,
     fee int,
-    students_count int,
     primary key (id)
 );
 
@@ -81,4 +80,10 @@ create table payment (
     amount bigint,
     created_at timestamp,
     primary key (id)
+);
+
+create table session_student (
+    session_id bigint not null,
+    student_id bigint not null,
+    primary key (session_id, student_id)
 );

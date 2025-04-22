@@ -2,72 +2,70 @@ package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
 import nextstep.students.domain.Student;
+import nextstep.students.domain.Students;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class Session {
-    private final Long id;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final CoverImage coverImage;
-    private final SessionStatus status;
-    private final SessionType type;
-    private final Integer capacity;
-    private final Long fee;
-    private Students students;
+public abstract class Session {
+    protected final Long id;
+    protected final Period period;
+    protected final CoverImage coverImage;
+    protected final SessionStatus status;
+    protected final SessionType type;
+    protected Students students;
 
-    public Session(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status) {
-        this(0L, startDate, endDate, coverImage, status, SessionType.FREE, null, null);
+    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type) {
+        this(id, startDate, endDate, coverImage, status, type, new Students(new ArrayList<>()));
     }
 
-    public Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type, Integer capacity, Long fee) {
+    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type, Students students) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = new Period(startDate, endDate);
         this.coverImage = coverImage;
         this.status = status;
         this.type = type;
-        this.capacity = capacity;
-        this.fee = fee;
-        this.students = new Students(new ArrayList<>());
+        this.students = students;
     }
 
     public Payment registerStudent(Student student) {
         validateEnrollment(student);
         this.students = this.students.addStudent(student);
-        student.registerSession(this);
-        return new Payment(id, student.getId(), fee);
+        student.registerSession(id);
+        return createPayment(student);
     }
 
     public void validateEnrollment(Student student) {
-        if (status != SessionStatus.OPEN) {
-            throw new IllegalArgumentException("세션이 '모집 중' 일때만 수강 신청이 가능합니다.");
-        }
-        if (type == SessionType.PAID) {
-            if (students.getSize() == capacity) {
-                throw new IllegalArgumentException("정원이 초과되었습니다.");
-            }
-            if (student.isBudgetOver(fee)) {
-                throw new IllegalArgumentException("예산이 부족하여 강의를 신청할 수 없습니다.");
-            }
-        }
+        validateSessionStatus();
+        validateAlreadyRegistered(student);
+        validateBudgetOver(student);
+        validateLimitedCapacity();
+    }
+
+    protected void validateBudgetOver(Student student) {}
+    protected void validateLimitedCapacity() {}
+    protected Payment createPayment(Student student) {
+        return null;
+    }
+
+    private void validateAlreadyRegistered(Student student) {
         if (student.isAlreadyRegistered(id)) {
             throw new IllegalStateException("이미 등록한 강의입니다.");
         }
     }
 
-    public boolean sessionIdMatches(Long id) {
-        return Objects.equals(this.id, id);
+    private void validateSessionStatus() {
+        if (status != SessionStatus.OPEN) {
+            throw new IllegalArgumentException("세션이 '모집 중' 일때만 수강 신청이 가능합니다.");
+        }
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public Long getId() {
+        return id;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public Period getPeriod() {
+        return period;
     }
 
     public CoverImage getCoverImage() {
@@ -82,11 +80,7 @@ public class Session {
         return type;
     }
 
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public Long getFee() {
-        return fee;
+    public Students getStudents() {
+        return students;
     }
 }

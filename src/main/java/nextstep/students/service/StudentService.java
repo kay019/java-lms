@@ -13,6 +13,8 @@ public class StudentService {
     }
 
     public Student findStudentById(Long studentId) {
-        return studentRepository.findById(studentId);
+        return studentRepository.findById(studentId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 학생입니다 : " + studentId)
+        );
     }
 }

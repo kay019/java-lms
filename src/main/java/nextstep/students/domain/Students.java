@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import nextstep.students.domain.Student;
+package nextstep.students.domain;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,5 +17,9 @@ public class Students {
 
     public int getSize() {
         return values.size();
+    }
+
+    public List<Student> getValues() {
+        return values;
     }
 }
