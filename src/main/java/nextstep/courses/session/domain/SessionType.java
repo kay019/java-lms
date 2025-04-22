@@ -2,15 +2,17 @@ package nextstep.courses.session.domain;
 
 public enum SessionType {
     FREE{
+        private final EnrollStrategy strategy = new FreeEnrollStrategy();
         @Override
         public EnrollStrategy getStrategy() {
-            return new FreeEnrollStrategy();
+            return strategy;
         }
     },
     PAID {
+        private final EnrollStrategy strategy = new PaidEnrollStrategy();
         @Override
         public EnrollStrategy getStrategy() {
-            return new PaidEnrollStrategy();
+            return strategy;
         }
     };
 
