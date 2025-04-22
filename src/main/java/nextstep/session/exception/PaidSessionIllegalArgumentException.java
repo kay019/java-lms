@@ -1,4 +1,4 @@
-package nextstep.exception;
+package nextstep.session.exception;
 
 public class PaidSessionIllegalArgumentException extends RuntimeException {
     public PaidSessionIllegalArgumentException() {

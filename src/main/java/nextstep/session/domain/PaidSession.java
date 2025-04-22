@@ -1,7 +1,7 @@
 package nextstep.session.domain;
 
 import nextstep.enrollment.domain.Enrollment;
-import nextstep.exception.PaidSessionIllegalArgumentException;
+import nextstep.session.exception.PaidSessionIllegalArgumentException;
 
 import static nextstep.session.domain.SessionStatus.ENROLLING;
 

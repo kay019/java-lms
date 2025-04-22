@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import nextstep.enrollment.domain.Enrollment;
 import nextstep.enrollment.domain.Student;
-import nextstep.exception.FreeSessionIllegalArgumentException;
+import nextstep.session.exception.FreeSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
 import static nextstep.session.domain.SessionStatus.CLOSED;
