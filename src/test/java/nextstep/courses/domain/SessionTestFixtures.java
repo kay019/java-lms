@@ -1,8 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.session.domain.*;
-import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUserTest;
 
 import java.time.LocalDateTime;
 
@@ -14,10 +12,14 @@ public class SessionTestFixtures {
             new SessionCoverImage(1, SessionImageType.from("gif"), 300, 200);
 
     public static Session paidSession(int max, long fee) {
-        return Session.paid(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS, max, fee);
+        return Session.paid(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollStatus.RECRUIT, EnrollmentTest.ENROLLMENTS, max, fee);
     }
 
     public static Session freeSession() {
-        return Session.free(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollmentTest.ENROLLMENTS);
+        return Session.free(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollStatus.RECRUIT, EnrollmentTest.ENROLLMENTS);
+    }
+
+    public static Session nonRecruitSession() {
+        return Session.free(1L, 1L, DEFAULT_DATE, DEFAULT_IMAGE, SessionStatus.OPEN, EnrollStatus.NON_RECRUIT, EnrollmentTest.ENROLLMENTS);
     }
 }

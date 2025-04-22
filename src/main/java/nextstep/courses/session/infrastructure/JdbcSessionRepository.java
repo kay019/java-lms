@@ -20,7 +20,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session) {
-        String sql = "INSERT INTO session (course_id, start_date, end_date, image_size, image_type, image_width, image_height, status, type, max_participants, fee) " +
+        String sql = "INSERT INTO session (course_id, start_date, end_date, image_size, image_type, image_width, image_height, status, enroll_status, type, max_participants, fee) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         SessionDate date = session.getSessionDate();
         SessionCoverImage image = session.getSessionCoverImage();
@@ -34,6 +34,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 image.getWidth(),
                 image.getHeight(),
                 session.getSessionStatus().name(),
+                session.getEnrollStatus().name(),
                 session.getSessionType().name(),
                 session.getMaxParticipants(),
                 session.getFee()
@@ -42,7 +43,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Session findById(Long id) {
-        String sql = "select id, course_id, start_date, end_date, image_size, image_type, image_width, image_height, status, type, max_participants, fee from session where id = ?";
+        String sql = "select id, course_id, start_date, end_date, image_size, image_type, image_width, image_height, status, enroll_status, type, max_participants, fee from session where id = ?";
         return jdbcTemplate.queryForObject(sql, mapRowToSession(), id);
 
     }
@@ -65,12 +66,13 @@ public class JdbcSessionRepository implements SessionRepository {
             );
 
             SessionStatus status = SessionStatus.valueOf(rs.getString("status"));
+            EnrollStatus enrollStatus = EnrollStatus.valueOf(rs.getString("enroll_status"));
             SessionType type = SessionType.valueOf(rs.getString("type"));
             int maxParticipants = rs.getInt("max_participants");
             Long fee = rs.getLong("fee");
             Enrollments enrollments = new Enrollments(new ArrayList<>());
 
-            return new Session(id, courseId, date, image, status, type, maxParticipants, fee, enrollments);
+            return new Session(id, courseId, date, image, status, enrollStatus, type, maxParticipants, fee, enrollments);
         };
     }
 

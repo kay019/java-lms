@@ -7,18 +7,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 public class SessionTest {
 
-    private SessionDate sessionDate;
-    private SessionCoverImage sessionCoverImage;
     private Payment payment;
 
     @BeforeEach
     void setUp() {
-        sessionDate = new SessionDate(LocalDateTime.of(2021, 1, 1, 0, 0), LocalDateTime.of(2022, 1, 1, 0, 0));
-        sessionCoverImage = new SessionCoverImage(1, SessionImageType.from("gif"), 300, 200);
         payment = new Payment("1", 1L, NsUserTest.JAVAJIGI.getId(), 10000L);
     }
 
@@ -41,5 +35,12 @@ public class SessionTest {
 
         session.enroll(payment, NsUserTest.JAVAJIGI);
         Assertions.assertThat(EnrollmentTest.ENROLLMENTS.size()).isEqualTo(initSize + 1);
+    }
+
+    @Test
+    void 모집상태_비모집일_경우_예외() {
+        Session session = SessionTestFixtures.nonRecruitSession();
+        Assertions.assertThatIllegalArgumentException()
+                .isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
     }
 }
