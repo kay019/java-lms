@@ -90,13 +90,13 @@ public class JdbcSessionRepository implements SessionRepository {
         return jdbcTemplate.queryForObject(
             sql,
             (rs, rowNum) -> new SessionEntity(
-                rs.getLong("id"),
-                rs.getLong("course_id"),
-                rs.getString("status"),
-                rs.getInt("fee"),
-                rs.getInt("capacity"),
-                rs.getTimestamp("start_date").toLocalDateTime().toLocalDate(),
-                rs.getTimestamp("end_date").toLocalDateTime().toLocalDate(),
+                rs.getLong(SessionEntity.COL_ID),
+                rs.getLong(SessionEntity.COL_COURSE_ID),
+                rs.getString(SessionEntity.COL_STATUS),
+                rs.getInt(SessionEntity.COL_FEE),
+                rs.getInt(SessionEntity.COL_CAPACITY),
+                rs.getTimestamp(SessionEntity.COL_START_DATE).toLocalDateTime().toLocalDate(),
+                rs.getTimestamp(SessionEntity.COL_END_DATE).toLocalDateTime().toLocalDate(),
                 students
             ),
             id
@@ -110,10 +110,10 @@ public class JdbcSessionRepository implements SessionRepository {
         return jdbcTemplate.query(
             sql,
             (rs, rowNum) -> new StudentEntity(
-                rs.getLong("id"),
-                rs.getLong("user_id"),
-                rs.getLong("session_id"),
-                rs.getString("name")
+                rs.getLong(StudentEntity.COL_ID),
+                rs.getLong(StudentEntity.COL_USER_ID),
+                rs.getLong(StudentEntity.COL_SESSION_ID),
+                rs.getString(StudentEntity.COL_NAME)
             ),
             id
         ).stream()

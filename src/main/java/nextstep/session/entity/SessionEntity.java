@@ -10,6 +10,14 @@ import nextstep.enrollment.mapper.StudentMapper;
 import static java.util.stream.Collectors.toList;
 
 public class SessionEntity {
+    public static final String COL_ID = "id";
+    public static final String COL_COURSE_ID = "course_id";
+    public static final String COL_STATUS = "status";
+    public static final String COL_FEE = "fee";
+    public static final String COL_CAPACITY = "capacity";
+    public static final String COL_START_DATE = "start_date";
+    public static final String COL_END_DATE = "end_date";
+
     private final long id;
     private final long courseId;
     private final String status;

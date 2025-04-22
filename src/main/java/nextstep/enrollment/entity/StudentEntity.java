@@ -1,6 +1,11 @@
 package nextstep.enrollment.entity;
 
 public class StudentEntity {
+    public static final String COL_ID = "id";
+    public static final String COL_USER_ID = "user_id";
+    public static final String COL_SESSION_ID = "session_id";
+    public static final String COL_NAME = "name";
+
     private final long id;
     private final long userId;
     private final long sessionId;
