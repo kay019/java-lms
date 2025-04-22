@@ -13,20 +13,21 @@ public abstract class Session {
 
     private final Period period;
 
-    private final List<Participant> participants = new ArrayList<>();
+    private final List<Participant> participants;
 
     private SessionStatus status = SessionStatus.PREPARING;
 
-    private Session(Long id, Image coverImage, Period period) {
+    protected Session(Long id, Image coverImage, Period period, List<Participant> participants) {
         validate(coverImage, period);
 
         this.id = id;
         this.coverImage = coverImage;
         this.period = period;
+        this.participants = participants;
     }
     
     protected Session(Image coverImage, Period period) {
-        this(null, coverImage, period);
+        this(null, coverImage, period, new ArrayList<>());
     }
 
     private void validate(Image coverImage, Period period) {

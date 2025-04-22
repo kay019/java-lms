@@ -1,11 +1,18 @@
 package nextstep.courses.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nextstep.payments.domain.Payment;
 
 public class FreeSession extends Session {
 
+    public FreeSession(Long id, Image coverImage, Period period, List<Participant> participants) {
+        super(id, coverImage, period, participants);
+    }
+
     public FreeSession(Image coverImage, Period period) {
-        super(coverImage, period);
+        this(null, coverImage, period, new ArrayList<>());
     }
 
     @Override

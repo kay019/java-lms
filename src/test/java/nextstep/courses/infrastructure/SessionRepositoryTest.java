@@ -5,6 +5,8 @@ import nextstep.courses.domain.FreeSession;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
+import nextstep.courses.domain.ImageRepository;
+import nextstep.courses.domain.ParticipantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,9 @@ public class SessionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate);
+        ImageRepository imageRepository = new JdbcImageRepository(jdbcTemplate);
+        ParticipantRepository participantRepository = new JdbcParticipantRepository(jdbcTemplate);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate, imageRepository, participantRepository);
     }
 
     @Test

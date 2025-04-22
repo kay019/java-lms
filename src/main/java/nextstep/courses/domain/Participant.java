@@ -3,13 +3,19 @@ package nextstep.courses.domain;
 import java.util.Objects;
 
 public class Participant {
+    private Long sessionId;
     private Long userId;
 
-    public Participant(Long userId) {
+    public Participant(Long sessionId, Long userId) {
+        this.sessionId = sessionId;
         this.userId = userId;
     }
+
+    public Participant(Long userId) {
+        this(null, userId);
+    }
     
-    public Long getId() {
+    public Long getUserId() {
         return userId;
     }
 
