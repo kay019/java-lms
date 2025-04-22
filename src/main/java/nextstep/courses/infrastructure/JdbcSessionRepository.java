@@ -22,8 +22,11 @@ public class JdbcSessionRepository implements SessionRepository {
         "JOIN image i ON s.image_id = i.id " +
         "LEFT JOIN participant p ON s.id = p.session_id " +
         "WHERE s.id = ?";
-    private static final String SESSION_TYPE_FREE = "FREE";
-    private static final String SESSION_TYPE_PAID = "PAID";
+
+    private enum SessionType {
+        FREE,
+        PAID
+    }
 
 
     public JdbcSessionRepository(JdbcTemplate jdbcTemplate) {
@@ -76,11 +79,11 @@ public class JdbcSessionRepository implements SessionRepository {
             rs.getTimestamp("end_at").toLocalDateTime().toLocalDate()
         );
 
-        String sessionType = rs.getString("session_type");
-        if (SESSION_TYPE_FREE.equals(sessionType)) {
+        SessionType sessionType = SessionType.valueOf(rs.getString("session_type"));
+        if (SessionType.FREE.equals(sessionType)) {
             return new FreeSession(image, period);
         }
-        if (SESSION_TYPE_PAID.equals(sessionType)) {
+        if (SessionType.PAID.equals(sessionType)) {
             return new PaidSession(
                 image,
                 period,
