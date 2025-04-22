@@ -80,7 +80,15 @@ public class Answer {
         return new DeleteHistory(ContentType.ANSWER, getId(), user, LocalDateTime.now());
     }
 
-    public void markAsDeleted() {
+    public DeleteHistory delete(NsUser user) throws CannotDeleteException {
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
+        }
+        markAsDeleted();
+        return new DeleteHistory(ContentType.ANSWER, getId(), writer, LocalDateTime.now());
+    }
+
+    private void markAsDeleted() {
         deleted = true;
     }
 }

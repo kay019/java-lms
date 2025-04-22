@@ -6,7 +6,6 @@ import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Question {
     private Long id;
@@ -88,7 +87,7 @@ public class Question {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 
-    public void validateDeletion(NsUser user) throws CannotDeleteException {
+    private void validateDeletion(NsUser user) throws CannotDeleteException {
         if (!isOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
@@ -101,29 +100,22 @@ public class Question {
 
     }
 
-    public List<DeleteHistory> deletedHistories(NsUser user) throws CannotDeleteException {
-        List<DeleteHistory> deleteHistories = answerDeleteHistories(user);
-        deleteHistories.add(deleteHistory(user));
-        return deleteHistories;
-    }
-
-    private DeleteHistory deleteHistory(NsUser user) throws CannotDeleteException {
-        if (!deleted) {
-            throw new CannotDeleteException("삭제되지 않은 질문입니다.");
-        }
-        return new DeleteHistory(ContentType.QUESTION, id, user, LocalDateTime.now());
-    }
-
-    private List<DeleteHistory> answerDeleteHistories(NsUser user) throws CannotDeleteException {
+    public List<DeleteHistory> deleteWithAnswers(NsUser user) throws CannotDeleteException {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        for (Answer answer : answers) {
-            deleteHistories.add(answer.deleteHistory(user));
+        for (Answer answer: answers) {
+            deleteHistories.add(answer.delete(user));
         }
+        deleteHistories.add(delete(user));
         return deleteHistories;
     }
 
-    public void markAsDeleted() {
+    private DeleteHistory delete(NsUser user) throws CannotDeleteException {
+        validateDeletion(user);
+        markAsDeleted();
+        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+    }
+
+    private void markAsDeleted() {
         deleted = true;
-        answers.forEach(Answer::markAsDeleted);
     }
 }

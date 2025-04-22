@@ -15,24 +15,23 @@ public class AnswerTest {
     public static final Answer A2 = new Answer(NsUserTest.SANJIGI, QuestionTest.Q1, "Answers Contents2");
 
     @Test
-    @DisplayName("deleteHistory - 삭제되지 않은 정답은 deleteHistory를 가져올 수 없다.")
-    void deleteHistoryFailTest() throws CannotDeleteException {
+    @DisplayName("delete - Owner가 아닌 경우 삭제할 수 없다.")
+    void deleteHistoryFailTest() {
         assertThatThrownBy( () ->
-                A1.deleteHistory(A1.getWriter())
+                A1.delete(NsUserTest.STRANGER)
         ).isInstanceOf(CannotDeleteException.class);
     }
 
     @Test
-    @DisplayName("deleteHistory - 삭제처리 된 정답은 deleteHistory를 가져올 수 있다.")
+    @DisplayName("delete - Owner가 아닌 경우 deleteHistory를 가져올 수 없다.")
     void deleteHistorySuccessTest() throws CannotDeleteException {
         Answer answer = new Answer(NsUserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
-        answer.markAsDeleted();
         DeleteHistory expected = new DeleteHistory(
                 ContentType.ANSWER,
                 answer.getId(),
-                NsUserTest.JAVAJIGI,
+                answer.getWriter(),
                 LocalDateTime.now()
         );
-        assertThat(answer.deleteHistory(answer.getWriter())).isEqualTo(expected);
+        assertThat(answer.delete(answer.getWriter())).isEqualTo(expected);
     }
 }
