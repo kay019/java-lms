@@ -3,7 +3,7 @@ package nextstep.session.image.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.exception.SessionCoverImageIllegalArgumentException;
+import nextstep.session.image.exception.SessionCoverImageIllegalArgumentException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

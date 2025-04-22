@@ -1,6 +1,6 @@
 package nextstep.session.image.domain;
 
-import nextstep.exception.SessionCoverImageIllegalArgumentException;
+import nextstep.session.image.exception.SessionCoverImageIllegalArgumentException;
 
 public class SessionCoverImage {
     private final long id;
