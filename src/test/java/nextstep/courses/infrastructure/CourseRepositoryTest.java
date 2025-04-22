@@ -1,7 +1,11 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.domain.Cohort;
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
+import nextstep.courses.entity.CohortEntity;
+import nextstep.courses.entity.CourseEntity;
+import nextstep.courses.repository.CohortRepository;
+import nextstep.courses.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,25 +18,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
 public class CourseRepositoryTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CourseRepositoryTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CourseRepositoryTest.class);
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+  private CourseRepository courseRepository;
+  private CohortRepository cohortRepository;
 
-    private CourseRepository courseRepository;
+  @BeforeEach
+  void setUp() {
+    courseRepository = new JdbcCourseRepository(jdbcTemplate);
+    cohortRepository = new JdbcCohortRepository(jdbcTemplate);
+  }
 
-    @BeforeEach
-    void setUp() {
-        courseRepository = new JdbcCourseRepository(jdbcTemplate);
-    }
+  @Test
+  void crud() {
+    String title = "TDD, 클린 코드 with Java";
+    Course course = new Course(title, 1L);
+    long id = courseRepository.save(course.toCourseEntity());
 
-    @Test
-    void crud() {
-        Course course = new Course("TDD, 클린 코드 with Java", 1L);
-        int count = courseRepository.save(course);
-        assertThat(count).isEqualTo(1);
-        Course savedCourse = courseRepository.findById(1L);
-        assertThat(course.getTitle()).isEqualTo(savedCourse.getTitle());
-        LOGGER.debug("Course: {}", savedCourse);
-    }
+    CourseEntity savedCourse = courseRepository.findById(id);
+    assertThat(savedCourse.title()).isEqualTo(title);
+    LOGGER.debug("Course: {}", savedCourse);
+  }
+
+  @Test
+  void crudCohort() {
+    Cohort cohort = new Cohort("1기");
+    long courseId = 2L;
+    cohortRepository.saveCohort(cohort.toCohortEntity(courseId));
+
+    CohortEntity savedCohort = cohortRepository.findByCourseId(courseId);
+    assertThat(savedCohort.name()).isEqualTo("1기");
+    assertThat(savedCohort.courseId()).isEqualTo(courseId);
+  }
 }

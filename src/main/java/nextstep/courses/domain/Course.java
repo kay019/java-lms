@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.entity.CourseEntity;
+
 import java.time.LocalDateTime;
 
 public class Course {
@@ -8,49 +10,43 @@ public class Course {
   private final Long creatorId;
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
-  private Sessions sessions;
   private final Cohort cohort;
 
   public Course() {
-    this(0L, null, null, LocalDateTime.now(), null, new Sessions(), new Cohort());
+    this(0L, null, null, LocalDateTime.now(), null, new Cohort());
   }
 
   public Course(String title, Long creatorId) {
-    this(0L, title, creatorId, LocalDateTime.now(), null, new Sessions(), new Cohort());
+    this(0L, title, creatorId, LocalDateTime.now(), LocalDateTime.now(), new Cohort());
+  }
+
+  public Course(String title, Long creatorId, Cohort cohort) {
+    this(0L, title, creatorId, LocalDateTime.now(), LocalDateTime.now(), cohort);
   }
 
   public Course (Long id, String title, Long createId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-    this(id, title, createId, createdAt, updatedAt, new Sessions(), new Cohort());
+    this(id, title, createId, createdAt, updatedAt, new Cohort());
   }
 
-  public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, Sessions sessions, Cohort cohort) {
+  public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, Cohort cohort) {
     this.id = id;
     this.title = title;
     this.creatorId = creatorId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.sessions = sessions;
     this.cohort = cohort;
   }
 
-  public String getTitle() {
-    return title;
+  public Long id() {
+    return id;
   }
 
-  public Long getCreatorId() {
-    return creatorId;
+  public Cohort cohort() {
+    return cohort;
   }
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void addSession(Session session) {
-    sessions.add(session);
-  }
-
-  public Sessions getSessions() {
-    return sessions;
+  public CourseEntity toCourseEntity() {
+    return new CourseEntity(id, title, creatorId, cohort.id(), createdAt, updatedAt);
   }
 
   @Override

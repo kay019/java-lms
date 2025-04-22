@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.utils.IdGenerator;
+import nextstep.courses.entity.ImageEntity;
 
 public class Image {
   private static final long MAX_SIZE_IN_BYTES = 1_000_000L;
@@ -14,11 +14,15 @@ public class Image {
   private final int heightInPixel;
 
   public Image(String filename) {
-    this(IdGenerator.generate(), filename, 1000, 300, 200);
+    this(filename, 1000, 300, 200);
+  }
+
+  public Image(Long id, String filename) {
+    this(id, filename, 1000, 300, 200);
   }
 
   public Image (String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
-    this(IdGenerator.generate(), filename, sizeInBytes, widthInPixel, heightInPixel);
+    this(0L, filename, sizeInBytes, widthInPixel, heightInPixel);
   }
 
   public Image (Long id, String filename, long sizeInBytes, int widthInPixel, int heightInPixel) {
@@ -51,5 +55,19 @@ public class Image {
     if (widthInPixel * 2 != heightInPixel * 3) {
       throw new IllegalArgumentException("가로 세로 비율이 유효하지 않습니다.");
     }
+  }
+
+  public long id() {
+    return id;
+  }
+
+  public ImageEntity toImageEntity() {
+    return new ImageEntity(
+            this.id,
+            this.filename,
+            this.sizeInBytes,
+            this.widthInPixel,
+            this.heightInPixel
+    );
   }
 }

@@ -1,11 +1,10 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.utils.IdGenerator;
+import nextstep.courses.entity.SessionEntity;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Session {
   private final Long id;
@@ -19,11 +18,19 @@ public class Session {
   private Enrollments enrollments;
 
   public Session(Course course, String title, LocalDateTime startDate, LocalDateTime endDate, EnrollmentPolicy enrollmentPolicy) {
-    this(IdGenerator.generate(), course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy);
+    this(0L, course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy);
+  }
+
+  public Session(Course course, String title, LocalDateTime startDate, LocalDateTime endDate, Image coverImage, EnrollmentPolicy enrollmentPolicy) {
+    this(0L, course, title, startDate, endDate, SessionStatus.PREPARING, enrollmentPolicy, new Enrollments(), coverImage);
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy) {
     this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), new Image("temp.jpeg"));
+  }
+
+  public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, Image coverImage, EnrollmentPolicy enrollmentPolicy) {
+    this(id, course, title, startDate, endDate, status, enrollmentPolicy, new Enrollments(), coverImage);
   }
 
   public Session(Long id, Course course, String title, LocalDateTime startDate, LocalDateTime endDate, SessionStatus status, EnrollmentPolicy enrollmentPolicy, Enrollments enrollments, Image coverImage) {
@@ -38,11 +45,13 @@ public class Session {
     this.coverImage = coverImage;
   }
 
-  public void enroll(NsUser user, Payment payment) {
+  public Enrollment enroll(NsUser user, Payment payment) {
     checkAvailability();
     checkPayment(payment);
-    enrollments.add(new Enrollment(user, this));
+    Enrollment enrollment = new Enrollment(user, this.id);
+    enrollments.add(enrollment);
     closeIfFull();
+    return enrollment;
   }
 
   private void closeIfFull() {
@@ -55,12 +64,7 @@ public class Session {
     if (!isRecruiting()) {
       throw new IllegalStateException("모집중인 상태가 아닙니다.");
     }
-    try {
-      enrollmentPolicy.checkEnrollAvailability(this);
-    } catch (IllegalStateException e) {
-      closeEnrollment();
-      throw e;
-    }
+    enrollmentPolicy.checkEnrollAvailability(this);
   }
 
   private void checkPayment(Payment payment) {
@@ -68,38 +72,45 @@ public class Session {
   }
 
   public void openForEnrollment() {
-    if (isRecruiting()) {
-      throw new IllegalStateException("이미 모집중입니다.");
-    }
-    if (isClosed()) {
-      throw new IllegalStateException("모집이 종료된 상태입니다.");
-    }
     this.status = SessionStatus.RECRUITING;
   }
 
-  public void closeEnrollment() {
-    if (isPreparing()) {
-      throw new IllegalStateException("모집이 시작되지 않은 상태입니다.");
-    }
-    if (isClosed()) {
-      throw new IllegalStateException("이미 모집이 종료되었습니다.");
-    }
+  private void closeEnrollment() {
     this.status = SessionStatus.CLOSED;
-  }
-
-  private boolean isPreparing() {
-    return this.status == SessionStatus.PREPARING;
   }
 
   private boolean isRecruiting() {
     return this.status == SessionStatus.RECRUITING;
   }
 
-  private boolean isClosed() {
-    return this.status == SessionStatus.CLOSED;
-  }
-
   public int enrolledCount() {
     return enrollments.size();
+  }
+
+  public Enrollments enrollments() {
+    return enrollments;
+  }
+
+  public long id() {
+    return id;
+  }
+
+  public Image coverImage() {
+    return coverImage;
+  }
+
+  public SessionEntity toSessionEntity() {
+    return new SessionEntity(
+            this.id,
+            this.course.id(),
+            this.coverImage.id(),
+            this.title,
+            this.status,
+            this.enrollmentPolicy.price(),
+            this.enrollmentPolicy.capacity(),
+            this.enrolledCount(),
+            this.startDate,
+            this.endDate
+    );
   }
 }

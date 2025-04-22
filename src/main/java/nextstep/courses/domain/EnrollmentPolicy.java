@@ -7,4 +7,6 @@ public interface EnrollmentPolicy {
   void checkPayment(Payment payment);
 
   boolean isFull(Enrollments enrollments);
+  long price();
+  int capacity();
 }

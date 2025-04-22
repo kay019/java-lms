@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.entity.EnrollmentEntity;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,5 +36,17 @@ public class Enrollments {
 
   public int size() {
     return enrollments.size();
+  }
+
+  public List<Enrollment> getEnrollments() {
+    return Collections.unmodifiableList(enrollments);
+  }
+
+  public List<EnrollmentEntity> toEnrollmentEntities(long sessionId) {
+    List<EnrollmentEntity> enrollmentEntities = new ArrayList<>();
+    for (Enrollment enrollment : enrollments) {
+      enrollmentEntities.add(enrollment.toEnrollmentEntity(sessionId));
+    }
+    return enrollmentEntities;
   }
 }

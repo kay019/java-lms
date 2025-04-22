@@ -1,6 +1,7 @@
 package nextstep.users.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class NsUser {
     public static final GuestNsUser GUEST_USER = new GuestNsUser();
@@ -29,6 +30,10 @@ public class NsUser {
         this.updatedAt = updatedAt;
     }
 
+    public String userId() {
+        return userId;
+    }
+
     public boolean isGuestUser() {
         return false;
     }
@@ -50,5 +55,18 @@ public class NsUser {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NsUser nsUser = (NsUser) o;
+        return Objects.equals(userId, nsUser.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(userId);
     }
 }
