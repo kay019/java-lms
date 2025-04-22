@@ -38,7 +38,7 @@ public class JdbcImageRepository implements nextstep.courses.domain.ImageReposit
         );
 
         Long id = keyHolder.getKey().longValue();
-        return new Image(id, image.getUrl(), image.getWidth(), image.getHeight(), image.getFormat(), image.getSize());
+        return findById(id).orElseThrow(() -> new IllegalArgumentException("이미지를 찾을 수 없습니다."));
     }
 
     @Override

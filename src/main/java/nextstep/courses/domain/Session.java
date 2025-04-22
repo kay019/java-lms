@@ -17,17 +17,18 @@ public abstract class Session {
 
     private SessionStatus status = SessionStatus.PREPARING;
 
-    protected Session(Long id, Image coverImage, Period period, List<Participant> participants) {
+    protected Session(Long id, Image coverImage, Period period, List<Participant> participants, SessionStatus status) {
         validate(coverImage, period);
 
         this.id = id;
         this.coverImage = coverImage;
         this.period = period;
         this.participants = participants;
+        this.status = status;
     }
     
     protected Session(Image coverImage, Period period) {
-        this(null, coverImage, period, new ArrayList<>());
+        this(null, coverImage, period, new ArrayList<>(), SessionStatus.PREPARING);
     }
 
     private void validate(Image coverImage, Period period) {
@@ -83,4 +84,23 @@ public abstract class Session {
         participants.add(participant);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Image getCoverImage() {
+        return coverImage;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
 }

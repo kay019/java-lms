@@ -1,9 +1,14 @@
 package nextstep.courses.infrastructure;
 
+import java.time.LocalDate;
 import java.util.Optional;
+
+import nextstep.courses.domain.Image;
+import nextstep.courses.domain.Period;
 import nextstep.courses.domain.FreeSession;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionStatus;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.courses.domain.ImageRepository;
 import nextstep.courses.domain.ParticipantRepository;
@@ -32,6 +37,21 @@ public class SessionRepositoryTest {
         ImageRepository imageRepository = new JdbcImageRepository(jdbcTemplate);
         ParticipantRepository participantRepository = new JdbcParticipantRepository(jdbcTemplate);
         sessionRepository = new JdbcSessionRepository(jdbcTemplate, imageRepository, participantRepository);
+    }
+
+    @Test
+    @DisplayName("세션을 저장할 수 있다.")
+    void save() {
+        Image image = new Image("https://example.com/image.jpg", 300, 200, "jpg", 1000);
+        Period period = new Period(LocalDate.now(), LocalDate.now().plusDays(1));
+        Session session = new FreeSession(image, period);
+        Session savedSession = sessionRepository.save(session);
+
+        assertThat(savedSession.getId()).isNotNull();
+        assertThat(savedSession.getCoverImage()).usingRecursiveComparison().ignoringFields("id").isEqualTo(image);
+        assertThat(savedSession.getPeriod()).isEqualTo(period);
+        assertThat(savedSession.getParticipants()).isEmpty();
+        assertThat(savedSession.getStatus()).isEqualTo(SessionStatus.PREPARING);
     }
 
     @Test

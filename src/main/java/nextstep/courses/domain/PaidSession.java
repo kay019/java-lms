@@ -11,8 +11,8 @@ public class PaidSession extends Session {
 
     private final Long price;
 
-    public PaidSession(Long id, Image coverImage, Period period, List<Participant> participants, Integer maxParticipants, Long price) {
-        super(id, coverImage, period, participants);
+    public PaidSession(Long id, Image coverImage, Period period, List<Participant> participants, SessionStatus status, Integer maxParticipants, Long price) {
+        super(id, coverImage, period, participants, status);
         validate(maxParticipants, price);
 
         this.maxParticipants = maxParticipants;
@@ -20,7 +20,7 @@ public class PaidSession extends Session {
     }
 
     public PaidSession(Image coverImage, Period period, Integer maxParticipants, Long price) {
-       this(null, coverImage, period, new ArrayList<>(), maxParticipants, price);
+       this(null, coverImage, period, new ArrayList<>(), SessionStatus.PREPARING, maxParticipants, price);
     }
 
     private void validate(Integer maxParticipants, Long price) {
@@ -48,4 +48,11 @@ public class PaidSession extends Session {
         }
     }
 
+    public Integer getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
 }
