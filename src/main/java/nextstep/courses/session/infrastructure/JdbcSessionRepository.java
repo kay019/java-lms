@@ -2,6 +2,8 @@ package nextstep.courses.session.infrastructure;
 
 import nextstep.courses.enrollment.domain.Enrollments;
 import nextstep.courses.session.domain.*;
+import nextstep.courses.session.domain.coverImages.SessionCoverImage;
+import nextstep.courses.session.domain.coverImages.SessionImageType;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
-    private JdbcOperations jdbcTemplate;
+    private final JdbcOperations jdbcTemplate;
 
     public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

@@ -1,7 +1,7 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.session.domain.SessionCoverImage;
-import nextstep.courses.session.domain.SessionImageType;
+import nextstep.courses.session.domain.coverImages.SessionCoverImage;
+import nextstep.courses.session.domain.coverImages.SessionImageType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

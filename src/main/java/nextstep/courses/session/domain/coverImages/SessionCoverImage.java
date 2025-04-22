@@ -1,4 +1,4 @@
-package nextstep.courses.session.domain;
+package nextstep.courses.session.domain.coverImages;
 
 public class SessionCoverImage {
     private static final int MIN_WIDTH = 300;

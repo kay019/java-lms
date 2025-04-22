@@ -2,11 +2,12 @@ package nextstep.courses.session.domain;
 
 import nextstep.courses.enrollment.domain.Enrollment;
 import nextstep.courses.enrollment.domain.Enrollments;
+import nextstep.courses.session.domain.coverImages.SessionCoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 public class Session {
-    private Long id;
+    private final Long id;
     private final Long courseId;
     private final SessionDate sessionDate;
     private final SessionCoverImage sessionCoverImage;

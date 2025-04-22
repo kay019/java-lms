@@ -1,6 +1,8 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.session.domain.*;
+import nextstep.courses.session.domain.coverImages.SessionCoverImage;
+import nextstep.courses.session.domain.coverImages.SessionImageType;
 
 import java.time.LocalDateTime;
 
