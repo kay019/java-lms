@@ -2,7 +2,6 @@ package nextstep.courses.infrastructure.session;
 
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionRepository;
-import nextstep.courses.domain.session.inner.SessionDate;
 import nextstep.courses.domain.session.inner.SessionStatus;
 import nextstep.courses.domain.session.inner.SessionTypeFactory;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -41,13 +40,6 @@ public class JdbcSessionRepository implements SessionRepository {
                 SessionStatus.valueOf(rs.getString(9)),
                 rs.getInt(10));
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
-    }
-
-    private SessionDate toSessionDate(Timestamp startDate, Timestamp finishDate) {
-        if (startDate == null || finishDate == null) {
-            return null;
-        }
-        return new SessionDate(startDate.toLocalDateTime().toLocalDate(), finishDate.toLocalDateTime().toLocalDate());
     }
 
     private LocalDate toLocalDate(Timestamp timestamp) {
