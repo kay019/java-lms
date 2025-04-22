@@ -5,6 +5,10 @@ import java.util.Objects;
 public class SessionCover {
     private static final double RATIO = 1.5;
 
+    private final Long id;
+
+    private final Long sessionId;
+
     private final ImgSize size;
 
     private final ImgType imgType;
@@ -14,7 +18,13 @@ public class SessionCover {
     private final ImgHeight height;
 
     public SessionCover(int size, String imgType, int width, int height) {
+        this(null, null, size, imgType, width, height);
+    }
+
+    public SessionCover(Long id, Long sessionId, int size, String imgType, int width, int height) {
         checkRatio(width, height);
+        this.id = id;
+        this.sessionId = sessionId;
         this.size = new ImgSize(size);
         this.imgType = ImgType.from(imgType);
         this.width = new ImgWidth(width);

@@ -35,6 +35,30 @@ public class Session {
         return new Student(nsUser.getId(), this.id);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getStartAt() {
+        return startAt;
+    }
+
+    public LocalDateTime getEndAt() {
+        return endAt;
+    }
+
+    public String getSessionStatus() {
+        return this.enrollment.getSessionStatus();
+    }
+
+    public Long getCapacity() {
+        return this.enrollment.getCapacity();
+    }
+
+    public Long getPrice() {
+        return this.sessionType.getPrice();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
