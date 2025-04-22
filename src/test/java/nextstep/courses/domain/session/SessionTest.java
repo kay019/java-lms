@@ -18,20 +18,21 @@ public class SessionTest {
     public static final Session SESSION1 = new Session(1L, 1L, "free1", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.PREPARING, EnrollmentStatus.RECRUITING, 0);
     public static final Session SESSION2 = new Session(2L, 1L, "paid1", new PaidSessionType(10, 10000), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.IN_PROGRESS, EnrollmentStatus.RECRUITING, 0);
     public static final Session SESSION3 = new Session(3L, 1L, "free2", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.COMPLETED, EnrollmentStatus.NOT_RECRUITING, 0);
-    public static final Session SESSION4 = new Session(1L, 1L, "free3", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.PREPARING, EnrollmentStatus.NOT_RECRUITING, 0);
+    public static final Session SESSION4 = new Session(4L, 1L, "free3", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.PREPARING, EnrollmentStatus.NOT_RECRUITING, 0);
 
     @ParameterizedTest
     @MethodSource("수강신청_예상")
-    void 수강신청상태(Session session, boolean expected) {
-        boolean result = session.enroll(new Payment());
+    void 수강신청상태(Session session, SessionEnrollment expected) {
+        SessionEnrollment result = session.enroll(new Payment("1", 1L, 1L, 10000L));
         assertThat(result).isEqualTo(expected);
     }
 
     static Stream<Arguments> 수강신청_예상() {
         return Stream.of(
-                Arguments.of(SESSION1, true),
-                Arguments.of(SESSION3, false),
-                Arguments.of(SESSION4, false)
+                Arguments.of(SESSION1, SessionEnrollment.requestEnroll(1L, 1L)),
+                        Arguments.of(SESSION2, SessionEnrollment.requestEnroll(2L, 1L)),
+                        Arguments.of(SESSION3, SessionEnrollment.notAvailableEnroll(3L, 1L)),
+                        Arguments.of(SESSION4, SessionEnrollment.notAvailableEnroll(4L, 1L))
         );
     }
 
