@@ -1,6 +1,6 @@
 package nextstep.enrollment.domain;
 
-import nextstep.exception.MoneyIllegalArgumentException;
+import nextstep.enrollment.exception.MoneyIllegalArgumentException;
 
 public class Money {
     private final long amount;

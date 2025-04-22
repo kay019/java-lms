@@ -3,7 +3,7 @@ package nextstep.enrollment.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.exception.MoneyIllegalArgumentException;
+import nextstep.enrollment.exception.MoneyIllegalArgumentException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
