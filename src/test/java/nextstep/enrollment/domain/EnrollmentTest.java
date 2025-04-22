@@ -3,7 +3,7 @@ package nextstep.enrollment.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.exception.EnrollmentIllegalArgumentException;
+import nextstep.enrollment.exception.EnrollmentIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;

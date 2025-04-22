@@ -1,6 +1,6 @@
 package nextstep.enrollment.domain;
 
-import nextstep.exception.EnrollmentIllegalArgumentException;
+import nextstep.enrollment.exception.EnrollmentIllegalArgumentException;
 import nextstep.payments.domain.Payment;
 
 public class Enrollment {
