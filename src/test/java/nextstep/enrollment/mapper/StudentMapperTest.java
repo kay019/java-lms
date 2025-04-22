@@ -1,0 +1,41 @@
+package nextstep.enrollment.mapper;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import nextstep.enrollment.domain.Student;
+import nextstep.enrollment.entity.StudentEntity;
+
+import static nextstep.users.domain.NsUserTest.JAVAJIGI;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class StudentMapperTest {
+    private final StudentMapper studentMapper = new StudentMapper();
+
+    @Test
+    @DisplayName("Student 객체를 StudentEntity로 정확히 변환해야 함")
+    void student_toEntity_mapping() {
+        Student student = new Student(
+            1L,
+            JAVAJIGI.getId(),
+            200L,
+            JAVAJIGI.getName()
+        );
+
+        StudentEntity entity = studentMapper.toEntity(student);
+
+        assertThat(entity)
+            .extracting(
+                StudentEntity::getId,
+                StudentEntity::getUserId,
+                StudentEntity::getSessionId,
+                StudentEntity::getName
+            )
+            .containsExactly(
+                1L,
+                1L,
+                200L,
+                "name"
+            );
+    }
+}
