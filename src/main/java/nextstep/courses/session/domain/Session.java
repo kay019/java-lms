@@ -39,8 +39,8 @@ public class Session {
 
 
     public void enroll(Payment payment, NsUser nsUser) {
-        if (!sessionStatus.canEnroll()) {
-            throw new IllegalStateException("모집 중인 상태에서만 수강 신청이 가능합니다.");
+        if (sessionStatus.canNotEnroll()) {
+            throw new IllegalArgumentException("종료된 강의는 수강신청할 수 없습니다.");
         }
         sessionType.getStrategy().validate(enrollments, payment, maxParticipants, fee);
         Enrollment enrollment = new Enrollment(id, nsUser, payment);
