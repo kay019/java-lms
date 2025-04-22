@@ -13,7 +13,7 @@ public class SessionTestFixtures {
             new SessionDate(LocalDateTime.of(2021, 1, 1, 0, 0), LocalDateTime.of(2022, 1, 1, 0, 0));
 
     private static final SessionCoverImage DEFAULT_IMAGE =
-            new SessionCoverImage(1, SessionImageType.from("gif"), 300, 200);
+            new SessionCoverImage(1L, 1L, 1, SessionImageType.from("gif"), 300, 200);
 
     public static Session paidSession(int max, long fee) {
         return Session.paid(1L, 1L, DEFAULT_DATE, new SessionCoverImages(List.of(DEFAULT_IMAGE)), SessionStatus.OPEN, EnrollStatus.RECRUIT, EnrollmentTest.ENROLLMENTS, max, fee);

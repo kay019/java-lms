@@ -7,13 +7,17 @@ public class SessionCoverImage {
     private static final int WIDTH_RATE = 2;
     private static final int HEIGHT_RATE = 3;
 
+    private final Long id;
+    private final Long sessionId;
     private final double size;
     private final SessionImageType type;
     private final int width;
     private final int height;
 
-    public SessionCoverImage(double size, SessionImageType type, int width, int height) {
+    public SessionCoverImage(Long id, Long sessionId, double size, SessionImageType type, int width, int height) {
         validate(size, width, height);
+        this.id = id;
+        this.sessionId = sessionId;
         this.size = size;
         this.type = type;
         this.width = width;

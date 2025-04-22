@@ -14,7 +14,7 @@ public class SessionCoverImageTest {
     @MethodSource("imageParams")
     void 이미지_검증_실패(double size, String type, int width, int height) {
         Assertions.assertThatIllegalArgumentException()
-                .isThrownBy(() -> new SessionCoverImage(size, SessionImageType.from(type), width, height));
+                .isThrownBy(() -> new SessionCoverImage(1L, 1L, size, SessionImageType.from(type), width, height));
     }
 
     private static Stream<Arguments> imageParams() {
