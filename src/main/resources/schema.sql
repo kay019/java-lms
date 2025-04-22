@@ -56,7 +56,7 @@ create table session (
     end_at timestamp not null,
 
     price bigint not null,
-    session_progress_state varchar(10) not null,
+    session_progress_state varchar(10),
     primary key (id)
 );
 

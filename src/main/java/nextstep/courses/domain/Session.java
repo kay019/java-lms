@@ -45,6 +45,10 @@ public class Session {
         registry.register(user, id, money, price);
     }
 
+    public void confirmUser(NsUser user, ApplicationState applicationState) {
+        registry.confirmStudent(user, applicationState);
+    }
+
     public Long getId() {
         return id;
     }

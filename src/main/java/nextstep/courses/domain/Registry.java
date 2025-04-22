@@ -42,6 +42,10 @@ public class Registry {
         };
     }
 
+    public void confirmStudent(NsUser user, ApplicationState applicationState) {
+        students.changeStudentStatus(user, applicationState);
+    }
+
     public String getSessionRecruitmentState() {
         return sessionRecruitmentState.name();
     }
