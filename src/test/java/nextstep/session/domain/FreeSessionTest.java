@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import nextstep.enrollment.domain.Enrollment;
 import nextstep.enrollment.domain.Student;
-import nextstep.session.exception.FreeSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
+import nextstep.session.exception.FreeSessionDuplicateStudentException;
+import nextstep.session.exception.FreeSessionInvalidEnrollmentException;
+import nextstep.session.exception.FreeSessionNotEnrollingException;
 
 import static nextstep.session.domain.SessionStatus.CLOSED;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
@@ -81,7 +83,7 @@ class FreeSessionTest {
         Payment paidPayment = createPayment(1000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, paidPayment)))
-            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+            .isInstanceOf(FreeSessionInvalidEnrollmentException.class);
     }
 
     @Test
@@ -95,7 +97,7 @@ class FreeSessionTest {
             .build();
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, createPayment(0))))
-            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+            .isInstanceOf(FreeSessionNotEnrollingException.class);
     }
 
     @Test
@@ -113,7 +115,7 @@ class FreeSessionTest {
         session.enroll(new Enrollment(student, freePayment));
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, freePayment)))
-            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+            .isInstanceOf(FreeSessionDuplicateStudentException.class);
     }
 
     private Payment createPayment(long amount) {
