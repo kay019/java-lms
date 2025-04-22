@@ -60,18 +60,26 @@ public class Session {
     }
 
 
-    public void enroll(Payment payment, NsUser nsUser) {
+    public void enrollToSelectedCourse(Payment payment, NsUser user) {
+        validate(payment);
+        Enrollment enrollment = Enrollment.enrollToSelectedCourse(this.id, user, payment);
+        enrollments.add(enrollment);
+    }
+
+    public void enrollToGeneralCourse(Payment payment, NsUser user) {
+        validate(payment);
+        Enrollment enrollment = Enrollment.enrollToGeneralCourse(this.id, user, payment);
+        enrollments.add(enrollment);
+    }
+
+    private void validate(Payment payment) {
         if (sessionStatus.canNotEnroll()) {
             throw new IllegalArgumentException("종료된 강의는 수강신청할 수 없습니다.");
         }
-
         if (enrollStatus != null && enrollStatus.canNotEnroll()) { // 변경 사항 이전 데이터의 경우 null 이므로
             throw new IllegalArgumentException("모집 중인 상태에서만 수강 신청이 가능합니다.");
         }
-
         sessionType.getStrategy().validate(enrollments, payment, maxParticipants, fee);
-        Enrollment enrollment = new Enrollment(id, nsUser, payment);
-        enrollments.add(enrollment);
     }
 
     public Long getCourseId() {

@@ -19,13 +19,13 @@ public class SessionTest {
     @Test
     void 유료강의_인원초과() {
         Session session = SessionTestFixtures.paidSession(2, 10000L);
-        Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
+        Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enrollToGeneralCourse(payment, NsUserTest.JAVAJIGI));
     }
 
     @Test
     void 유료강의_금액_다름() {
         Session session = SessionTestFixtures.paidSession(2, 20000L);
-        Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
+        Assertions.assertThatIllegalArgumentException().isThrownBy(() -> session.enrollToGeneralCourse(payment, NsUserTest.JAVAJIGI));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class SessionTest {
         Session session = SessionTestFixtures.freeSession();
         int initSize = EnrollmentTest.ENROLLMENTS.size();
 
-        session.enroll(payment, NsUserTest.JAVAJIGI);
+        session.enrollToGeneralCourse(payment, NsUserTest.JAVAJIGI);
         Assertions.assertThat(EnrollmentTest.ENROLLMENTS.size()).isEqualTo(initSize + 1);
     }
 
@@ -41,6 +41,6 @@ public class SessionTest {
     void 모집상태_비모집일_경우_예외() {
         Session session = SessionTestFixtures.nonRecruitSession();
         Assertions.assertThatIllegalArgumentException()
-                .isThrownBy(() -> session.enroll(payment, NsUserTest.JAVAJIGI));
+                .isThrownBy(() -> session.enrollToGeneralCourse(payment, NsUserTest.JAVAJIGI));
     }
 }
