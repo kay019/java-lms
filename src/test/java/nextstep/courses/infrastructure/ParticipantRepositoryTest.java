@@ -1,5 +1,7 @@
 package nextstep.courses.infrastructure;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,5 +34,14 @@ public class ParticipantRepositoryTest {
         int count = participantRepository.save(1L, participant);
 
         assertThat(count).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("참가자를 조회할 수 있다.")
+    void findBySessionId() {
+        List<Participant> participants = participantRepository.findBySessionId(2L);
+        assertThat(participants).hasSize(2);
+        assertThat(participants.get(0).getUserId()).isEqualTo(1L);
+        assertThat(participants.get(1).getUserId()).isEqualTo(2L);
     }
 }
