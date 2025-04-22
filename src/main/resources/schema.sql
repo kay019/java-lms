@@ -4,6 +4,7 @@ create table course (
     creator_id bigint not null,
     created_at timestamp not null,
     updated_at timestamp,
+    requires_selection boolean,
     primary key (id)
 );
 
