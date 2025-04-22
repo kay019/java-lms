@@ -1,25 +1,19 @@
 package nextstep.sessions.domain.type;
 
 import java.util.Objects;
-import nextstep.payments.domain.Payment;
 
 public abstract class SessionType {
-    protected final Long maxMemberCount;
     protected final Long price;
 
-    protected SessionType(Long maxMemberCount, Long price) {
-        this.maxMemberCount = maxMemberCount;
+    protected SessionType(Long price) {
         this.price = price;
     }
 
-    public void register(Payment payment, Long currentMemberCount) {
-        validateMemberLimit(currentMemberCount);
-        validatePayment(payment);
+    protected abstract void validatePayment(Long amount);
+
+    public Long getPrice() {
+        return price;
     }
-
-    protected abstract void validateMemberLimit(Long currentMemberCount);
-
-    protected abstract void validatePayment(Payment payment);
 
     @Override
     public boolean equals(Object o) {
@@ -27,11 +21,11 @@ public abstract class SessionType {
             return false;
         }
         SessionType that = (SessionType) o;
-        return Objects.equals(maxMemberCount, that.maxMemberCount) && Objects.equals(price, that.price);
+        return Objects.equals(price, that.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maxMemberCount, price);
+        return Objects.hashCode(price);
     }
 }

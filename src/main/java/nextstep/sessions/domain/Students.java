@@ -36,6 +36,10 @@ public class Students {
                 .anyMatch(student -> student.isSameUser(nsUser.getId()));
     }
 
+    public Long getCapacity() {
+        return capacity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

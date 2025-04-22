@@ -1,31 +1,17 @@
 package nextstep.sessions.domain.type;
 
-import nextstep.payments.domain.Payment;
+import java.util.Objects;
 
 public class PaidSessionType extends SessionType {
-    public PaidSessionType(Long maxMember, Long price) {
-        super(maxMember, price);
+    public PaidSessionType(Long price) {
+        super(price);
     }
 
     @Override
-    public void register(Payment payment, Long currentMemberCount) {
-        validatePayment(payment);
-        validateMemberLimit(currentMemberCount);
-    }
-
-    @Override
-    protected void validatePayment(Payment payment) {
-        if (!payment.isSameAmountAs(price)) {
+    protected void validatePayment(Long amount) {
+        if (!Objects.equals(this.price, amount)) {
             throw new IllegalArgumentException("payment price is not same as session price");
         }
     }
-
-    @Override
-    protected void validateMemberLimit(Long currentMemberCount) {
-        if (currentMemberCount > maxMemberCount) {
-            throw new IllegalArgumentException("member count is over limit");
-        }
-    }
-
 
 }

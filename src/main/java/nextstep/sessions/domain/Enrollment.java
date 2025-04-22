@@ -22,6 +22,14 @@ public class Enrollment {
         students.enroll(nsUser);
     }
 
+    public String getSessionStatus() {
+        return sessionStatus.getDescription();
+    }
+
+    public Long getCapacity() {
+        return this.students.getCapacity();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -35,4 +43,6 @@ public class Enrollment {
     public int hashCode() {
         return Objects.hash(sessionStatus, students);
     }
+
+
 }
