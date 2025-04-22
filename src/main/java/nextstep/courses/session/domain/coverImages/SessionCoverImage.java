@@ -38,6 +38,11 @@ public class SessionCoverImage {
         }
     }
 
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
     public double getSize() {
         return size;
     }
