@@ -37,4 +37,4 @@
     - [x] Session 설계
     - [x] Session Image 설계
     - [x] Student 설계
-- [] Service layer에서 데이터 저장 로직
+- [x] Service layer에서 데이터 저장 로직
