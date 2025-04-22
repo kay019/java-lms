@@ -31,8 +31,12 @@ public class NsStudent {
         return userId;
     }
 
+    public String getApplicationState() {
+        return applicationState.name();
+    }
+
     public void changeStatus(ApplicationState applicationState) {
-        if (!ApplicationState.isPending(applicationState)) {
+        if (!ApplicationState.isPending(this.applicationState)) {
             throw new IllegalArgumentException("이미 수강 상태가 결정된 학생입니다.");
         }
         this.applicationState = applicationState;
