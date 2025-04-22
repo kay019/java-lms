@@ -20,7 +20,7 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
 
     @Override
     public int save(Enrollment enrollment) {
-        String sql = "INSERT INTO enrollment (session_id, user_id, payment_id, status, selected, created_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO enrollment (session_id, user_id, payment_id, status, created_at) VALUES (?, ?, ?, ?)";
         String paymentId = enrollment.getPayment() != null ? enrollment.getPayment().getId() : null;
 
         return jdbcTemplate.update(sql,
@@ -28,14 +28,13 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
                 enrollment.getNsUser().getId(),
                 paymentId,
                 enrollment.getStatus().name(),
-                enrollment.isSelected(),
                 enrollment.getCreatedAt()
         );
     }
 
     @Override
     public Enrollment findById(Long id) {
-        String sql = "SELECT id, session_id, user_id, payment_id, status, selected, created_at FROM enrollment WHERE id = ?";
+        String sql = "SELECT id, session_id, user_id, payment_id, status, created_at FROM enrollment WHERE id = ?";
 
         RowMapper<Enrollment> rowMapper = (rs, rowNum) -> {
             String stringStatus = rs.getString("status");
@@ -50,7 +49,6 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
                     null,
                     null,
                     status,
-                    rs.getBoolean("selected"),
                     toLocalDateTime(rs.getTimestamp("created_at")));
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);

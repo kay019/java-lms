@@ -38,7 +38,6 @@ create table enrollment (
     user_id bigint not null,    -- 외래키 (user)
     payment_id varchar(100),    -- nullable
     status varchar(10),         -- nullable
-    selected boolean,           -- nullable
     created_at timestamp not null
 );
 

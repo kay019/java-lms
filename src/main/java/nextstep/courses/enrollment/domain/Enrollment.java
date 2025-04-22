@@ -11,27 +11,25 @@ public class Enrollment {
     private final NsUser nsUser;
     private final Payment payment;
     private EnrollmentStatus status;
-    private final boolean selected;
     private final LocalDateTime createdAt;
 
     public Enrollment(Long sessionId, NsUser nsUser, Payment payment) {
-        this(null, sessionId, nsUser, payment, EnrollmentStatus.APPROVED, false, LocalDateTime.now());
+        this(null, sessionId, nsUser, payment, EnrollmentStatus.APPROVED, LocalDateTime.now());
     }
 
     public static Enrollment enrollToSelectedCourse(Long sessionId, NsUser user, Payment payment) {
-        return new Enrollment(null, sessionId, user, payment, EnrollmentStatus.APPLIED, false, LocalDateTime.now());
+        return new Enrollment(null, sessionId, user, payment, EnrollmentStatus.APPLIED, LocalDateTime.now());
     }
 
     public static Enrollment enrollToGeneralCourse(Long sessionId, NsUser user, Payment payment) {
-        return new Enrollment(null, sessionId, user, payment, EnrollmentStatus.APPROVED, false, LocalDateTime.now());
+        return new Enrollment(null, sessionId, user, payment, EnrollmentStatus.APPROVED, LocalDateTime.now());
     }
-    public Enrollment(Long id, Long sessionId, NsUser nsUser, Payment payment, EnrollmentStatus status, boolean selected, LocalDateTime createdAt) {
+    public Enrollment(Long id, Long sessionId, NsUser nsUser, Payment payment, EnrollmentStatus status, LocalDateTime createdAt) {
         this.id = id;
         this.sessionId = sessionId;
         this.nsUser = nsUser;
         this.payment = payment;
         this.status = status;
-        this.selected = selected;
         this.createdAt = createdAt;
     }
 
@@ -70,10 +68,6 @@ public class Enrollment {
 
     public EnrollmentStatus getStatus() {
         return status;
-    }
-
-    public boolean isSelected() {
-        return selected;
     }
 
     public LocalDateTime getCreatedAt() {
