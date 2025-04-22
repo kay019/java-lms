@@ -17,6 +17,7 @@ create table session (
     start_date timestamp not null,
     finish_date timestamp not null,
     status varchar(255) not null,
+    enrollment_status varchar(255) not null,
     enrollmentCount int not null,
     primary key (id)
 );
