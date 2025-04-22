@@ -35,6 +35,23 @@ public class Enrollment {
         this.createdAt = createdAt;
     }
 
+    public void approve(NsUser user) {
+        if (user.isNotInstructor()) {
+            throw new IllegalArgumentException("강사만 승인할 수 있습니다.");
+        }
+        if (status != EnrollmentStatus.APPLIED) {
+            throw new IllegalStateException("신청 상태에서만 승인할 수 있습니다.");
+        }
+        this.status = EnrollmentStatus.APPROVED;
+    }
+
+    public void cancel(NsUser user) {
+        if (user.isNotInstructor()) {
+            throw new IllegalArgumentException("강사만 취소할 수 있습니다.");
+        }
+        this.status = EnrollmentStatus.CANCELED;
+    }
+
     public Long getId() {
         return id;
     }

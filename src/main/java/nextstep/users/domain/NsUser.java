@@ -124,6 +124,10 @@ public class NsUser {
         return false;
     }
 
+    public boolean isNotInstructor() {
+        return !this.userType.isInstructor();
+    }
+
     private static class GuestNsUser extends NsUser {
         @Override
         public boolean isGuestUser() {
