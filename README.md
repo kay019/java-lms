@@ -33,8 +33,8 @@
 - [] 도메인 모델을 DB테이블과 매핑하고, 데이터를 저장한다.
     - CRUD 쿼리와 코드를 구현하는데 집중하기 보다 테이블을 설계하고 객체 매핑하는 부분에 집중한다.
     - Payment는 테이블 매핑을 고려하지 않아도 된다.
-- [] DB 테이블 설계하기
-    - [] Session 설계
-    - [] Session Image 설계
+- [x] DB 테이블 설계하기
+    - [x] Session 설계
+    - [x] Session Image 설계
     - [x] Student 설계
 - [] Service layer에서 데이터 저장 로직
