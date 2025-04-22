@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class Enrollment {
     private final Long id;
     private final Long sessionId;
-    private final NsUser nsUser;
-    private final Payment payment;
+    private NsUser nsUser;
+    private Payment payment;
     private EnrollmentStatus status;
     private final LocalDateTime createdAt;
 
@@ -48,6 +48,12 @@ public class Enrollment {
             throw new IllegalArgumentException("강사만 취소할 수 있습니다.");
         }
         this.status = EnrollmentStatus.CANCELED;
+    }
+
+    public Enrollment injectUserAndPayment(NsUser user, Payment payment) {
+        this.nsUser = user;
+        this.payment = payment;
+        return this;
     }
 
     public Long getId() {
