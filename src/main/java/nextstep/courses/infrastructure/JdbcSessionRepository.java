@@ -54,9 +54,9 @@ public class JdbcSessionRepository implements SessionRepository {
 
         // students 저장
         List<NsStudent> students = registry.getStudents();
-        String sql_students = "insert into ns_students (session_id, user_id) values(?, ?)";
+        String sql_students = "insert into ns_students (session_id, user_id, application_state) values(?, ?, ?)";
         for(NsStudent student: students) {
-            jdbcTemplate.update(sql_students, sessionId, student.getUserId());
+            jdbcTemplate.update(sql_students, sessionId, student.getUserId(), student.getApplicationState());
         }
 
         return 1;
@@ -65,9 +65,9 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findById(Long id) {
         // students 찾기
-        String sql_students = "SELECT user_id FROM ns_students WHERE session_id = ?";
+        String sql_students = "SELECT user_id, application_state FROM ns_students WHERE session_id = ?";
         List<NsStudent> students = jdbcTemplate.query(sql_students, (rs, rowNum) ->
-                new NsStudent(rs.getLong(1), id), id);
+                new NsStudent(rs.getLong(1), id, rs.getString(2)), id);
 
         // registry 찾기
         String sql_repository = "SELECT pay_strategy, session_state, capacity FROM registry WHERE session_id = ?";

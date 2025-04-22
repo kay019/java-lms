@@ -34,4 +34,20 @@ public class SessionService {
         targetSession.register(targetUser, new PositiveNumber(price));
         sessionRepository.save(targetSession);
     }
+
+    public void rejectStudent(Long sessionId, Long userId) {
+        Session targetSession = sessionRepository.findById(sessionId);
+        NsUser targetUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CannotRegisterException("해당하는 유저가 없습니다."));
+        targetSession.confirmUser(targetUser, ApplicationState.REJECTED);
+        sessionRepository.save(targetSession);
+    }
+
+    public void approveStudent(Long sessionId, Long userId) {
+        Session targetSession = sessionRepository.findById(sessionId);
+        NsUser targetUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CannotRegisterException("해당하는 유저가 없습니다."));
+        targetSession.confirmUser(targetUser, ApplicationState.APPROVED);
+        sessionRepository.save(targetSession);
+    }
 }

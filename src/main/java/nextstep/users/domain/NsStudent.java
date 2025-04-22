@@ -17,6 +17,10 @@ public class NsStudent {
         this(userId, sessionId, ApplicationState.PENDING);
     }
 
+    public NsStudent(Long userId, Long sessionId, String applicationState) {
+        this(userId, sessionId, ApplicationState.valueOf(applicationState));
+    }
+
     public NsStudent(Long userId, Long sessionId, ApplicationState applicationState) {
         this.userId = userId;
         this.registeredSessionId = sessionId;

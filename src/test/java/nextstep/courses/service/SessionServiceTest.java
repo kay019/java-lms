@@ -15,6 +15,7 @@ import java.time.Month;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,5 +54,27 @@ public class SessionServiceTest {
         sessionService.registerSession(0L, 1L, 1000L);
 
         assertThat(session.getRegistry().getStudents()).hasSize(1);
+    }
+
+    @Test
+    public void reject_student() {
+        when(sessionRepository.findById(session.getId())).thenReturn(session);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
+
+        sessionService.registerSession(0L, 1L, 1000L);
+        sessionService.rejectStudent(0L, 1L);
+
+        assertThat(session.getRegistry().getStudents().get(0).getApplicationState()).isEqualTo(ApplicationState.REJECTED.name());
+    }
+
+    @Test
+    public void approve_student() {
+        when(sessionRepository.findById(session.getId())).thenReturn(session);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
+
+        sessionService.registerSession(0L, 1L, 1000L);
+        sessionService.approveStudent(0L, 1L);
+
+        assertThat(session.getRegistry().getStudents().get(0).getApplicationState()).isEqualTo(ApplicationState.APPROVED.name());
     }
 }

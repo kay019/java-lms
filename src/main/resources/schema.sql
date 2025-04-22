@@ -72,6 +72,7 @@ create table ns_students (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     session_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
+    application_state varchar(10),
     FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES ns_user(id) ON DELETE CASCADE
 );
