@@ -12,10 +12,10 @@ create table session (
     course_id bigint not null, -- 외래키 (course)
     start_date timestamp not null,
     end_date timestamp not null,
-    image_size double precision not null,
-    image_type varchar(10) not null,
-    image_width int not null,
-    image_height int not null,
+    image_size double,
+    image_type varchar(10),
+    image_width int,
+    image_height int,
     status varchar(10) not null, -- SessionStatus (PREPARING, OPEN, CLOSE)
     enroll_status varchar(10),   -- EnrollStatus (NON_RECRUIT, RECRUIT)
     type varchar(10) not null,   -- SessionType (FREE, PAID)
