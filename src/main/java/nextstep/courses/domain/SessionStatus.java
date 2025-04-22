@@ -5,6 +5,10 @@ public enum SessionStatus {
     ENROLLING,
     CLOSED;
 
+    public static SessionStatus from(String status) {
+        return SessionStatus.valueOf(status);
+    }
+
     public SessionStatus openEnrollment() {
         if (this != PREPARING) {
             throw new IllegalStateException("Session is not preparing");
