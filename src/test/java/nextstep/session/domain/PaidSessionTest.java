@@ -9,8 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import nextstep.enrollment.domain.Enrollment;
 import nextstep.enrollment.domain.Student;
-import nextstep.session.exception.PaidSessionIllegalArgumentException;
 import nextstep.payments.domain.Payment;
+import nextstep.session.exception.PaidDuplicateStudentEnrollmentException;
+import nextstep.session.exception.PaidSessionInvalidFeeException;
+import nextstep.session.exception.PaidSessionCapacityExceededException;
+import nextstep.session.exception.PaidSessionNotEnrollingException;
 
 import static nextstep.session.domain.SessionStatus.ENROLLING;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
@@ -74,12 +77,13 @@ class PaidSessionTest {
     void enroll_잘못된_결제금액_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .fee(30000)
+            .status(ENROLLING)
             .build();
 
         Payment wrongAmountPayment = createPayment(25000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, wrongAmountPayment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidSessionInvalidFeeException.class);
     }
 
     @Test
@@ -98,7 +102,7 @@ class PaidSessionTest {
         session.enroll(new Enrollment(student, payment));
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(secondStudent, payment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidSessionCapacityExceededException.class);
     }
 
     @Test
@@ -112,7 +116,7 @@ class PaidSessionTest {
         Payment payment = createPayment(30000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidSessionNotEnrollingException.class);
     }
 
     @Test
@@ -128,7 +132,7 @@ class PaidSessionTest {
         Payment payment = createPayment(30000);
         session.enroll(new Enrollment(student, payment));
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidDuplicateStudentEnrollmentException.class);
     }
 
     private Payment createPayment(long amount) {
