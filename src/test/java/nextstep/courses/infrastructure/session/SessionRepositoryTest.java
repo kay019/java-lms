@@ -14,7 +14,7 @@ import static nextstep.courses.domain.session.SessionTest.SESSION1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
-public class SessionRepositoryTest {
+class SessionRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionRepositoryTest.class);
 
     @Autowired
@@ -30,11 +30,18 @@ public class SessionRepositoryTest {
     @Test
     void crud() {
         Session session = SESSION1;
-//        Course course = new Course("TDD, 클린 코드 with Java", 1L);
         int count = sessionRepository.save(SESSION1);
         assertThat(count).isEqualTo(1);
         Session savedSession = sessionRepository.findById(1L);
         assertThat(session.getTitle()).isEqualTo(savedSession.getTitle());
+        assertThat(session.getSessionType()).isEqualTo(savedSession.getSessionType());
+        assertThat(session.getCourseId()).isEqualTo(savedSession.getCourseId());
+        assertThat(session.getFee()).isEqualTo(savedSession.getFee());
+        assertThat(session.getEnrollmentCount()).isEqualTo(savedSession.getEnrollmentCount());
+        assertThat(session.getMaxEnrollment()).isEqualTo(savedSession.getMaxEnrollment());
+        assertThat(session.getStatus()).isEqualTo(savedSession.getStatus());
+        assertThat(session.getStartDate()).isEqualTo(savedSession.getStartDate());
+        assertThat(session.getFinishDate()).isEqualTo(savedSession.getFinishDate());
         LOGGER.debug("Session: {}", savedSession);
     }
 }
