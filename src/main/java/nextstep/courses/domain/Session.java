@@ -7,19 +7,28 @@ import nextstep.payments.domain.Payment;
 
 public abstract class Session {
 
+    private final Long id;
+
     private final Image coverImage;
 
     private final Period period;
 
-    private final List<Long> participants = new ArrayList<>();
+    private final List<Participant> participants;
 
     private SessionStatus status = SessionStatus.PREPARING;
 
-    protected Session(Image coverImage, Period period) {
+    protected Session(Long id, Image coverImage, Period period, List<Participant> participants, SessionStatus status) {
         validate(coverImage, period);
 
+        this.id = id;
         this.coverImage = coverImage;
         this.period = period;
+        this.participants = participants;
+        this.status = status;
+    }
+    
+    protected Session(Image coverImage, Period period) {
+        this(null, coverImage, period, new ArrayList<>(), SessionStatus.PREPARING);
     }
 
     private void validate(Image coverImage, Period period) {
@@ -52,10 +61,13 @@ public abstract class Session {
         status = status.closeEnrollment();
     }
 
-    public void enroll(Long userId, Payment payment) {
+    public Participant enroll(Long userId, Payment payment) {
         status.assertCanEnroll();
         validateEnrollment(payment);
-        participants.add(userId);
+
+        Participant participant = new Participant(userId);
+        participants.add(participant);
+        return participant;
     }
 
     protected abstract void validateEnrollment(Payment payment);
@@ -65,7 +77,30 @@ public abstract class Session {
     }
 
     public boolean isParticipant(Long userId) {
-        return participants.contains(userId);
+        return participants.contains(new Participant(userId));
     }
 
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Image getCoverImage() {
+        return coverImage;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
 }

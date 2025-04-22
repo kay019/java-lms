@@ -1,19 +1,26 @@
 package nextstep.courses.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nextstep.payments.domain.Payment;
+
 public class PaidSession extends Session {
 
     private final Integer maxParticipants;
 
     private final Long price;
 
-    public PaidSession(Image coverImage, Period period, Integer maxParticipants, Long price) {
-        super(coverImage, period);
-
+    public PaidSession(Long id, Image coverImage, Period period, List<Participant> participants, SessionStatus status, Integer maxParticipants, Long price) {
+        super(id, coverImage, period, participants, status);
         validate(maxParticipants, price);
 
         this.maxParticipants = maxParticipants;
         this.price = price;
+    }
+
+    public PaidSession(Image coverImage, Period period, Integer maxParticipants, Long price) {
+       this(null, coverImage, period, new ArrayList<>(), SessionStatus.PREPARING, maxParticipants, price);
     }
 
     private void validate(Integer maxParticipants, Long price) {
@@ -41,4 +48,11 @@ public class PaidSession extends Session {
         }
     }
 
+    public Integer getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
 }

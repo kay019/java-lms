@@ -111,3 +111,25 @@
 - Session ← FreeSession, PaidSession(상속)
 - Session → Image, Period, SessionStatus
 - EnrollService → SessionRepository → Session
+
+# 3단계
+
+## TODO
+
+1. DB 테이블 설계
+
+   - session 테이블: 강의 세션 정보 저장
+   - course_session 테이블: 강의와 세션의 관계
+   - image 테이블: 세션의 이미지 정보
+   - participant 테이블: 세션 참여자 정보
+
+2. Repository 연결
+
+   - SessionRepository 구현
+   - CourseRepository 구현
+   - 각 도메인 객체와 DB 테이블 매핑
+
+3. 기존 객체 수정
+   - 도메인 객체에 DB 매핑 관련 필드 추가
+   - JPA 엔티티 매핑 설정
+   - 관계 설정 (1:1, 1:N, N:M)
