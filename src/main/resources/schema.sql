@@ -17,6 +17,7 @@ create table session (
     image_width int not null,
     image_height int not null,
     status varchar(10) not null, -- SessionStatus (PREPARING, OPEN, CLOSE)
+    enroll_status varchar(10),   -- EnrollStatus (NON_RECRUIT, RECRUIT)
     type varchar(10) not null,   -- SessionType (FREE, PAID)
     max_participants int,
     fee bigint
