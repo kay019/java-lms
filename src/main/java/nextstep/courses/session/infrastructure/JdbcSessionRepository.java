@@ -3,7 +3,6 @@ package nextstep.courses.session.infrastructure;
 import nextstep.courses.enrollment.domain.Enrollments;
 import nextstep.courses.session.domain.*;
 import nextstep.courses.session.domain.coverImages.SessionCoverImage;
-import nextstep.courses.session.domain.coverImages.SessionImageType;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -60,13 +59,6 @@ public class JdbcSessionRepository implements SessionRepository {
                     toLocalDateTime(rs.getTimestamp("end_date"))
             );
 
-            SessionCoverImage image = new SessionCoverImage(
-                    rs.getDouble("image_size"),
-                    SessionImageType.valueOf(rs.getString("image_type")),
-                    rs.getInt("image_width"),
-                    rs.getInt("image_height")
-            );
-
             SessionStatus status = SessionStatus.valueOf(rs.getString("status"));
             EnrollStatus enrollStatus = EnrollStatus.valueOf(rs.getString("enroll_status"));
             SessionType type = SessionType.valueOf(rs.getString("type"));
@@ -74,7 +66,7 @@ public class JdbcSessionRepository implements SessionRepository {
             Long fee = rs.getLong("fee");
             Enrollments enrollments = new Enrollments(new ArrayList<>());
 
-            return new Session(id, courseId, date, image, status, enrollStatus, type, maxParticipants, fee, enrollments);
+            return new Session(id, courseId, date, null, status, enrollStatus, type, maxParticipants, fee, enrollments);
         };
     }
 
