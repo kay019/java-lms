@@ -5,8 +5,8 @@ import nextstep.courses.domain.image.CoverImage;
 import java.util.Optional;
 
 public interface CoverImageRepository {
-    int save(CoverImage image, Long sessionId);
+    Long save(CoverImage image, Long sessionId);
 
-    Optional<CoverImage> findBySessionId(Long id);
+    Optional<CoverImage> findBySessionId(Long sessionId);
 
 }

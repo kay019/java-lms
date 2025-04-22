@@ -3,25 +3,35 @@ package nextstep.courses.infrastructure;
 import nextstep.courses.domain.Student;
 import nextstep.courses.domain.repository.StudentRepository;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
-@Repository("sessionStudentRepository")
+@Repository()
 public class JdbcStudentRepository implements StudentRepository {
-    private JdbcOperations jdbcTemplate;
+    private final JdbcOperations jdbcTemplate;
 
     public JdbcStudentRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int save(Long userId, Long sessionId) {
+    public Long save(Long userId, Long sessionId) {
         String sql = "insert into session_student (ns_user_id, session_id) " +
                 "values(?, ?)";
-        return jdbcTemplate.update(sql,
-                userId,
-                sessionId);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setLong(1, userId);
+            ps.setLong(2, sessionId);
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override

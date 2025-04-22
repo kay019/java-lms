@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
+@Sql(scripts = "/reset-db.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class JdbcFreeSessionRepositoryTest {
 
     @Autowired
@@ -28,12 +30,24 @@ class JdbcFreeSessionRepositoryTest {
     }
 
     @Test
-    void crud() {
+    void saveTest() {
         // given
         FreeSession freeSession = new FreeSessionBuilder().build();
 
         // when
+        Long result = sessionRepository.save(freeSession);
+
+        // then
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    void findByIdTest_found() {
+        // given
+        FreeSession freeSession = new FreeSessionBuilder().build();
         sessionRepository.save(freeSession);
+
+        // when
         Optional<Session> result = sessionRepository.findById(1L);
 
         // then
@@ -43,6 +57,15 @@ class JdbcFreeSessionRepositoryTest {
         assertThat(session.getDate().getStartedAt()).isEqualTo(freeSession.getDate().getStartedAt());
         assertThat(session.getDate().getEndedAt()).isEqualTo(freeSession.getDate().getEndedAt());
         assertThat(session.getCreatedAt()).isEqualTo(freeSession.getCreatedAt());
+    }
+
+    @Test
+    void findByIdTest_notFound() {
+        // when
+        Optional<Session> result = sessionRepository.findById(1L);
+
+        // then
+        assertThat(result).isEmpty();
     }
 
 }

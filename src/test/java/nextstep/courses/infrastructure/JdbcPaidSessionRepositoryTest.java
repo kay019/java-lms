@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
+@Sql(scripts = "/reset-db.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class JdbcPaidSessionRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -27,12 +29,24 @@ class JdbcPaidSessionRepositoryTest {
     }
 
     @Test
-    void crud() {
+    void saveTest() {
         // given
         PaidSession paidSession = new PaidSessionBuilder().build();
 
         // when
+        Long result = sessionRepository.save(paidSession);
+
+        // then
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    void findByIdTest_found() {
+        // given
+        PaidSession paidSession = new PaidSessionBuilder().build();
         sessionRepository.save(paidSession);
+
+        // when
         Optional<Session> result = sessionRepository.findById(1L);
 
         // then
@@ -44,6 +58,15 @@ class JdbcPaidSessionRepositoryTest {
         assertThat(session.getCreatedAt()).isEqualTo(paidSession.getCreatedAt());
         assertThat(((PaidSession) session).getFee()).isEqualTo(paidSession.getFee());
         assertThat(((PaidSession) session).getMaxStudent()).isEqualTo(paidSession.getMaxStudent());
+    }
+
+    @Test
+    void findByIdTest_notFound() {
+        // when
+        Optional<Session> result = sessionRepository.findById(999L);
+
+        // then
+        assertThat(result).isEmpty();
     }
 
 }

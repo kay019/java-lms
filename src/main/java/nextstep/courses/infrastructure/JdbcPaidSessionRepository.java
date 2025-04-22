@@ -6,34 +6,43 @@ import nextstep.courses.domain.SessionDate;
 import nextstep.courses.domain.SessionStatus;
 import nextstep.courses.domain.repository.SessionRepository;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository("paidSessionRepository")
 public class JdbcPaidSessionRepository implements SessionRepository {
-    private JdbcOperations jdbcTemplate;
+    private final JdbcOperations jdbcTemplate;
 
     public JdbcPaidSessionRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int save(Session session) {
+    public Long save(Session session) {
         PaidSession paidSession = (PaidSession) session;
         String sql = "insert into session (status, started_at, ended_at, created_at, fee_policy, fee, max_student) " +
                 "values(?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql,
-                paidSession.getStatus().name(),
-                paidSession.getDate().getStartedAt(),
-                paidSession.getDate().getEndedAt(),
-                paidSession.getCreatedAt(),
-                SessionFeePolicy.PAID.name(),
-                paidSession.getFee(),
-                paidSession.getMaxStudent()
-        );
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, paidSession.getStatus().name());
+            ps.setObject(2, paidSession.getDate().getStartedAt());
+            ps.setObject(3, paidSession.getDate().getEndedAt());
+            ps.setObject(4, paidSession.getCreatedAt());
+            ps.setString(5, SessionFeePolicy.PAID.name());
+            ps.setInt(6, paidSession.getFee()); // Assuming fee is a BigDecimal
+            ps.setInt(7, paidSession.getMaxStudent());
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override

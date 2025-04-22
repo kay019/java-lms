@@ -5,7 +5,7 @@ import nextstep.courses.domain.Session;
 import java.util.Optional;
 
 public interface SessionRepository {
-    int save(Session session);
+    Long save(Session session);
 
     Optional<Session> findById(Long id);
 }

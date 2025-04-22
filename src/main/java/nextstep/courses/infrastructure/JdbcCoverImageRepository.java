@@ -6,29 +6,38 @@ import nextstep.courses.domain.image.CoverImageFileSize;
 import nextstep.courses.domain.image.CoverImagePixelSize;
 import nextstep.courses.domain.repository.CoverImageRepository;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.Optional;
 
-@Repository("coverImageRepository")
+@Repository()
 public class JdbcCoverImageRepository implements CoverImageRepository {
-    private JdbcOperations jdbcTemplate;
+    private final JdbcOperations jdbcTemplate;
 
     public JdbcCoverImageRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int save(CoverImage image, Long sessionId) {
+    public Long save(CoverImage image, Long sessionId) {
         String sql = "insert into cover_image (session_id, size, extension, width, height) " +
                 "values(?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql,
-                sessionId,
-                image.getFileSize().getSize(),
-                image.getExtension().name(),
-                image.getPixelSize().getWidth(),
-                image.getPixelSize().getHeight()
-        );
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setLong(1, sessionId);
+            ps.setLong(2, image.getFileSize().getSize());
+            ps.setString(3, image.getExtension().name());
+            ps.setInt(4, image.getPixelSize().getWidth());
+            ps.setInt(5, image.getPixelSize().getHeight());
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override
