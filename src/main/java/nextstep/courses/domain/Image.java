@@ -1,7 +1,7 @@
 package nextstep.courses.domain;
 
 import java.util.List;
-
+import java.util.Objects;
 public class Image {
     private static final int MAX_SIZE = 1024 * 1024;
     private static final List<String> SUPPORTED_FORMATS = List.of("gif", "jpg", "png", "svg");
@@ -10,20 +10,27 @@ public class Image {
     private static final double RATIO = 3.0 / 2.0;
     private static final double RATIO_TOLERANCE = 0.01;
 
+    private final Long id;
     private final String url;
     private final int width;
     private final int height;
     private final String format;
     private final int size;
 
-    public Image(String url, int width, int height, String format, int size) {
+    public Image(Long id, String url, int width, int height, String format, int size) {
         validate(url, width, height, format, size);
-
+        
+        this.id = id;
         this.url = url;
         this.width = width;
         this.height = height;
-        this.format = format;
+        this.format = format; 
         this.size = size;
+    }
+
+
+    public Image(String url, int width, int height, String format, int size) {
+        this(null, url, width, height, format, size);
     }
 
     private void validate(String url, int width, int height, String format, int size) {
@@ -55,4 +62,45 @@ public class Image {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Image image = (Image) o;
+        return Objects.equals(id, image.id) &&
+               Objects.equals(url, image.url) &&
+               width == image.width &&
+               height == image.height &&
+               Objects.equals(format, image.format) &&
+               size == image.size;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url, width, height, format, size);
+    }
 }
