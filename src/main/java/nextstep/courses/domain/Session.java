@@ -5,18 +5,26 @@ import nextstep.payments.domain.Payment;
 public abstract class Session {
     protected final Long id;
     protected final Period period;
-    protected final CoverImage coverImage;
+    protected final CoverImages coverImages;
     protected final SessionStatus status;
     protected final SessionType type;
     protected Students students;
 
-    protected Session(Long id, Period period, CoverImage coverImage, SessionStatus status, SessionType type, Students students) {
+    protected Session(Long id, Period period, CoverImages coverImages, SessionStatus status, SessionType type, Students students) {
         this.id = id;
         this.period = period;
-        this.coverImage = coverImage;
+        this.coverImages = coverImages;
         this.status = status;
         this.type = type;
         this.students = students;
+    }
+
+    protected Session withCoverImages(CoverImages coverImages) {
+        return null;
+    }
+
+    protected Session withStudents(Students students) {
+        return null;
     }
 
     public Payment registerStudent(Student student) {
@@ -63,8 +71,8 @@ public abstract class Session {
         return period;
     }
 
-    public CoverImage getCoverImage() {
-        return coverImage;
+    public CoverImages getCoverImages() {
+        return coverImages;
     }
 
     public SessionStatus getStatus() {

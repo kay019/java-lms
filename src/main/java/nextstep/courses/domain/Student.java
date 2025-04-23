@@ -26,6 +26,10 @@ public class Student {
         this(id, name, email, budget, new Sessions(new ArrayList<>()));
     }
 
+    public Student withSessions(Sessions sessions) {
+        return new Student(id, name, email, budget, sessions);
+    }
+
     public Long getId() {
         return id;
     }
