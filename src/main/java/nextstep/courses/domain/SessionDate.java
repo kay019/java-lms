@@ -17,4 +17,12 @@ public class SessionDate {
             throw new IllegalArgumentException("강의 시작일은 종료일 보다 늦을 수 없습니다.");
         }
     }
+
+    public LocalDateTime getStartedAt() {
+        return startedAt;
+    }
+
+    public LocalDateTime getEndedAt() {
+        return endedAt;
+    }
 }

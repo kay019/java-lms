@@ -4,9 +4,19 @@ import nextstep.courses.domain.image.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.time.LocalDateTime;
+
 public class PaidSession extends Session {
     private final int fee;
     private final int maxStudent;
+
+    public PaidSession(Long id, SessionStatus status, SessionDate date,
+                       LocalDateTime createdAt, LocalDateTime updatedAt,
+                       int fee, int maxStudent) {
+        super(id, status, date, createdAt, updatedAt);
+        this.fee = fee;
+        this.maxStudent = maxStudent;
+    }
 
     public PaidSession(Long id, CoverImage coverImage, SessionStatus status, SessionDate date, int fee, int maxStudent) {
         super(id, coverImage, status, date);
@@ -22,10 +32,11 @@ public class PaidSession extends Session {
     }
 
     private void enrollStudent(NsUser user) {
-        students.add(user);
+        Student student = new Student(user);
+        students.add(student);
     }
 
-    public void validateEnroll(Payment payment) {
+    private void validateEnroll(Payment payment) {
         validateSessionFullStudent();
 
         if (fee != payment.getAmount()) {
@@ -38,5 +49,13 @@ public class PaidSession extends Session {
         if (currentStudent >= maxStudent) {
             throw new IllegalArgumentException("유료 강의는 강의 최대 수강 인원을 초과할 수 없습니다.");
         }
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public int getMaxStudent() {
+        return maxStudent;
     }
 }
