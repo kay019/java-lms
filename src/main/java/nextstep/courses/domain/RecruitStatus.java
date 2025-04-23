@@ -1,11 +1,11 @@
 package nextstep.courses.domain;
 
-public enum SessionRecruitStatus {
+public enum RecruitStatus {
     OPEN("모집중"), CLOSED("모집 마감");
 
     public final String description;
 
-    SessionRecruitStatus(String description) {
+    RecruitStatus(String description) {
         this.description = description;
     }
 }

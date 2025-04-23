@@ -2,8 +2,8 @@ package nextstep.application.service;
 
 import nextstep.courses.domain.Session;
 import nextstep.courses.service.SessionService;
-import nextstep.students.domain.Student;
-import nextstep.students.service.StudentService;
+import nextstep.courses.domain.Student;
+import nextstep.courses.service.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

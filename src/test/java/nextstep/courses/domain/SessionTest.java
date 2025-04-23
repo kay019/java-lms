@@ -1,6 +1,5 @@
 package nextstep.courses.domain;
 
-import nextstep.students.domain.Student;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -11,14 +10,22 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class SessionTest {
     @Test
     void 수강신청_성공() {
-        Session session = new FreeSession(LocalDate.now(), LocalDate.now().plusDays(1), null, SessionLifeCycle.READY, SessionRecruitStatus.OPEN);
+        Session session = new FreeSession(
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
+                null,
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN)
+        );
         Student student = new Student("baek", "sh@github.com", 10000L);
         assertDoesNotThrow(() -> session.registerStudent(student));
     }
 
     @Test
     void 정합성테스트_실패_세션상태() {
-        Session session = new FreeSession(LocalDate.now(), LocalDate.now().plusDays(1), null, SessionLifeCycle.READY, SessionRecruitStatus.CLOSED);
+        Session session = new FreeSession(
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
+                null,
+                new SessionStatus(Phase.READY, RecruitStatus.CLOSED)
+        );
         Student student = new Student("baek", "sh@github.com", 10000L);
         assertThatThrownBy(() -> session.registerStudent(student))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -27,7 +34,14 @@ class SessionTest {
 
     @Test
     void 정합성테스트_실패_정원초과() {
-        Session session = new PaidSession(0L, LocalDate.now(), LocalDate.now().plusDays(1), null, SessionLifeCycle.READY, SessionRecruitStatus.OPEN, 1, 10000L);
+        Session session = new PaidSession(
+                0L,
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
+                null,
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN),
+                1,
+                10000L
+        );
         Student student1 = new Student("baek", "sh@github.com", 10000L);
         Student student2 = new Student("shin", "hj@github.com", 10000L);
         session.registerStudent(student1);
@@ -38,7 +52,14 @@ class SessionTest {
 
     @Test
     void 정합성테스트_실패_예산부족() {
-        Session session = new PaidSession(0L, LocalDate.now(), LocalDate.now().plusDays(1), null, SessionLifeCycle.IN_PROGRESS, SessionRecruitStatus.OPEN, 1, 10000L);
+        Session session = new PaidSession(
+                0L,
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
+                null,
+                new SessionStatus(Phase.IN_PROGRESS, RecruitStatus.OPEN),
+                1,
+                10000L
+        );
         Student student = new Student("baek", "sh@github.com", 1000L);
         assertThatThrownBy(() -> session.registerStudent(student))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -47,7 +68,14 @@ class SessionTest {
 
     @Test
     void 정합성테스트_실패_이미등록한강의() {
-        Session session = new PaidSession(0L, LocalDate.now(), LocalDate.now().plusDays(1), null, SessionLifeCycle.IN_PROGRESS, SessionRecruitStatus.OPEN, 3, 10000L);
+        Session session = new PaidSession(
+                0L,
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
+                null,
+                new SessionStatus(Phase.IN_PROGRESS, RecruitStatus.OPEN),
+                3,
+                10000L
+        );
         Student student1 = new Student("baek", "sh@github.com", 10000L);
         session.registerStudent(student1);
         assertThatThrownBy(() -> session.registerStudent(student1))

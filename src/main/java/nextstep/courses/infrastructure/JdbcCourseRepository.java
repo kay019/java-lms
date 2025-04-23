@@ -2,7 +2,6 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Course;
 import nextstep.courses.domain.CourseRepository;
-import nextstep.courses.domain.Sessions;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
 
@@ -40,6 +39,13 @@ public class JdbcCourseRepository implements CourseRepository {
         }, id);
     }
 
+    private void saveSessions(Long courseId, List<Long> sessionIds) {
+        String sql = "INSERT INTO course_session (course_id, session_id) VALUES (?, ?)";
+        for (Long sessionId : sessionIds) {
+            jdbcTemplate.update(sql, courseId, sessionId);
+        }
+    }
+
     private Course mapRowToCourse(ResultSet rs) throws SQLException {
         Long id = rs.getLong("id");
         String title = rs.getString("title");
@@ -47,13 +53,7 @@ public class JdbcCourseRepository implements CourseRepository {
         LocalDateTime createdAt = toLocalDateTime(rs.getTimestamp("created_at"));
         LocalDateTime updatedAt = toLocalDateTime(rs.getTimestamp("updated_at"));
 
-        List<Long> sessionIds = jdbcTemplate.query(
-                "SELECT session_id FROM course_session WHERE course_id = ?",
-                (rs2, rowNum) -> rs2.getLong("session_id"),
-                id
-        );
-
-        return new Course(id, title, creatorId, createdAt, updatedAt, new Sessions(sessionIds));
+        return new Course(id, title, creatorId, createdAt, updatedAt);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {
@@ -61,12 +61,5 @@ public class JdbcCourseRepository implements CourseRepository {
             return null;
         }
         return timestamp.toLocalDateTime();
-    }
-
-    private void saveSessions(Long courseId, List<Long> sessionIds) {
-        String sql = "INSERT INTO course_session (course_id, session_id) VALUES (?, ?)";
-        for (Long sessionId : sessionIds) {
-            jdbcTemplate.update(sql, courseId, sessionId);
-        }
     }
 }

@@ -1,23 +1,17 @@
-package nextstep.courses.domain;
+package nextstep.courses.infrastructure;
 
-import nextstep.courses.infrastructure.JdbcSessionRepository;
-import nextstep.students.domain.Student;
-import nextstep.students.domain.StudentRepository;
-import nextstep.students.domain.Students;
+import nextstep.courses.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @JdbcTest
 @TestPropertySource(properties = {
@@ -28,13 +22,11 @@ import static org.mockito.Mockito.when;
 class SessionRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Mock
-    private StudentRepository studentRepository;
     private SessionRepository sessionRepository;
 
     @BeforeEach
     void setUp() {
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate, studentRepository);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate);
         try {
             jdbcTemplate.execute("DELETE FROM session");
             jdbcTemplate.execute("ALTER TABLE session ALTER COLUMN id RESTART WITH 1");
@@ -47,11 +39,9 @@ class SessionRepositoryTest {
     @Test
     void 저장_유료강의() {
         Session session = new PaidSession(
-                LocalDate.now(),
-                LocalDate.now().plusDays(1),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImage(20 * 1024, "PNG", 300, 200),
-                SessionLifeCycle.READY,
-                SessionRecruitStatus.OPEN,
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN),
                 10,
                 10000L
         );
@@ -62,11 +52,9 @@ class SessionRepositoryTest {
     @Test
     void 저장_무료강의() {
         Session session = new FreeSession(
-                LocalDate.now(),
-                LocalDate.now().plusDays(1),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImage(20 * 1024, "PNG", 300, 200),
-                SessionLifeCycle.READY,
-                SessionRecruitStatus.OPEN
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN)
         );
         int count = sessionRepository.save(session);
         assertEquals(1, count);
@@ -75,11 +63,9 @@ class SessionRepositoryTest {
     @Test
     void 조회_유료강의() {
         Session session = new PaidSession(
-                LocalDate.now(),
-                LocalDate.now().plusDays(1),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImage(20 * 1024, "PNG", 600, 400),
-                SessionLifeCycle.READY,
-                SessionRecruitStatus.OPEN,
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN),
                 10,
                 10000L
         );
@@ -92,7 +78,7 @@ class SessionRepositoryTest {
         assertThat(session.getCoverImage().getType()).isEqualTo(savedSession.getCoverImage().getType());
         assertThat(session.getCoverImage().getWidth()).isEqualTo(savedSession.getCoverImage().getWidth());
         assertThat(session.getCoverImage().getHeight()).isEqualTo(savedSession.getCoverImage().getHeight());
-        assertThat(session.getStatus().getLifeCycle()).isEqualTo(savedSession.getStatus().getLifeCycle());
+        assertThat(session.getStatus().getPhase()).isEqualTo(savedSession.getStatus().getPhase());
         assertThat(session.getStatus().getRecruitStatus()).isEqualTo(savedSession.getStatus().getRecruitStatus());
         assertThat(session).isInstanceOf(PaidSession.class);
         assertThat(((PaidSession) session).getCapacity()).isEqualTo(10);
@@ -102,11 +88,9 @@ class SessionRepositoryTest {
     @Test
     void 조회_무료강의() {
         Session session = new FreeSession(
-                LocalDate.now(),
-                LocalDate.now().plusDays(1),
+                new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImage(20 * 1024, "PNG", 600, 400),
-                SessionLifeCycle.READY,
-                SessionRecruitStatus.OPEN
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN)
         );
         sessionRepository.save(session);
         Session savedSession = sessionRepository.findById(1L).orElse(null);
@@ -117,29 +101,8 @@ class SessionRepositoryTest {
         assertThat(session.getCoverImage().getType()).isEqualTo(savedSession.getCoverImage().getType());
         assertThat(session.getCoverImage().getWidth()).isEqualTo(savedSession.getCoverImage().getWidth());
         assertThat(session.getCoverImage().getHeight()).isEqualTo(savedSession.getCoverImage().getHeight());
-        assertThat(session.getStatus().getLifeCycle()).isEqualTo(savedSession.getStatus().getLifeCycle());
+        assertThat(session.getStatus().getPhase()).isEqualTo(savedSession.getStatus().getPhase());
         assertThat(session.getStatus().getRecruitStatus()).isEqualTo(savedSession.getStatus().getRecruitStatus());
         assertThat(session).isInstanceOf(FreeSession.class);
-    }
-
-    @Test
-    void 조회_무료강의_학생있을때() {
-        Student baek = new Student(1L, "baek", "baek@github.com", 10000L);
-        Student shin = new Student(2L, "shin", "shin@github.com", 10000L);
-        Session session = new FreeSession(
-                1L,
-                LocalDate.now(),
-                LocalDate.now().plusDays(1),
-                new CoverImage(20 * 1024, "PNG", 600, 400),
-                SessionLifeCycle.READY,
-                SessionRecruitStatus.OPEN,
-                new Students(List.of(baek, shin))
-        );
-        when(studentRepository.findAllById(List.of(1L, 2L))).thenReturn(List.of(baek, shin));
-        sessionRepository.save(session);
-        Session savedSession = sessionRepository.findById(1L).orElse(null);
-        assertThat(savedSession).isNotNull();
-        assertThat(savedSession.getStudents().getSize()).isEqualTo(2);
-        assertThat(savedSession.getStudents().getValues().get(0).getName()).isEqualTo("baek");
     }
 }

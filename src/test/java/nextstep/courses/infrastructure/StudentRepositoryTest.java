@@ -1,17 +1,13 @@
-package nextstep.students.domain;
+package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.SessionRepository;
-import nextstep.courses.domain.Sessions;
-import nextstep.students.infrastructure.JdbcStudentRepository;
+import nextstep.courses.domain.Student;
+import nextstep.courses.domain.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,8 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StudentRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Mock
-    private SessionRepository sessionRepository;
     private StudentRepository studentRepository;
 
     @BeforeEach
@@ -56,21 +50,5 @@ class StudentRepositoryTest {
         assertThat(student.getName()).isEqualTo(savedStudent.getName());
         assertThat(student.getEmail()).isEqualTo(savedStudent.getEmail());
         assertThat(student.getBudget()).isEqualTo(savedStudent.getBudget());
-    }
-
-    @Test
-    void 세션id_조회_테스트() {
-        Student student = new Student(
-                1L,
-                "sh",
-                "sh@nextstep.com",
-                1000L,
-                new Sessions(List.of(1L, 2L, 3L))
-        );
-        studentRepository.save(student);
-        Student savedStudent = studentRepository.findById(1L).get();
-        assertThat(savedStudent).isNotNull();
-        assertThat(savedStudent.getSessionIds()).isNotNull();
-        assertThat(savedStudent.getSessionIds()).containsExactlyInAnyOrder(1L, 2L, 3L);
     }
 }

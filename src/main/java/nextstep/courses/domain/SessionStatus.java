@@ -1,23 +1,23 @@
 package nextstep.courses.domain;
 
 public class SessionStatus {
-    private final SessionLifeCycle lifeCycle;
-    private final SessionRecruitStatus recruitStatus;
+    private final Phase phase;
+    private final RecruitStatus recruitStatus;
 
-    public SessionStatus(SessionLifeCycle lifeCycle, SessionRecruitStatus recruitStatus) {
-        this.lifeCycle = lifeCycle;
+    public SessionStatus(Phase phase, RecruitStatus recruitStatus) {
+        this.phase = phase;
         this.recruitStatus = recruitStatus;
     }
 
-    public SessionLifeCycle getLifeCycle() {
-        return lifeCycle;
+    public Phase getPhase() {
+        return phase;
     }
 
-    public SessionRecruitStatus getRecruitStatus() {
+    public RecruitStatus getRecruitStatus() {
         return recruitStatus;
     }
 
     public boolean isInRecruit() {
-        return recruitStatus == SessionRecruitStatus.OPEN;
+        return recruitStatus == RecruitStatus.OPEN;
     }
 }

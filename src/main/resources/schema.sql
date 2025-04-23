@@ -54,7 +54,6 @@ create table student (
     name varchar(20) not null,
     email varchar(50),
     budget bigint,
-    session_id bigint,
     primary key (id)
 );
 
@@ -66,7 +65,7 @@ create table session (
     cover_type varchar(20) not null ,
     cover_width int not null,
     cover_height int not null,
-    life_cycle varchar(20) not null,
+    phase varchar(20) not null,
     recruit_status varchar(20) not null,
     type varchar(20) not null,
     capacity int,
@@ -83,14 +82,14 @@ create table payment (
     primary key (id)
 );
 
-create table session_student (
-    session_id bigint not null,
-    student_id bigint not null,
-    primary key (session_id, student_id)
-);
-
 create table course_session (
     course_id bigint not null,
     session_id bigint not null,
     primary key (course_id, session_id)
+);
+
+create table session_student (
+    session_id bigint not null,
+    student_id bigint not null,
+    primary key (session_id, student_id)
 );

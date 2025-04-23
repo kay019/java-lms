@@ -1,18 +1,20 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
-import nextstep.students.domain.Student;
-import nextstep.students.domain.Students;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class FreeSession extends Session {
-    public FreeSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, Students students) {
-        super(id, startDate, endDate, coverImage, status, recruitStatus, SessionType.FREE, students);
+    public FreeSession(Long id, Period period, CoverImage coverImage, SessionStatus status, Students students) {
+        super(id, period, coverImage, status, SessionType.FREE, students);
     }
 
-    public FreeSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus) {
-        super(0L, startDate, endDate, coverImage, status, recruitStatus, SessionType.FREE);
+    public FreeSession(Long id, Period period, CoverImage coverImage, SessionStatus status) {
+        this(id, period, coverImage, status, new Students(new ArrayList<>()));
+    }
+
+    public FreeSession(Period period, CoverImage coverImage, SessionStatus status) {
+        this(0L, period, coverImage, status, new Students(new ArrayList<>()));
     }
 
     @Override

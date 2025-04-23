@@ -1,11 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
-import nextstep.students.domain.Student;
-import nextstep.students.domain.Students;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public abstract class Session {
     protected final Long id;
@@ -15,15 +10,11 @@ public abstract class Session {
     protected final SessionType type;
     protected Students students;
 
-    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, SessionType type) {
-        this(id, startDate, endDate, coverImage, status, recruitStatus, type, new Students(new ArrayList<>()));
-    }
-
-    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, SessionType type, Students students) {
+    protected Session(Long id, Period period, CoverImage coverImage, SessionStatus status, SessionType type, Students students) {
         this.id = id;
-        this.period = new Period(startDate, endDate);
+        this.period = period;
         this.coverImage = coverImage;
-        this.status = new SessionStatus(status, recruitStatus);
+        this.status = status;
         this.type = type;
         this.students = students;
     }
@@ -31,7 +22,7 @@ public abstract class Session {
     public Payment registerStudent(Student student) {
         validateEnrollment(student);
         this.students = this.students.addStudent(student);
-        student.registerSession(id);
+        student.registerSession(this);
         return createPayment(student);
     }
 
@@ -53,7 +44,7 @@ public abstract class Session {
     }
 
     private void validateAlreadyRegistered(Student student) {
-        if (student.isAlreadyRegistered(id)) {
+        if (student.isAlreadyRegistered(this)) {
             throw new IllegalStateException("이미 등록한 강의입니다.");
         }
     }

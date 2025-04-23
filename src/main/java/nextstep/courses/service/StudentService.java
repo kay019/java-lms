@@ -1,7 +1,7 @@
-package nextstep.students.service;
+package nextstep.courses.service;
 
-import nextstep.students.domain.Student;
-import nextstep.students.domain.StudentRepository;
+import nextstep.courses.domain.Student;
+import nextstep.courses.domain.StudentRepository;
 import org.springframework.stereotype.Service;
 
 @Service
