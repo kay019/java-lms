@@ -35,7 +35,7 @@ public class JdbcStudentRepository implements StudentRepository {
             if (!rs.next()) {
                 return Optional.empty();
             }
-            return Optional.of(mapRowToSession(rs));
+            return Optional.of(mapRowToStudent(rs));
         }, id);
     }
 
@@ -66,7 +66,7 @@ public class JdbcStudentRepository implements StudentRepository {
         }
     }
 
-    private Student mapRowToSession(ResultSet rs) throws SQLException {
+    private Student mapRowToStudent(ResultSet rs) throws SQLException {
         Long id = rs.getLong("id");
         String name = rs.getString("name");
         String email = rs.getString("email");

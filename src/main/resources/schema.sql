@@ -87,3 +87,9 @@ create table session_student (
     student_id bigint not null,
     primary key (session_id, student_id)
 );
+
+create table course_session (
+    course_id bigint not null,
+    session_id bigint not null,
+    primary key (course_id, session_id)
+);
