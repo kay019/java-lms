@@ -11,22 +11,22 @@ public class PaidSession extends Session {
     private final Integer capacity;
     private final Long fee;
 
-    public PaidSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee, Students students) {
-        super(id, startDate, endDate, coverImage, status, SessionType.PAID, students);
+    public PaidSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, Integer capacity, Long fee, Students students) {
+        super(id, startDate, endDate, coverImage, status, recruitStatus, SessionType.PAID, students);
         this.capacity = capacity;
         this.fee = fee;
     }
 
-    public PaidSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee) {
-        this(id, startDate, endDate, coverImage, status, capacity, fee, new Students(new ArrayList<>()));
+    public PaidSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, Integer capacity, Long fee) {
+        this(id, startDate, endDate, coverImage, status, recruitStatus, capacity, fee, new Students(new ArrayList<>()));
     }
 
-    public PaidSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee) {
-        this(startDate, endDate, coverImage, status, capacity, fee, new Students(new ArrayList<>()));
+    public PaidSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, Integer capacity, Long fee) {
+        this(startDate, endDate, coverImage, status, recruitStatus, capacity, fee, new Students(new ArrayList<>()));
     }
 
-    public PaidSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee, Students students) {
-        this(0L, startDate, endDate, coverImage, status, capacity, fee, students);
+    public PaidSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, Integer capacity, Long fee, Students students) {
+        this(0L, startDate, endDate, coverImage, status, recruitStatus, capacity, fee, students);
     }
 
     @Override

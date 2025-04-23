@@ -15,15 +15,15 @@ public abstract class Session {
     protected final SessionType type;
     protected Students students;
 
-    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type) {
-        this(id, startDate, endDate, coverImage, status, type, new Students(new ArrayList<>()));
+    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, SessionType type) {
+        this(id, startDate, endDate, coverImage, status, recruitStatus, type, new Students(new ArrayList<>()));
     }
 
-    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, SessionType type, Students students) {
+    protected Session(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionLifeCycle status, SessionRecruitStatus recruitStatus, SessionType type, Students students) {
         this.id = id;
         this.period = new Period(startDate, endDate);
         this.coverImage = coverImage;
-        this.status = status;
+        this.status = new SessionStatus(status, recruitStatus);
         this.type = type;
         this.students = students;
     }
@@ -42,8 +42,12 @@ public abstract class Session {
         validateLimitedCapacity();
     }
 
-    protected void validateBudgetOver(Student student) {}
-    protected void validateLimitedCapacity() {}
+    protected void validateBudgetOver(Student student) {
+    }
+
+    protected void validateLimitedCapacity() {
+    }
+
     protected Payment createPayment(Student student) {
         return null;
     }
@@ -55,7 +59,7 @@ public abstract class Session {
     }
 
     private void validateSessionStatus() {
-        if (status != SessionStatus.OPEN) {
+        if (!status.isInRecruit()) {
             throw new IllegalArgumentException("세션이 '모집 중' 일때만 수강 신청이 가능합니다.");
         }
     }

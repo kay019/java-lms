@@ -25,8 +25,8 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session) {
-        String sql = "INSERT INTO session (start_date, end_date, cover_size, cover_type, cover_width, cover_height, status, type, capacity, fee) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session (start_date, end_date, cover_size, cover_type, cover_width, cover_height, life_cycle, recruit_status, type, capacity, fee) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int res = jdbcTemplate.update(sql,
                 session.getPeriod().getStartDate(),
                 session.getPeriod().getEndDate(),
@@ -34,7 +34,8 @@ public class JdbcSessionRepository implements SessionRepository {
                 session.getCoverImage().getType(),
                 session.getCoverImage().getWidth(),
                 session.getCoverImage().getHeight(),
-                session.getStatus().name(),
+                session.getStatus().getLifeCycle().name(),
+                session.getStatus().getRecruitStatus().name(),
                 session.getType().name(),
                 (session instanceof PaidSession) ? ((PaidSession) session).getCapacity() : null,
                 (session instanceof PaidSession) ? ((PaidSession) session).getFee() : null
@@ -65,7 +66,8 @@ public class JdbcSessionRepository implements SessionRepository {
                 rs.getInt("cover_width"),
                 rs.getInt("cover_height")
         );
-        SessionStatus status = SessionStatus.valueOf(rs.getString("status"));
+        SessionLifeCycle status = SessionLifeCycle.valueOf(rs.getString("life_cycle"));
+        SessionRecruitStatus recruitStatus = SessionRecruitStatus.valueOf(rs.getString("recruit_status"));
         SessionType type = SessionType.valueOf(rs.getString("type"));
 
         List<Long> studentIds = jdbcTemplate.query(
@@ -77,12 +79,12 @@ public class JdbcSessionRepository implements SessionRepository {
         List<Student> allById = studentRepository.findAllById(studentIds);
         Students students = new Students(allById);
         if (type == SessionType.FREE) {
-            return new FreeSession(id, startDate, endDate, coverImage, status, students);
+            return new FreeSession(id, startDate, endDate, coverImage, status, recruitStatus, students);
         }
 
         Integer capacity = rs.getInt("capacity");
         Long fee = rs.getLong("fee");
-        return new PaidSession(id, startDate, endDate, coverImage, status, capacity, fee, students);
+        return new PaidSession(id, startDate, endDate, coverImage, status, recruitStatus, capacity, fee, students);
     }
 
     private void saveStudents(Long id, Students students) {

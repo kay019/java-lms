@@ -47,10 +47,11 @@ class SessionRepositoryTest {
     @Test
     void 저장_유료강의() {
         Session session = new PaidSession(
-                LocalDate.of(2025, 4, 15),
-                LocalDate.of(2025, 5, 15),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 new CoverImage(20 * 1024, "PNG", 300, 200),
-                SessionStatus.READY,
+                SessionLifeCycle.READY,
+                SessionRecruitStatus.OPEN,
                 10,
                 10000L
         );
@@ -61,10 +62,11 @@ class SessionRepositoryTest {
     @Test
     void 저장_무료강의() {
         Session session = new FreeSession(
-                LocalDate.of(2025, 4, 15),
-                LocalDate.of(2025, 5, 15),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 new CoverImage(20 * 1024, "PNG", 300, 200),
-                SessionStatus.READY
+                SessionLifeCycle.READY,
+                SessionRecruitStatus.OPEN
         );
         int count = sessionRepository.save(session);
         assertEquals(1, count);
@@ -73,10 +75,11 @@ class SessionRepositoryTest {
     @Test
     void 조회_유료강의() {
         Session session = new PaidSession(
-                LocalDate.of(2025, 4, 15),
-                LocalDate.of(2025, 5, 15),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 new CoverImage(20 * 1024, "PNG", 600, 400),
-                SessionStatus.READY,
+                SessionLifeCycle.READY,
+                SessionRecruitStatus.OPEN,
                 10,
                 10000L
         );
@@ -89,7 +92,8 @@ class SessionRepositoryTest {
         assertThat(session.getCoverImage().getType()).isEqualTo(savedSession.getCoverImage().getType());
         assertThat(session.getCoverImage().getWidth()).isEqualTo(savedSession.getCoverImage().getWidth());
         assertThat(session.getCoverImage().getHeight()).isEqualTo(savedSession.getCoverImage().getHeight());
-        assertThat(session.getStatus()).isEqualTo(savedSession.getStatus());
+        assertThat(session.getStatus().getLifeCycle()).isEqualTo(savedSession.getStatus().getLifeCycle());
+        assertThat(session.getStatus().getRecruitStatus()).isEqualTo(savedSession.getStatus().getRecruitStatus());
         assertThat(session).isInstanceOf(PaidSession.class);
         assertThat(((PaidSession) session).getCapacity()).isEqualTo(10);
         assertThat(((PaidSession) session).getFee()).isEqualTo(10000L);
@@ -98,10 +102,11 @@ class SessionRepositoryTest {
     @Test
     void 조회_무료강의() {
         Session session = new FreeSession(
-                LocalDate.of(2025, 4, 15),
-                LocalDate.of(2025, 5, 15),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 new CoverImage(20 * 1024, "PNG", 600, 400),
-                SessionStatus.READY
+                SessionLifeCycle.READY,
+                SessionRecruitStatus.OPEN
         );
         sessionRepository.save(session);
         Session savedSession = sessionRepository.findById(1L).orElse(null);
@@ -112,7 +117,8 @@ class SessionRepositoryTest {
         assertThat(session.getCoverImage().getType()).isEqualTo(savedSession.getCoverImage().getType());
         assertThat(session.getCoverImage().getWidth()).isEqualTo(savedSession.getCoverImage().getWidth());
         assertThat(session.getCoverImage().getHeight()).isEqualTo(savedSession.getCoverImage().getHeight());
-        assertThat(session.getStatus()).isEqualTo(savedSession.getStatus());
+        assertThat(session.getStatus().getLifeCycle()).isEqualTo(savedSession.getStatus().getLifeCycle());
+        assertThat(session.getStatus().getRecruitStatus()).isEqualTo(savedSession.getStatus().getRecruitStatus());
         assertThat(session).isInstanceOf(FreeSession.class);
     }
 
@@ -122,10 +128,11 @@ class SessionRepositoryTest {
         Student shin = new Student(2L, "shin", "shin@github.com", 10000L);
         Session session = new FreeSession(
                 1L,
-                LocalDate.of(2025, 4, 15),
-                LocalDate.of(2025, 5, 15),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 new CoverImage(20 * 1024, "PNG", 600, 400),
-                SessionStatus.READY,
+                SessionLifeCycle.READY,
+                SessionRecruitStatus.OPEN,
                 new Students(List.of(baek, shin))
         );
         when(studentRepository.findAllById(List.of(1L, 2L))).thenReturn(List.of(baek, shin));
