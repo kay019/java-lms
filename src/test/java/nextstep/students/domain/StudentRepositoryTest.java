@@ -1,12 +1,17 @@
 package nextstep.students.domain;
 
+import nextstep.courses.domain.SessionRepository;
+import nextstep.courses.domain.Sessions;
 import nextstep.students.infrastructure.JdbcStudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,17 +24,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StudentRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    @Mock
+    private SessionRepository sessionRepository;
     private StudentRepository studentRepository;
 
     @BeforeEach
     void setup() {
         studentRepository = new JdbcStudentRepository(jdbcTemplate);
+        try {
+            jdbcTemplate.execute("DELETE FROM student");
+            jdbcTemplate.execute("ALTER TABLE student ALTER COLUMN id RESTART WITH 1");
+            System.out.println("테이블 초기화 성공");
+        } catch (Exception e) {
+            System.err.println("테이블 초기화 실패: " + e.getMessage());
+        }
     }
 
     @Test
     void 저장_테스트() {
-        studentRepository = new JdbcStudentRepository(jdbcTemplate);
         Student student = new Student("sh", "sh@nextstep.com", 1000L);
         int count = studentRepository.save(student);
         assertThat(count).isEqualTo(1);
@@ -37,12 +49,28 @@ class StudentRepositoryTest {
 
     @Test
     void id_검색_테스트() {
-        studentRepository = new JdbcStudentRepository(jdbcTemplate);
         Student student = new Student("sh", "sh@nextstep.com", 1000L);
         studentRepository.save(student);
-        Student savedStudent = studentRepository.findById(1L);
+        Student savedStudent = studentRepository.findById(1L).get();
+        assertThat(savedStudent).isNotNull();
         assertThat(student.getName()).isEqualTo(savedStudent.getName());
         assertThat(student.getEmail()).isEqualTo(savedStudent.getEmail());
         assertThat(student.getBudget()).isEqualTo(savedStudent.getBudget());
+    }
+
+    @Test
+    void 세션id_조회_테스트() {
+        Student student = new Student(
+                1L,
+                "sh",
+                "sh@nextstep.com",
+                1000L,
+                new Sessions(List.of(1L, 2L, 3L))
+        );
+        studentRepository.save(student);
+        Student savedStudent = studentRepository.findById(1L).get();
+        assertThat(savedStudent).isNotNull();
+        assertThat(savedStudent.getSessionIds()).isNotNull();
+        assertThat(savedStudent.getSessionIds()).containsExactlyInAnyOrder(1L, 2L, 3L);
     }
 }

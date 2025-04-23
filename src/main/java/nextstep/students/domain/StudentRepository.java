@@ -1,6 +1,10 @@
 package nextstep.students.domain;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface StudentRepository {
     int save(Student student);
-    Student findById(Long id);
+    Optional<Student> findById(Long id);
+    List<Student> findAllById(List<Long> studentIds);
 }

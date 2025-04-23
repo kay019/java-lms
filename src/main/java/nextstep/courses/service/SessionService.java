@@ -13,6 +13,7 @@ public class SessionService {
     }
 
     public Session findSessionById(Long sessionId) {
-        return sessionRepository.findById(sessionId);
+        return sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다: " + sessionId));
     }
 }
