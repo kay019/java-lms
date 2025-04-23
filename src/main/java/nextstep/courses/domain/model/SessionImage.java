@@ -1,21 +1,16 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.model;
 
-import java.util.List;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 public class SessionImage {
-    private static final List<String> ALLOWED_EXTENSIONS = List.of("gif", "jpg", "jpeg", "png", "svg");
     private static final int MAX_FILE_SIZE_BYTES = 1024 * 1024;
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 200;
     private static final double WIDTH_HEIGHT_RATIO = 1.5;
     private final String path;
-    private final int width;
-    private final int height;
     private final byte[] file;
-
-    protected SessionImage(String path) {
-        this(path, 300, 200, new byte[300 * 200]);
-    }
 
     public SessionImage(String path, int width, int height, byte[] file) {
         validateSize(file);
@@ -23,9 +18,24 @@ public class SessionImage {
         validateDimensions(width, height);
 
         this.path = path;
-        this.width = width;
-        this.height = height;
         this.file = file;
+    }
+
+    public SessionImage(String path, Blob blob) throws SQLException, IOException {
+        this(path, toByteArray(blob));
+    }
+
+    public SessionImage(String path, byte[] file) {
+        this.path = path;
+        this.file = file;
+    }
+
+    private static byte[] toByteArray(Blob blob) throws IOException, SQLException {
+        byte[] file = null;
+        if (blob != null) {
+            file = blob.getBinaryStream().readAllBytes();
+        }
+        return file;
     }
 
     private static void validateSize(byte[] file) {
@@ -34,7 +44,7 @@ public class SessionImage {
     }
 
     private static void validateExtension(String path) {
-        if (!ALLOWED_EXTENSIONS.contains(extractExtension(path)))
+        if (ImageExtension.notExist(extractExtension(path)))
             throw new IllegalArgumentException("File extension does not match");
     }
 
@@ -51,4 +61,18 @@ public class SessionImage {
         return (double) width / height;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    @Override
+    public String toString() {
+        return "SessionImage{" +
+                "path='" + path + '\'' +
+                '}';
+    }
 }

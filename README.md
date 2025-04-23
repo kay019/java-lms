@@ -73,7 +73,7 @@
 - [x] 유료 강의는 수강생이 결제한 금액과 수강료가 일치할 때 수강 신청이 가능하다.
 - [x] 강의 상태는 준비중, 모집중, 종료 3가지 상태를 가진다.
 - [x] 강의 수강신청은 강의 상태가 모집중일 때만 가능하다.
-- [x] 결제를 완료한 결제 정보는 payments 모듈을 통해 관리되며, 결제 정보는 Payment 객체에 담겨 반한된다.
+- [x] 결제를 완료한 결제 정보는 payments 모듈을 통해 관리되며, 결제 정보는 Payment 객체에 담겨 반환된다.
 
 ### 프로그래밍 요구사항
 > - DB 테이블 설계 없이 도메인 모델부터 구현한다.
@@ -84,4 +84,52 @@
 ### 코멘트
 - [x] Course - List<Session>에 final 키워드를 추가해서 불변성도 확보해주면 더욱 좋겠네요.
 - [x] Session - 무료강의, 일반강의를 나누어 팩터리 메서드를 제공하는 것도 방법이겠네요 😄
+- [ ] Session - price 가 음수로 주어진 경우에는 따로 예외처리가 필요없을까요?
 - [x] SessionImage - 확장자명은 고정으로 사용될 것 같아 보이는데, 상수로 분리하는 건 어떨까요?
+- [x] SessionImage - 확장자명을 enum class 로 관리하는 것도 방법이죠
+
+---
+## STEP3. 수강신청(DB 적용)
+### 프로그래밍 요구사항
+> - 앞 단계에서 구현한 도메인 모델을 DB 테이블과 매핑하고, 데이터를 저장한다.
+>   - CRUD 쿼리와 코드를 구현하는데 집중하기 보다 테이블을 설계하고 객체 매핑하는 부분에 집중한다.
+> - 성능보다 도메인 객체에 로직 구현하는 것을 목표로 연습한다. 
+>   - 객체 구조를 유지하기 위해 여러 번의 DB 쿼리를 실행해도 괜찮다.
+> - Payment는 테이블 매핑을 고려하지 않아도 된다.
+
+- [x] session 테이블 생성 및 매핑
+- [x] student 테이블 생성 및 매핑
+- [x] ns_user 매핑
+- [ ] question 매핑
+- [ ] answer 매핑
+- [ ] delete_history 매핑
+
+### 참고할 코드
+> - DB 테이블 추가 - src/main/resources/schema.sql
+> - 테이블에 샘플 데이터를 추가하고 싶다면 src/main/resources/data.sql 파일에 추가 가능함
+> - CRUD 코드
+>   - src/main/java 폴더의 nextstep.courses.infrastructure.JdbcCourseRepository
+>   - JdbcCourseRepository 샘플 코드는 Spring JDBC 라이브러리를 활용해 구현함
+> - CRUD 코드에 대한 테스트 코드
+>   - src/test/java 폴더의 nextstep.courses.infrastructure.CourseRepositoryTest
+
+### 코멘트
+
+- [x] Session > Entity 에서 id 외의 필드들은 시간에 따른 변화를 나타낼 뿐, 서로 다름을 의미하진 않죠.
+  - Java instance: 인스턴스 생성시 주어진 해시값으로 동등성을 비교한다.
+  - Value Object(VO): 모든 필드가 동등한지 비교한다.
+  - Entity: Identifier + VO. Identifier 만으로 동등성을 비교한다.
+- [ ] data.sql > NsUserTest.JAVAJIGI와 같이 static final 상수로 만들어서 사용하는 방식이 좋을까요?
+  - static final 사용과 테스트 픽스처 생성 두 테스트 방법 모두 각각의 장단점이 있고, 그에 따라 선택을 하면 좋을거 같은데요.
+- [x] Entity > 도메인 클래스의 필드 수 증가로 인한 가독성 저하
+  - createdAt, updatedAt 같은 경우 직접적인 비즈니스 보다는 운영 관점에서 필요한 공통 필드이기 때문에, 따로 추출해서 관리하는게 용이하겠네요.
+  - Spring Data JPA 에서 기본적으로 채택하는 형태를 이용해보는 건 어떨까요? id, createdAt, updatedAt 같이 모든 테이블에서 활용하는, 공통되는 필드를 모은 abstract class 를 하나 만들어 getter 까지도 제공해주는거죠.
+  - 가장 좋은 선택 방법은 함께 일하는 동료 개발자와 장단점을 의논하고 "이 프로젝트에는 이 테스트 방법이 어울리는 것 같아요. 이걸로 결정하죠." 라고 정하는 것 같아요 😄
+- [x] JdbcSessionRepository > simple jdbc insert 를 활용해봐도 좋을거 같습니다 😄
+- [x] JdbcStudentRepository > findById()로 객체를 조회하고 매핑하는 과정이 너무 복잡해졌습니다.
+  - 조금의 복잡도를 희생하지만 쿼리를 1번만 발생시키는 방법과 쿼리는 2번 발생하지만, 복잡도를 크게 낮추는 방법
+  - 결국 선택과 타협을 잘 하려면 우리 서버의 성능과, 우리 비즈니스의 특성을 잘 아는 것이 중요하겠네요 😄
+- [x] JdbcStudentRepository > DB 데이터를 도메인 객체로 매핑할 때 Getter를 사용하고 있는데, 혹시 Getter를 사용하지 않고 매핑하는 더 좋은 방법이 있을까요?
+  - MyBatis, JPA 를 도입하는 것이 가장 편리한데, 추가 기술 도입 의사가 없다면 BeanPropertyRowMapper 를 활용하는 것도 방법이겠네요! (다만 중간에 enum class 처리 등 학습해야할 요소가 늘어나겠네요.)
+  - 도메인 모델과 DB 테이블 모델을 2가지로 나눈다면 설계 복잡도가 살짝 올라가지만, 관리 복잡도가 획기적으로 내려가겠네요. 당연히 쿼리 호출 수가 늘어나고, 관리해야 할 클래스 파일 개수가 늘어납니다.
+

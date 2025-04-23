@@ -2,8 +2,12 @@ package nextstep.users.domain;
 
 import nextstep.qna.UnAuthorizedException;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static nextstep.courses.domain.model.Timestamped.toLocalDateTime;
 
 public class NsUser {
     public static final GuestNsUser GUEST_USER = new GuestNsUser();
@@ -18,23 +22,38 @@ public class NsUser {
 
     private String email;
 
+    private BigDecimal balance;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public NsUser() {
+    private NsUser() {
     }
 
     public NsUser(Long id, String userId, String password, String name, String email) {
-        this(id, userId, password, name, email, LocalDateTime.now(), null);
+        this(id, userId, password, name, email, LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public NsUser(Long id, String userId, String password, String name, BigDecimal balance) {
+        this(id, userId, password, name, null, balance, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(id, userId, password, name, email, new BigDecimal(0), createdAt, updatedAt);
+    }
+
+    public NsUser(Long id, String userId, String password, String name, String email, BigDecimal balance, Timestamp createdAt, Timestamp updatedAt) {
+        this(id, userId, password, name, email, balance, toLocalDateTime(createdAt), toLocalDateTime(updatedAt));
+    }
+
+    public NsUser(Long id, String userId, String password, String name, String email, BigDecimal balance, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.balance = balance;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -47,36 +66,28 @@ public class NsUser {
         return userId;
     }
 
-    public NsUser setUserId(String userId) {
-        this.userId = userId;
-        return this;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public NsUser setPassword(String password) {
-        this.password = password;
-        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public NsUser setName(String name) {
-        this.name = name;
-        return this;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public NsUser setEmail(String email) {
-        this.email = email;
-        return this;
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public void update(NsUser loginUser, NsUser target) {
@@ -113,6 +124,13 @@ public class NsUser {
                 email.equals(target.email);
     }
 
+    public synchronized void pay(Long price) {
+        if (balance.compareTo(BigDecimal.valueOf(price)) < 0) {
+            throw new IllegalArgumentException("not enough money");
+        }
+        balance = balance.subtract(BigDecimal.valueOf(price));
+    }
+
     public boolean isGuestUser() {
         return false;
     }
@@ -122,6 +140,18 @@ public class NsUser {
         public boolean isGuestUser() {
             return true;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        NsUser nsUser = (NsUser) o;
+        return Objects.equals(id, nsUser.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package nextstep.users.infrastructure;
 
 import nextstep.users.domain.NsUser;
+import nextstep.users.domain.NsUserTest;
 import nextstep.users.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
-public class UserRepositoryTest {
+class UserRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryTest.class);
 
     @Autowired
@@ -26,6 +27,17 @@ public class UserRepositoryTest {
     @BeforeEach
     void setUp() {
         userRepository = new JdbcUserRepository(jdbcTemplate);
+    }
+
+    @Test
+    void save() {
+        NsUser nsUser = NsUserTest.createNsUser(3L, 100_000L);
+        int count = userRepository.save(nsUser);
+        assertThat(count).isEqualTo(1);
+
+        Optional<NsUser> user = userRepository.findByUserId(nsUser.getUserId());
+        assertThat(user.isPresent()).isTrue();
+        assertThat(user.get().getBalance().compareTo(nsUser.getBalance())).isZero();
     }
 
     @Test
