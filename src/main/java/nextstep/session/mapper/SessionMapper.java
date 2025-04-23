@@ -9,9 +9,8 @@ import nextstep.session.domain.FreeSession;
 import nextstep.session.domain.PaidSession;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionDate;
+import nextstep.session.domain.SessionStatus;
 import nextstep.session.entity.SessionEntity;
-
-import static nextstep.session.domain.SessionStatus.valueOf;
 
 public class SessionMapper {
     private static final int FREE = 0;
@@ -29,7 +28,8 @@ public class SessionMapper {
         return new SessionEntity(
                 session.getId(),
                 session.getCourseId(),
-                session.getStatus().name(),
+                session.getStatus().getProgressStatusName(),
+                session.getStatus().getEnrollmentStatusName(),
                 session.getFee(),
                 session.getMaxCapacity(),
                 session.getSessionDate().getStartDate(),
@@ -42,7 +42,8 @@ public class SessionMapper {
         return new SessionEntity(
                 session.getId(),
                 session.getCourseId(),
-                session.getStatus().name(),
+                session.getStatus().getProgressStatusName(),
+                session.getStatus().getEnrollmentStatusName(),
                 FREE,
                 NO_LIMIT,
                 session.getSessionDate().getStartDate(),
@@ -77,7 +78,7 @@ public class SessionMapper {
         return new FreeSession.Builder()
             .id(entity.getId())
             .courseId(entity.getCourseId())
-            .status(valueOf(entity.getStatus()))
+            .status(new SessionStatus(entity.getProgressStatus(), entity.getEnrollmentStatus()))
             .sessionDate(sessionDate)
             .students(students)
             .build();
@@ -87,7 +88,7 @@ public class SessionMapper {
         return new PaidSession.Builder()
             .id(entity.getId())
             .courseId(entity.getCourseId())
-            .status(valueOf(entity.getStatus()))
+            .status(new SessionStatus(entity.getProgressStatus(), entity.getEnrollmentStatus()))
             .fee(entity.getFee())
             .maxCapacity(entity.getCapacity())
             .sessionDate(sessionDate)
