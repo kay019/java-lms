@@ -1,5 +1,6 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.domain.PremiumPlan;
 import nextstep.courses.domain.Student;
 import nextstep.courses.domain.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,14 +37,14 @@ class StudentRepositoryTest {
 
     @Test
     void 저장_테스트() {
-        Student student = new Student("sh", "sh@nextstep.com", 1000L);
+        Student student = new Student("sh", "sh@nextstep.com", 1000L, new PremiumPlan(true, true));
         int count = studentRepository.save(student);
         assertThat(count).isEqualTo(1);
     }
 
     @Test
     void id_검색_테스트() {
-        Student student = new Student("sh", "sh@nextstep.com", 1000L);
+        Student student = new Student("sh", "sh@nextstep.com", 1000L, new PremiumPlan(true, true));
         studentRepository.save(student);
         Student savedStudent = studentRepository.findById(1L).get();
         assertThat(savedStudent).isNotNull();

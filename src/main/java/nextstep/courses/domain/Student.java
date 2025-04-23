@@ -8,26 +8,28 @@ public class Student {
     private final String name;
     private final String email;
     private final Long budget;
+    private final PremiumPlan premiumPlan;
     private Sessions sessions;
 
-    public Student(Long id, String name, String email, Long budget, Sessions sessions) {
+    public Student(Long id, String name, String email, Long budget, PremiumPlan premiumPlan, Sessions sessions) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.budget = budget;
+        this.premiumPlan = premiumPlan;
         this.sessions = sessions;
     }
 
-    public Student(String name, String email, Long budget) {
-        this(0L, name, email, budget);
+    public Student(String name, String email, Long budget, PremiumPlan premiumPlan) {
+        this(0L, name, email, budget, premiumPlan);
     }
 
-    public Student(Long id, String name, String email, Long budget) {
-        this(id, name, email, budget, new Sessions(new ArrayList<>()));
+    public Student(Long id, String name, String email, Long budget, PremiumPlan premiumPlan) {
+        this(id, name, email, budget, premiumPlan, new Sessions(new ArrayList<>()));
     }
 
     public Student withSessions(Sessions sessions) {
-        return new Student(id, name, email, budget, sessions);
+        return new Student(id, name, email, budget, premiumPlan, sessions);
     }
 
     public Long getId() {
@@ -51,7 +53,7 @@ public class Student {
     }
 
     public boolean isAlreadyRegistered(Session session) {
-        return sessions.isAlreadyIncluded(session);
+        return sessions.contains(session);
     }
 
     public void registerSession(Session session) {
@@ -60,5 +62,9 @@ public class Student {
 
     public List<Long> getSessionIds() {
         return sessions.getSessionIds();
+    }
+
+    public PremiumPlan getPremiumPlan() {
+        return premiumPlan;
     }
 }

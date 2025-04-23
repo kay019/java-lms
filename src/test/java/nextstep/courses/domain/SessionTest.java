@@ -15,7 +15,7 @@ class SessionTest {
                 null,
                 new SessionStatus(Phase.READY, RecruitStatus.OPEN)
         );
-        Student student = new Student("baek", "sh@github.com", 10000L);
+        Student student = new Student("baek", "sh@github.com", 10000L, new PremiumPlan(true, true));
         assertDoesNotThrow(() -> session.registerStudent(student));
     }
 
@@ -26,7 +26,7 @@ class SessionTest {
                 null,
                 new SessionStatus(Phase.READY, RecruitStatus.CLOSED)
         );
-        Student student = new Student("baek", "sh@github.com", 10000L);
+        Student student = new Student("baek", "sh@github.com", 10000L, new PremiumPlan(true, true));
         assertThatThrownBy(() -> session.registerStudent(student))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("세션이 '모집 중' 일때만 수강 신청이 가능합니다.");
@@ -42,8 +42,8 @@ class SessionTest {
                 1,
                 10000L
         );
-        Student student1 = new Student("baek", "sh@github.com", 10000L);
-        Student student2 = new Student("shin", "hj@github.com", 10000L);
+        Student student1 = new Student("baek", "sh@github.com", 10000L, new PremiumPlan(true, true));
+        Student student2 = new Student("shin", "hj@github.com", 10000L, new PremiumPlan(true, true));
         session.registerStudent(student1);
         assertThatThrownBy(() -> session.registerStudent(student2))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -60,7 +60,7 @@ class SessionTest {
                 1,
                 10000L
         );
-        Student student = new Student("baek", "sh@github.com", 1000L);
+        Student student = new Student("baek", "sh@github.com", 1000L, new PremiumPlan(true, true));
         assertThatThrownBy(() -> session.registerStudent(student))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("예산이 부족하여 강의를 신청할 수 없습니다.");
@@ -76,7 +76,7 @@ class SessionTest {
                 3,
                 10000L
         );
-        Student student1 = new Student("baek", "sh@github.com", 10000L);
+        Student student1 = new Student("baek", "sh@github.com", 10000L, new PremiumPlan(true, true));
         session.registerStudent(student1);
         assertThatThrownBy(() -> session.registerStudent(student1))
                 .isInstanceOf(IllegalStateException.class)

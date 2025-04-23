@@ -15,9 +15,9 @@ class SessionsTest {
 
         Sessions sessions = new Sessions(List.of(session1, session2));
 
-        assertThat(sessions.isAlreadyIncluded(session1)).isTrue();
-        assertThat(sessions.isAlreadyIncluded(session2)).isTrue();
-        assertThat(sessions.isAlreadyIncluded(session3)).isFalse();
+        assertThat(sessions.contains(session1)).isTrue();
+        assertThat(sessions.contains(session2)).isTrue();
+        assertThat(sessions.contains(session3)).isFalse();
     }
 
     @Test
@@ -29,8 +29,8 @@ class SessionsTest {
         Sessions sessions = new Sessions(List.of(session1, session2));
         Sessions updatedSessions = sessions.addSession(session3);
 
-        assertThat(updatedSessions.isAlreadyIncluded(session1)).isTrue();
-        assertThat(updatedSessions.isAlreadyIncluded(session2)).isTrue();
-        assertThat(updatedSessions.isAlreadyIncluded(session3)).isTrue();
+        assertThat(updatedSessions.contains(session1)).isTrue();
+        assertThat(updatedSessions.contains(session2)).isTrue();
+        assertThat(updatedSessions.contains(session3)).isTrue();
     }
 }

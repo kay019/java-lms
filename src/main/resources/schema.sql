@@ -54,6 +54,8 @@ create table student (
     name varchar(20) not null,
     email varchar(50),
     budget bigint,
+    wooteco boolean,
+    wootecopro boolean,
     primary key (id)
 );
 

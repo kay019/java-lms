@@ -1,5 +1,6 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.domain.PremiumPlan;
 import nextstep.courses.domain.Student;
 import nextstep.courses.domain.StudentRepository;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -20,8 +21,14 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public int save(Student student) {
-        String sql = "insert into student (name, email, budget) values(?, ?, ?)";
-        int res = jdbcTemplate.update(sql, student.getName(), student.getEmail(), student.getBudget());
+        String sql = "insert into student (name, email, budget, wooteco, wootecopro) values(?, ?, ?, ?, ?)";
+        int res = jdbcTemplate.update(sql,
+                student.getName(),
+                student.getEmail(),
+                student.getBudget(),
+                student.getPremiumPlan().isWooteco(),
+                student.getPremiumPlan().isWootecopro()
+        );
         saveSessions(student.getId(), student.getSessionIds());
         return res;
     }
@@ -49,7 +56,9 @@ public class JdbcStudentRepository implements StudentRepository {
         String name = rs.getString("name");
         String email = rs.getString("email");
         Long budget = rs.getLong("budget");
+        boolean wooteco = rs.getBoolean("wooteco");
+        boolean wootecopro = rs.getBoolean("wootecopro");
 
-        return new Student(id, name, email, budget);
+        return new Student(id, name, email, budget, new PremiumPlan(wooteco, wootecopro));
     }
 }

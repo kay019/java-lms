@@ -11,7 +11,7 @@ public class Sessions {
         this.values = values;
     }
 
-    public boolean isAlreadyIncluded(Session session) {
+    public boolean contains(Session session) {
         Long id = session.getId();
         return values.stream().anyMatch(value -> value.getId().equals(id));
     }
