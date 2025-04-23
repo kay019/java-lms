@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +28,11 @@ public class JdbcSessionRepository implements SessionRepository {
     private final int NAME = 3;
 
     private final JdbcOperations jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Transactional
@@ -43,17 +47,21 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     private int saveSession(SessionEntity entity) {
-        String sql = "INSERT INTO session (id, course_id, progress_status, enrollment_status, fee, capacity, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session " +
+            "(id, course_id, progress_status, enrollment_status, fee, capacity, start_date, end_date) " +
+            "VALUES (:id, :course_id, :progress_status, :enrollment_status, :fee, :capacity, :start_date, :end_date)";
 
-        return jdbcTemplate.update(sql,
-            entity.getId(),
-            entity.getCourseId(),
-            entity.getProgressStatus(),
-            entity.getEnrollmentStatus(),
-            entity.getFee(),
-            entity.getCapacity(),
-            entity.getStartDate(),
-            entity.getEndDate());
+        MapSqlParameterSource params = new MapSqlParameterSource()
+            .addValue(SessionEntity.COL_ID, entity.getId())
+            .addValue(SessionEntity.COL_COURSE_ID, entity.getCourseId())
+            .addValue(SessionEntity.COL_PROGRESS_STATUS, entity.getProgressStatus())
+            .addValue(SessionEntity.COL_ENROLLMENT_STATUS, entity.getEnrollmentStatus())
+            .addValue(SessionEntity.COL_FEE, entity.getFee())
+            .addValue(SessionEntity.COL_CAPACITY, entity.getCapacity())
+            .addValue(SessionEntity.COL_START_DATE, entity.getStartDate())
+            .addValue(SessionEntity.COL_END_DATE, entity.getEndDate());
+
+        return namedParameterJdbcTemplate.update(sql, params);
     }
 
     private int[] saveEnrollments(SessionEntity entity) {

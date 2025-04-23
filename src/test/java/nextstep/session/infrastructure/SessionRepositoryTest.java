@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import nextstep.enrollment.domain.Student;
 import nextstep.session.domain.PaidSession;
@@ -30,11 +31,14 @@ class SessionRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     private SessionRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = new JdbcSessionRepository(jdbcTemplate);
+        repository = new JdbcSessionRepository(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
     @Test
