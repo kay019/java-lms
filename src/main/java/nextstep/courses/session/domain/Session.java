@@ -12,7 +12,6 @@ public class Session {
     private final Long courseId;
     private final SessionDate sessionDate;
     private final SessionCoverImages sessionCoverImages;
-    private final SessionCoverImage sessionCoverImage;
     private final SessionStatus sessionStatus;
     private final EnrollStatus enrollStatus;
     private final Enrollments enrollments;
@@ -26,7 +25,6 @@ public class Session {
         this.courseId = courseId;
         this.sessionDate = sessionDate;
         this.sessionCoverImages = sessionCoverImages;
-        this.sessionCoverImage = sessionCoverImages.mainImage();
         this.sessionStatus = sessionStatus;
         this.enrollStatus = enrollStatus;
         this.sessionType = sessionType;
@@ -90,10 +88,6 @@ public class Session {
 
     public SessionDate getSessionDate() {
         return sessionDate;
-    }
-
-    public SessionCoverImage getSessionCoverImage() {
-        return sessionCoverImage;
     }
 
     public SessionStatus getSessionStatus() {

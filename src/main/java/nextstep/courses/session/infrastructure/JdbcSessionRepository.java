@@ -21,19 +21,13 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session) {
-        String sql = "INSERT INTO session (course_id, start_date, end_date, image_size, image_type, image_width, image_height, status, enroll_status, type, max_participants, fee) " +
+        String sql = "INSERT INTO session (course_id, start_date, end_date, status, enroll_status, type, max_participants, fee) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         SessionDate date = session.getSessionDate();
-        SessionCoverImage image = session.getSessionCoverImage();
-
         return jdbcTemplate.update(sql,
                 session.getCourseId(),
                 date.getStartDate(),
                 date.getEndDate(),
-                image.getSize(),
-                image.getType().name(),
-                image.getWidth(),
-                image.getHeight(),
                 session.getSessionStatus().name(),
                 session.getEnrollStatus().name(),
                 session.getSessionType().name(),
@@ -44,7 +38,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Session findById(Long id) {
-        String sql = "select id, course_id, start_date, end_date, image_size, image_type, image_width, image_height, status, enroll_status, type, max_participants, fee from session where id = ?";
+        String sql = "select id, course_id, start_date, end_date, status, enroll_status, type, max_participants, fee from session where id = ?";
         return jdbcTemplate.queryForObject(sql, mapRowToSession(), id);
 
     }
