@@ -44,12 +44,10 @@ public class Course {
         this.requiresSelection = requiresSelection;
     }
 
-    public boolean canEnrollRequireSelection(boolean isSelectedUser) {
+    public void validateEnrollRequireSelection(boolean isSelectedUser) {
         if (!isSelectedUser) {
             throw new IllegalArgumentException("선발되지 않은 유저는 해당 코스를 수강할 수 없습니다.");
-        }
-        return requiresSelection;
-    }
+        }}
 
     public String getTitle() {
         return title;

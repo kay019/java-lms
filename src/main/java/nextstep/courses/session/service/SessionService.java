@@ -29,10 +29,10 @@ public class SessionService {
         Course course = courseRepository.findById(courseId);
         Session session = sessionRepository.findById(sessionId);
         NsUser user = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException(userId + " : 해당 유저가 존재하지 않습니다."));
-        boolean isSelectedUser = selectedUserRepository.existsByCourseIdAndUserId(courseId, Long.parseLong(userId));
 
-        // 선발 코스 강의일 경우 유저 체크
-        if (course.canEnrollRequireSelection(isSelectedUser)) {
+        if (course.getRequiresSelection()) {
+            boolean isSelectedUser = selectedUserRepository.existsByCourseIdAndUserId(courseId, user.getId());
+            course.validateEnrollRequireSelection(isSelectedUser);
             return session.enrollToSelectedCourse(payment, user);
         }
         // 일반 코스 강의는 바로 수강 가능

@@ -10,8 +10,6 @@ public class CourseTest {
     void 선발강의는_선발된_유저만_가능() {
         Course course = Course.selective("선발 코스", 1L);
         Assertions.assertThatIllegalArgumentException()
-                .isThrownBy(() -> course.canEnrollRequireSelection(false));
-
-        Assertions.assertThat(course.canEnrollRequireSelection(true)).isTrue();
+                .isThrownBy(() -> course.validateEnrollRequireSelection(false));
     }
 }
