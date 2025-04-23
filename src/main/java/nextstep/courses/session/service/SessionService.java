@@ -25,6 +25,7 @@ public class SessionService {
 
     @Resource(name = "selectedUserRepository")
     private SelectedUserRepository selectedUserRepository;
+
     public Enrollment enrollSession(Long courseId, Long sessionId, String userId, Payment payment) {
         Course course = courseRepository.findById(courseId);
         Session session = sessionRepository.findById(sessionId);
@@ -32,10 +33,16 @@ public class SessionService {
 
         if (course.getRequiresSelection()) {
             boolean isSelectedUser = selectedUserRepository.existsByCourseIdAndUserId(courseId, user.getId());
-            course.validateEnrollRequireSelection(isSelectedUser);
+            validateSelectedUser(isSelectedUser);
             return session.enrollToSelectedCourse(payment, user);
         }
         // 일반 코스 강의는 바로 수강 가능
         return session.enrollToGeneralCourse(payment, user);
+    }
+
+    private static void validateSelectedUser(boolean isSelectedUser) {
+        if (!isSelectedUser) {
+            throw new IllegalArgumentException("선발되지 않은 유저는 해당 코스를 수강할 수 없습니다.");
+        }
     }
 }
