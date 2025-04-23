@@ -4,24 +4,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 
+import java.util.stream.Stream;
+import nextstep.courses.domain.session.inner.EnrollmentStatus;
 import nextstep.courses.domain.session.inner.FreeSessionType;
 import nextstep.courses.domain.session.inner.PaidSessionType;
 import nextstep.courses.domain.session.inner.SessionStatus;
 import nextstep.payments.domain.Payment;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class SessionTest {
-    public static final Session SESSION1 = new Session(1L, 1L, "free1", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.OPEN, 0);
-    public static final Session SESSION2 = new Session(2L, 1L, "paid1", new PaidSessionType(10, 10000), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.OPEN, 0);
-    public static final Session SESSION3 = new Session(3L, 1L, "free2", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.CLOSED, 0);
+    public static final Session SESSION1 = new Session(1L, 1L, "free1", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.PREPARING, EnrollmentStatus.RECRUITING, 0);
+    public static final Session SESSION2 = new Session(2L, 1L, "paid1", new PaidSessionType(10, 10000), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.IN_PROGRESS, EnrollmentStatus.RECRUITING, 0);
+    public static final Session SESSION3 = new Session(3L, 1L, "free2", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.COMPLETED, EnrollmentStatus.NOT_RECRUITING, 0);
+    public static final Session SESSION4 = new Session(4L, 1L, "free3", new FreeSessionType(), LocalDate.of(2023, 10, 1), LocalDate.of(2023, 10, 31), SessionStatus.PREPARING, EnrollmentStatus.NOT_RECRUITING, 0);
 
-    @Test
-    void 수강신청상태(){
-        boolean enroll1 = SESSION1.enroll(new Payment());
-        assertThat(enroll1).isTrue();
+    @ParameterizedTest
+    @MethodSource("수강신청_예상")
+    void 수강신청상태(Session session, SessionEnrollment expected) {
+        SessionEnrollment result = session.enroll(new Payment("1", 1L, 1L, 10000L));
+        assertThat(result).isEqualTo(expected);
+    }
 
-        boolean enroll3 = SESSION3.enroll(new Payment());
-        assertThat(enroll3).isFalse();
+    static Stream<Arguments> 수강신청_예상() {
+        return Stream.of(
+                Arguments.of(SESSION1, SessionEnrollment.requestEnroll(1L, 1L)),
+                        Arguments.of(SESSION2, SessionEnrollment.requestEnroll(2L, 1L)),
+                        Arguments.of(SESSION3, SessionEnrollment.notAvailableEnroll(3L, 1L)),
+                        Arguments.of(SESSION4, SessionEnrollment.notAvailableEnroll(4L, 1L))
+        );
     }
 
 }

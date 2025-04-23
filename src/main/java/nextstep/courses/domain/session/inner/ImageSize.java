@@ -30,4 +30,16 @@ public class ImageSize {
             throw new IllegalArgumentException("이미지의 용량이 너무 큽니다.");
         }
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public long getSize() {
+        return size;
+    }
 }

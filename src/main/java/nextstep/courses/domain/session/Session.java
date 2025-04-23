@@ -2,6 +2,7 @@ package nextstep.courses.domain.session;
 
 import java.time.LocalDate;
 
+import nextstep.courses.domain.session.inner.EnrollmentStatus;
 import nextstep.courses.domain.session.inner.SessionDate;
 import nextstep.courses.domain.session.inner.SessionStatus;
 import nextstep.courses.domain.session.inner.SessionType;
@@ -21,16 +22,19 @@ public class Session {
 
     private SessionStatus status;
 
+    private EnrollmentStatus enrollmentStatus;
+
     private int enrollmentCount;
 
     public Session(Long id, Long courseId, String title, SessionType sessionType, LocalDate startDate,
-            LocalDate finishDate, SessionStatus status, int enrollmentCount) {
+            LocalDate finishDate, SessionStatus status, EnrollmentStatus enrollmentStatus, int enrollmentCount) {
         this.id = id;
         this.courseId = courseId;
         this.title = title;
         this.sessionType = sessionType;
         this.sessionDate = new SessionDate(startDate, finishDate);
         this.status = status;
+        this.enrollmentStatus = enrollmentStatus;
         this.enrollmentCount = enrollmentCount;
     }
 
@@ -38,17 +42,16 @@ public class Session {
         return this.enrollmentCount >= enrollmentCount;
     }
 
-    public boolean enroll(Payment payment) {
-        if (status.canEnroll() && sessionType.enroll(payment, this)) {
-            enrollUser(payment.getNsUserId());
-            return true;
+    public SessionEnrollment enroll(Payment payment) {
+        if (enrollmentStatus.canEnroll() && sessionType.enroll(payment, this)) {
+//            enrollUser(payment.getNsUserId());
+            return SessionEnrollment.requestEnroll(id, payment.getNsUserId());
         }
 
-        return false;
+        return SessionEnrollment.notAvailableEnroll(id, payment.getNsUserId());
     }
 
-    private void enrollUser(Long nsUserId) {
-        // 수강 신청 여부를 DB에 등록? 수강신청한 유저 명단을 어떻게 관리해야 할지 요구 사항 명확하지 않음
+    public void approveEnroll() {
         enrollmentCount++;
     }
 
@@ -82,6 +85,10 @@ public class Session {
 
     public String getStatus() {
         return status.name();
+    }
+
+    public String getEnrollmentStatus() {
+        return enrollmentStatus.name();
     }
 
     public int getEnrollmentCount() {
