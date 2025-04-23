@@ -35,7 +35,7 @@ public class Enrollment {
 
     public void approve() {
         if (status != EnrollmentStatus.APPLIED) {
-            throw new IllegalStateException("신청 상태에서만 승인할 수 있습니다.");
+            throw new IllegalArgumentException("신청 상태에서만 승인할 수 있습니다.");
         }
         this.status = EnrollmentStatus.APPROVED;
     }
