@@ -28,11 +28,11 @@ public class JdbcCourseRepository implements CourseRepository {
         String sql = "select id, title, creator_id, created_at, updated_at, requires_selection from course where id = ?";
         RowMapper<Course> rowMapper = (rs, rowNum) ->
                 new Course(
-                        rs.getLong(1),
-                        rs.getString(2),
-                        rs.getLong(3),
-                        toLocalDateTime(rs.getTimestamp(4)),
-                        toLocalDateTime(rs.getTimestamp(5)),
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getLong("creator_id"),
+                        toLocalDateTime(rs.getTimestamp("created_at")),
+                        toLocalDateTime(rs.getTimestamp("updated_at")),
                         null,
                         rs.getBoolean("requires_selection")
                 );
