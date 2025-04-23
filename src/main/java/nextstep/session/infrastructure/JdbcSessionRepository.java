@@ -43,12 +43,13 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     private int saveSession(SessionEntity entity) {
-        String sql = "INSERT INTO session (id, course_id, status, fee, capacity, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session (id, course_id, progress_status, enrollment_status, fee, capacity, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         return jdbcTemplate.update(sql,
             entity.getId(),
             entity.getCourseId(),
-            entity.getStatus(),
+            entity.getProgressStatus(),
+            entity.getEnrollmentStatus(),
             entity.getFee(),
             entity.getCapacity(),
             entity.getStartDate(),
@@ -85,14 +86,15 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     private SessionEntity selectSession(long id, List<Student> students) {
-        String sql = "SELECT id, course_id, status, fee, capacity, start_date, end_date FROM session WHERE id = ?";
+        String sql = "SELECT id, course_id, progress_status, enrollment_status, fee, capacity, start_date, end_date FROM session WHERE id = ?";
 
         return jdbcTemplate.queryForObject(
             sql,
             (rs, rowNum) -> new SessionEntity(
                 rs.getLong(SessionEntity.COL_ID),
                 rs.getLong(SessionEntity.COL_COURSE_ID),
-                rs.getString(SessionEntity.COL_STATUS),
+                rs.getString(SessionEntity.COL_PROGRESS_STATUS),
+                rs.getString(SessionEntity.COL_ENROLLMENT_STATUS),
                 rs.getInt(SessionEntity.COL_FEE),
                 rs.getInt(SessionEntity.COL_CAPACITY),
                 rs.getTimestamp(SessionEntity.COL_START_DATE).toLocalDateTime().toLocalDate(),

@@ -12,7 +12,8 @@ import static java.util.stream.Collectors.toList;
 public class SessionEntity {
     public static final String COL_ID = "id";
     public static final String COL_COURSE_ID = "course_id";
-    public static final String COL_STATUS = "status";
+    public static final String COL_PROGRESS_STATUS = "progress_status";
+    public static final String COL_ENROLLMENT_STATUS = "enrollment_status";
     public static final String COL_FEE = "fee";
     public static final String COL_CAPACITY = "capacity";
     public static final String COL_START_DATE = "start_date";
@@ -20,17 +21,19 @@ public class SessionEntity {
 
     private final long id;
     private final long courseId;
-    private final String status;
+    private final String progressStatus;
+    private final String enrollmentStatus;
     private final int fee;
     private final int capacity;
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final List<StudentEntity> studentEntities;
 
-    public SessionEntity(long id, long courseId, String status, int fee, int capacity, LocalDate startDate, LocalDate endDate, List<Student> students) {
+    public SessionEntity(long id, long courseId, String progressStatus, String enrollmentStatus, int fee, int capacity, LocalDate startDate, LocalDate endDate, List<Student> students) {
         this.id = id;
         this.courseId = courseId;
-        this.status = status;
+        this.progressStatus = progressStatus;
+        this.enrollmentStatus = enrollmentStatus;
         this.fee = fee;
         this.capacity = capacity;
         this.startDate = startDate;
@@ -54,8 +57,12 @@ public class SessionEntity {
         return courseId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getProgressStatus() {
+        return progressStatus;
+    }
+
+    public String getEnrollmentStatus() {
+        return enrollmentStatus;
     }
 
     public int getFee() {
