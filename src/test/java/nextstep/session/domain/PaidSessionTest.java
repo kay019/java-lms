@@ -11,11 +11,13 @@ import nextstep.enrollment.domain.Enrollment;
 import nextstep.enrollment.domain.Student;
 import nextstep.payments.domain.Payment;
 import nextstep.session.exception.PaidDuplicateStudentEnrollmentException;
-import nextstep.session.exception.PaidSessionInvalidFeeException;
 import nextstep.session.exception.PaidSessionCapacityExceededException;
+import nextstep.session.exception.PaidSessionInvalidFeeException;
 import nextstep.session.exception.PaidSessionNotEnrollingException;
 
-import static nextstep.session.domain.SessionStatus.ENROLLING;
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.EnrollmentStatus.NOT_ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static nextstep.users.domain.NsUserTest.SANJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +31,7 @@ class PaidSessionTest {
     @BeforeEach
     void setUp() {
         student = new Student(1, JAVAJIGI.getId(), 1, JAVAJIGI.getName());
-        status = ENROLLING;
+        status = new SessionStatus(IN_PROGRESS, ENROLLING);
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
 
@@ -58,7 +60,7 @@ class PaidSessionTest {
     void enroll_정상_등록() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
-            .status(ENROLLING)
+            .status(status)
             .fee(30000)
             .students(new ArrayList<>())
             .build();
@@ -77,7 +79,7 @@ class PaidSessionTest {
     void enroll_잘못된_결제금액_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .fee(30000)
-            .status(ENROLLING)
+            .status(status)
             .build();
 
         Payment wrongAmountPayment = createPayment(25000);
@@ -91,7 +93,7 @@ class PaidSessionTest {
     void enroll_정원초과_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
-            .status(ENROLLING)
+            .status(status)
             .fee(30000)
             .students(new ArrayList<>())
             .build();
@@ -109,7 +111,7 @@ class PaidSessionTest {
     @DisplayName("상태가 ENROLLING이 아니면 예외가 발생한다")
     void enroll_상태가_ENROLLING이_아닐때_예외발생() {
         PaidSession session = new PaidSession.Builder()
-            .status(SessionStatus.CLOSED)
+            .status(new SessionStatus(IN_PROGRESS, NOT_ENROLLING))
             .fee(30000)
             .build();
 
@@ -124,7 +126,7 @@ class PaidSessionTest {
     void enroll_학생이_중복으로_등록할때_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
-            .status(ENROLLING)
+            .status(status)
             .fee(30000)
             .students(new ArrayList<>())
             .build();

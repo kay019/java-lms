@@ -14,7 +14,9 @@ import nextstep.session.exception.FreeSessionDuplicateStudentException;
 import nextstep.session.exception.FreeSessionInvalidEnrollmentException;
 import nextstep.session.exception.FreeSessionNotEnrollingException;
 
-import static nextstep.session.domain.SessionStatus.CLOSED;
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.CLOSED;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,7 +29,7 @@ class FreeSessionTest {
     @BeforeEach
     void setUp() {
         student = new Student(1, JAVAJIGI.getId(), 1, JAVAJIGI.getName());
-        status = SessionStatus.ENROLLING;
+        status = new SessionStatus(IN_PROGRESS, ENROLLING);
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
 
@@ -92,7 +94,7 @@ class FreeSessionTest {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
             .courseId(1L)
-            .status(CLOSED)
+            .status(new SessionStatus(CLOSED, ENROLLING))
             .sessionDate(sessionDate)
             .build();
 

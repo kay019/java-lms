@@ -6,8 +6,6 @@ import nextstep.session.exception.FreeSessionEnrollmentRequiredException;
 import nextstep.session.exception.FreeSessionInvalidEnrollmentException;
 import nextstep.session.exception.FreeSessionNotEnrollingException;
 
-import static nextstep.session.domain.SessionStatus.ENROLLING;
-
 public class FreeSession extends Session {
     public static final int FREE = 0;
 
@@ -33,7 +31,7 @@ public class FreeSession extends Session {
             throw new FreeSessionEnrollmentRequiredException();
         }
 
-        if (!ENROLLING.equals(getStatus())) {
+        if (getStatus().isEnrollmentUnavailable()) {
             throw new FreeSessionNotEnrollingException();
         }
 

@@ -19,6 +19,8 @@ import nextstep.session.domain.SessionDate;
 import nextstep.session.domain.SessionStatus;
 import nextstep.session.repository.SessionRepository;
 
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
@@ -41,7 +43,7 @@ class SessionRepositoryTest {
         PaidSession paidSession = new PaidSession.Builder()
             .id(1L)
             .courseId(100L)
-            .status(SessionStatus.ENROLLING)
+            .status(new SessionStatus(IN_PROGRESS, ENROLLING))
             .fee(50000)
             .maxCapacity(30)
             .sessionDate(new SessionDate(
