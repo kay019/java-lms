@@ -76,5 +76,6 @@ create table student (
     user_id bigint not null,
     session_id bigint not null,
     name varchar(20) not null,
+    status varchar(20) not null,
     primary key (id)
 );

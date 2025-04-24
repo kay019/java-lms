@@ -29,13 +29,15 @@ class StudentMapperTest {
                 StudentEntity::getId,
                 StudentEntity::getUserId,
                 StudentEntity::getSessionId,
-                StudentEntity::getName
+                StudentEntity::getName,
+                StudentEntity::getStatus
             )
             .containsExactly(
                 1L,
                 1L,
                 200L,
-                "name"
+                "name",
+                "PENDING"
             );
     }
 }

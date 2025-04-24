@@ -8,7 +8,8 @@ public class StudentMapper {
         return new StudentEntity(student.getId(),
             student.getUserId(),
             student.getSessionId(),
-            student.getName());
+            student.getName(),
+            student.getStatus().name());
     }
 
     public Student toDomain(StudentEntity entity) {

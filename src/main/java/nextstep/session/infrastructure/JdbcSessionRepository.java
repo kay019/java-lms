@@ -26,6 +26,7 @@ public class JdbcSessionRepository implements SessionRepository {
     private final int SESSION_ID = 1;
     private final int USER_ID = 2;
     private final int NAME = 3;
+    private final int STATUS = 4;
 
     private final JdbcOperations jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -65,7 +66,7 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     private int[] saveEnrollments(SessionEntity entity) {
-        String sql = "INSERT INTO student (session_id, user_id, name) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO student (session_id, user_id, name, status) VALUES (?, ?, ?, ?)";
 
         return jdbcTemplate.batchUpdate(sql,
             new BatchPreparedStatementSetter() {
@@ -75,6 +76,7 @@ public class JdbcSessionRepository implements SessionRepository {
                     ps.setLong(SESSION_ID, studentEntity.getSessionId());
                     ps.setLong(USER_ID, studentEntity.getUserId());
                     ps.setString(NAME, studentEntity.getName());
+                    ps.setString(STATUS, studentEntity.getStatus());
                 }
 
                 @Override
@@ -115,7 +117,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private List<Student> selectStudents(long id) {
         StudentMapper mapper = new StudentMapper();
-        String sql = "SELECT id, user_id, session_id, name FROM student WHERE session_id = ?";
+        String sql = "SELECT id, user_id, session_id, name, status FROM student WHERE session_id = ?";
 
         return jdbcTemplate.query(
             sql,
@@ -123,7 +125,8 @@ public class JdbcSessionRepository implements SessionRepository {
                 rs.getLong(StudentEntity.COL_ID),
                 rs.getLong(StudentEntity.COL_USER_ID),
                 rs.getLong(StudentEntity.COL_SESSION_ID),
-                rs.getString(StudentEntity.COL_NAME)
+                rs.getString(StudentEntity.COL_NAME),
+                rs.getString(StudentEntity.COL_STATUS)
             ),
             id
         ).stream()
