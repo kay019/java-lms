@@ -1,6 +1,5 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.domain.image.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
@@ -13,8 +12,8 @@ public class FreeSession extends Session {
         super(id, status, date, createdAt, updatedAt);
     }
 
-    public FreeSession(Long id, CoverImage coverImage, SessionStatus status, SessionDate date) {
-        super(id, coverImage, status, date);
+    public FreeSession(Long id, SessionStatus status, SessionDate date) {
+        super(id, status, date);
     }
 
     @Override

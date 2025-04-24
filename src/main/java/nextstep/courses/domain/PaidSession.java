@@ -1,6 +1,5 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.domain.image.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
@@ -18,8 +17,8 @@ public class PaidSession extends Session {
         this.maxStudent = maxStudent;
     }
 
-    public PaidSession(Long id, CoverImage coverImage, SessionStatus status, SessionDate date, int fee, int maxStudent) {
-        super(id, coverImage, status, date);
+    public PaidSession(Long id, SessionStatus status, SessionDate date, int fee, int maxStudent) {
+        super(id, status, date);
         this.fee = fee;
         this.maxStudent = maxStudent;
     }

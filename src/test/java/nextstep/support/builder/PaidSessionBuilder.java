@@ -3,13 +3,10 @@ package nextstep.support.builder;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.SessionDate;
 import nextstep.courses.domain.SessionStatus;
-import nextstep.courses.domain.image.CoverImage;
-import nextstep.support.fixture.CoverImageFixture;
 import nextstep.support.fixture.SessionDateFixture;
 
 public class PaidSessionBuilder {
     private Long id = 1L;
-    private CoverImage coverImage = CoverImageFixture.create();
     private SessionStatus status = SessionStatus.RECRUITING;
     private SessionDate date = SessionDateFixture.create();
     private int fee = 10_000;
@@ -17,11 +14,6 @@ public class PaidSessionBuilder {
 
     public PaidSessionBuilder id(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public PaidSessionBuilder coverImage(CoverImage coverImage) {
-        this.coverImage = coverImage;
         return this;
     }
 
@@ -41,7 +33,7 @@ public class PaidSessionBuilder {
     }
 
     public PaidSession build() {
-        return new PaidSession(id, coverImage, status, date, fee, maxStudent);
+        return new PaidSession(id, status, date, fee, maxStudent);
     }
 
 }
