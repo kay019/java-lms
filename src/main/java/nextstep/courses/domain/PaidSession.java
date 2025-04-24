@@ -1,32 +1,35 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
-import nextstep.students.domain.Student;
-import nextstep.students.domain.Students;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PaidSession extends Session {
     private final Integer capacity;
     private final Long fee;
 
-    public PaidSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee, Students students) {
-        super(id, startDate, endDate, coverImage, status, SessionType.PAID, students);
+    public PaidSession(Long id, Period period, CoverImages coverImages, SessionStatus status, ParticipantType participantType, Integer capacity, Long fee, Students students) {
+        super(id, period, coverImages, status, new SessionType(PricingType.PAID, participantType), students);
         this.capacity = capacity;
         this.fee = fee;
     }
 
-    public PaidSession(Long id, LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee) {
-        this(id, startDate, endDate, coverImage, status, capacity, fee, new Students(new ArrayList<>()));
+    public PaidSession(Long id, Period period, CoverImages coverImages, SessionStatus status, ParticipantType participantType, Integer capacity, Long fee) {
+        this(id, period, coverImages, status, participantType, capacity, fee, new Students(new ArrayList<>()));
     }
 
-    public PaidSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee) {
-        this(startDate, endDate, coverImage, status, capacity, fee, new Students(new ArrayList<>()));
+    public PaidSession(Period period, CoverImages coverImages, SessionStatus status, ParticipantType participantType, Integer capacity, Long fee) {
+        this(0L, period, coverImages, status, participantType, capacity, fee, new Students(new ArrayList<>()));
     }
 
-    public PaidSession(LocalDate startDate, LocalDate endDate, CoverImage coverImage, SessionStatus status, Integer capacity, Long fee, Students students) {
-        this(0L, startDate, endDate, coverImage, status, capacity, fee, students);
+    @Override
+    public PaidSession withStudents(Students students) {
+        return new PaidSession(id, period, coverImages, status, type.getParticipantType(), capacity, fee, students);
+    }
+
+    @Override
+    public PaidSession withCoverImages(CoverImages coverImages) {
+        return new PaidSession(id, period, coverImages, status, type.getParticipantType(), capacity, fee, students);
     }
 
     @Override
