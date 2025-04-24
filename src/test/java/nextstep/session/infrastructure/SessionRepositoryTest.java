@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import nextstep.enrollment.domain.Student;
+import nextstep.session.domain.Student;
 import nextstep.session.domain.PaidSession;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionDate;

@@ -1,11 +1,11 @@
-package nextstep.enrollment.domain;
+package nextstep.session.domain;
 
 import java.util.Currency;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.enrollment.exception.MoneyIllegalArgumentException;
+import nextstep.session.exception.MoneyIllegalArgumentException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

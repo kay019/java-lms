@@ -1,10 +1,10 @@
-package nextstep.enrollment.mapper;
+package nextstep.session.mapper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.enrollment.domain.Student;
-import nextstep.enrollment.entity.StudentEntity;
+import nextstep.session.domain.Student;
+import nextstep.session.entity.StudentEntity;
 
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;

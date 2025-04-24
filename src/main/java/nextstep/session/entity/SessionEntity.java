@@ -3,9 +3,8 @@ package nextstep.session.entity;
 import java.time.LocalDate;
 import java.util.List;
 
-import nextstep.enrollment.domain.Student;
-import nextstep.enrollment.entity.StudentEntity;
-import nextstep.enrollment.mapper.StudentMapper;
+import nextstep.session.domain.Student;
+import nextstep.session.mapper.StudentMapper;
 
 import static java.util.stream.Collectors.toList;
 

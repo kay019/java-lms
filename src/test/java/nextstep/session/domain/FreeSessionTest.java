@@ -7,8 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.enrollment.domain.Student;
+import nextstep.session.cmd.Enrollment;
 import nextstep.payments.domain.Payment;
 import nextstep.session.exception.FreeSessionDuplicateStudentException;
 import nextstep.session.exception.FreeSessionInvalidEnrollmentException;

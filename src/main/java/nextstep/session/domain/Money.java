@@ -1,8 +1,8 @@
-package nextstep.enrollment.domain;
+package nextstep.session.domain;
 
 import java.util.Currency;
 
-import nextstep.enrollment.exception.MoneyIllegalArgumentException;
+import nextstep.session.exception.MoneyIllegalArgumentException;
 
 public class Money {
     private final long amount;

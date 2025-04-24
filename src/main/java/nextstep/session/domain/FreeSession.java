@@ -1,6 +1,6 @@
 package nextstep.session.domain;
 
-import nextstep.enrollment.domain.Enrollment;
+import nextstep.session.cmd.Enrollment;
 import nextstep.session.exception.FreeSessionDuplicateStudentException;
 import nextstep.session.exception.FreeSessionEnrollmentRequiredException;
 import nextstep.session.exception.FreeSessionInvalidEnrollmentException;

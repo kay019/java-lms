@@ -2,8 +2,7 @@ package nextstep.session.domain;
 
 import java.util.List;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.enrollment.domain.Student;
+import nextstep.session.cmd.Enrollment;
 
 public abstract class Session {
     private final long id;

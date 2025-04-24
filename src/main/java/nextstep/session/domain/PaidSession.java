@@ -1,6 +1,6 @@
 package nextstep.session.domain;
 
-import nextstep.enrollment.domain.Enrollment;
+import nextstep.session.cmd.Enrollment;
 import nextstep.session.exception.PaidDuplicateStudentEnrollmentException;
 import nextstep.session.exception.PaidSessionCapacityExceededException;
 import nextstep.session.exception.PaidSessionIllegalArgumentException;

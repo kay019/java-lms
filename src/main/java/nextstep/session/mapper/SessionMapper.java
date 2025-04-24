@@ -3,8 +3,7 @@ package nextstep.session.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import nextstep.enrollment.domain.Student;
-import nextstep.enrollment.mapper.StudentMapper;
+import nextstep.session.domain.Student;
 import nextstep.session.domain.FreeSession;
 import nextstep.session.domain.PaidSession;
 import nextstep.session.domain.Session;

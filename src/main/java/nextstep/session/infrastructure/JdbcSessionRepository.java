@@ -13,9 +13,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import nextstep.enrollment.domain.Student;
-import nextstep.enrollment.entity.StudentEntity;
-import nextstep.enrollment.mapper.StudentMapper;
+import nextstep.session.domain.Student;
+import nextstep.session.entity.StudentEntity;
+import nextstep.session.mapper.StudentMapper;
 import nextstep.session.domain.Session;
 import nextstep.session.entity.SessionEntity;
 import nextstep.session.mapper.SessionMapper;

@@ -1,4 +1,4 @@
-package nextstep.enrollment.entity;
+package nextstep.session.entity;
 
 public class StudentEntity {
     public static final String COL_ID = "id";

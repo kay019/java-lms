@@ -1,7 +1,9 @@
-package nextstep.enrollment.domain;
+package nextstep.session.cmd;
 
-import nextstep.enrollment.exception.EnrollmentIllegalArgumentException;
+import nextstep.session.domain.Money;
+import nextstep.session.exception.EnrollmentIllegalArgumentException;
 import nextstep.payments.domain.Payment;
+import nextstep.session.domain.Student;
 
 public class Enrollment {
     private final Student student;
