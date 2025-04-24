@@ -49,7 +49,8 @@ public class SessionRepositoryTest {
                         200L
                 ),
                 10L,
-                1000L);
+                1000L
+                , SessionAccessType.OPEN);
         session.register(userRepository.findByUserId("javajigi").get(), new PositiveNumber(1000L));
         LOGGER.debug("Student: {}", userRepository.findByUserId("javajigi").get());
         LOGGER.debug("Student Registry: {}", session.getRegistry().getStudents().get(0).getUserId());

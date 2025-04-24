@@ -65,6 +65,7 @@ CREATE TABLE registry (
     session_state VARCHAR(10) NOT NULL,
     pay_strategy VARCHAR(10) NOT NULL,
     capacity BIGINT NOT NULL,
+    session_access_type VARCHAR(10),
     FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE
 );
 

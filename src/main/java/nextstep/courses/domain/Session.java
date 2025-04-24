@@ -15,17 +15,14 @@ public class Session {
     private Registry registry;
     private PositiveNumber price;
     private SessionProgressState sessionState;
+    private SessionAccessType sessionAccessType;
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity) {
-        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity)), coverImage, 0L, sessionState);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity, SessionAccessType sessionAccessType) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity), sessionAccessType), coverImage, 0L, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price) {
-        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity)), coverImage, price, sessionState);
-    }
-
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, SessionProgressState sessionState) {
-        this(id, startDate, endDate, registry, coverImage, 0L, sessionState);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price, SessionAccessType sessionAccessType) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity), sessionAccessType), coverImage, price, sessionState);
     }
 
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price, SessionProgressState sessionState) {
@@ -39,6 +36,7 @@ public class Session {
         this.registry = registry;
         this.price = new PositiveNumber(price);
         this.sessionState = sessionState;
+        this.sessionAccessType = sessionAccessType;
     }
 
     public void register(NsUser user, PositiveNumber money) {

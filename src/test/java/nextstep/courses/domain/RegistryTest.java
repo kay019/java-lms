@@ -31,4 +31,22 @@ public class RegistryTest {
         Registry registry = new Registry(new PaidPayStrategy(), SessionRecruitmentState.RECRUTING, new PositiveNumber(1000000L));
         assertThatNoException().isThrownBy(() -> registry.register(NsUserTest.JAVAJIGI, 0L, new PositiveNumber(1000L), new PositiveNumber(1000L)));
     }
+
+    @DisplayName("공개 강의는 승인이 필요 없음")
+    @Test
+    public void register_open_session() {
+        Registry registry = new Registry(new PaidPayStrategy(), SessionRecruitmentState.RECRUTING, new PositiveNumber(1000000L));
+        registry.register(NsUserTest.JAVAJIGI, 0L, new PositiveNumber(1000L), new PositiveNumber(1000L));
+        assertThatThrownBy(() -> registry.confirmStudent(NsUserTest.JAVAJIGI, ApplicationState.APPROVED));
+    }
+
+    @DisplayName("제한 강의는 승인이 필요함")
+    @Test
+    public void register_restricted_session() {
+        Registry registry = new Registry(new PaidPayStrategy(), SessionRecruitmentState.RECRUTING, new PositiveNumber(1000000L), SessionAccessType.RESTRICTED);
+        registry.register(NsUserTest.JAVAJIGI, 0L, new PositiveNumber(1000L), new PositiveNumber(1000L));
+        assertThat(registry.getStudents().get(0).getApplicationState()).isEqualTo("PENDING");
+        registry.confirmStudent(NsUserTest.JAVAJIGI, ApplicationState.APPROVED);
+        assertThat(registry.getStudents().get(0).getApplicationState()).isEqualTo("APPROVED");
+    }
 }

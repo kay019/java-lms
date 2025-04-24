@@ -13,26 +13,30 @@ public class Registry {
     private PositiveNumber capacity;
     private PayStrategy payStrategy;
     private SessionRecruitmentState sessionRecruitmentState;
+    private SessionAccessType sessionAccessType;
 
-    public Registry(List<NsStudent> students, PayStrategy payStrategy, String sessionRecruitmentState, Long capacity) {
-        this(students, payStrategy, SessionRecruitmentState.valueOf(sessionRecruitmentState), new PositiveNumber(capacity));
-    }
 
     public Registry(PayStrategy payStrategy, SessionRecruitmentState sessionRecruitmentState, PositiveNumber capacity) {
-        this(new ArrayList<>(), payStrategy, sessionRecruitmentState, capacity);
+        this(new ArrayList<>(), payStrategy, sessionRecruitmentState, capacity, SessionAccessType.OPEN);
     }
 
-    public Registry(List<NsStudent> students, PayStrategy payStrategy, SessionRecruitmentState sessionRecruitmentState, PositiveNumber capacity) {
+    public Registry(PayStrategy payStrategy, SessionRecruitmentState sessionRecruitmentState, PositiveNumber capacity, SessionAccessType sessionAccessType) {
+        this(new ArrayList<>(), payStrategy, sessionRecruitmentState, capacity, sessionAccessType);
+    }
+
+    public Registry(List<NsStudent> students, PayStrategy payStrategy, SessionRecruitmentState sessionRecruitmentState, PositiveNumber capacity, SessionAccessType sessionAccessType) {
         this.payStrategy = payStrategy;
         this.sessionRecruitmentState = sessionRecruitmentState;
         this.capacity = capacity;
         this.students = new NsStudents(students);
+        this.sessionAccessType = sessionAccessType;
     }
 
     public void register(NsUser user, Long sessionId, PositiveNumber money, PositiveNumber price) {
         validateSessionProgressState(sessionRecruitmentState);
         payStrategy.pay(user, sessionId, money, price);
-        NsStudent student = new NsStudent(user, sessionId);
+        NsStudent student = new NsStudent(user.getId(), sessionId, sessionAccessType.getDefaultApplicationState());
+
         students.enroll(student, capacity);
     }
 
@@ -43,7 +47,14 @@ public class Registry {
     }
 
     public void confirmStudent(NsUser user, ApplicationState applicationState) {
+        validateSessionAccessType();
         students.changeStudentStatus(user, applicationState);
+    }
+
+    private void validateSessionAccessType() {
+        if (sessionAccessType.isOpen()) {
+            throw new IllegalArgumentException("누구나 수강 가능한 강의는 승인할 필요가 없습니다.");
+        }
     }
 
     public String getSessionRecruitmentState() {
@@ -60,5 +71,9 @@ public class Registry {
 
     public List<NsStudent> getStudents() {
         return students.getStudents();
+    }
+
+    public String getSessionAccessType() {
+        return sessionAccessType.name();
     }
 }

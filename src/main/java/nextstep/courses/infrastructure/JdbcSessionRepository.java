@@ -49,8 +49,8 @@ public class JdbcSessionRepository implements SessionRepository {
         }
 
         // registry 저장
-        String sql_registry = "insert into registry (session_id, session_state, pay_strategy, capacity) values(?, ?, ?, ?)";
-        jdbcTemplate.update(sql_registry, sessionId, registry.getSessionRecruitmentState(), registry.getPayStrategy(), registry.getCapacity());
+        String sql_registry = "insert into registry (session_id, session_state, pay_strategy, capacity, session_access_type) values(?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql_registry, sessionId, registry.getSessionRecruitmentState(), registry.getPayStrategy(), registry.getCapacity(), registry.getSessionAccessType());
 
         // students 저장
         List<NsStudent> students = registry.getStudents();
@@ -70,14 +70,15 @@ public class JdbcSessionRepository implements SessionRepository {
                 new NsStudent(rs.getLong(1), id, rs.getString(2)), id);
 
         // registry 찾기
-        String sql_repository = "SELECT pay_strategy, session_state, capacity FROM registry WHERE session_id = ?";
+        String sql_repository = "SELECT pay_strategy, session_state, capacity, session_access_type FROM registry WHERE session_id = ?";
 
         Registry registry = jdbcTemplate.queryForObject(sql_repository, (rs, rowNum) ->
                 new Registry(
                         students,
                         payStrategyFactory.getStrategy(rs.getString(1)),
-                        rs.getString(2),
-                        rs.getLong(3)
+                        SessionRecruitmentState.valueOf(rs.getString(2)),
+                        new PositiveNumber(rs.getLong(3)),
+                        SessionAccessType.valueOf(rs.getString(4))
                 ), id);
 
         // images 찾기

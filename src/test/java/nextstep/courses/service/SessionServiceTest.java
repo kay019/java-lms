@@ -15,7 +15,6 @@ import java.time.Month;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +40,8 @@ public class SessionServiceTest {
                 , SessionRecruitmentState.RECRUTING
                 , new FreePayStrategy()
                 , new Image(1000L, ImageType.GIF, 300L, 200L)
-                , 10L);
+                , 10L
+                , SessionAccessType.RESTRICTED);
         user1 = new NsUser(1L, "user1", "12345678", "pikmin", "pikmin@gmail.com");
     }
 

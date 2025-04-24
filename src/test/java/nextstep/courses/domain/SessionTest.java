@@ -20,7 +20,8 @@ public class SessionTest {
                         , SessionRecruitmentState.RECRUTING
                         , new FreePayStrategy()
                         , new Image(1000L, ImageType.GIF, 300L, 200L)
-                        , 10L)
+                        , 10L
+                        , SessionAccessType.OPEN)
         );
     }
 }
