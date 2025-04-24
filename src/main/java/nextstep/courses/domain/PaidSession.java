@@ -8,28 +8,28 @@ public class PaidSession extends Session {
     private final Integer capacity;
     private final Long fee;
 
-    public PaidSession(Long id, Period period, CoverImages coverImages, SessionStatus status, Integer capacity, Long fee, Students students) {
-        super(id, period, coverImages, status, SessionType.PAID, students);
+    public PaidSession(Long id, Period period, CoverImages coverImages, SessionStatus status, ParticipantType participantType, Integer capacity, Long fee, Students students) {
+        super(id, period, coverImages, status, new SessionType(PricingType.PAID, participantType), students);
         this.capacity = capacity;
         this.fee = fee;
     }
 
-    public PaidSession(Long id, Period period, CoverImages coverImages, SessionStatus status, Integer capacity, Long fee) {
-        this(id, period, coverImages, status, capacity, fee, new Students(new ArrayList<>()));
+    public PaidSession(Long id, Period period, CoverImages coverImages, SessionStatus status, ParticipantType participantType, Integer capacity, Long fee) {
+        this(id, period, coverImages, status, participantType, capacity, fee, new Students(new ArrayList<>()));
     }
 
-    public PaidSession(Period period, CoverImages coverImages, SessionStatus status, Integer capacity, Long fee) {
-        this(0L, period, coverImages, status, capacity, fee, new Students(new ArrayList<>()));
+    public PaidSession(Period period, CoverImages coverImages, SessionStatus status, ParticipantType participantType, Integer capacity, Long fee) {
+        this(0L, period, coverImages, status, participantType, capacity, fee, new Students(new ArrayList<>()));
     }
 
     @Override
     public PaidSession withStudents(Students students) {
-        return new PaidSession(id, period, coverImages, status, capacity, fee, students);
+        return new PaidSession(id, period, coverImages, status, type.getParticipantType(), capacity, fee, students);
     }
 
     @Override
     public PaidSession withCoverImages(CoverImages coverImages) {
-        return new PaidSession(id, period, coverImages, status, capacity, fee, students);
+        return new PaidSession(id, period, coverImages, status, type.getParticipantType(), capacity, fee, students);
     }
 
     @Override

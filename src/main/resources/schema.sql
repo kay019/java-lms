@@ -54,8 +54,7 @@ create table student (
     name varchar(20) not null,
     email varchar(50),
     budget bigint,
-    wooteco boolean,
-    wootecopro boolean,
+    enroll_status varchar(20) not null,
     primary key (id)
 );
 
@@ -65,7 +64,8 @@ create table session (
     end_date timestamp not null,
     phase varchar(20) not null,
     recruit_status varchar(20) not null,
-    type varchar(20) not null,
+    pricing_type varchar(20) not null,
+    participant_type varchar(20) not null,
     capacity int,
     fee int,
     primary key (id)

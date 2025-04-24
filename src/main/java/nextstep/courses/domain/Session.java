@@ -36,9 +36,18 @@ public abstract class Session {
 
     public void validateEnrollment(Student student) {
         validateSessionStatus();
-        validateAlreadyRegistered(student);
-        validateBudgetOver(student);
+        validateSessionIsEligibleForEnrollment(student);
         validateLimitedCapacity();
+    }
+
+    private void validateSessionIsEligibleForEnrollment(Student student) {
+        if (student.isAlreadyRegistered(this)) {
+            throw new IllegalStateException("이미 등록한 강의입니다.");
+        }
+        if (type.getParticipantType() == ParticipantType.PRIVILEGED && !student.isPrivileged()) {
+            throw new IllegalArgumentException("승인 받은 수강생만 신청할 수 있는 강의입니다.");
+        }
+        validateBudgetOver(student);
     }
 
     protected void validateBudgetOver(Student student) {
@@ -49,12 +58,6 @@ public abstract class Session {
 
     protected Payment createPayment(Student student) {
         return null;
-    }
-
-    private void validateAlreadyRegistered(Student student) {
-        if (student.isAlreadyRegistered(this)) {
-            throw new IllegalStateException("이미 등록한 강의입니다.");
-        }
     }
 
     private void validateSessionStatus() {

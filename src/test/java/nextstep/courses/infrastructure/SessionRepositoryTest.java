@@ -44,6 +44,7 @@ class SessionRepositoryTest {
                 new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImages(List.of(new CoverImage(20 * 1024, "PNG", 300, 200))),
                 new SessionStatus(Phase.READY, RecruitStatus.OPEN),
+                ParticipantType.NORMAL,
                 10,
                 10000L
         );
@@ -56,7 +57,8 @@ class SessionRepositoryTest {
         Session session = new FreeSession(
                 new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImages(List.of(new CoverImage(20 * 1024, "PNG", 300, 200))),
-                new SessionStatus(Phase.READY, RecruitStatus.OPEN)
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN),
+                ParticipantType.NORMAL
         );
         int count = sessionRepository.save(session);
         assertEquals(1, count);
@@ -68,6 +70,7 @@ class SessionRepositoryTest {
                 new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImages(List.of(new CoverImage(20 * 1024, "PNG", 600, 400))),
                 new SessionStatus(Phase.READY, RecruitStatus.OPEN),
+                ParticipantType.NORMAL,
                 10,
                 10000L
         );
@@ -94,7 +97,8 @@ class SessionRepositoryTest {
         Session session = new FreeSession(
                 new Period(LocalDate.now(), LocalDate.now().plusDays(1)),
                 new CoverImages(List.of(new CoverImage(20 * 1024, "PNG", 600, 400))),
-                new SessionStatus(Phase.READY, RecruitStatus.OPEN)
+                new SessionStatus(Phase.READY, RecruitStatus.OPEN),
+                ParticipantType.NORMAL
         );
         sessionRepository.save(session);
         Session savedSession = sessionRepository.findById(1L).orElse(null);

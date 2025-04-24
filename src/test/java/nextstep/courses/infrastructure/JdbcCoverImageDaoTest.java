@@ -18,8 +18,8 @@ class JdbcCoverImageDaoTest {
 
     @BeforeEach
     void setUp() {
-        jdbcTemplate.update("INSERT INTO session (id, start_date, end_date, phase, recruit_status, type, capacity, fee) " +
-                "VALUES (1, '2025-04-24', '2025-04-30', 'READY', 'OPEN', 'PAID', 30, 10000)");
+        jdbcTemplate.update("INSERT INTO session (id, start_date, end_date, phase, recruit_status, pricing_type, participant_type, capacity, fee) " +
+                "VALUES (1, '2025-04-24', '2025-04-30', 'READY', 'OPEN', 'PAID', 'NORMAL', 30, 10000)");
         jdbcTemplate.update("INSERT INTO cover_image (session_id, size, type, width, height)" +
                 " VALUES (1, 1024, 'png', 900, 600), (1, 2048, 'jpg', 600, 400)");
     }

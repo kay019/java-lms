@@ -8,28 +8,28 @@ public class Student {
     private final String name;
     private final String email;
     private final Long budget;
-    private final PremiumPlan premiumPlan;
+    private final EnrollStatus enrollStatus;
     private Sessions sessions;
 
-    public Student(Long id, String name, String email, Long budget, PremiumPlan premiumPlan, Sessions sessions) {
+    public Student(Long id, String name, String email, Long budget, EnrollStatus status, Sessions sessions) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.budget = budget;
-        this.premiumPlan = premiumPlan;
         this.sessions = sessions;
+        this.enrollStatus = status;
     }
 
-    public Student(String name, String email, Long budget, PremiumPlan premiumPlan) {
-        this(0L, name, email, budget, premiumPlan);
+    public Student(String name, String email, Long budget, EnrollStatus status) {
+        this(0L, name, email, budget, status);
     }
 
-    public Student(Long id, String name, String email, Long budget, PremiumPlan premiumPlan) {
-        this(id, name, email, budget, premiumPlan, new Sessions(new ArrayList<>()));
+    public Student(Long id, String name, String email, Long budget, EnrollStatus status) {
+        this(id, name, email, budget, status, new Sessions(new ArrayList<>()));
     }
 
     public Student withSessions(Sessions sessions) {
-        return new Student(id, name, email, budget, premiumPlan, sessions);
+        return new Student(id, name, email, budget, enrollStatus, sessions);
     }
 
     public Long getId() {
@@ -64,7 +64,11 @@ public class Student {
         return sessions.getSessionIds();
     }
 
-    public PremiumPlan getPremiumPlan() {
-        return premiumPlan;
+    public EnrollStatus getEnrollStatus() {
+        return enrollStatus;
+    }
+
+    public boolean isPrivileged() {
+        return enrollStatus == EnrollStatus.PASS;
     }
 }

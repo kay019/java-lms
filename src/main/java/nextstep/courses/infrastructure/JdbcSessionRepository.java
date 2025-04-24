@@ -21,14 +21,15 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public int save(Session session) {
         String sql = "INSERT INTO session " +
-                "(start_date, end_date, phase, recruit_status, type, capacity, fee) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "(start_date, end_date, phase, recruit_status, pricing_type, participant_type, capacity, fee) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         int res = jdbcTemplate.update(sql,
                 session.getPeriod().getStartDate(),
                 session.getPeriod().getEndDate(),
                 session.getStatus().getPhase().name(),
                 session.getStatus().getRecruitStatus().name(),
-                session.getType().name(),
+                session.getType().getPricingType().name(),
+                session.getType().getParticipantType().name(),
                 (session instanceof PaidSession) ? ((PaidSession) session).getCapacity() : null,
                 (session instanceof PaidSession) ? ((PaidSession) session).getFee() : null
         );
@@ -81,14 +82,15 @@ public class JdbcSessionRepository implements SessionRepository {
                 Phase.valueOf(rs.getString("phase")),
                 RecruitStatus.valueOf(rs.getString("recruit_status"))
         );
-        SessionType type = SessionType.valueOf(rs.getString("type"));
+        PricingType pricingType = PricingType.valueOf(rs.getString("pricing_type"));
+        ParticipantType participantType = ParticipantType.valueOf(rs.getString("participant_type"));
 
-        if (type == SessionType.FREE) {
-            return new FreeSession(id, period, coverImages, status);
+        if (pricingType == PricingType.FREE) {
+            return new FreeSession(id, period, coverImages, status, participantType);
         }
 
         Integer capacity = rs.getInt("capacity");
         Long fee = rs.getLong("fee");
-        return new PaidSession(id, period, coverImages, status, capacity, fee);
+        return new PaidSession(id, period, coverImages, status, participantType, capacity, fee);
     }
 }
