@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,13 +35,13 @@ public class SessionRepositoryTest {
         period = new SessionPeriod(start, end);
         image = new NsImage(500_000, "image/png", 300, 200);
         price = Price.of(1000L);
-        paidSession = Session.createPaid(2L, period, image, 1, price);
+        paidSession = Session.createPaid(2L, period, List.of(image), 1, price);
     }
 
     @Test
     void crud() {
-        int count = sessionRepository.save(paidSession);
-        assertThat(count).isEqualTo(1);
+        int savedId = sessionRepository.save(paidSession);
+        assertThat(savedId).isEqualTo(1);
         Session savedSession = sessionRepository.findById(1L);
         assertThat(paidSession.getMeta()).isEqualTo(savedSession.getMeta());
         assertThat(paidSession.isFree()).isEqualTo(savedSession.isFree());
