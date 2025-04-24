@@ -40,7 +40,7 @@ public class NsStudent {
     }
 
     public void changeStatus(ApplicationState applicationState) {
-        if (!ApplicationState.isPending(this.applicationState)) {
+        if (!this.applicationState.isPending()) {
             throw new IllegalArgumentException("이미 수강 상태가 결정된 학생입니다.");
         }
         this.applicationState = applicationState;

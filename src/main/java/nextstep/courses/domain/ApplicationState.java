@@ -5,15 +5,7 @@ public enum ApplicationState {
     APPROVED,
     REJECTED;
 
-    public static boolean isPending(ApplicationState applicationState) {
-        return applicationState == PENDING;
-    }
-
-    public static boolean isApproved(ApplicationState applicationState) {
-        return applicationState == APPROVED;
-    }
-
-    public static boolean isRejected(ApplicationState applicationState) {
-        return applicationState == REJECTED;
+    public boolean isPending() {
+        return this == PENDING;
     }
 }

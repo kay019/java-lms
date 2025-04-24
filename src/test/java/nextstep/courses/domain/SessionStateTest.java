@@ -9,6 +9,7 @@ public class SessionStateTest {
     @DisplayName("강의 상태가 모집 중일 때만 수강신청 가능")
     @Test
     public void can_register_session_state() {
-        assertThat(SessionState.canNotRegister(SessionState.RECRUTING)).isFalse();
+        SessionState sessionState = SessionState.RECRUTING;
+        assertThat(sessionState.canNotRegister()).isFalse();
     }
 }

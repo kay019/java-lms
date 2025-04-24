@@ -4,7 +4,7 @@ public enum SessionRecruitmentState {
     ENDED,
     RECRUTING;
 
-    public static boolean canNotRegister(SessionRecruitmentState sessionState) {
-        return sessionState != RECRUTING;
+    public boolean canNotRegister() {
+        return this != RECRUTING;
     }
 }

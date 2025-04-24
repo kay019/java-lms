@@ -37,7 +37,7 @@ public class Registry {
     }
 
     private void validateSessionProgressState(SessionRecruitmentState sessionState) {
-        if (SessionRecruitmentState.canNotRegister(sessionState)) {
+        if (sessionState.canNotRegister()) {
             throw new CannotRegisterException("강의는 모집 중일 때만 등록할 수 있습니다.");
         };
     }
