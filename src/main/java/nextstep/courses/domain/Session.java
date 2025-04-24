@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 public abstract class Session {
     protected Long id;
 
-    protected SessionStatus status;
+    protected SessionStatus sessionStatus;
+
+    protected EnrollStatus enrollStatus;
 
     protected SessionDate date;
 
@@ -17,19 +19,22 @@ public abstract class Session {
 
     protected LocalDateTime updatedAt;
 
-    public Session(Long id, SessionStatus status, SessionDate date) {
+    public Session(Long id, SessionStatus sessionStatus,
+                   EnrollStatus enrollStatus, SessionDate date) {
         this.id = id;
-        this.status = status;
+        this.sessionStatus = sessionStatus;
+        this.enrollStatus = enrollStatus;
         this.date = date;
         this.students = new Students();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = null;
     }
 
-    public Session(Long id, SessionStatus status, SessionDate date,
-                   LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Session(Long id, SessionStatus sessionStatus, EnrollStatus enrollStatus,
+                   SessionDate date, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.status = status;
+        this.sessionStatus = sessionStatus;
+        this.enrollStatus = enrollStatus;
         this.date = date;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -41,8 +46,12 @@ public abstract class Session {
         return students.size();
     }
 
-    public SessionStatus getStatus() {
-        return status;
+    public SessionStatus getSessionStatus() {
+        return sessionStatus;
+    }
+
+    public EnrollStatus getEnrollStatus() {
+        return enrollStatus;
     }
 
     public SessionDate getDate() {

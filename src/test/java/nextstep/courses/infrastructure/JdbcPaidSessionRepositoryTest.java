@@ -52,7 +52,7 @@ class JdbcPaidSessionRepositoryTest {
         // then
         assertThat(result).isPresent();
         Session session = result.get();
-        assertThat(session.getStatus()).isEqualTo(paidSession.getStatus());
+        assertThat(session.getSessionStatus()).isEqualTo(paidSession.getSessionStatus());
         assertThat(session.getDate().getStartedAt()).isEqualTo(paidSession.getDate().getStartedAt());
         assertThat(session.getDate().getEndedAt()).isEqualTo(paidSession.getDate().getEndedAt());
         assertThat(session.getCreatedAt()).isEqualTo(paidSession.getCreatedAt());

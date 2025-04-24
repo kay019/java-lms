@@ -7,18 +7,19 @@ import java.time.LocalDateTime;
 
 public class FreeSession extends Session {
 
-    public FreeSession(Long id, SessionStatus status, SessionDate date,
-                       LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(id, status, date, createdAt, updatedAt);
+    public FreeSession(Long id, SessionStatus sessionStatus, EnrollStatus enrollStatus,
+                       SessionDate date, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(id, sessionStatus, enrollStatus, date, createdAt, updatedAt);
     }
 
-    public FreeSession(Long id, SessionStatus status, SessionDate date) {
-        super(id, status, date);
+    public FreeSession(Long id, SessionStatus sessionStatus,
+                       EnrollStatus enrollStatus, SessionDate date) {
+        super(id, sessionStatus, enrollStatus, date);
     }
 
     @Override
     public void enroll(Payment payment) {
-        status.validateEnroll();
+        enrollStatus.validateEnroll();
         enrollStudent(payment.getNsUser());
     }
 

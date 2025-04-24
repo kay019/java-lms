@@ -9,23 +9,25 @@ public class PaidSession extends Session {
     private final int fee;
     private final int maxStudent;
 
-    public PaidSession(Long id, SessionStatus status, SessionDate date,
-                       LocalDateTime createdAt, LocalDateTime updatedAt,
+    public PaidSession(Long id, SessionStatus sessionStatus, EnrollStatus enrollStatus,
+                       SessionDate date, LocalDateTime createdAt, LocalDateTime updatedAt,
                        int fee, int maxStudent) {
-        super(id, status, date, createdAt, updatedAt);
+        super(id, sessionStatus, enrollStatus, date, createdAt, updatedAt);
         this.fee = fee;
         this.maxStudent = maxStudent;
     }
 
-    public PaidSession(Long id, SessionStatus status, SessionDate date, int fee, int maxStudent) {
-        super(id, status, date);
+    public PaidSession(Long id, SessionStatus sessionStatus, EnrollStatus enrollStatus,
+                       SessionDate date,
+                       int fee, int maxStudent) {
+        super(id, sessionStatus, enrollStatus, date);
         this.fee = fee;
         this.maxStudent = maxStudent;
     }
 
     @Override
     public void enroll(Payment payment) {
-        status.validateEnroll();
+        enrollStatus.validateEnroll();
         validateEnroll(payment);
         enrollStudent(payment.getNsUser());
     }

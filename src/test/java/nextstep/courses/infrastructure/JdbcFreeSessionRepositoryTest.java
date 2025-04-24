@@ -53,7 +53,7 @@ class JdbcFreeSessionRepositoryTest {
         // then
         assertThat(result).isPresent();
         Session session = result.get();
-        assertThat(session.getStatus()).isEqualTo(freeSession.getStatus());
+        assertThat(session.getSessionStatus()).isEqualTo(freeSession.getSessionStatus());
         assertThat(session.getDate().getStartedAt()).isEqualTo(freeSession.getDate().getStartedAt());
         assertThat(session.getDate().getEndedAt()).isEqualTo(freeSession.getDate().getEndedAt());
         assertThat(session.getCreatedAt()).isEqualTo(freeSession.getCreatedAt());

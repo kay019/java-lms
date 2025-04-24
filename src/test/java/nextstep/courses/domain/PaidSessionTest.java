@@ -28,7 +28,7 @@ class PaidSessionTest {
         Session session = new PaidSessionBuilder()
                 .fee(fee)
                 .maxStudent(maxStudent)
-                .status(SessionStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
         assertThatIllegalArgumentException()
@@ -51,7 +51,7 @@ class PaidSessionTest {
         Session session = new PaidSessionBuilder()
                 .fee(fee)
                 .maxStudent(maxStudent)
-                .status(SessionStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
         assertThatIllegalArgumentException()
@@ -77,7 +77,7 @@ class PaidSessionTest {
         Session session = new PaidSessionBuilder()
                 .fee(fee)
                 .maxStudent(maxStudent)
-                .status(SessionStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
         session.enroll(payment1);

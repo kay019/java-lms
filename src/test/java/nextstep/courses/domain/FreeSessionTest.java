@@ -19,7 +19,7 @@ class FreeSessionTest {
                 .nsUser(NsUserTest.JAVAJIGI)
                 .build();
         Session session = new FreeSessionBuilder()
-                .status(SessionStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
         session.enroll(payment);
