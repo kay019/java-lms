@@ -13,7 +13,8 @@ import nextstep.session.domain.SessionDate;
 import nextstep.session.domain.SessionStatus;
 import nextstep.session.entity.SessionEntity;
 
-import static nextstep.session.domain.SessionStatus.ENROLLING;
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SessionMapperTest {
@@ -23,7 +24,7 @@ class SessionMapperTest {
 
     @BeforeEach
     void setUp() {
-        status = ENROLLING;
+        status = new SessionStatus(IN_PROGRESS, ENROLLING);
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
 
@@ -33,10 +34,11 @@ class SessionMapperTest {
         PaidSession paidSession = new PaidSession.Builder()
             .id(1L)
             .courseId(1L)
-            .status(ENROLLING)
+            .status(status)
             .sessionDate(sessionDate)
             .maxCapacity(50)
             .fee(30000)
+            .students(List.of())
             .build();
 
         SessionEntity entity = sessionMapper.toEntity(paidSession);
@@ -45,7 +47,8 @@ class SessionMapperTest {
             .extracting(
                 SessionEntity::getId,
                 SessionEntity::getCourseId,
-                SessionEntity::getStatus,
+                SessionEntity::getProgressStatus,
+                SessionEntity::getEnrollmentStatus,
                 SessionEntity::getFee,
                 SessionEntity::getCapacity,
                 SessionEntity::getStartDate,
@@ -55,6 +58,7 @@ class SessionMapperTest {
             .containsExactly(
                 1L,
                 1L,
+                IN_PROGRESS.name(),
                 ENROLLING.name(),
                 30000,
                 50,
@@ -72,6 +76,7 @@ class SessionMapperTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(List.of())
             .build();
 
         SessionEntity entity = sessionMapper.toEntity(session);
@@ -80,7 +85,8 @@ class SessionMapperTest {
             .extracting(
                 SessionEntity::getId,
                 SessionEntity::getCourseId,
-                SessionEntity::getStatus,
+                SessionEntity::getProgressStatus,
+                SessionEntity::getEnrollmentStatus,
                 SessionEntity::getFee,
                 SessionEntity::getCapacity,
                 SessionEntity::getStartDate,
@@ -90,6 +96,7 @@ class SessionMapperTest {
             .containsExactly(
                 1L,
                 1L,
+                IN_PROGRESS.name(),
                 ENROLLING.name(),
                 0,
                 0,

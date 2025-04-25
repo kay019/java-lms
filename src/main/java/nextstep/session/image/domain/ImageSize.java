@@ -2,7 +2,7 @@ package nextstep.session.image.domain;
 
 import java.util.Objects;
 
-import nextstep.exception.ImageSizeIllegalArgumentException;
+import nextstep.session.image.exception.ImageSizeIllegalArgumentException;
 
 public class ImageSize {
     private static final int MIN_WIDTH = 300;

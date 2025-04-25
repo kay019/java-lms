@@ -2,8 +2,8 @@ package nextstep.session.domain;
 
 import java.util.List;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.enrollment.domain.Student;
+import nextstep.session.cmd.Enrollment;
+import nextstep.session.exception.StudentNotFoundException;
 
 public abstract class Session {
     private final long id;
@@ -82,5 +82,27 @@ public abstract class Session {
         return getStudents()
             .stream()
             .anyMatch(student -> student.equals(enrollment.getStudent()));
+    }
+
+    void selectStudent(long studentId) {
+        Student student = findStudent(studentId);
+        student.markAsSelected();
+    }
+
+    void approveStudent(long studentId) {
+        Student student = findStudent(studentId);
+        student.markAsApproved();
+    }
+
+    void cancelStudent(long studentId) {
+        Student student = findStudent(studentId);
+        student.markAsCanceled();
+    }
+
+    private Student findStudent(long studentId) {
+        return students.stream()
+            .filter(s -> s.getId() == studentId)
+            .findFirst()
+            .orElseThrow(StudentNotFoundException::new);
     }
 }

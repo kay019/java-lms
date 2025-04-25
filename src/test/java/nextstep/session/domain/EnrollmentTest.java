@@ -1,10 +1,11 @@
-package nextstep.enrollment.domain;
+package nextstep.session.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.exception.EnrollmentIllegalArgumentException;
+import nextstep.session.exception.EnrollmentIllegalArgumentException;
 import nextstep.payments.domain.Payment;
+import nextstep.session.cmd.Enrollment;
 
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;

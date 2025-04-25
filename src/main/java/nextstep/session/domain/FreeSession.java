@@ -1,9 +1,10 @@
 package nextstep.session.domain;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.exception.FreeSessionIllegalArgumentException;
-
-import static nextstep.session.domain.SessionStatus.ENROLLING;
+import nextstep.session.cmd.Enrollment;
+import nextstep.session.exception.FreeSessionDuplicateStudentException;
+import nextstep.session.exception.FreeSessionEnrollmentRequiredException;
+import nextstep.session.exception.FreeSessionInvalidEnrollmentException;
+import nextstep.session.exception.FreeSessionNotEnrollingException;
 
 public class FreeSession extends Session {
     public static final int FREE = 0;
@@ -27,19 +28,19 @@ public class FreeSession extends Session {
     @Override
     public void enroll(Enrollment enrollment) {
         if (enrollment == null) {
-            throw new FreeSessionIllegalArgumentException();
+            throw new FreeSessionEnrollmentRequiredException();
         }
 
-        if (!ENROLLING.equals(getStatus())) {
-            throw new FreeSessionIllegalArgumentException();
+        if (getStatus().isEnrollmentUnavailable()) {
+            throw new FreeSessionNotEnrollingException();
         }
 
         if (isDuplicateStudent(enrollment)) {
-            throw new FreeSessionIllegalArgumentException();
+            throw new FreeSessionDuplicateStudentException();
         }
 
         if (enrollment.isNotValid(FREE)) {
-            throw new FreeSessionIllegalArgumentException();
+            throw new FreeSessionInvalidEnrollmentException();
         }
 
         getStudents().add(enrollment.getStudent());

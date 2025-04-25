@@ -1,5 +1,7 @@
 package nextstep.session.image.infrastructure;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,29 +36,33 @@ class SessionCoverImageRepositoryTest {
     @Test
     @DisplayName("SessionCoverImage 저장 후 조회 시 동일한 값 반환")
     void saveAndFindById() {
-        SessionCoverImage image = new SessionCoverImage(
-            0L,
-            100L,
-            new ImageFileSize(1024),
-            ImageType.JPG,
-            new ImageSize(300, 200)
+        List<SessionCoverImage> expected = List.of(
+            new SessionCoverImage(
+                0L,
+                100L,
+                new ImageFileSize(1024),
+                ImageType.JPG,
+                new ImageSize(300, 200)
+            ),
+            new SessionCoverImage(
+                0L,
+                100L,
+                new ImageFileSize(2048),
+                ImageType.PNG,
+                new ImageSize(600, 400)
+            )
         );
 
-        int saveResult = repository.save(image);
-        SessionCoverImage found = repository.findById(1L);
+        int saveResult = expected.stream()
+            .mapToInt(image -> repository.save(image))
+            .sum();
 
-        assertThat(saveResult).isEqualTo(1);
-
-        SessionCoverImage expected = new SessionCoverImage(
-            1L,
-            image.getSessionId(),
-            image.getFileSize(),
-            image.getType(),
-            image.getImageSize()
-        );
+        List<SessionCoverImage> found = repository.findBySessionId(100L);
 
         assertThat(found)
+            .hasSize(saveResult)
             .usingRecursiveComparison()
+            .ignoringFields("id")
             .isEqualTo(expected);
 
         LOGGER.debug("SessionCoverImage: {}", found);

@@ -1,6 +1,13 @@
 package nextstep.session.image.entity;
 
 public class SessionCoverImageEntity {
+    public static final String COL_ID = "id";
+    public static final String COL_SESSION_ID = "session_id";
+    public static final String COL_SIZE = "size";
+    public static final String COL_TYPE = "type";
+    public static final String COL_WIDTH = "width";
+    public static final String COL_HEIGHT = "height";
+
     private final long id;
     private final long sessionId;
     private final int size;

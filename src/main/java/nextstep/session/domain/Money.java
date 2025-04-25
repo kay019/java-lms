@@ -1,16 +1,18 @@
-package nextstep.enrollment.domain;
+package nextstep.session.domain;
 
-import nextstep.exception.MoneyIllegalArgumentException;
+import java.util.Currency;
+
+import nextstep.session.exception.MoneyIllegalArgumentException;
 
 public class Money {
     private final long amount;
-    private final String currency;
+    private final Currency currency;
 
     public Money(long amount) {
-        this(amount, "KRW");
+        this(amount, Currency.getInstance("KRW"));
     }
 
-    public Money(long amount, String currency) {
+    public Money(long amount, Currency currency) {
         validate(amount);
 
         this.amount = amount;
@@ -27,7 +29,7 @@ public class Money {
         return this.amount == amount;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 }

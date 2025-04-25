@@ -1,9 +1,11 @@
 package nextstep.session.domain;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.exception.PaidSessionIllegalArgumentException;
-
-import static nextstep.session.domain.SessionStatus.ENROLLING;
+import nextstep.session.cmd.Enrollment;
+import nextstep.session.exception.PaidDuplicateStudentEnrollmentException;
+import nextstep.session.exception.PaidSessionCapacityExceededException;
+import nextstep.session.exception.PaidSessionIllegalArgumentException;
+import nextstep.session.exception.PaidSessionInvalidFeeException;
+import nextstep.session.exception.PaidSessionNotEnrollingException;
 
 public class PaidSession extends Session {
     private final int maxCapacity;
@@ -51,20 +53,20 @@ public class PaidSession extends Session {
             throw new PaidSessionIllegalArgumentException();
         }
 
-        if (!ENROLLING.equals(getStatus())) {
-            throw new PaidSessionIllegalArgumentException();
+        if (getStatus().isEnrollmentUnavailable()) {
+            throw new PaidSessionNotEnrollingException();
         }
 
         if (enrollment.isNotValid(fee)) {
-            throw new PaidSessionIllegalArgumentException();
+            throw new PaidSessionInvalidFeeException();
         }
 
         if (isDuplicateStudent(enrollment)) {
-            throw new PaidSessionIllegalArgumentException();
+            throw new PaidDuplicateStudentEnrollmentException();
         }
 
         if (getStudents().size() >= maxCapacity) {
-            throw new PaidSessionIllegalArgumentException();
+            throw new PaidSessionCapacityExceededException();
         }
     }
 

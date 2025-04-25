@@ -1,9 +1,11 @@
-package nextstep.enrollment.domain;
+package nextstep.session.domain;
+
+import java.util.Currency;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.exception.MoneyIllegalArgumentException;
+import nextstep.session.exception.MoneyIllegalArgumentException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -13,14 +15,14 @@ class MoneyTest {
     @DisplayName("금액만 입력하면 기본 통화(KRW)로 Money 객체가 생성된다")
     void createMoneyWithDefaultCurrency() {
         Money money = new Money(1000);
-        assertThat(money.getCurrency()).isEqualTo("KRW");
+        assertThat(money.getCurrency()).isEqualTo(Currency.getInstance("KRW"));
     }
 
     @Test
     @DisplayName("금액과 통화를 입력하면 해당 통화로 Money 객체가 생성된다")
     void createMoneyWithCustomCurrency() {
-        Money money = new Money(2000, "USD");
-        assertThat(money.getCurrency()).isEqualTo("USD");
+        Money money = new Money(2000, Currency.getInstance("USD"));
+        assertThat(money.getCurrency()).isEqualTo(Currency.getInstance("USD"));
     }
 
     @Test

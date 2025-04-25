@@ -3,7 +3,7 @@ package nextstep.session.image.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.exception.ImageFileSizeIllegalArgumentException;
+import nextstep.session.image.exception.ImageFileSizeIllegalArgumentException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

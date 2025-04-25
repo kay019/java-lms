@@ -3,7 +3,7 @@ package nextstep.session.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import nextstep.exception.SessionDateIllegalArgumentException;
+import nextstep.session.exception.SessionDateIllegalArgumentException;
 
 public class SessionDate {
     private final LocalDate startDate;

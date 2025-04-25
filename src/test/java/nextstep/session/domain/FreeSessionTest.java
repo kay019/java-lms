@@ -1,17 +1,21 @@
 package nextstep.session.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.enrollment.domain.Student;
-import nextstep.exception.FreeSessionIllegalArgumentException;
+import nextstep.session.cmd.Enrollment;
 import nextstep.payments.domain.Payment;
+import nextstep.session.exception.FreeSessionDuplicateStudentException;
+import nextstep.session.exception.FreeSessionInvalidEnrollmentException;
+import nextstep.session.exception.FreeSessionNotEnrollingException;
 
-import static nextstep.session.domain.SessionStatus.CLOSED;
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.CLOSED;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,7 +28,7 @@ class FreeSessionTest {
     @BeforeEach
     void setUp() {
         student = new Student(1, JAVAJIGI.getId(), 1, JAVAJIGI.getName());
-        status = SessionStatus.ENROLLING;
+        status = new SessionStatus(IN_PROGRESS, ENROLLING);
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
 
@@ -36,6 +40,7 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         assertThat(session.getId()).isEqualTo(1L);
@@ -53,6 +58,7 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         Payment freePayment = createPayment(0);
@@ -72,12 +78,13 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         Payment paidPayment = createPayment(1000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, paidPayment)))
-            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+            .isInstanceOf(FreeSessionInvalidEnrollmentException.class);
     }
 
     @Test
@@ -86,12 +93,12 @@ class FreeSessionTest {
         FreeSession session = new FreeSession.Builder()
             .id(1L)
             .courseId(1L)
-            .status(CLOSED)
+            .status(new SessionStatus(CLOSED, ENROLLING))
             .sessionDate(sessionDate)
             .build();
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, createPayment(0))))
-            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+            .isInstanceOf(FreeSessionNotEnrollingException.class);
     }
 
     @Test
@@ -102,13 +109,14 @@ class FreeSessionTest {
             .courseId(1L)
             .status(status)
             .sessionDate(sessionDate)
+            .students(new ArrayList<>())
             .build();
 
         Payment freePayment = createPayment(0);
         session.enroll(new Enrollment(student, freePayment));
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, freePayment)))
-            .isInstanceOf(FreeSessionIllegalArgumentException.class);
+            .isInstanceOf(FreeSessionDuplicateStudentException.class);
     }
 
     private Payment createPayment(long amount) {

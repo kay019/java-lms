@@ -11,14 +11,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import nextstep.enrollment.domain.Student;
+import nextstep.session.domain.Student;
 import nextstep.session.domain.PaidSession;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionDate;
 import nextstep.session.domain.SessionStatus;
 import nextstep.session.repository.SessionRepository;
 
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
@@ -28,11 +31,14 @@ class SessionRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     private SessionRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = new JdbcSessionRepository(jdbcTemplate);
+        repository = new JdbcSessionRepository(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
     @Test
@@ -41,7 +47,7 @@ class SessionRepositoryTest {
         PaidSession paidSession = new PaidSession.Builder()
             .id(1L)
             .courseId(100L)
-            .status(SessionStatus.ENROLLING)
+            .status(new SessionStatus(IN_PROGRESS, ENROLLING))
             .fee(50000)
             .maxCapacity(30)
             .sessionDate(new SessionDate(

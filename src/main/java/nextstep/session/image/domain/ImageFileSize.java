@@ -2,7 +2,7 @@ package nextstep.session.image.domain;
 
 import java.util.Objects;
 
-import nextstep.exception.ImageFileSizeIllegalArgumentException;
+import nextstep.session.image.exception.ImageFileSizeIllegalArgumentException;
 
 public class ImageFileSize {
     private static final int MAX_SIZE_1MB = 1024 * 1024;

@@ -1,17 +1,22 @@
 package nextstep.session.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.enrollment.domain.Enrollment;
-import nextstep.enrollment.domain.Student;
-import nextstep.exception.PaidSessionIllegalArgumentException;
+import nextstep.session.cmd.Enrollment;
 import nextstep.payments.domain.Payment;
+import nextstep.session.exception.PaidDuplicateStudentEnrollmentException;
+import nextstep.session.exception.PaidSessionCapacityExceededException;
+import nextstep.session.exception.PaidSessionInvalidFeeException;
+import nextstep.session.exception.PaidSessionNotEnrollingException;
 
-import static nextstep.session.domain.SessionStatus.ENROLLING;
+import static nextstep.session.domain.EnrollmentStatus.ENROLLING;
+import static nextstep.session.domain.EnrollmentStatus.NOT_ENROLLING;
+import static nextstep.session.domain.SessionProgressStatus.IN_PROGRESS;
 import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static nextstep.users.domain.NsUserTest.SANJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +30,7 @@ class PaidSessionTest {
     @BeforeEach
     void setUp() {
         student = new Student(1, JAVAJIGI.getId(), 1, JAVAJIGI.getName());
-        status = ENROLLING;
+        status = new SessionStatus(IN_PROGRESS, ENROLLING);
         sessionDate = new SessionDate(LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 20));
     }
 
@@ -39,6 +44,7 @@ class PaidSessionTest {
             .sessionDate(sessionDate)
             .maxCapacity(50)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         assertThat(session.getId()).isEqualTo(2L);
@@ -53,8 +59,9 @@ class PaidSessionTest {
     void enroll_정상_등록() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
-            .status(ENROLLING)
+            .status(status)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         Payment correctPayment = createPayment(30000);
@@ -71,12 +78,13 @@ class PaidSessionTest {
     void enroll_잘못된_결제금액_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .fee(30000)
+            .status(status)
             .build();
 
         Payment wrongAmountPayment = createPayment(25000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, wrongAmountPayment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidSessionInvalidFeeException.class);
     }
 
     @Test
@@ -84,8 +92,9 @@ class PaidSessionTest {
     void enroll_정원초과_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
-            .status(ENROLLING)
+            .status(status)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         Student secondStudent = new Student(1, SANJIGI.getId(), 1, SANJIGI.getName());
@@ -94,21 +103,21 @@ class PaidSessionTest {
         session.enroll(new Enrollment(student, payment));
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(secondStudent, payment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidSessionCapacityExceededException.class);
     }
 
     @Test
     @DisplayName("상태가 ENROLLING이 아니면 예외가 발생한다")
     void enroll_상태가_ENROLLING이_아닐때_예외발생() {
         PaidSession session = new PaidSession.Builder()
-            .status(SessionStatus.CLOSED)
+            .status(new SessionStatus(IN_PROGRESS, NOT_ENROLLING))
             .fee(30000)
             .build();
 
         Payment payment = createPayment(30000);
 
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidSessionNotEnrollingException.class);
     }
 
     @Test
@@ -116,14 +125,15 @@ class PaidSessionTest {
     void enroll_학생이_중복으로_등록할때_예외발생() {
         PaidSession session = new PaidSession.Builder()
             .maxCapacity(1)
-            .status(ENROLLING)
+            .status(status)
             .fee(30000)
+            .students(new ArrayList<>())
             .build();
 
         Payment payment = createPayment(30000);
         session.enroll(new Enrollment(student, payment));
         assertThatThrownBy(() -> session.enroll(new Enrollment(student, payment)))
-            .isInstanceOf(PaidSessionIllegalArgumentException.class);
+            .isInstanceOf(PaidDuplicateStudentEnrollmentException.class);
     }
 
     private Payment createPayment(long amount) {
