@@ -55,12 +55,8 @@ create table session (
     start_at timestamp not null,
     end_at timestamp not null,
 
-    image_size bigint not null,
-    image_type varchar(10) not null,
-    image_width bigint not null,
-    image_height bigint not null,
-
     price bigint not null,
+    session_progress_state varchar(10),
     primary key (id)
 );
 
@@ -69,6 +65,7 @@ CREATE TABLE registry (
     session_state VARCHAR(10) NOT NULL,
     pay_strategy VARCHAR(10) NOT NULL,
     capacity BIGINT NOT NULL,
+    session_access_type VARCHAR(10),
     FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE
 );
 
@@ -76,6 +73,19 @@ create table ns_students (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     session_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
+    application_state varchar(10),
     FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES ns_user(id) ON DELETE CASCADE
+);
+
+create table images (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    session_id BIGINT NOT NULL,
+
+    image_size bigint not null,
+    image_type varchar(10) not null,
+    image_width bigint not null,
+    image_height bigint not null,
+
+    FOREIGN KEY (session_id) REFERENCES session(id) ON DELETE CASCADE
 );

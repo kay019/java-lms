@@ -1,6 +1,7 @@
 package nextstep.users.domain;
 
 import nextstep.courses.CannotRegisterException;
+import nextstep.courses.domain.ApplicationState;
 import nextstep.courses.domain.PositiveNumber;
 
 import java.util.ArrayList;
@@ -41,6 +42,17 @@ public class NsStudents {
         if (capacity.compareTo(students.size()) >= 0) {
             throw new CannotRegisterException("최대 수강 인원을 초과하였습니다.");
         }
+    }
+
+    public void changeStudentStatus(NsUser user, ApplicationState applicationState) {
+        for (NsStudent nsStudent: students) {
+            if (!nsStudent.isSameUser(user)) {
+                continue;
+            }
+            nsStudent.changeStatus(applicationState);
+            return;
+        }
+        throw new IllegalArgumentException("해당 학생이 존재하지 않습니다.");
     }
 
     public List<NsStudent> getStudents() {

@@ -1,18 +1,30 @@
 package nextstep.users.domain;
 
+import nextstep.courses.domain.ApplicationState;
+
 import java.util.Objects;
 
 public class NsStudent {
     private Long userId;
     private final Long registeredSessionId;
+    private ApplicationState applicationState;
 
     public NsStudent(NsUser user, Long sessionId) {
-        this(user.getId(), sessionId);
+        this(user.getId(), sessionId, ApplicationState.PENDING);
     }
 
     public NsStudent(Long userId, Long sessionId) {
+        this(userId, sessionId, ApplicationState.PENDING);
+    }
+
+    public NsStudent(Long userId, Long sessionId, String applicationState) {
+        this(userId, sessionId, ApplicationState.valueOf(applicationState));
+    }
+
+    public NsStudent(Long userId, Long sessionId, ApplicationState applicationState) {
         this.userId = userId;
         this.registeredSessionId = sessionId;
+        this.applicationState = applicationState;
     }
 
     public boolean isSameUser(NsUser user) {
@@ -21,6 +33,17 @@ public class NsStudent {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getApplicationState() {
+        return applicationState.name();
+    }
+
+    public void changeStatus(ApplicationState applicationState) {
+        if (!this.applicationState.isPending()) {
+            throw new IllegalArgumentException("이미 수강 상태가 결정된 학생입니다.");
+        }
+        this.applicationState = applicationState;
     }
 
     @Override

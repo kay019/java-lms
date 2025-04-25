@@ -1,48 +1,50 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotCreateSessionException;
-import nextstep.users.domain.NsStudent;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Session {
     private Long id;
     private Period sessionPeriod;
-    private Image coverImage;
+    private List<Image> coverImages = new ArrayList<>();
     private Registry registry;
     private PositiveNumber price;
+    private SessionProgressState sessionState;
+    private SessionAccessType sessionAccessType;
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity) {
-        this(id, startDate, endDate, new Registry(payStrategy, sessionState, new PositiveNumber(capacity)), coverImage, 0L);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity, SessionAccessType sessionAccessType) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity), sessionAccessType), coverImage, 0L, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionState sessionState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price) {
-        this(id, startDate, endDate, new Registry(payStrategy, sessionState, new PositiveNumber(capacity)), coverImage, price);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, SessionProgressState sessionState, SessionRecruitmentState sessionRecruitmentState, PayStrategy payStrategy, Image coverImage, Long capacity, Long price, SessionAccessType sessionAccessType) {
+        this(id, startDate, endDate, new Registry(payStrategy, sessionRecruitmentState, new PositiveNumber(capacity), sessionAccessType), coverImage, price, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage) {
-        this(id, startDate, endDate, registry, coverImage, 0L);
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price, SessionProgressState sessionState) {
+        this(id, startDate, endDate, registry, Arrays.asList(coverImage), price, sessionState);
     }
 
-    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, Image coverImage, Long price) {
+    public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, Registry registry, List<Image> coverImages, Long price, SessionProgressState sessionState) {
         this.id = id;
         this.sessionPeriod = new Period(startDate, endDate);
-        this.coverImage = coverImage;
+        this.coverImages = coverImages;
         this.registry = registry;
         this.price = new PositiveNumber(price);
-    }
-
-    private void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
-        if (startDate.isAfter(endDate)) {
-            throw new CannotCreateSessionException("강의의 시작 날짜가 끝나는 날짜보다 뒤입니다.");
-        }
+        this.sessionState = sessionState;
+        this.sessionAccessType = sessionAccessType;
     }
 
     public void register(NsUser user, PositiveNumber money) {
         registry.register(user, id, money, price);
+    }
+
+    public void confirmUser(NsUser user, ApplicationState applicationState) {
+        registry.confirmStudent(user, applicationState);
     }
 
     public Long getId() {
@@ -57,20 +59,8 @@ public class Session {
         return sessionPeriod.getEndDate();
     }
 
-    public Long getImageSize() {
-        return coverImage.getSize();
-    }
-
-    public Long getImageHeight() {
-        return coverImage.getHeight();
-    }
-
-    public Long getImageWidth() {
-        return coverImage.getWidth();
-    }
-
-    public String getImageType() {
-        return coverImage.getImageType();
+    public List<Image> getCoverImages() {
+        return coverImages;
     }
 
     public Registry getRegistry() {
@@ -79,5 +69,9 @@ public class Session {
 
     public Long getPrice() {
         return price.value();
+    }
+
+    public SessionProgressState getSessionState() {
+        return sessionState;
     }
 }
