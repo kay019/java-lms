@@ -19,15 +19,23 @@ public class SessionService {
 
     @Transactional
     public Enrollment enroll(Long sessionId, Student student, Payment payment) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
+        Session session = findById(sessionId);
 
-        Enrollments sessionEnrollments = enrollmentRepository.findBySessionId(sessionId)
-                .orElse(new Enrollments());
+        Enrollments sessionEnrollments = enrollmentRepository.findBySessionId(sessionId);
 
         Enrollment enrollment = session.enroll(sessionEnrollments.count(), student, payment);
         enrollmentRepository.save(enrollment);
 
         return enrollment;
+    }
+
+
+    public void save(Session session) {
+        sessionRepository.save(session);
+    }
+
+    public Session findById(Long sessionId) {
+        return sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
     }
 }

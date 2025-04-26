@@ -4,13 +4,13 @@ import nextstep.payments.domain.Payment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Session {
     private Long id;
     private Course course;
-    private SessionStatus status;
+    private SessionProgressStatus progressStatus;
+    private SessionRecruitmentStatus recruitmentStatus;
     private SessionType type;
     private Money price;
     private Capacity maxCapacity;
@@ -20,10 +20,15 @@ public class Session {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Session(Long id, Course course, SessionStatus status, SessionType type, Money price, Capacity maxCapacity, Enrollments enrollments, LocalDate startDate, LocalDate endDate, SessionCoverImage coverImage, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Session(Long id, Course course, SessionProgressStatus progressStatus, SessionRecruitmentStatus recruitmentStatus, SessionType type, Money price, Capacity maxCapacity, LocalDate startDate, LocalDate endDate, SessionCoverImage coverImage, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        if (progressStatus == SessionProgressStatus.ENDED && recruitmentStatus == SessionRecruitmentStatus.RECRUITING) {
+            throw new IllegalArgumentException("종료된 강의는 모집중 상태일 수 없습니다.");
+        }
+
         this.id = id;
         this.course = course;
-        this.status = status;
+        this.progressStatus = progressStatus;
+        this.recruitmentStatus = recruitmentStatus;
         this.type = type;
         this.price = price;
         this.maxCapacity = maxCapacity;
@@ -34,14 +39,8 @@ public class Session {
         this.updatedAt = updatedAt;
     }
 
-    public Session(SessionStatus status, SessionType type, Money price, Capacity maxCapacity, Enrollments enrollments, LocalDate startDate, LocalDate endDate, SessionCoverImage coverImage) {
-        this.status = status;
-        this.type = type;
-        this.price = price;
-        this.maxCapacity = maxCapacity;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.coverImage = coverImage;
+    public Session(SessionProgressStatus progressStatus, SessionRecruitmentStatus recruitmentStatus, SessionType type, Money price, Capacity maxCapacity, LocalDate startDate, LocalDate endDate, SessionCoverImage coverImage) {
+        this(null, null, progressStatus, recruitmentStatus, type, price, maxCapacity, startDate, endDate, coverImage, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public Session(Long sessionId) {
@@ -50,11 +49,11 @@ public class Session {
 
     public static Session createFreeSession(LocalDate startDate, LocalDate endDate) {
         return new Session(
-                SessionStatus.READY,
+                SessionProgressStatus.READY,
+                SessionRecruitmentStatus.NOT_RECRUITING,
                 SessionType.FREE,
                 Money.FREE,
                 Capacity.ZERO,
-                new Enrollments(new ArrayList<>()),
                 startDate,
                 endDate,
                 SessionCoverImage.EMPTY
@@ -63,11 +62,11 @@ public class Session {
 
     public static Session createPaidSession(Money price, Capacity maxCapacity, LocalDate startDate, LocalDate endDate) {
         return new Session(
-                SessionStatus.READY,
+                SessionProgressStatus.READY,
+                SessionRecruitmentStatus.NOT_RECRUITING,
                 SessionType.PAID,
                 price,
                 maxCapacity,
-                new Enrollments(new ArrayList<>()),
                 startDate,
                 endDate,
                 SessionCoverImage.EMPTY
@@ -75,32 +74,49 @@ public class Session {
     }
 
     public Enrollment enroll(int currentCount, Student student, Payment payment) {
-        validateRecruiting();
+        validateEnrollmentAvailable();
         validateMaxCapacity(currentCount);
         validatePayment(payment);
 
-        return new Enrollment(this, student);
+        return Enrollment.request(this, student);
     }
 
     public void updateCoverImage(SessionCoverImage newCoverImage) {
         coverImage = newCoverImage;
     }
 
-    public void ready() {
-        status = SessionStatus.READY;
+    public void readySession() {
+        progressStatus = SessionProgressStatus.READY;
     }
 
-    public void startRecruiting() {
-        status = SessionStatus.RECRUITING;
+    public void startSession() {
+        progressStatus = SessionProgressStatus.ONGOING;
     }
 
-    public void close() {
-        status = SessionStatus.CLOSED;
+    public void endSession() {
+        progressStatus = SessionProgressStatus.ENDED;
+        stopRecruitment();
     }
 
-    private void validateRecruiting() {
-        if (status != SessionStatus.RECRUITING) {
-            throw new IllegalArgumentException("본 강의는 수강생을 모집하고 있지 않습니다.");
+    public void startRecruitment() {
+        if (progressStatus == SessionProgressStatus.ENDED) {
+            throw new IllegalStateException("종료된 강의는 수강생 모집이 불가합니다.");
+        }
+
+        recruitmentStatus = SessionRecruitmentStatus.RECRUITING;
+    }
+
+    public void stopRecruitment() {
+        recruitmentStatus = SessionRecruitmentStatus.NOT_RECRUITING;
+    }
+
+    private void validateEnrollmentAvailable() {
+        if (recruitmentStatus == SessionRecruitmentStatus.NOT_RECRUITING) {
+            throw new IllegalStateException("본 강의는 수강생을 모집하고 있지 않습니다.");
+        }
+
+        if (progressStatus == SessionProgressStatus.ENDED) {
+            throw new IllegalStateException("본 강의는 종료된 강의입니다.");
         }
     }
 
@@ -120,8 +136,12 @@ public class Session {
         return id;
     }
 
-    public SessionStatus getStatus() {
-        return status;
+    public SessionProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
+    public SessionRecruitmentStatus getRecruitmentStatus() {
+        return recruitmentStatus;
     }
 
     public SessionType getType() {
@@ -154,6 +174,10 @@ public class Session {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void assignId(long id) {
+        this.id = id;
     }
 
     @Override

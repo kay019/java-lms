@@ -1,30 +1,35 @@
 package nextstep.courses.fixture;
 
-import nextstep.courses.domain.*;
+import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeSessionRepository implements SessionRepository {
 
-    public static final Session TEST_SESSION = new Session(
-            1L,
-            new Course(1L),
-            SessionStatus.RECRUITING,
-            SessionType.PAID,
-            new Money(10000L),
-            new Capacity(30),
-            new Enrollments(),
-            LocalDate.now(),
-            LocalDate.now().plusDays(7),
-            SessionCoverImage.from("imagePath"),
-            LocalDateTime.now(),
-            LocalDateTime.now()
-    );
+    private final AtomicLong idGenerator;
+    private final Map<Long, Session> sessions;
+
+    public FakeSessionRepository() {
+        idGenerator = new AtomicLong();
+        sessions = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public void save(Session session) {
+        if (session.getId() == null) {
+            long newId = idGenerator.getAndIncrement();
+            session.assignId(newId);
+        }
+
+        sessions.put(session.getId(), session);
+    }
 
     @Override
     public Optional<Session> findById(Long id) {
-        return Optional.of(TEST_SESSION);
+        return Optional.of(sessions.get(id));
     }
 }
