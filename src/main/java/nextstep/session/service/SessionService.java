@@ -5,6 +5,7 @@ import nextstep.session.domain.SessionRepository;
 import nextstep.session.domain.Student;
 import nextstep.session.domain.StudentRepository;
 import nextstep.session.dto.SessionRequestDto;
+import nextstep.session.exception.SessionNotFoundException;
 import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,8 @@ public class SessionService {
     }
 
     public void enrollSession(NsUser nsUser, Long sessionId) {
-        Session session = sessionRepository.findById(sessionId).orElseThrow(RuntimeException::new);
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new SessionNotFoundException(sessionId));
         Student enrollStudent = session.enroll(nsUser);
         studentRepository.save(enrollStudent);
     }
