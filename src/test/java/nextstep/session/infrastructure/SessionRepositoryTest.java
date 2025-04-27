@@ -33,7 +33,7 @@ class SessionRepositoryTest {
 
     @Test
     void crud() {
-        int savedId = sessionRepository.save(createSession());
+        Long savedId = sessionRepository.save(createSession());
 
         assertThat(savedId).isEqualTo(1);
 

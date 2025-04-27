@@ -1,5 +1,7 @@
 package nextstep.session.infrastructure;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import nextstep.session.domain.type.SessionType;
 import nextstep.users.domain.NsUser;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -27,10 +31,24 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public int save(Session session) {
+    public Long save(Session session) {
         String sql = "INSERT INTO session(start_at, end_at, session_status, capacity, price) VALUES (?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, session.getStartedAt(), session.getEndedAt(), session.getSessionStatus(),
-                session.getCapacity(), session.getPrice());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setTimestamp(1, Timestamp.valueOf(session.getStartedAt()));
+            ps.setTimestamp(2, Timestamp.valueOf(session.getEndedAt()));
+            ps.setString(3, session.getSessionStatus());
+            ps.setLong(4, session.getCapacity());
+            ps.setLong(5, session.getPrice());
+            return ps;
+        }, keyHolder);
+
+        Number key = keyHolder.getKey();
+
+        return key != null ? key.longValue() : null;
     }
 
     @Override
