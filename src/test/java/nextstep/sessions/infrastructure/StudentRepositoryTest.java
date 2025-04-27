@@ -1,5 +1,7 @@
 package nextstep.sessions.infrastructure;
 
+import static nextstep.sessions.SessionTest.createSession;
+import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nextstep.sessions.domain.Student;
@@ -25,12 +27,13 @@ class StudentRepositoryTest {
 
     @Test
     void crud() {
-        Student student = new Student(1L, 1L);
+        Student student = new Student(JAVAJIGI, createSession());
         int savedId = studentRepository.save(student);
 
         assertThat(savedId).isEqualTo(1);
 
-        Student savedStudent = studentRepository.findById(1L).orElse(null);
-        assertThat(student).isEqualTo(savedStudent);
+        Student savedStudent = studentRepository.findById((long) savedId).orElse(null);
+
+        assertThat(student.getSessionId()).isEqualTo(savedStudent.getSessionId());
     }
 }

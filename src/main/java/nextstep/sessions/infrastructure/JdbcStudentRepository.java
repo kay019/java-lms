@@ -3,8 +3,10 @@ package nextstep.sessions.infrastructure;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import nextstep.sessions.domain.Session;
 import nextstep.sessions.domain.Student;
 import nextstep.sessions.domain.StudentRepository;
+import nextstep.users.domain.NsUser;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,7 +23,7 @@ public class JdbcStudentRepository implements StudentRepository {
     @Override
     public int save(Student student) {
         String sql = "INSERT INTO student(ns_user_id, session_id, create_dt) VALUES (?, ?, ?)";
-        return jdbcTemplate.update(sql, student.getNsUserId(), student.getSessionId(), LocalDateTime.now());
+        return jdbcTemplate.update(sql, student.getUserId(), student.getSessionId(), LocalDateTime.now());
     }
 
     @Override
@@ -29,12 +31,13 @@ public class JdbcStudentRepository implements StudentRepository {
         String sql = "SELECT id, ns_user_id, session_id, create_dt FROM student WHERE id = ?";
         RowMapper<Student> rowMapper = (rs, rowNum) -> new Student(
                 rs.getLong(1),
-                rs.getLong(2),
-                rs.getLong(3),
+                new NsUser(rs.getLong(2)),
+                new Session(rs.getLong(3)),
                 toLocalDateTime(rs.getTimestamp(4)));
 
         return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, studentId));
     }
+
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {
         if (timestamp == null) {

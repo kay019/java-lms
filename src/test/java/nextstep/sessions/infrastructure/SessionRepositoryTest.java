@@ -1,5 +1,6 @@
 package nextstep.sessions.infrastructure;
 
+import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
@@ -47,8 +48,10 @@ class SessionRepositoryTest {
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
         Long capacity = 10L;
-        List<Student> students = List.of(new Student(1L, 1L));
+        Session session = new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, capacity, null);
+        List<Student> students = List.of(new Student(JAVAJIGI, session));
 
         return new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, capacity, students);
     }
+
 }

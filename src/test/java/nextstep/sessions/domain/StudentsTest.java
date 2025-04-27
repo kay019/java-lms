@@ -1,5 +1,7 @@
 package nextstep.sessions.domain;
 
+import static nextstep.sessions.SessionTest.createSession;
+import static nextstep.users.domain.NsUserTest.JAVAJIGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -11,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class StudentsTest {
     @Test
     void createTest() {
-        Student student = new Student(1L, 1L);
+        Student student = new Student(JAVAJIGI, new Session(1L, null, null, null, null, null, null, List.of()));
 
         Students students = new Students(2L, List.of(student));
 
@@ -21,7 +23,7 @@ class StudentsTest {
     @DisplayName("유료 강의는 강의 최대 수강 인원을 초과할 수 없다.")
     @Test
     void enrollCapacityExceptionTest() {
-        Student student = new Student(1L, 1L);
+        Student student = new Student(JAVAJIGI, createSession());
 
         Students students = new Students(1L, List.of(student));
 
@@ -31,12 +33,13 @@ class StudentsTest {
 
     @Test
     void enrollAlreadyEnrolledExceptionTest() {
-        Student student = new Student(1L, 1L);
+        Student student = new Student(JAVAJIGI, createSession());
 
         Students students = new Students(2L, List.of(student));
 
-        assertThatThrownBy(() -> students.enroll(new NsUser(1L, "userId", "password", "name", "email")))
+        assertThatThrownBy(() -> students.enroll(JAVAJIGI))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("already enrolled student");
     }
+
 }

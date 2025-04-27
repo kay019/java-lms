@@ -33,7 +33,7 @@ public class Students {
 
     private boolean isAlreadyEnrolled(NsUser nsUser) {
         return students.stream()
-                .anyMatch(student -> student.isSameUser(nsUser.getId()));
+                .anyMatch(student -> student.isSameUser(nsUser));
     }
 
     public Long getCapacity() {

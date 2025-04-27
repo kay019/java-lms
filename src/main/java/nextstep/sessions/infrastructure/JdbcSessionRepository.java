@@ -13,6 +13,7 @@ import nextstep.sessions.domain.cover.SessionCover;
 import nextstep.sessions.domain.type.FreeSessionType;
 import nextstep.sessions.domain.type.PaidSessionType;
 import nextstep.sessions.domain.type.SessionType;
+import nextstep.users.domain.NsUser;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public int save(Session session) {
         String sql = "INSERT INTO session(start_at, end_at, session_status, capacity, price) VALUES (?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, session.getStartAt(), session.getEndAt(), session.getSessionStatus(),
+        return jdbcTemplate.update(sql, session.getStartedAt(), session.getEndedAt(), session.getSessionStatus(),
                 session.getCapacity(), session.getPrice());
     }
 
@@ -75,8 +76,8 @@ public class JdbcSessionRepository implements SessionRepository {
 
         RowMapper<Student> rowMapper = (rs, rowNum) -> new Student(
                 rs.getLong(1),
-                rs.getLong(2),
-                rs.getLong(3),
+                new NsUser(rs.getLong(2)),
+                new Session(rs.getLong(3)),
                 toLocalDateTime(rs.getTimestamp(4)));
 
         return new ArrayList<>(jdbcTemplate.query(sql, rowMapper, sessionId));
