@@ -1,14 +1,10 @@
 package nextstep.session.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionRepository;
-import nextstep.session.domain.SessionStatus;
 import nextstep.session.domain.Student;
 import nextstep.session.domain.StudentRepository;
-import nextstep.session.domain.cover.SessionCover;
-import nextstep.session.domain.type.SessionType;
+import nextstep.session.dto.SessionRequestDto;
 import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +19,17 @@ public class SessionService {
         this.studentRepository = studentRepository;
     }
 
-    public void saveSession(Long id, LocalDateTime startAt, LocalDateTime endAt, SessionCover cover,
-                            SessionType sessionType, SessionStatus sessionStatus, Long capacity,
-                            List<Student> students) {
-        Session session = new Session(id, startAt, endAt, cover, sessionType, sessionStatus, capacity, students);
+    public void saveSession(SessionRequestDto dto) {
+        Session session = new Session(
+                dto.getId(),
+                dto.getStartAt(),
+                dto.getEndAt(),
+                dto.getCover(),
+                dto.getSessionType(),
+                dto.getSessionStatus(),
+                dto.getCapacity(),
+                dto.getStudents()
+        );
         sessionRepository.save(session);
     }
 
