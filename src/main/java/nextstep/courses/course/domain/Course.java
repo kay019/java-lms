@@ -16,25 +16,32 @@ public class Course {
     private LocalDateTime updatedAt;
 
     private Sessions sessions;
+    private Boolean requiresSelection;
+
 
     public Course() {
     }
 
+    public static Course general(String title, Long creatorId) {
+        return new Course(0L, title, creatorId, LocalDateTime.now(), null, null, false);
+    }
+
+    public static Course selective(String title, Long creatorId) {
+        return new Course(0L, title, creatorId, LocalDateTime.now(), null, null, true);
+    }
+
     public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null, null);
+        this(0L, title, creatorId, LocalDateTime.now(), null, null, false);
     }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(id, title, creatorId, createdAt, updatedAt, null);
-    }
-
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, Sessions sessions) {
+    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, Sessions sessions, boolean requiresSelection) {
         this.id = id;
         this.title = title;
         this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.sessions = sessions;
+        this.requiresSelection = requiresSelection;
     }
 
     public String getTitle() {
@@ -47,6 +54,10 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public Boolean getRequiresSelection() {
+        return requiresSelection;
     }
 
     @Override

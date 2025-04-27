@@ -5,7 +5,7 @@ public enum SessionStatus {
     OPEN,
     CLOSE;
 
-    public boolean canEnroll() {
-        return this == OPEN;
+    public boolean canNotEnroll() {
+        return this == CLOSE;
     }
 }

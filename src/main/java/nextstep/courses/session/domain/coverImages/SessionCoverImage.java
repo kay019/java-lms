@@ -1,4 +1,4 @@
-package nextstep.courses.session.domain;
+package nextstep.courses.session.domain.coverImages;
 
 public class SessionCoverImage {
     private static final int MIN_WIDTH = 300;
@@ -7,13 +7,17 @@ public class SessionCoverImage {
     private static final int WIDTH_RATE = 2;
     private static final int HEIGHT_RATE = 3;
 
+    private final Long id;
+    private final Long sessionId;
     private final double size;
     private final SessionImageType type;
     private final int width;
     private final int height;
 
-    public SessionCoverImage(double size, SessionImageType type, int width, int height) {
+    public SessionCoverImage(Long id, Long sessionId, double size, SessionImageType type, int width, int height) {
         validate(size, width, height);
+        this.id = id;
+        this.sessionId = sessionId;
         this.size = size;
         this.type = type;
         this.width = width;
@@ -32,6 +36,11 @@ public class SessionCoverImage {
         if (width * WIDTH_RATE != height * HEIGHT_RATE) {
             throw new IllegalArgumentException(String.format("이미지의 폭과 높이는 %d:%d 비율이어야 합니다.", HEIGHT_RATE, WIDTH_RATE));
         }
+    }
+
+
+    public Long getSessionId() {
+        return sessionId;
     }
 
     public double getSize() {

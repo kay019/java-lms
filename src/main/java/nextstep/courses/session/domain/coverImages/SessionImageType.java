@@ -1,4 +1,4 @@
-package nextstep.courses.session.domain;
+package nextstep.courses.session.domain.coverImages;
 
 import java.util.Arrays;
 
