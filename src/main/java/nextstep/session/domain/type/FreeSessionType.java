@@ -9,6 +9,8 @@ public class FreeSessionType extends SessionType {
 
     @Override
     protected void validatePayment(Long amount) {
-        
+        if (amount != FREE_PRICE) {
+            throw new IllegalArgumentException("payment price must be 0");
+        }
     }
 }
