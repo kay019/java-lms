@@ -34,7 +34,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Long save(Session session) {
-        String sql = "INSERT INTO session(start_at, end_at, session_status, capacity, price) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session(started_at, ended_at, session_status, capacity, price) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -56,7 +56,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Optional<Session> findById(Long sessionId) {
         String joinSql = "SELECT " +
-                "s.id, s.start_at, s.end_at, s.session_status, s.capacity, s.price, " +
+                "s.id, s.started_at, s.ended_at, s.session_status, s.capacity, s.price, " +
                 "sc.id as cover_id, sc.session_id as cover_session_id, sc.size, sc.img_type, sc.width, sc.height, " +
                 "st.id as student_id, st.ns_user_id, st.create_dt " +
                 "FROM session s " +

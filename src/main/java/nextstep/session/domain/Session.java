@@ -69,14 +69,11 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(startedAt, session.startedAt)
-                && Objects.equals(endedAt, session.endedAt) && Objects.equals(cover, session.cover)
-                && Objects.equals(sessionType, session.sessionType) && Objects.equals(enrollment,
-                session.enrollment);
+        return Objects.equals(id, session.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startedAt, endedAt, cover, sessionType, enrollment);
+        return Objects.hashCode(id);
     }
 }
