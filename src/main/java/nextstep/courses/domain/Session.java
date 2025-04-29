@@ -46,6 +46,10 @@ public abstract class Session {
         return students.size();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public SessionStatus getSessionStatus() {
         return sessionStatus;
     }

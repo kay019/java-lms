@@ -29,7 +29,7 @@ class JdbcEnrollmentRepositoryTest {
     @BeforeEach
     void setUp() {
         enrollmentRepository = new JdbcEnrollmentRepository(jdbcTemplate);
-        sessionRepository = new JdbcFreeSessionRepository(jdbcTemplate);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate);
     }
 
     @Test
