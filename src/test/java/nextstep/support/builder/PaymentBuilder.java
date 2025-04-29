@@ -1,14 +1,11 @@
 package nextstep.support.builder;
 
-import nextstep.courses.domain.Session;
 import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
-import nextstep.users.domain.NsUserTest;
 
 public class PaymentBuilder {
     private String id = "1";
-    private Session session;
-    private NsUser nsUser = NsUserTest.JAVAJIGI;
+    private Long sessionId = 1L;
+    private Long nsUserId = 1L;
     private Long amount = 10_000L;
 
     public PaymentBuilder id(String id) {
@@ -16,13 +13,13 @@ public class PaymentBuilder {
         return this;
     }
 
-    public PaymentBuilder session(Session session) {
-        this.session = session;
+    public PaymentBuilder sessionId(Long sessionId) {
+        this.sessionId = sessionId;
         return this;
     }
 
-    public PaymentBuilder nsUser(NsUser nsUser) {
-        this.nsUser = nsUser;
+    public PaymentBuilder nsUserId(Long nsUserId) {
+        this.nsUserId = nsUserId;
         return this;
     }
 
@@ -32,6 +29,6 @@ public class PaymentBuilder {
     }
 
     public Payment build() {
-        return new Payment(id, session, nsUser, amount);
+        return new Payment(id, sessionId, nsUserId, amount);
     }
 }

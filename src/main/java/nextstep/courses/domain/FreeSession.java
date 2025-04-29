@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 
@@ -18,14 +17,9 @@ public class FreeSession extends Session {
     }
 
     @Override
-    public void enroll(Payment payment) {
+    public Enrollment requestEnroll(int approvedStudent, Payment payment) {
         enrollStatus.validateEnroll();
-        enrollStudent(payment.getNsUser());
-    }
-
-    private void enrollStudent(NsUser user) {
-        Student student = new Student(user);
-        students.add(student);
+        return Enrollment.requestEnroll(payment.getSessionId(), payment.getNsUserId());
     }
 
 }

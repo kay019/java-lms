@@ -50,4 +50,10 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
             return Optional.of(enrollment);
         }, sessionId, userId);
     }
+
+    @Override
+    public int countApprovedBySessionId(Long sessionId) {
+        String sql = "select count(*) from enrollment where session_id = ? and status = 'APPROVED'";
+        return jdbcTemplate.queryForObject(sql, Integer.class, sessionId);
+    }
 }

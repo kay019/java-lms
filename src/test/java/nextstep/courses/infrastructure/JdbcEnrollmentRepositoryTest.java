@@ -2,6 +2,7 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Enrollment;
 import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.RequestStatus;
 import nextstep.courses.domain.repository.EnrollmentRepository;
 import nextstep.courses.domain.repository.SessionRepository;
 import nextstep.support.builder.FreeSessionBuilder;
@@ -80,4 +81,35 @@ class JdbcEnrollmentRepositoryTest {
         // then
         assertThat(result).isEmpty();
     }
+
+    @Test
+    void countApprovedBySessionIdTest_withResult() {
+        // given
+        FreeSession freeSession = new FreeSessionBuilder().build();
+        Long sessionId = sessionRepository.save(freeSession);
+        Enrollment enrollment1 = new Enrollment(null, sessionId, 1L, RequestStatus.APPROVED);
+        Enrollment enrollment2 = new Enrollment(null, sessionId, 2L, RequestStatus.REJECTED);
+        enrollmentRepository.save(enrollment1);
+        enrollmentRepository.save(enrollment2);
+
+        // when
+        int result = enrollmentRepository.countApprovedBySessionId(sessionId);
+
+        // then
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    void countApprovedBySessionIdTest_noResult() {
+        // given
+        FreeSession freeSession = new FreeSessionBuilder().build();
+        Long sessionId = sessionRepository.save(freeSession);
+
+        // when
+        int result = enrollmentRepository.countApprovedBySessionId(sessionId);
+
+        // then
+        assertThat(result).isZero();
+    }
+
 }

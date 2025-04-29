@@ -8,4 +8,6 @@ public interface EnrollmentRepository {
     Long save(Enrollment enrollment);
 
     Optional<Enrollment> findById(Long sessionId, Long userId);
+
+    int countApprovedBySessionId(Long sessionId);
 }

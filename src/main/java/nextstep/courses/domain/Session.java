@@ -13,8 +13,6 @@ public abstract class Session {
 
     protected SessionDate date;
 
-    protected Students students;
-
     protected LocalDateTime createdAt;
 
     protected LocalDateTime updatedAt;
@@ -25,7 +23,6 @@ public abstract class Session {
         this.sessionStatus = sessionStatus;
         this.enrollStatus = enrollStatus;
         this.date = date;
-        this.students = new Students();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = null;
     }
@@ -40,11 +37,7 @@ public abstract class Session {
         this.updatedAt = updatedAt;
     }
 
-    public abstract void enroll(Payment payment);
-
-    public int getStudentSize() {
-        return students.size();
-    }
+    public abstract Enrollment requestEnroll(int approvedStudent, Payment payment);
 
     public Long getId() {
         return id;
