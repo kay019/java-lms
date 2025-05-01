@@ -1,20 +1,20 @@
 package nextstep.courses.infrastructure.entity;
 
-import nextstep.courses.domain.model.Session;
-import nextstep.courses.domain.model.Student;
+import nextstep.courses.domain.model.Applicant;
+import nextstep.courses.domain.model.ApplicantStatus;
 import nextstep.users.domain.NsUser;
 
 import java.sql.Timestamp;
 
-public class JdbcStudent extends BaseEntity {
+public class JdbcApplicant extends BaseEntity {
     private Long sessionId;
     private Long nsUserId;
 
-    public JdbcStudent() {
+    public JdbcApplicant() {
         super();
     }
 
-    public JdbcStudent(Long id, Long sessionId, Long nsUserId, Timestamp createdAt, Timestamp updatedAt) {
+    public JdbcApplicant(Long id, Long sessionId, Long nsUserId, Timestamp createdAt, Timestamp updatedAt) {
         super(id, createdAt, updatedAt);
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
@@ -36,7 +36,9 @@ public class JdbcStudent extends BaseEntity {
         this.nsUserId = nsUserId;
     }
 
-    public Student toDomain(NsUser nsUser, Session session) {
-        return new Student(getId(), nsUser, session, getCreatedAt(), getUpdatedAt());
+    public Applicant toDomain(NsUser nsUser) {
+        return new Applicant(getId(), sessionId, nsUser, null, ApplicantStatus.APPROVED,
+                getCreatedAt().toLocalDateTime(),
+                getUpdatedAt() == null ? null : getUpdatedAt().toLocalDateTime());
     }
 }

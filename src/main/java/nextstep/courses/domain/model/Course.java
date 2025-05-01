@@ -1,59 +1,45 @@
 package nextstep.courses.domain.model;
 
-import org.springframework.lang.NonNull;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static nextstep.courses.domain.model.Timestamped.toLocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Course extends BaseEntity {
-    private String title;
+    private final String title;
+    private final boolean hasSelection;
+    private final Long creatorId;
 
-    private Long creatorId;
-
-    private final List<Session> sessions;
-
-    public Course(String title, Long creatorId) {
-        this(null, title, creatorId, LocalDateTime.now(), LocalDateTime.now());
+    public Course(String title, boolean hasSelection, Long creatorId) {
+        this(null, title, hasSelection, creatorId, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(id, title, creatorId, new ArrayList<>(), createdAt, updatedAt);
-    }
-
-    public Course(Long id, String title, Long creatorId, Timestamp createdAt, Timestamp updatedAt) {
-        this(id, title, creatorId, new ArrayList<>(), toLocalDateTime(createdAt), toLocalDateTime(updatedAt));
-    }
-
-    public Course(Long id, String title, Long creatorId, @NonNull List<Session> sessions, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(Long id, String title, boolean hasSelection, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, createdAt, updatedAt);
         this.title = title;
+        this.hasSelection = hasSelection;
         this.creatorId = creatorId;
-        this.sessions = sessions;
     }
 
-    public String getTitle() {
-        return title;
+    public boolean hasSelection() {
+        return hasSelection;
     }
 
-    public Long getCreatorId() {
-        return creatorId;
+    public boolean hasSameTitle(Course savedCourse) {
+        return title.equals(savedCourse.title);
     }
 
-    public void addSession(Session session) {
-        sessions.add(session);
+    public boolean hasSameSelection(Course savedCourse) {
+        return hasSelection == savedCourse.hasSelection;
     }
 
-    public List<Session> getSessions() {
-        return Collections.unmodifiableList(sessions);
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" + ", title='" + title + '\'' + ", creatorId=" + creatorId + '}';
+    public Map<String, Object> getParameters() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("created_at", getCreatedAt());
+        map.put("updated_at", getUpdatedAt());
+        map.put("title", title);
+        map.put("has_selection", hasSelection);
+        map.put("creator_id", creatorId);
+        return map;
     }
 }

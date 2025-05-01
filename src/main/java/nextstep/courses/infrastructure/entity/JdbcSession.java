@@ -1,18 +1,18 @@
 package nextstep.courses.infrastructure.entity;
 
-import nextstep.courses.domain.model.Session;
+import nextstep.courses.domain.model.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class JdbcSession extends BaseEntity {
     private Long courseId;
     private Integer capacity;
     private String status;
+    private String recruitment;
     private BigDecimal price;
     private Date startDate;
     private Date endDate;
@@ -24,7 +24,7 @@ public class JdbcSession extends BaseEntity {
         super();
     }
 
-    public JdbcSession(Long id, Long courseId, Integer capacity, String status,
+    public JdbcSession(Long id, Long courseId, Integer capacity, String status, String recruitment,
                        BigDecimal price, Date startDate, Date endDate,
                        String imagePath, Blob imageFile, Long creatorId,
                        Timestamp createdAt, Timestamp updatedAt) {
@@ -32,6 +32,7 @@ public class JdbcSession extends BaseEntity {
         this.courseId = courseId;
         this.capacity = capacity;
         this.status = status;
+        this.recruitment = recruitment;
         this.price = price;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -62,6 +63,14 @@ public class JdbcSession extends BaseEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getRecruitment() {
+        return recruitment;
+    }
+
+    public void setRecruitment(String recruitment) {
+        this.recruitment = recruitment;
     }
 
     public BigDecimal getPrice() {
@@ -113,11 +122,11 @@ public class JdbcSession extends BaseEntity {
         this.creatorId = creatorId;
     }
 
-    public Session toDomain() {
-        try {
-            return new Session(getId(), courseId, startDate, endDate, imagePath, imageFile, status, price.longValue(), capacity, creatorId, getCreatedAt(), getUpdatedAt());
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException("Failed to convert SessionEntity to Session", e);
-        }
+    public Session toDomain(Course course, List<SessionImage> images) {
+        return new Session(getId(), course, new SessionPeriod(startDate, endDate), images,
+                ProgressStatus.valueOf(status), RegistrationStatus.valueOf(recruitment), price.longValue(), new Registration(capacity),
+                creatorId, getCreatedAt().toLocalDateTime(),
+                getUpdatedAt() == null ? null : getUpdatedAt().toLocalDateTime());
     }
+
 }

@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class SessionPeriod {
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
 
     public SessionPeriod(Date startDate, Date endDate) {
         this(startDate.toLocalDate().atStartOfDay(), endDate.toLocalDate().atStartOfDay());
@@ -32,11 +32,4 @@ public class SessionPeriod {
         return endDate;
     }
 
-    @Override
-    public String toString() {
-        return "SessionPeriod{" +
-                "startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
-    }
 }

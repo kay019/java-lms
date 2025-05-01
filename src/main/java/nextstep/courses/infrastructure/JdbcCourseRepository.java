@@ -8,9 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Repository
 public class JdbcCourseRepository implements CourseRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -20,24 +17,21 @@ public class JdbcCourseRepository implements CourseRepository {
     }
 
     @Override
-    public int save(Course course) {
+    public long save(Course course) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("course")
                 .usingGeneratedKeyColumns("id");
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("title", course.getTitle());
-        parameters.put("creator_id", course.getCreatorId());
-        parameters.put("created_at", course.getCreatedAt());
-
-        return simpleJdbcInsert.execute(parameters);
+        Number number = simpleJdbcInsert.executeAndReturnKey(course.getParameters());
+        course.setId(number.longValue());
+        return number.longValue();
     }
 
     @Override
     public Course findById(Long id) {
         String sql = "select * from course where id = ?";
         JdbcCourse entity = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(JdbcCourse.class), id);
-        return entity == null? null : entity.toDomain();
+        return entity == null ? null : entity.toDomain();
     }
 
 }

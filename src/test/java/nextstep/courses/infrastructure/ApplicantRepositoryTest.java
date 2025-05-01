@@ -1,9 +1,9 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.SessionTest;
+import nextstep.courses.domain.model.Applicant;
 import nextstep.courses.domain.model.Session;
-import nextstep.courses.domain.model.Student;
-import nextstep.courses.domain.repository.StudentRepository;
+import nextstep.courses.domain.repository.ApplicantRepository;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,28 +16,28 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
-class StudentRepositoryTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StudentRepositoryTest.class);
+class ApplicantRepositoryTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicantRepositoryTest.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private StudentRepository studentRepository;
+    private ApplicantRepository applicantRepository;
 
     @BeforeEach
     void setUp() {
-        studentRepository = new JdbcStudentRepository(jdbcTemplate);
+        applicantRepository = new JdbcApplicantRepository(jdbcTemplate);
     }
 
     @Test
     void save() {
         Session session = SessionTest.SESSION1;
-        Student student = new Student(NsUserTest.JAVAJIGI, session);
-        int count = studentRepository.save(student);
-        assertThat(count).isEqualTo(1);
+        Applicant applicant = new Applicant(NsUserTest.JAVAJIGI, session.getId(), null);
+        long id = applicantRepository.save(applicant);
+        assertThat(id).isEqualTo(applicant.getId());
 
-        Student saved = studentRepository.findById(1L);
-        assertThat(saved.getSession()).isEqualTo(session);
+        Applicant saved = applicantRepository.findById(id);
+        assertThat(saved.getSessionId()).isEqualTo(session.getId());
         assertThat(saved.getNsUser()).isEqualTo(NsUserTest.JAVAJIGI);
         LOGGER.debug("Student: {}", saved);
     }

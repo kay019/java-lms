@@ -3,11 +3,9 @@ package nextstep.users.domain;
 import nextstep.qna.UnAuthorizedException;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static nextstep.courses.domain.model.Timestamped.toLocalDateTime;
 
 public class NsUser {
     public static final GuestNsUser GUEST_USER = new GuestNsUser();
@@ -41,10 +39,6 @@ public class NsUser {
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this(id, userId, password, name, email, new BigDecimal(0), createdAt, updatedAt);
-    }
-
-    public NsUser(Long id, String userId, String password, String name, String email, BigDecimal balance, Timestamp createdAt, Timestamp updatedAt) {
-        this(id, userId, password, name, email, balance, toLocalDateTime(createdAt), toLocalDateTime(updatedAt));
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, BigDecimal balance, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -135,13 +129,6 @@ public class NsUser {
         return false;
     }
 
-    private static class GuestNsUser extends NsUser {
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -164,5 +151,12 @@ public class NsUser {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    private static class GuestNsUser extends NsUser {
+        @Override
+        public boolean isGuestUser() {
+            return true;
+        }
     }
 }

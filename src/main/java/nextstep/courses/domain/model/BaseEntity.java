@@ -1,14 +1,16 @@
 package nextstep.courses.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public abstract class BaseEntity {
-    protected Long id;
-    protected LocalDateTime createdAt;
-    protected LocalDateTime updatedAt;
+    private Long id;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     protected BaseEntity() {
-
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     protected BaseEntity(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -21,6 +23,10 @@ public abstract class BaseEntity {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -29,4 +35,16 @@ public abstract class BaseEntity {
         return updatedAt;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseEntity that = (BaseEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

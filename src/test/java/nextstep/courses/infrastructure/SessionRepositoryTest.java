@@ -1,9 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.model.Course;
-import nextstep.courses.domain.model.Session;
-import nextstep.courses.domain.model.SessionImage;
-import nextstep.courses.domain.model.SessionStatus;
+import nextstep.courses.domain.model.*;
 import nextstep.courses.domain.repository.CourseRepository;
 import nextstep.courses.domain.repository.SessionRepository;
 import nextstep.users.domain.NsUserTest;
@@ -45,18 +42,19 @@ class SessionRepositoryTest {
                 now.plusMonths(1),
                 now.plusMonths(2),
                 new SessionImage("/image/clean_code.jpg", 300, 200, new byte[300 * 200]),
-                SessionStatus.OPEN,
-                NsUserTest.JAVAJIGI
+                ProgressStatus.ACTIVE,
+                RegistrationStatus.OPEN, NsUserTest.JAVAJIGI
         );
-        int count = sessionRepository.save(session);
-        assertThat(count).isEqualTo(1);
+        long id = sessionRepository.save(session);
+        assertThat(id).isEqualTo(session.getId());
 
         Session saved = sessionRepository.findById(2L);
-        assertThat(saved.getCourseId()).isEqualTo(1L);
+        assertThat(saved.getCourse()).isEqualTo(course);
         assertThat(saved.getPrice()).isEqualTo(session.getPrice());
         assertThat(saved.getStatus()).isEqualTo(session.getStatus());
-        assertThat(saved.getStudents().getCapacity()).isEqualTo(session.getStudents().getCapacity());
-        assertThat(saved.getImage().getFile()).isEqualTo(session.getImage().getFile());
+        assertThat(saved.getRecruitmentStatus()).isEqualTo(session.getRecruitmentStatus());
+        assertThat(saved.getCapacity()).isEqualTo(session.getCapacity());
+        assertThat(saved.getImages().size()).isEqualTo(session.getImages().size());
         LOGGER.debug("Session: {}", saved);
     }
 

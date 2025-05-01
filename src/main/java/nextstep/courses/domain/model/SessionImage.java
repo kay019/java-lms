@@ -3,8 +3,10 @@ package nextstep.courses.domain.model;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class SessionImage {
+public class SessionImage extends BaseEntity {
     private static final int MAX_FILE_SIZE_BYTES = 1024 * 1024;
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 200;
@@ -13,10 +15,10 @@ public class SessionImage {
     private final byte[] file;
 
     public SessionImage(String path, int width, int height, byte[] file) {
+        super();
         validateSize(file);
         validateExtension(path);
         validateDimensions(width, height);
-
         this.path = path;
         this.file = file;
     }
@@ -26,6 +28,7 @@ public class SessionImage {
     }
 
     public SessionImage(String path, byte[] file) {
+        super();
         this.path = path;
         this.file = file;
     }
@@ -69,10 +72,14 @@ public class SessionImage {
         return file;
     }
 
-    @Override
-    public String toString() {
-        return "SessionImage{" +
-                "path='" + path + '\'' +
-                '}';
+    public Map<String, Object> getParameters(Long sessionId) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("session_id", sessionId);
+        parameters.put("image_path", path);
+        parameters.put("image_file", file);
+        parameters.put("created_at", getCreatedAt());
+        parameters.put("updated_at", getUpdatedAt());
+        return parameters;
     }
+
 }
