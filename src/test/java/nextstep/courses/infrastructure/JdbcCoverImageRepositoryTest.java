@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,23 +57,26 @@ class JdbcCoverImageRepositoryTest {
         CoverImagePixelSize pixelSize = CoverImagePixelSizeFixture.create();
         CoverImage coverImage = new CoverImage(fileSize, extension, pixelSize);
         coverImageRepository.save(coverImage, sessionId);
+        coverImageRepository.save(coverImage, sessionId);
 
         // when
-        Optional<CoverImage> result = coverImageRepository.findBySessionId(sessionId);
+        List<CoverImage> result = coverImageRepository.findByAllSessionId(sessionId);
 
         // then
-        assertThat(result).isPresent();
-        CoverImage image = result.get();
-        assertThat(image.getFileSize().getSize()).isEqualTo(fileSize.getSize());
-        assertThat(image.getExtension()).isEqualTo(CoverImageExtension.JPEG);
-        assertThat(image.getPixelSize().getWidth()).isEqualTo(pixelSize.getWidth());
-        assertThat(image.getPixelSize().getHeight()).isEqualTo(pixelSize.getHeight());
+        assertThat(result).hasSize(2);
+        for (int i = 0; i < result.size(); i++) {
+            CoverImage image = result.get(i);
+            assertThat(image.getFileSize().getSize()).isEqualTo(fileSize.getSize());
+            assertThat(image.getExtension()).isEqualTo(CoverImageExtension.JPEG);
+            assertThat(image.getPixelSize().getWidth()).isEqualTo(pixelSize.getWidth());
+            assertThat(image.getPixelSize().getHeight()).isEqualTo(pixelSize.getHeight());
+        }
     }
 
     @Test
     void findBySessionIdTest_notFound() {
         // when
-        Optional<CoverImage> result = coverImageRepository.findBySessionId(1L);
+        List<CoverImage> result = coverImageRepository.findByAllSessionId(1L);
 
         // then
         assertThat(result).isEmpty();

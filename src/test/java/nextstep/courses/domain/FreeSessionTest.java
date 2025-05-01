@@ -3,28 +3,30 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.support.builder.FreeSessionBuilder;
 import nextstep.support.builder.PaymentBuilder;
-import nextstep.users.domain.NsUserTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FreeSessionTest {
 
     @Test
-    @DisplayName("수강을 완료하면 수강 학생 목록에 추가한다.")
-    void enrollStudentTest() {
+    @DisplayName("수강 신청을 하면 수강 대기 상태가 된다.")
+    void requestEnrollTest() {
+        int approvedStudent = 10;
         Payment payment = new PaymentBuilder()
                 .amount(0L)
-                .nsUser(NsUserTest.JAVAJIGI)
+                .sessionId(1L)
+                .nsUserId(1L)
                 .build();
         Session session = new FreeSessionBuilder()
-                .status(SessionStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
-        session.enroll(payment);
+        Enrollment enrollment = session.requestEnroll(approvedStudent, payment);
 
-        assertEquals(session.getStudentSize(), 1);
+        Assertions.assertThat(enrollment.getStatus()).isEqualTo(RequestStatus.REQUESTED);
+        Assertions.assertThat(enrollment.getSessionId()).isEqualTo(payment.getSessionId());
+        Assertions.assertThat(enrollment.getUserId()).isEqualTo(payment.getNsUserId());
     }
 
 }

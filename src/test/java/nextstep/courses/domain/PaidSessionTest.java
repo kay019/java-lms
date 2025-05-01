@@ -3,7 +3,6 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.support.builder.PaidSessionBuilder;
 import nextstep.support.builder.PaymentBuilder;
-import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,24 +16,20 @@ class PaidSessionTest {
     void validateEnrollTest_validateMaxStudent() {
         int fee = 10_000;
         int maxStudent = 1;
-        Payment payment1 = new PaymentBuilder()
+        Payment payment = new PaymentBuilder()
                 .amount((long) fee)
-                .nsUser(NsUserTest.JAVAJIGI)
-                .build();
-        Payment payment2 = new PaymentBuilder()
-                .amount((long) fee)
-                .nsUser(NsUserTest.SANJIGI)
+                .nsUserId(1L)
                 .build();
         Session session = new PaidSessionBuilder()
                 .fee(fee)
                 .maxStudent(maxStudent)
-                .status(SessionStatus.RECRUITING)
+                .enrollStatus(EnrollStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> {
-                    session.enroll(payment1);
-                    session.enroll(payment2);
+                    session.requestEnroll(maxStudent, payment);
                 })
                 .withMessageContaining("유료 강의는 강의 최대 수강 인원을 초과할 수 없습니다.");
     }
@@ -44,46 +39,47 @@ class PaidSessionTest {
     void validateEnrollTest_validateSameFee() {
         int fee = 10_000;
         int maxStudent = 1;
-        Payment payment1 = new PaymentBuilder()
+        int approvedStudent = 0;
+        Payment payment = new PaymentBuilder()
                 .amount((long) fee - 10)
-                .nsUser(NsUserTest.JAVAJIGI)
+                .nsUserId(1L)
                 .build();
         Session session = new PaidSessionBuilder()
                 .fee(fee)
                 .maxStudent(maxStudent)
-                .status(SessionStatus.RECRUITING)
+                .enrollStatus(EnrollStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> {
-                    session.enroll(payment1);
+                    session.requestEnroll(approvedStudent, payment);
                 })
                 .withMessageContaining("수강생이 결제한 금액과 수강료가 일치할 때 수강 신청이 가능합니다.");
     }
 
     @Test
-    @DisplayName("수강을 완료하면 수강 학생 목록에 추가한다.")
+    @DisplayName("수강 신청을 하면 수강 대기 상태가 된다.")
     void enrollStudentTest() {
         int fee = 10_000;
         int maxStudent = 3;
-        Payment payment1 = new PaymentBuilder()
+        int approvedStudent = 1;
+        Payment payment = new PaymentBuilder()
                 .amount((long) fee)
-                .nsUser(NsUserTest.JAVAJIGI)
-                .build();
-        Payment payment2 = new PaymentBuilder()
-                .amount((long) fee)
-                .nsUser(NsUserTest.SANJIGI)
+                .nsUserId(1L)
                 .build();
         Session session = new PaidSessionBuilder()
                 .fee(fee)
                 .maxStudent(maxStudent)
-                .status(SessionStatus.RECRUITING)
+                .enrollStatus(EnrollStatus.RECRUITING)
+                .sessionStatus(SessionStatus.ONGOING)
                 .build();
 
-        session.enroll(payment1);
-        session.enroll(payment2);
+        Enrollment enrollment = session.requestEnroll(approvedStudent, payment);
 
-        assertEquals(session.getStudentSize(), 2);
+        assertEquals(enrollment.getStatus(), RequestStatus.REQUESTED);
+        assertEquals(enrollment.getSessionId(), payment.getSessionId());
+        assertEquals(enrollment.getUserId(), payment.getNsUserId());
     }
 
 }

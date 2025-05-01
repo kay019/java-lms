@@ -11,9 +11,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
-import java.util.Optional;
+import java.util.List;
 
-@Repository()
+@Repository
 public class JdbcCoverImageRepository implements CoverImageRepository {
     private final JdbcOperations jdbcTemplate;
 
@@ -41,14 +41,10 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
     }
 
     @Override
-    public Optional<CoverImage> findBySessionId(Long sessionId) {
+    public List<CoverImage> findByAllSessionId(Long sessionId) {
         String sql = "select id, size, extension, width, height from cover_image where session_id = ?";
 
-        return jdbcTemplate.query(sql, rs -> {
-            if (!rs.next()) {
-                return Optional.empty();
-            }
-
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
             long size = rs.getLong("size");
             String extensionString = rs.getString("extension");
             int width = rs.getInt("width");
@@ -57,9 +53,7 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
             CoverImageFileSize fileSize = new CoverImageFileSize(size);
             CoverImageExtension extension = CoverImageExtension.from(extensionString);
             CoverImagePixelSize pixelSize = new CoverImagePixelSize(width, height);
-            CoverImage coverImage = new CoverImage(fileSize, extension, pixelSize);
-
-            return Optional.of(coverImage);
+            return new CoverImage(fileSize, extension, pixelSize);
         }, sessionId);
     }
 }

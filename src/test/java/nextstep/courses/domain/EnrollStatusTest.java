@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.EnumSource;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class SessionStatusTest {
+class EnrollStatusTest {
     @ParameterizedTest
     @DisplayName("강의 수강신청은 강의 상태가 모집중일 때가 아니면 예외를 발생한다.")
-    @EnumSource(value = SessionStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "RECRUITING")
-    void validateEnrollTest_notRECRUITING(SessionStatus input) {
+    @EnumSource(value = EnrollStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "RECRUITING")
+    void validateEnrollTest_notRECRUITING(EnrollStatus input) {
         assertThatIllegalArgumentException()
                 .isThrownBy(input::validateEnroll);
     }
@@ -20,10 +20,9 @@ class SessionStatusTest {
     @Test
     @DisplayName("강의 수강신청은 강의 상태가 모집중일 때만 가능하다.")
     void validateEnrollTest_RECRUITING() {
-        SessionStatus status = SessionStatus.RECRUITING;
+        EnrollStatus status = EnrollStatus.RECRUITING;
 
         assertDoesNotThrow(status::validateEnroll);
     }
-
 
 }

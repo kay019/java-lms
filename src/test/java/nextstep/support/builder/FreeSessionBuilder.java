@@ -1,16 +1,15 @@
 package nextstep.support.builder;
 
+import nextstep.courses.domain.EnrollStatus;
 import nextstep.courses.domain.FreeSession;
 import nextstep.courses.domain.SessionDate;
 import nextstep.courses.domain.SessionStatus;
-import nextstep.courses.domain.image.CoverImage;
-import nextstep.support.fixture.CoverImageFixture;
 import nextstep.support.fixture.SessionDateFixture;
 
 public class FreeSessionBuilder {
     private Long id = 1L;
-    private CoverImage coverImage = CoverImageFixture.create();
-    private SessionStatus status = SessionStatus.RECRUITING;
+    private SessionStatus sessionStatus = SessionStatus.ONGOING;
+    private EnrollStatus enrollStatus = EnrollStatus.RECRUITING;
     private SessionDate date = SessionDateFixture.create();
 
     public FreeSessionBuilder id(Long id) {
@@ -18,18 +17,18 @@ public class FreeSessionBuilder {
         return this;
     }
 
-    public FreeSessionBuilder coverImage(CoverImage coverImage) {
-        this.coverImage = coverImage;
+    public FreeSessionBuilder sessionStatus(SessionStatus sessionStatus) {
+        this.sessionStatus = sessionStatus;
         return this;
     }
 
-    public FreeSessionBuilder status(SessionStatus status) {
-        this.status = status;
+    public FreeSessionBuilder enrollStatus(EnrollStatus enrollStatus) {
+        this.enrollStatus = enrollStatus;
         return this;
     }
 
     public FreeSession build() {
-        return new FreeSession(id, coverImage, status, date);
+        return new FreeSession(id, sessionStatus, enrollStatus, date);
     }
 
 }

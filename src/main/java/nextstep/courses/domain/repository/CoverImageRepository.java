@@ -2,11 +2,11 @@ package nextstep.courses.domain.repository;
 
 import nextstep.courses.domain.image.CoverImage;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface CoverImageRepository {
     Long save(CoverImage image, Long sessionId);
 
-    Optional<CoverImage> findBySessionId(Long sessionId);
+    List<CoverImage> findByAllSessionId(Long sessionId);
 
 }
