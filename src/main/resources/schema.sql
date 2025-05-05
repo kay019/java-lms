@@ -52,12 +52,12 @@ create table delete_history (
 create table session (
     id bigint not null,
     title varchar(100) not null,
-    cover_image_id bigint,
     start_at timestamp,
     end_at timestamp,
     fee bigint,
     enrollment_limit int,
-    status varchar(100) not null,
+    session_status varchar(100) not null,
+    recruitment_status varchar(100) not null,
     created_at timestamp not null,
     updated_at timestamp,
     primary key (id)
@@ -70,12 +70,14 @@ create table cover_image (
     file_size int,
     width int,
     height int,
+    session_id bigint,
     primary key (id)
 );
 
 create table enrolled_students (
     session_id bigint,
     student_id bigint,
+    enrollment_status varchar(100) not null,
     primary key(session_id, student_id)
 );
 
