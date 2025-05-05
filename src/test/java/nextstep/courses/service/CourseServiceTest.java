@@ -1,16 +1,10 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.Course;
-import nextstep.stub.TestCourseFactory;
-import nextstep.stub.TestCourseRepository;
-import nextstep.stub.TestSessionRepository;
-import nextstep.stub.TestSessionsFactory;
+import nextstep.courses.factory.CourseFactory;
+import nextstep.stub.repository.TestCourseRepository;
+import nextstep.stub.service.TestSessionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -20,13 +14,11 @@ class CourseServiceTest {
     @DisplayName("course 만들기")
     @Test
     void testCreateCourse() {
-        Course course = new Course("1", "test-course", 3L, LocalDateTime.now(), LocalDateTime.now());
-
-        TestCourseRepository courseRepository = new TestCourseRepository(1L, null);
+        TestCourseRepository courseRepository = new TestCourseRepository(1L);
         CourseService courseService = new CourseService(
             courseRepository,
-            new TestSessionRepository(1L, null, List.of()),
-            new TestCourseFactory(new TestSessionsFactory(), course)
+            new CourseFactory(),
+            new TestSessionService()
         );
 
         courseService.createCourse("test-title", 1L);
@@ -36,24 +28,16 @@ class CourseServiceTest {
 
     @DisplayName("course 삭제")
     @Test
-    void testDeleteCourse() throws IOException {
-        LocalDateTime testLocalDateTime = LocalDateTime.now();
-        Course course = new Course("1", "test-course", 3L, testLocalDateTime, testLocalDateTime);
-
-        TestCourseRepository courseRepository = new TestCourseRepository(1L, null);
-        TestCourseFactory courseFactory = new TestCourseFactory(new TestSessionsFactory(), course);
-
-        CourseService courseService = new CourseService(
-            courseRepository,
-            new TestSessionRepository(1L, null, List.of()),
-            courseFactory
-        );
+    void testDeleteCourse() {
+        TestCourseRepository courseRepository = new TestCourseRepository(1L);
+        TestSessionService sessionService = new TestSessionService();
+        CourseService courseService = new CourseService(courseRepository, new CourseFactory(), sessionService);
 
         courseService.deleteCourse(1L);
 
         assertAll(
-            () -> assertThat(courseFactory.getCreateCalled()).isEqualTo(1),
-            () -> assertThat(course.isDeleted()).isTrue()
+            () -> assertThat(courseRepository.getDeleteCalled()).isEqualTo(1),
+            () -> assertThat(sessionService.getDeleteSessionsCalled()).isEqualTo(1)
         );
     }
 }

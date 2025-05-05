@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
-    private JdbcOperations jdbcTemplate;
+    private final JdbcOperations jdbcTemplate;
 
     public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -25,25 +25,27 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Long save(SessionEntity sessionEntity) {
         String sql = "INSERT INTO session ("
-            + "created_at, deleted, course_id, fee, capacity, "
-            + "image_url, image_type, start_date, end_date, type, status"
-            + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            + "created_at, updated_at, deleted, course_id, fee, capacity, "
+            + "image_url, image_type, start_date, end_date, type, status, enroll_status"
+            + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setTimestamp(1, Timestamp.valueOf(sessionEntity.getCreatedAt()));
-            ps.setBoolean(2, sessionEntity.isDeleted());
-            ps.setLong(3, sessionEntity.getCourseId());
-            ps.setLong(4, sessionEntity.getFee());
-            ps.setInt(5, sessionEntity.getCapacity());
-            ps.setString(6, sessionEntity.getImageUrl());
-            ps.setString(7, sessionEntity.getImageType());
-            ps.setTimestamp(8, Timestamp.valueOf(sessionEntity.getStartDate()));
-            ps.setTimestamp(9, Timestamp.valueOf(sessionEntity.getEndDate()));
-            ps.setString(10, sessionEntity.getType());
-            ps.setString(11, sessionEntity.getStatus());
+            ps.setTimestamp(1, toTimestamp(sessionEntity.getCreatedAt()));
+            ps.setTimestamp(2, toTimestamp(sessionEntity.getUpdatedAt()));
+            ps.setBoolean(3, sessionEntity.isDeleted());
+            ps.setLong(4, sessionEntity.getCourseId());
+            ps.setLong(5, sessionEntity.getFee());
+            ps.setInt(6, sessionEntity.getCapacity());
+            ps.setString(7, sessionEntity.getImageUrl());
+            ps.setString(8, sessionEntity.getImageType());
+            ps.setTimestamp(9, toTimestamp(sessionEntity.getStartDate()));
+            ps.setTimestamp(10, toTimestamp(sessionEntity.getEndDate()));
+            ps.setString(11, sessionEntity.getType());
+            ps.setString(12, sessionEntity.getStatus());
+            ps.setString(13, sessionEntity.getEnrollStatus());
             return ps;
         }, keyHolder);
 
@@ -53,8 +55,8 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public SessionEntity findById(Long id) {
         String sessionSql = "SELECT id, created_at, updated_at, deleted, course_id, " +
-            "fee, capacity, image_url, image_type, start_date, end_date, type, status " +
-            "FROM session WHERE id = ?";
+            "fee, capacity, image_url, image_type, start_date, end_date, type, status, enroll_status " +
+            "FROM session WHERE id = ? AND deleted = false";
 
         RowMapper<SessionEntity> rowMapper = (rs, rowNum) -> SessionEntity.builder()
             .id(rs.getLong("id"))
@@ -70,16 +72,18 @@ public class JdbcSessionRepository implements SessionRepository {
             .endDate(toLocalDateTime(rs.getTimestamp("end_date")))
             .type(rs.getString("type"))
             .status(rs.getString("status"))
+            .enrollStatus(rs.getString("enroll_status"))
             .build();
 
-        return jdbcTemplate.queryForObject(sessionSql, rowMapper, id);
+        List<SessionEntity> results = jdbcTemplate.query(sessionSql, rowMapper, id);
+        return results.isEmpty() ? null : results.get(0);
     }
 
     @Override
     public List<SessionEntity> findAllByCourseId(Long courseId) {
         String sql = "SELECT id, created_at, updated_at, deleted, course_id, " +
-            "fee, capacity, image_url, image_type, start_date, end_date, type, status " +
-            "FROM session WHERE course_id = ?";
+            "fee, capacity, image_url, image_type, start_date, end_date, type, status, enroll_status " +
+            "FROM session WHERE course_id = ? AND deleted = false";
 
         RowMapper<SessionEntity> rowMapper = (rs, rowNum) -> SessionEntity.builder()
             .id(rs.getLong("id"))
@@ -95,9 +99,30 @@ public class JdbcSessionRepository implements SessionRepository {
             .endDate(toLocalDateTime(rs.getTimestamp("end_date")))
             .type(rs.getString("type"))
             .status(rs.getString("status"))
+            .enrollStatus(rs.getString("enroll_status"))
             .build();
 
         return jdbcTemplate.query(sql, rowMapper, courseId);
+    }
+
+    @Override
+    public void delete(Long sessionId) {
+        String sql = "UPDATE session SET deleted = ?, updated_at = ? WHERE id = ?";
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setBoolean(1, true); // Set the deleted flag to true
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now())); // Update the updated_at field
+            ps.setLong(3, sessionId);
+            return ps;
+        });
+    }
+
+    private Timestamp toTimestamp(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return null;
+        }
+        return Timestamp.valueOf(localDateTime);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {

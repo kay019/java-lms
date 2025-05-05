@@ -12,11 +12,13 @@ import java.time.LocalDateTime;
 public class PaymentEntity {
     private Long id;
 
-    private Long userId;
+    private String userId;
 
     private Long sessionId;
 
     private Long amount;
+
+    private String status;
 
     private LocalDateTime createdAt;
 

@@ -1,13 +1,14 @@
 package nextstep.courses.entity;
 
-
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@EqualsAndHashCode
 public class SessionEntity {
     private Long id;
 
@@ -23,8 +24,10 @@ public class SessionEntity {
 
     private int capacity;
 
+    @Deprecated
     private String imageUrl;
 
+    @Deprecated
     private String imageType;
 
     private LocalDateTime startDate;
@@ -32,6 +35,8 @@ public class SessionEntity {
     private LocalDateTime endDate;
 
     private String type;
+
+    private String enrollStatus;
 
     private String status;
 

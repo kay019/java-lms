@@ -1,18 +1,20 @@
-package nextstep.stub;
+package nextstep.stub.repository;
 
 import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.entity.SessionEntity;
 
 import java.util.List;
 
-public class TestSessionRepository implements SessionRepository  {
-    int saveCalled = 0;
-    int findByIdCalled = 0;
-    int findAllByCourseIdCalled = 0;
+public class TestSessionRepository implements SessionRepository {
+    private final Long saveResult;
+    private final SessionEntity findByIdResult;
+    private final List<SessionEntity> findAllByCourseIdResult;
+    private int saveCalled = 0;
+    private int deleteCalled = 0;
 
-    Long saveResult;
-    SessionEntity findByIdResult;
-    List<SessionEntity> findAllByCourseIdResult;
+    public TestSessionRepository() {
+        this(null, null, null);
+    }
 
     public TestSessionRepository(Long saveResult, SessionEntity findByIdResult, List<SessionEntity> findAllByCourseIdResult) {
         this.saveResult = saveResult;
@@ -28,25 +30,24 @@ public class TestSessionRepository implements SessionRepository  {
 
     @Override
     public SessionEntity findById(Long id) {
-        findByIdCalled++;
         return findByIdResult;
     }
 
     @Override
     public List<SessionEntity> findAllByCourseId(Long courseId) {
-        findAllByCourseIdCalled++;
         return findAllByCourseIdResult;
+    }
+
+    @Override
+    public void delete(Long sessionId) {
+        deleteCalled++;
     }
 
     public int getSaveCalled() {
         return saveCalled;
     }
 
-    public int getFindByIdCalled() {
-        return findByIdCalled;
-    }
-
-    public int getFindAllByCourseIdCalled() {
-        return findAllByCourseIdCalled;
+    public int getDeleteCalled() {
+        return deleteCalled;
     }
 }

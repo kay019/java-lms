@@ -1,13 +1,16 @@
 package nextstep.payments.domain;
 
+import lombok.Getter;
 import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.session.Session;
-import nextstep.payments.entity.PaymentEntity;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static nextstep.payments.domain.PaymentStatus.PENDING;
+
+@Getter
 public class Payment extends BaseDomain {
 
     private Session session;
@@ -16,37 +19,25 @@ public class Payment extends BaseDomain {
 
     private Long amount;
 
-    public static Payment from(PaymentEntity paymentEntity, Session session, NsUser nsUser) {
-        return new Payment(
-            paymentEntity.getId(),
-            paymentEntity.isDeleted(),
-            paymentEntity.getCreatedAt(),
-            paymentEntity.getUpdatedAt(),
-            session,
-            nsUser,
-            paymentEntity.getAmount()
-        );
-    }
+    private PaymentStatus status;
 
     public Payment() {
     }
 
     public Payment(Session session, NsUser user, Long amount) {
-        this(null, session, user, amount);
+        this(null, false, LocalDateTime.now(), LocalDateTime.now(), session, user, amount, PENDING);
     }
 
     public Payment(String id, Session session, NsUser user, Long amount) {
-        super(id, LocalDateTime.now(), LocalDateTime.now());
-        this.session = session;
-        this.user = user;
-        this.amount = amount;
+        this(id, false, LocalDateTime.now(), LocalDateTime.now(), session, user, amount, PENDING);
     }
 
-    public Payment(String id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt, Session session, NsUser user, Long amount) {
+    public Payment(String id, boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt, Session session, NsUser user, Long amount, PaymentStatus status) {
         super(id, deleted, createdAt, updatedAt);
         this.session = session;
         this.user = user;
         this.amount = amount;
+        this.status = status;
     }
 
     public boolean equalsSessionUser(Payment payment) {
@@ -59,18 +50,6 @@ public class Payment extends BaseDomain {
 
     public boolean canEnroll(Session session, int enrollCount) {
         return session.canEnroll(enrollCount, amount);
-    }
-
-    public PaymentEntity toPaymentEntity() {
-        return PaymentEntity.builder()
-            .id(id())
-            .userId(user.id())
-            .sessionId(session.id())
-            .amount(amount)
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
-            .deleted(deleted)
-            .build();
     }
 
     @Override

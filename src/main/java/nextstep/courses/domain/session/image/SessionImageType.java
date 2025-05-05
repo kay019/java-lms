@@ -12,16 +12,16 @@ public enum SessionImageType {
     PNG("png"),
     SVG("svg");
 
-    private final String image;
+    private final String type;
 
-    SessionImageType(String image) {
-        this.image = image;
+    SessionImageType(String type) {
+        this.type = type;
     }
 
     public static SessionImageType fromString(String image) {
         return Stream.of(SessionImageType.values())
-            .filter(type -> type.image.equalsIgnoreCase(image))
+            .filter(type -> type.type.equalsIgnoreCase(image))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(String.format("알 수 없는 이미지 유형: '%s'", image)));
+            .orElse(null);
     }
 }

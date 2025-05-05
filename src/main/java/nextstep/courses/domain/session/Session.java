@@ -1,14 +1,13 @@
 package nextstep.courses.domain.session;
 
+import lombok.Getter;
 import nextstep.common.domian.BaseDomain;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
-import nextstep.courses.entity.SessionEntity;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
 public class Session extends BaseDomain {
 
     private final SessionConstraint constraint;
@@ -40,35 +39,14 @@ public class Session extends BaseDomain {
         this.deleted = deleted;
     }
 
-    public BufferedImage image() throws IOException {
-        return descriptor.image();
-    }
-
     public void delete() {
         this.deleted = true;
         this.updatedAt = LocalDateTime.now();
+        this.descriptor.deleteSessionImage();
     }
 
     public boolean canEnroll(int enrollCount, long amount) {
         return descriptor.canEnroll(constraint, enrollCount, amount);
-    }
-
-    public SessionEntity toSessionEntity(Long courseId) {
-        return SessionEntity.builder()
-            .id(id())
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
-            .deleted(deleted)
-            .courseId(courseId)
-            .fee(constraint.fee())
-            .capacity(constraint.capacity())
-            .imageUrl(descriptor.imageUrl())
-            .imageType(descriptor.imageType())
-            .startDate(descriptor.startDate())
-            .endDate(descriptor.endDate())
-            .type(descriptor.type())
-            .status(descriptor.status())
-            .build();
     }
 
     @Override

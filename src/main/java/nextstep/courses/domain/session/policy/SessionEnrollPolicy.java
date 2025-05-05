@@ -1,34 +1,31 @@
 package nextstep.courses.domain.session.policy;
 
+import lombok.Getter;
 import nextstep.courses.domain.session.constraint.SessionConstraint;
 
 import java.util.Objects;
 
+@Getter
 public class SessionEnrollPolicy {
+
+    private final EnrollmentStatus enrollmentStatus;
 
     private final SessionStatus status;
 
     private final SessionType type;
 
     public SessionEnrollPolicy() {
-        this(SessionStatus.PREPARING, SessionType.FREE);
+        this(EnrollmentStatus.NOT_ENROLLING, SessionStatus.PREPARING, SessionType.FREE);
     }
 
-    public SessionEnrollPolicy(SessionStatus status, SessionType type) {
+    public SessionEnrollPolicy(EnrollmentStatus enrollmentStatus, SessionStatus status, SessionType type) {
+        this.enrollmentStatus = enrollmentStatus;
         this.status = status;
         this.type = type;
     }
 
     public boolean canEnroll(SessionConstraint sessionConstraint, int enrollCount, long amount) {
-        return type.canEnroll(sessionConstraint, enrollCount, amount) && status.canEnroll();
-    }
-
-    public String type() {
-        return type.getType();
-    }
-
-    public String status() {
-        return status.getStatus();
+        return type.canEnroll(sessionConstraint, enrollCount, amount) && status.canEnroll() && enrollmentStatus.canEnroll();
     }
 
     @Override

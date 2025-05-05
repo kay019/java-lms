@@ -1,7 +1,11 @@
 package nextstep.users.domain;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface UserRepository {
-    Optional<NsUser> findByUserId(String userId);
+    long save(NsUser nsUser);
+
+    NsUser findByUserId(String userId);
+
+    List<NsUser> findByUserIds(List<String> userIds);
 }
