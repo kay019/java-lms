@@ -1,6 +1,7 @@
 package nextstep.session.domain;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import nextstep.session.domain.cover.SessionCover;
@@ -14,23 +15,24 @@ public class Session {
 
     private final LocalDateTime endedAt;
 
-    private final SessionCover cover;
+    private final List<SessionCover> covers;
 
     private final SessionType sessionType;
 
     private final Enrollment enrollment;
 
     public Session(Long id) {
-        this(id, null, null, null, null, null, null, null, null);
+        this(id, null, null, List.of(), null, null, null, null, null);
     }
 
-    public Session(Long id, LocalDateTime startedAt, LocalDateTime endedAt, SessionCover cover, SessionType sessionType,
+    public Session(Long id, LocalDateTime startedAt, LocalDateTime endedAt, List<SessionCover> covers,
+                   SessionType sessionType,
                    SessionStatus sessionStatus, EnrollmentStatus enrollmentStatus, Long capacity,
                    List<Student> students) {
         this.id = id;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
-        this.cover = cover;
+        this.covers = covers;
         this.sessionType = sessionType;
         this.enrollment = new Enrollment(sessionStatus, enrollmentStatus, new Students(capacity, students));
     }
@@ -50,6 +52,10 @@ public class Session {
 
     public LocalDateTime getEndedAt() {
         return endedAt;
+    }
+
+    public List<SessionCover> getCovers() {
+        return Collections.unmodifiableList(covers);
     }
 
     public String getSessionStatus() {

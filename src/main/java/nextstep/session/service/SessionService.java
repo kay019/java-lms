@@ -25,7 +25,7 @@ public class SessionService {
                 dto.getId(),
                 dto.getStartAt(),
                 dto.getEndAt(),
-                dto.getCover(),
+                dto.getCovers(),
                 dto.getSessionType(),
                 dto.getSessionStatus(),
                 dto.getEnrollmentStatus(),

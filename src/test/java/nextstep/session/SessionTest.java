@@ -3,6 +3,7 @@ package nextstep.session;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import nextstep.session.domain.EnrollmentStatus;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionStatus;
@@ -15,7 +16,8 @@ public class SessionTest {
     public static Session createSession() {
         LocalDateTime startAt = LocalDateTime.of(2025, 3, 15, 0, 0, 0);
         LocalDateTime endAt = LocalDateTime.of(2025, 4, 22, 0, 0, 0);
-        SessionCover sessionCover = new SessionCover(1_048_576, "png", 300, 200);
+        List<SessionCover> sessionCover = List.of(new SessionCover(1_048_576, "png", 300, 200),
+                new SessionCover(1_048_576, "jpg", 600, 400));
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
         EnrollmentStatus enrollmentStatus = EnrollmentStatus.ENROLLED;
@@ -29,7 +31,7 @@ public class SessionTest {
     void createTest() {
         LocalDateTime startAt = LocalDateTime.of(2025, 3, 15, 0, 0, 0);
         LocalDateTime endAt = LocalDateTime.of(2025, 4, 22, 0, 0, 0);
-        SessionCover sessionCover = new SessionCover(1_048_576, "png", 300, 200);
+        List<SessionCover> sessionCover = List.of(new SessionCover(1_048_576, "png", 300, 200));
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
         EnrollmentStatus enrollmentStatus = EnrollmentStatus.ENROLLED;
@@ -41,5 +43,4 @@ public class SessionTest {
                 new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, enrollmentStatus, capacity,
                         null));
     }
-
 }
