@@ -21,17 +21,18 @@ public class Session {
     private final Enrollment enrollment;
 
     public Session(Long id) {
-        this(id, null, null, null, null, null, null, null);
+        this(id, null, null, null, null, null, null, null, null);
     }
 
     public Session(Long id, LocalDateTime startedAt, LocalDateTime endedAt, SessionCover cover, SessionType sessionType,
-                   SessionStatus sessionStatus, Long capacity, List<Student> students) {
+                   SessionStatus sessionStatus, EnrollmentStatus enrollmentStatus, Long capacity,
+                   List<Student> students) {
         this.id = id;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.cover = cover;
         this.sessionType = sessionType;
-        this.enrollment = new Enrollment(sessionStatus, new Students(capacity, students));
+        this.enrollment = new Enrollment(sessionStatus, enrollmentStatus, new Students(capacity, students));
     }
 
     public Student enroll(NsUser nsUser) {
@@ -53,6 +54,10 @@ public class Session {
 
     public String getSessionStatus() {
         return this.enrollment.getSessionStatus();
+    }
+
+    public String getEnrollmentStatus() {
+        return this.enrollment.getEnrollmentStatus();
     }
 
     public Long getCapacity() {

@@ -28,6 +28,7 @@ public class SessionService {
                 dto.getCover(),
                 dto.getSessionType(),
                 dto.getSessionStatus(),
+                dto.getEnrollmentStatus(),
                 dto.getCapacity(),
                 dto.getStudents()
         );

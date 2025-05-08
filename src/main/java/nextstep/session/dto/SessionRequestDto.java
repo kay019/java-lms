@@ -2,6 +2,7 @@ package nextstep.session.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import nextstep.session.domain.EnrollmentStatus;
 import nextstep.session.domain.SessionStatus;
 import nextstep.session.domain.Student;
 import nextstep.session.domain.cover.SessionCover;
@@ -14,11 +15,13 @@ public class SessionRequestDto {
     private SessionCover cover;
     private SessionType sessionType;
     private SessionStatus sessionStatus;
+    private EnrollmentStatus enrollmentStatus;
     private Long capacity;
     private List<Student> students;
 
     public SessionRequestDto(Long id, LocalDateTime startAt, LocalDateTime endAt, SessionCover cover,
-                             SessionType sessionType, SessionStatus sessionStatus, Long capacity,
+                             SessionType sessionType, SessionStatus sessionStatus, EnrollmentStatus enrollmentStatus,
+                             Long capacity,
                              List<Student> students) {
         this.id = id;
         this.startAt = startAt;
@@ -26,6 +29,7 @@ public class SessionRequestDto {
         this.cover = cover;
         this.sessionType = sessionType;
         this.sessionStatus = sessionStatus;
+        this.enrollmentStatus = enrollmentStatus;
         this.capacity = capacity;
         this.students = students;
     }
@@ -52,6 +56,10 @@ public class SessionRequestDto {
 
     public SessionStatus getSessionStatus() {
         return sessionStatus;
+    }
+
+    public EnrollmentStatus getEnrollmentStatus() {
+        return enrollmentStatus;
     }
 
     public Long getCapacity() {

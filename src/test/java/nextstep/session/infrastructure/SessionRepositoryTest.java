@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import nextstep.session.domain.EnrollmentStatus;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionRepository;
 import nextstep.session.domain.SessionStatus;
@@ -47,11 +48,14 @@ class SessionRepositoryTest {
         SessionCover sessionCover = new SessionCover(1_048_576, "png", 300, 200);
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
+        EnrollmentStatus enrollmentStatus = EnrollmentStatus.ENROLLED;
         Long capacity = 10L;
-        Session session = new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, capacity, null);
+        Session session = new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, enrollmentStatus,
+                capacity, null);
         List<Student> students = List.of(new Student(JAVAJIGI, session));
 
-        return new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, capacity, students);
+        return new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, enrollmentStatus, capacity,
+                students);
     }
 
 }

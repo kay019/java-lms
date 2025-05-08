@@ -3,6 +3,7 @@ package nextstep.session;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import nextstep.session.domain.EnrollmentStatus;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionStatus;
 import nextstep.session.domain.cover.SessionCover;
@@ -17,9 +18,11 @@ public class SessionTest {
         SessionCover sessionCover = new SessionCover(1_048_576, "png", 300, 200);
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
+        EnrollmentStatus enrollmentStatus = EnrollmentStatus.ENROLLED;
         Long capacity = 10L;
 
-        return new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, capacity, null);
+        return new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, enrollmentStatus, capacity,
+                null);
     }
 
     @Test
@@ -29,12 +32,14 @@ public class SessionTest {
         SessionCover sessionCover = new SessionCover(1_048_576, "png", 300, 200);
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
+        EnrollmentStatus enrollmentStatus = EnrollmentStatus.ENROLLED;
         Long capacity = 10L;
 
         Session session = createSession();
 
         assertThat(session).isEqualTo(
-                new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, capacity, null));
+                new Session(1L, startAt, endAt, sessionCover, sessionType, sessionStatus, enrollmentStatus, capacity,
+                        null));
     }
 
 }

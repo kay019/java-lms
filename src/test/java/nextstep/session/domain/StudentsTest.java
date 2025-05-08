@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class StudentsTest {
     @Test
     void createTest() {
-        Student student = new Student(JAVAJIGI, new Session(1L, null, null, null, null, null, null, List.of()));
+        Student student = new Student(JAVAJIGI, new Session(1L, null, null, null, null, null, null, null, List.of()));
 
         Students students = new Students(2L, List.of(student));
 

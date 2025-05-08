@@ -1,29 +1,34 @@
 package nextstep.session.domain;
 
-import static nextstep.session.domain.SessionStatus.ONGOING;
+import static nextstep.session.domain.EnrollmentStatus.ENROLLED;
 
 import java.util.Objects;
 import nextstep.users.domain.NsUser;
 
 public class Enrollment {
     private final SessionStatus sessionStatus;
-
+    private final EnrollmentStatus enrollmentStatus;
     private final Students students;
 
-    public Enrollment(SessionStatus sessionStatus, Students students) {
+    public Enrollment(SessionStatus sessionStatus, EnrollmentStatus enrollmentStatus, Students students) {
         this.sessionStatus = sessionStatus;
+        this.enrollmentStatus = enrollmentStatus;
         this.students = students;
     }
 
     public void enroll(NsUser nsUser) {
-        if (!sessionStatus.isSameAs(ONGOING)) {
-            throw new IllegalStateException("session is not in progress");
+        if (!enrollmentStatus.isSameAs(ENROLLED)) {
+            throw new IllegalStateException("session is not in enrollment");
         }
         students.enroll(nsUser);
     }
 
     public String getSessionStatus() {
         return sessionStatus.getDescription();
+    }
+
+    public String getEnrollmentStatus() {
+        return enrollmentStatus.getDescription();
     }
 
     public Long getCapacity() {

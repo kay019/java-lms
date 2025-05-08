@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import nextstep.session.domain.EnrollmentStatus;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionRepository;
 import nextstep.session.domain.SessionStatus;
@@ -34,7 +35,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Long save(Session session) {
-        String sql = "INSERT INTO session(started_at, ended_at, session_status, capacity, price) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session(started_at, ended_at, session_status, enrollment_status, capacity, price) VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -43,8 +44,9 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.setTimestamp(1, Timestamp.valueOf(session.getStartedAt()));
             ps.setTimestamp(2, Timestamp.valueOf(session.getEndedAt()));
             ps.setString(3, session.getSessionStatus());
-            ps.setLong(4, session.getCapacity());
-            ps.setLong(5, session.getPrice());
+            ps.setString(4, session.getEnrollmentStatus());
+            ps.setLong(5, session.getCapacity());
+            ps.setLong(6, session.getPrice());
             return ps;
         }, keyHolder);
 
@@ -56,7 +58,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Optional<Session> findById(Long sessionId) {
         String joinSql = "SELECT " +
-                "s.id, s.started_at, s.ended_at, s.session_status, s.capacity, s.price, " +
+                "s.id, s.started_at, s.ended_at, s.session_status, s.enrollment_status, s.capacity, s.price, " +
                 "sc.id as cover_id, sc.session_id as cover_session_id, sc.size, sc.img_type, sc.width, sc.height, " +
                 "st.id as student_id, st.ns_user_id, st.create_dt " +
                 "FROM session s " +
@@ -75,7 +77,9 @@ public class JdbcSessionRepository implements SessionRepository {
         Long id = getLongValue(firstRow, "id");
         LocalDateTime startAt = toLocalDateTime((Timestamp) firstRow.get("start_at"));
         LocalDateTime endAt = toLocalDateTime((Timestamp) firstRow.get("end_at"));
-        SessionStatus status = SessionStatus.from((String) firstRow.get("session_status"));
+        SessionStatus sessionStatus = SessionStatus.from((String) firstRow.get("session_status"));
+        EnrollmentStatus enrollmentStatus = EnrollmentStatus.from((String) firstRow.get("enrollment_status"));
+
         Long capacity = getLongValue(firstRow, "capacity");
         Long price = getLongValue(firstRow, "price");
 
@@ -89,7 +93,8 @@ public class JdbcSessionRepository implements SessionRepository {
         List<Student> students = extractStudents(rows, id);
 
         // 최종 세션 객체 생성
-        Session session = new Session(id, startAt, endAt, cover, sessionType, status, capacity, students);
+        Session session = new Session(id, startAt, endAt, cover, sessionType, sessionStatus, enrollmentStatus, capacity,
+                students);
 
         return Optional.of(session);
     }
