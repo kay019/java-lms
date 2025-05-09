@@ -24,6 +24,10 @@ public class Amount {
         return new Amount(BigInteger.valueOf(amount));
     }
 
+    public static Amount of(BigInteger amount) {
+        return new Amount(amount);
+    }
+
     public BigInteger getAmount() {
         return amount;
     }
