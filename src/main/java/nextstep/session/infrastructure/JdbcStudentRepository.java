@@ -26,7 +26,7 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public Long save(Student student) {
-        String sql = "INSERT INTO student(ns_user_id, session_id, create_dt) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO student(ns_user_id, session_id, approved, create_dt) VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -34,7 +34,8 @@ public class JdbcStudentRepository implements StudentRepository {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, student.getUserId());
             ps.setLong(2, student.getSessionId());
-            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setBoolean(3, student.getApproved());
+            ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             return ps;
         }, keyHolder);
 
@@ -44,12 +45,14 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public Optional<Student> findById(Long studentId) {
-        String sql = "SELECT id, ns_user_id, session_id, create_dt FROM student WHERE id = ?";
+        String sql = "SELECT id, ns_user_id, session_id, approved, create_dt FROM student WHERE id = ?";
         RowMapper<Student> rowMapper = (rs, rowNum) -> new Student(
                 rs.getLong(1),
                 new NsUser(rs.getLong(2)),
                 new Session(rs.getLong(3)),
-                toLocalDateTime(rs.getTimestamp(4)));
+                rs.getBoolean(4),
+                toLocalDateTime(rs.getTimestamp(5))
+        );
 
         return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, studentId));
     }

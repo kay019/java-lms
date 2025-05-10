@@ -41,4 +41,18 @@ public class SessionService {
         Student enrollStudent = session.enroll(nsUser);
         studentRepository.save(enrollStudent);
     }
+
+    public void approveStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        student.approve();
+        studentRepository.save(student);
+    }
+
+    public void cancelEnrollment(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        student.disApprove();
+        studentRepository.save(student);
+    }
 }

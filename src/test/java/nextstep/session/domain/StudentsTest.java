@@ -24,6 +24,7 @@ class StudentsTest {
     @Test
     void enrollCapacityExceptionTest() {
         Student student = new Student(JAVAJIGI, createSession());
+        student = student.approve();
 
         Students students = new Students(1L, List.of(student));
 

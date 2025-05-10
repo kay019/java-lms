@@ -28,7 +28,9 @@ public class Students {
     }
 
     private int getStudentsSize() {
-        return students.size();
+        return students.stream().map(Student::getApproved)
+                .map(approved -> Boolean.TRUE.equals(approved) ? 1 : 0)
+                .reduce(0, Integer::sum);
     }
 
     private boolean isAlreadyEnrolled(NsUser nsUser) {

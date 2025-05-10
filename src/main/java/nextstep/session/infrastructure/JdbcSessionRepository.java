@@ -133,6 +133,7 @@ public class JdbcSessionRepository implements SessionRepository {
                         studentId,
                         new NsUser(getLongValue(row, "ns_user_id")),
                         new Session(sessionId),
+                        getBooleanValue(row, "approved"),
                         toLocalDateTime((Timestamp) row.get("create_dt"))
                 );
                 students.add(student);
@@ -157,6 +158,11 @@ public class JdbcSessionRepository implements SessionRepository {
     private Integer getIntValue(Map<String, Object> row, String columnName) {
         Object value = row.get(columnName);
         return value != null ? ((Number) value).intValue() : null;
+    }
+
+    private Boolean getBooleanValue(Map<String, Object> row, String columnName) {
+        Object value = row.get(columnName);
+        return value != null ? (Boolean) value : null;
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {
