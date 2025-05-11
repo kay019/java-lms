@@ -13,11 +13,8 @@ public enum SessionStatus {
         this.description = description;
     }
 
-    public static SessionStatus from(String description) {
-        return Arrays.stream(values())
-                .filter(status -> status.description.equals(description))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No enum constant for description: " + description));
+    public static SessionStatus from(String name) {
+        return SessionStatus.valueOf(name);
     }
 
     public boolean isSameAs(SessionStatus sessionStatus) {

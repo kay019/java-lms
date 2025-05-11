@@ -24,11 +24,11 @@ public class Enrollment {
     }
 
     public String getSessionStatus() {
-        return sessionStatus.getDescription();
+        return sessionStatus.name();
     }
 
     public String getEnrollmentStatus() {
-        return enrollmentStatus.getDescription();
+        return enrollmentStatus.name();
     }
 
     public Long getCapacity() {

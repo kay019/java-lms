@@ -11,11 +11,8 @@ public enum EnrollmentStatus {
         this.description = description;
     }
 
-    public static EnrollmentStatus from(String description) {
-        return Arrays.stream(values())
-                .filter(status -> status.description.equals(description))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No enum constant for description: " + description));
+    public static EnrollmentStatus from(String name) {
+        return EnrollmentStatus.valueOf(name);
     }
 
 
