@@ -24,13 +24,13 @@ public class Students {
     }
 
     private boolean isFullCapacity() {
-        return getStudentsSize() >= capacity;
+        return getApprovedStudentsCount() >= capacity;
     }
 
-    private int getStudentsSize() {
-        return students.stream().map(Student::getApproved)
-                .map(approved -> Boolean.TRUE.equals(approved) ? 1 : 0)
-                .reduce(0, Integer::sum);
+    private Long getApprovedStudentsCount() {
+        return students.stream()
+                .filter(student -> Boolean.TRUE.equals(student.getApproved()))
+                .count();
     }
 
     private boolean isAlreadyEnrolled(NsUser nsUser) {

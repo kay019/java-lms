@@ -22,7 +22,7 @@ public class Session {
     private final Enrollment enrollment;
 
     public Session(Long id) {
-        this(id, null, null, List.of(), null, null, null, null, null);
+        this(id, null, null, Collections.emptyList(), null, null, null, null, null);
     }
 
     public Session(Long id, LocalDateTime startedAt, LocalDateTime endedAt, List<SessionCover> covers,

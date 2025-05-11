@@ -49,17 +49,15 @@ public class Student {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(id, student.id) && Objects.equals(user, student.user)
-                && Objects.equals(session, student.session) && Objects.equals(created_dt,
-                student.created_dt);
+        return Objects.equals(id, student.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, session, created_dt);
+        return Objects.hash(id);
     }
+
 }

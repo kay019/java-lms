@@ -45,14 +45,14 @@ public class SessionService {
     public void approveStudent(Long studentId) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        student.approve();
+        student = student.approve();
         studentRepository.save(student);
     }
 
     public void cancelEnrollment(Long studentId) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        student.disApprove();
+        student = student.disApprove();
         studentRepository.save(student);
     }
 }
