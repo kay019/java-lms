@@ -31,7 +31,8 @@ public class SessionTest {
     void createTest() {
         LocalDateTime startAt = LocalDateTime.of(2025, 3, 15, 0, 0, 0);
         LocalDateTime endAt = LocalDateTime.of(2025, 4, 22, 0, 0, 0);
-        List<SessionCover> sessionCover = List.of(new SessionCover(1_048_576, "png", 300, 200));
+        List<SessionCover> sessionCover = List.of(new SessionCover(1_048_576, "png", 300, 200),
+                new SessionCover(1_048_576, "jpg", 600, 400));
         SessionType sessionType = new FreeSessionType();
         SessionStatus sessionStatus = SessionStatus.READY;
         EnrollmentStatus enrollmentStatus = EnrollmentStatus.ENROLLED;

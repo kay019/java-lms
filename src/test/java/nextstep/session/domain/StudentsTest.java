@@ -32,6 +32,7 @@ class StudentsTest {
                 .hasMessage("capacity is full");
     }
 
+    @DisplayName("이미 등록된 강의인 경우 등록 시에 예외를 발생한다.")
     @Test
     void enrollAlreadyEnrolledExceptionTest() {
         Student student = new Student(JAVAJIGI, createSession());

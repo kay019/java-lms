@@ -27,12 +27,21 @@ class EnrollmentTest {
     @Test
     @DisplayName("강의 모집상태가 모집중일때 수강신청이 가능하다.")
     void enrollValidationTest() {
-        Enrollment enrollment = new Enrollment(SessionStatus.ONGOING, EnrollmentStatus.ENROLLED,
+        Enrollment enrollment = new Enrollment(SessionStatus.READY, EnrollmentStatus.ENROLLED,
                 new Students(5L, List.of(new Student(JAVAJIGI, createSession()))));
 
         assertThatCode(() -> enrollment.enroll(new NsUser(2L, "userId", "password", "name", "email")))
                 .doesNotThrowAnyException();
 
+    }
+
+    @Test
+    @DisplayName("강의가 진행 중인 상태에서도 수강신청이 가능하다.")
+    void enrollmentInProgressTest() {
+        Enrollment enrollment = new Enrollment(SessionStatus.ONGOING, EnrollmentStatus.ENROLLED,
+                new Students(5L, List.of(new Student(JAVAJIGI, createSession()))));
+
+        assertThatCode(() -> enrollment.enroll(new NsUser())).doesNotThrowAnyException();
     }
 
     @Test
@@ -45,4 +54,6 @@ class EnrollmentTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("session is not in enrollment");
     }
+
+
 }
