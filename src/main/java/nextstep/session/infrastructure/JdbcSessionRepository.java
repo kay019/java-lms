@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import nextstep.session.domain.EnrollmentStatus;
 import nextstep.session.domain.Session;
 import nextstep.session.domain.SessionRepository;
 import nextstep.session.domain.SessionStatus;
@@ -34,7 +35,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Long save(Session session) {
-        String sql = "INSERT INTO session(start_at, end_at, session_status, capacity, price) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session(started_at, ended_at, session_status, enrollment_status, capacity, price) VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -43,8 +44,9 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.setTimestamp(1, Timestamp.valueOf(session.getStartedAt()));
             ps.setTimestamp(2, Timestamp.valueOf(session.getEndedAt()));
             ps.setString(3, session.getSessionStatus());
-            ps.setLong(4, session.getCapacity());
-            ps.setLong(5, session.getPrice());
+            ps.setString(4, session.getEnrollmentStatus());
+            ps.setLong(5, session.getCapacity());
+            ps.setLong(6, session.getPrice());
             return ps;
         }, keyHolder);
 
@@ -56,7 +58,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Optional<Session> findById(Long sessionId) {
         String joinSql = "SELECT " +
-                "s.id, s.start_at, s.end_at, s.session_status, s.capacity, s.price, " +
+                "s.id, s.started_at, s.ended_at, s.session_status, s.enrollment_status, s.capacity, s.price, " +
                 "sc.id as cover_id, sc.session_id as cover_session_id, sc.size, sc.img_type, sc.width, sc.height, " +
                 "st.id as student_id, st.ns_user_id, st.create_dt " +
                 "FROM session s " +
@@ -66,21 +68,19 @@ public class JdbcSessionRepository implements SessionRepository {
 
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(joinSql, sessionId);
 
-        if (rows.isEmpty()) {
-            return Optional.empty();
-        }
-
         Map<String, Object> firstRow = rows.get(0);
 
         Long id = getLongValue(firstRow, "id");
         LocalDateTime startAt = toLocalDateTime((Timestamp) firstRow.get("start_at"));
         LocalDateTime endAt = toLocalDateTime((Timestamp) firstRow.get("end_at"));
-        SessionStatus status = SessionStatus.from((String) firstRow.get("session_status"));
+        SessionStatus sessionStatus = SessionStatus.from((String) firstRow.get("session_status"));
+        EnrollmentStatus enrollmentStatus = EnrollmentStatus.from((String) firstRow.get("enrollment_status"));
+
         Long capacity = getLongValue(firstRow, "capacity");
         Long price = getLongValue(firstRow, "price");
 
         // 세션 커버 정보
-        SessionCover cover = extractSessionCover(firstRow);
+        List<SessionCover> covers = extractSessionCovers(rows);
 
         // 세션 타입 정보
         SessionType sessionType = getSessionType(price);
@@ -89,20 +89,35 @@ public class JdbcSessionRepository implements SessionRepository {
         List<Student> students = extractStudents(rows, id);
 
         // 최종 세션 객체 생성
-        Session session = new Session(id, startAt, endAt, cover, sessionType, status, capacity, students);
+        Session session = new Session(id, startAt, endAt, covers, sessionType, sessionStatus, enrollmentStatus,
+                capacity,
+                students);
 
         return Optional.of(session);
     }
 
-    private SessionCover extractSessionCover(Map<String, Object> row) {
-        return new SessionCover(
-                getLongValue(row, "cover_id"),
-                getLongValue(row, "cover_session_id"),
-                getIntValue(row, "size"),
-                (String) row.get("img_type"),
-                getIntValue(row, "width"),
-                getIntValue(row, "height")
-        );
+    private List<SessionCover> extractSessionCovers(List<Map<String, Object>> rows) {
+        List<SessionCover> covers = new ArrayList<>();
+        Set<Long> processedCoverIds = new HashSet<>();
+
+        for (Map<String, Object> row : rows) {
+            Long coverId = getLongValue(row, "cover_id");
+            if (coverId != null && !processedCoverIds.contains(coverId)) {
+                processedCoverIds.add(coverId);
+
+                SessionCover cover = new SessionCover(
+                        coverId,
+                        getLongValue(row, "cover_session_id"),
+                        getIntValue(row, "size"),
+                        (String) row.get("img_type"),
+                        getIntValue(row, "width"),
+                        getIntValue(row, "height")
+                );
+                covers.add(cover);
+            }
+        }
+
+        return covers;
     }
 
     private List<Student> extractStudents(List<Map<String, Object>> rows, Long sessionId) {
@@ -118,6 +133,7 @@ public class JdbcSessionRepository implements SessionRepository {
                         studentId,
                         new NsUser(getLongValue(row, "ns_user_id")),
                         new Session(sessionId),
+                        getBooleanValue(row, "approved"),
                         toLocalDateTime((Timestamp) row.get("create_dt"))
                 );
                 students.add(student);
@@ -142,6 +158,11 @@ public class JdbcSessionRepository implements SessionRepository {
     private Integer getIntValue(Map<String, Object> row, String columnName) {
         Object value = row.get(columnName);
         return value != null ? ((Number) value).intValue() : null;
+    }
+
+    private Boolean getBooleanValue(Map<String, Object> row, String columnName) {
+        Object value = row.get(columnName);
+        return value != null ? (Boolean) value : null;
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {

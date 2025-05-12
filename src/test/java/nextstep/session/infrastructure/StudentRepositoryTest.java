@@ -28,11 +28,11 @@ class StudentRepositoryTest {
     @Test
     void crud() {
         Student student = new Student(JAVAJIGI, createSession());
-        int savedId = studentRepository.save(student);
+        Long savedId = studentRepository.save(student);
 
         assertThat(savedId).isEqualTo(1);
 
-        Student savedStudent = studentRepository.findById((long) savedId).orElse(null);
+        Student savedStudent = studentRepository.findById(savedId).orElse(null);
 
         assertThat(student.getSessionId()).isEqualTo(savedStudent.getSessionId());
     }

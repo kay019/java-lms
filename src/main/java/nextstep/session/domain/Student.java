@@ -6,24 +6,33 @@ import nextstep.users.domain.NsUser;
 
 public class Student {
     private final Long id;
-    private final NsUser user;  // ID 대신 실제 객체 참조
-    private final Session session;  // ID 대신 실제 객체 참조
+    private final NsUser user;
+    private final Session session;
+    private final Boolean approved;
     private final LocalDateTime created_dt;
 
     public Student(NsUser user, Session session) {
-        this(null, user, session, null);
+        this(null, user, session, false, null);
     }
 
-    public Student(Long id, NsUser user, Session session, LocalDateTime created_dt) {
+    public Student(Long id, NsUser user, Session session, Boolean approved, LocalDateTime created_dt) {
         this.id = id;
         this.user = user;
         this.session = session;
+        this.approved = approved;
         this.created_dt = created_dt;
     }
 
-
     public boolean isSameUser(NsUser user) {
         return this.user.matchUser(user);
+    }
+
+    public Student approve() {
+        return new Student(id, user, session, true, created_dt);
+    }
+
+    public Student disApprove() {
+        return new Student(id, user, session, false, created_dt);
     }
 
     public Long getUserId() {
@@ -34,19 +43,21 @@ public class Student {
         return session.getId();
     }
 
+    public Boolean getApproved() {
+        return approved;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(id, student.id) && Objects.equals(user, student.user)
-                && Objects.equals(session, student.session) && Objects.equals(created_dt,
-                student.created_dt);
+        return Objects.equals(id, student.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, session, created_dt);
+        return Objects.hash(id);
     }
+
 }

@@ -25,9 +25,10 @@ public class SessionService {
                 dto.getId(),
                 dto.getStartAt(),
                 dto.getEndAt(),
-                dto.getCover(),
+                dto.getCovers(),
                 dto.getSessionType(),
                 dto.getSessionStatus(),
+                dto.getEnrollmentStatus(),
                 dto.getCapacity(),
                 dto.getStudents()
         );
@@ -39,5 +40,19 @@ public class SessionService {
                 .orElseThrow(() -> new SessionNotFoundException(sessionId));
         Student enrollStudent = session.enroll(nsUser);
         studentRepository.save(enrollStudent);
+    }
+
+    public void approveStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        student = student.approve();
+        studentRepository.save(student);
+    }
+
+    public void cancelEnrollment(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        student = student.disApprove();
+        studentRepository.save(student);
     }
 }

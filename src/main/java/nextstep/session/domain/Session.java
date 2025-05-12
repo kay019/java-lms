@@ -1,6 +1,7 @@
 package nextstep.session.domain;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import nextstep.session.domain.cover.SessionCover;
@@ -14,24 +15,26 @@ public class Session {
 
     private final LocalDateTime endedAt;
 
-    private final SessionCover cover;
+    private final List<SessionCover> covers;
 
     private final SessionType sessionType;
 
     private final Enrollment enrollment;
 
     public Session(Long id) {
-        this(id, null, null, null, null, null, null, null);
+        this(id, null, null, Collections.emptyList(), null, null, null, null, null);
     }
 
-    public Session(Long id, LocalDateTime startedAt, LocalDateTime endedAt, SessionCover cover, SessionType sessionType,
-                   SessionStatus sessionStatus, Long capacity, List<Student> students) {
+    public Session(Long id, LocalDateTime startedAt, LocalDateTime endedAt, List<SessionCover> covers,
+                   SessionType sessionType,
+                   SessionStatus sessionStatus, EnrollmentStatus enrollmentStatus, Long capacity,
+                   List<Student> students) {
         this.id = id;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
-        this.cover = cover;
+        this.covers = covers;
         this.sessionType = sessionType;
-        this.enrollment = new Enrollment(sessionStatus, new Students(capacity, students));
+        this.enrollment = new Enrollment(sessionStatus, enrollmentStatus, new Students(capacity, students));
     }
 
     public Student enroll(NsUser nsUser) {
@@ -51,8 +54,16 @@ public class Session {
         return endedAt;
     }
 
+    public List<SessionCover> getCovers() {
+        return Collections.unmodifiableList(covers);
+    }
+
     public String getSessionStatus() {
         return this.enrollment.getSessionStatus();
+    }
+
+    public String getEnrollmentStatus() {
+        return this.enrollment.getEnrollmentStatus();
     }
 
     public Long getCapacity() {
@@ -69,14 +80,11 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(startedAt, session.startedAt)
-                && Objects.equals(endedAt, session.endedAt) && Objects.equals(cover, session.cover)
-                && Objects.equals(sessionType, session.sessionType) && Objects.equals(enrollment,
-                session.enrollment);
+        return Objects.equals(id, session.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startedAt, endedAt, cover, sessionType, enrollment);
+        return Objects.hashCode(id);
     }
 }

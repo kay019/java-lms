@@ -21,4 +21,23 @@ class StudentTest {
         assertThat(student.isSameUser(JAVAJIGI)).isTrue();
         assertThat(student.isSameUser(SANJIGI)).isFalse();
     }
+
+    @Test
+    void approveTest() {
+        Student student = new Student(JAVAJIGI, createSession());
+
+        student = student.approve();
+
+        assertThat(student.getApproved()).isTrue();
+    }
+
+    @Test
+    void disApproveTest() {
+        Student student = new Student(JAVAJIGI, createSession());
+
+        student = student.disApprove();
+
+        assertThat(student.getApproved()).isFalse();
+    }
+
 }

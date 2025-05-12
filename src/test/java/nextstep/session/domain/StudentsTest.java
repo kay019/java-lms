@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class StudentsTest {
     @Test
     void createTest() {
-        Student student = new Student(JAVAJIGI, new Session(1L, null, null, null, null, null, null, List.of()));
+        Student student = new Student(JAVAJIGI, new Session(1L, null, null, null, null, null, null, null, List.of()));
 
         Students students = new Students(2L, List.of(student));
 
@@ -24,6 +24,7 @@ class StudentsTest {
     @Test
     void enrollCapacityExceptionTest() {
         Student student = new Student(JAVAJIGI, createSession());
+        student = student.approve();
 
         Students students = new Students(1L, List.of(student));
 
@@ -31,6 +32,7 @@ class StudentsTest {
                 .hasMessage("capacity is full");
     }
 
+    @DisplayName("이미 등록된 강의인 경우 등록 시에 예외를 발생한다.")
     @Test
     void enrollAlreadyEnrolledExceptionTest() {
         Student student = new Student(JAVAJIGI, createSession());
