@@ -67,7 +67,29 @@
 - [x] Enrollment 리팩토링 
   - [x] 생성자에 List<NsUser> 추가
   - [x] EnrollmentManager 추가
-- [ ] 피드백
+- [x] 피드백
   - [x] SessionRepository.update 제거
   - [x] Enrollment.isFull 리팩토링
   - [x] Enrollment.hasEnrolledUser 제거
+# 4단계
+- [x] 3단계 피드백
+  - [x] SessionService 리팩토링
+    - [x] UserService.findByUserIds 추가
+    - [x] ImageRepository 의존성 제거
+  - [x] Enrollment 검증 테스트 도입
+- [x] 강의 진행 상태 / 모집 상태 분리
+- [x] 강의 커버 이미지 다수 등록
+- [x] 수강 신청 변경
+  - [x] 수강 신청 상태 추가 (미승인/승인/취소)
+    - [x] Enrollment 추가
+    - [x] Enrollments 리팩토링
+  - [x] 수강 신청 승인
+  - [x] 수강 신청 취소
+- [ ] 피드백
+  - [x] Enrollments 를 Session 의 필드에서 제거
+  - [x] Enrollment 메소드 위치 이동
+    - [x] approve
+    - [x] cancel
+    - [x] 상태 확인 메소드
+  - [x] Session 테스트 데이터 생성 방법 변경
+  - [ ] AbstractEnrollments 추가

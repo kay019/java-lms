@@ -1,40 +1,32 @@
 package nextstep.courses.domain.session;
 
+import lombok.Builder;
 import lombok.Getter;
-import nextstep.courses.domain.session.enrollment.Enrollment;
+import nextstep.courses.domain.session.enrollment.Enrollments;
+import nextstep.courses.domain.session.enrollment.FreeEnrollments;
+import nextstep.courses.domain.session.enrollment.PaidEnrollments;
 import nextstep.courses.domain.session.info.SessionInfo;
-import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
 
 @Getter
+@Builder(toBuilder = true)
 public class Session {
     private final SessionId id;
     private final SessionInfo info;
-    private final Enrollment enrollment;
 
-    public Session(SessionId id, SessionInfo info, Enrollment enrollment) {
+    public Session(SessionId id, SessionInfo info) {
         this.id = id;
         this.info = info;
-        this.enrollment = enrollment;
-    }
-
-    public void enroll(NsUser user, Payment payment) {
-        if (info.isPaid()) {
-            validatePaymentExists(payment);
-            info.validatePayment(payment);
-        }
-        
-        enrollment.enroll(user);
     }
 
     public boolean isPaid() {
         return info.isPaid();
     }
 
-    private void validatePaymentExists(Payment payment) {
-        if (payment == null) {
-            throw new IllegalArgumentException("유료 강의는 결제가 필요합니다.");
+    public Enrollments createEnrollments() {
+        if (info.isPaid()) {
+            return new PaidEnrollments(info.getMaxEnrollment());
         }
+        return new FreeEnrollments();
     }
 
     @Override

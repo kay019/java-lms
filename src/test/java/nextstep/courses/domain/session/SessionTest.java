@@ -1,42 +1,41 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.session.enrollment.FreeEnrollment;
-import nextstep.courses.domain.session.enrollment.PaidEnrollment;
+import nextstep.courses.domain.session.enrollment.Enrollments;
+import nextstep.courses.domain.session.enrollment.FreeEnrollments;
+import nextstep.courses.domain.session.enrollment.PaidEnrollments;
 import nextstep.courses.domain.session.info.SessionInfo;
 import nextstep.courses.domain.session.info.basic.SessionBasicInfo;
 import nextstep.courses.domain.session.info.basic.SessionThumbnail;
 import nextstep.courses.domain.session.info.detail.SessionDetailInfo;
 import nextstep.courses.domain.session.info.detail.SessionPeriod;
 import nextstep.courses.domain.session.info.detail.SessionPrice;
-import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SessionTest {
-    private static final NsUser USER = new NsUser(1L, "user", "password", "name", "email");
-    private static final LocalDate START_DATE = LocalDate.now();
-    private static final LocalDate END_DATE = START_DATE.plusMonths(1);
-    public static final SessionThumbnail THUMBNAIL = new SessionThumbnail("image.jpg", 1024, 300, 200);
+    public static final SessionThumbnail THUMBNAIL = new SessionThumbnail();
+
+    @BeforeAll
+    static void setUp() {
+        THUMBNAIL.addThumbnail("image.jpg", 1024, 300, 200);
+    }
 
     @Test
     @DisplayName("강의를 생성한다")
     void create() {
-        SessionPeriod period = new SessionPeriod(START_DATE, END_DATE);
-        SessionPrice price = new SessionPrice(SessionType.PAID, 10000);
-        SessionDetailInfo detailInfo = new SessionDetailInfo(period, price);
-        SessionBasicInfo basicInfo = new SessionBasicInfo("강의 제목", THUMBNAIL);
-        SessionInfo sessionInfo = new SessionInfo(basicInfo, detailInfo);
-        Session session = new Session(
-                new SessionId(1L, 1L),
-                sessionInfo,
-                new FreeEnrollment()
-        );
+        int maxEnrollment = 30;
+
+        Session session = SessionTestData.defaultSession()
+                .info(SessionTestData.defaultSessionInfo()
+                        .detailInfo(SessionTestData.paidSessionDetailInfo())
+                        .maxEnrollment(maxEnrollment)
+                        .build())
+                .build();
 
         assertThat(session.isPaid()).isTrue();
     }
@@ -44,74 +43,98 @@ class SessionTest {
     @Test
     @DisplayName("무료 강의를 생성한다")
     void createFreeSession() {
-        SessionPeriod period = new SessionPeriod(START_DATE, END_DATE);
-        SessionPrice price = new SessionPrice(SessionType.FREE, 0);
-        SessionDetailInfo detailInfo = new SessionDetailInfo(period, price);
-        SessionBasicInfo basicInfo = new SessionBasicInfo("강의 제목", THUMBNAIL);
-        SessionInfo sessionInfo = new SessionInfo(basicInfo, detailInfo);
-        Session session = new Session(
-                new SessionId(1L, 1L),
-                sessionInfo,
-                new FreeEnrollment()
-        );
+        Session session = SessionTestData.defaultSession()
+                .info(SessionTestData.defaultSessionInfo()
+                        .detailInfo(SessionTestData.freeSessionDetailInfo())
+                        .build())
+                .build();
 
         assertThat(session.isPaid()).isFalse();
     }
 
     @Test
-    @DisplayName("수강 신청을 한다")
-    void enroll() {
-        Session session = getPaidSession(30);
-        Payment payment = new Payment("payment1", 1L, 1L, 10000L);
+    @DisplayName("유료 강의의 Enrollments를 생성한다")
+    void createPaidEnrollments() {
+        int maxEnrollment = 30;
 
-        session.enroll(USER, payment);
-        assertThatThrownBy(() -> session.enroll(USER, payment))
-                .isInstanceOf(IllegalStateException.class);
+        Session session = SessionTestData.defaultSession()
+                .info(SessionTestData.defaultSessionInfo()
+                        .detailInfo(SessionTestData.paidSessionDetailInfo())
+                        .maxEnrollment(maxEnrollment)
+                        .build())
+                .build();
+
+        Enrollments enrollments = session.createEnrollments();
+        assertThat(enrollments).isInstanceOf(PaidEnrollments.class);
     }
 
     @Test
-    @DisplayName("무료 강의에 수강 신청을 한다")
-    void enrollFreeSession() {
-        SessionPeriod period = new SessionPeriod(START_DATE, END_DATE);
+    @DisplayName("무료 강의의 Enrollments를 생성한다")
+    void createFreeEnrollments() {
+        Session session = SessionTestData.defaultSession()
+                .info(SessionTestData.defaultSessionInfo()
+                        .detailInfo(SessionTestData.freeSessionDetailInfo())
+                        .build())
+                .build();
+
+        Enrollments enrollments = session.createEnrollments();
+        assertThat(enrollments).isInstanceOf(FreeEnrollments.class);
+    }
+
+    @Test
+    @DisplayName("세션에 여러 썸네일을 추가할 수 있다")
+    void addThumbnails() {
+        SessionThumbnail thumbnail = new SessionThumbnail();
+        thumbnail.addThumbnail("test1.jpg", 1024L, 300, 200);
+        thumbnail.addThumbnail("test2.jpg", 1024L, 300, 200);
+
+        SessionBasicInfo basicInfo = new SessionBasicInfo("강의 제목", thumbnail);
+        int maxEnrollment = 30;
+
+        Session session = SessionTestData.defaultSession()
+                .info(SessionTestData.defaultSessionInfo()
+                        .basicInfo(basicInfo)
+                        .detailInfo(SessionTestData.freeSessionDetailInfo())
+                        .maxEnrollment(maxEnrollment)
+                        .build())
+                .build();
+
+        assertThat(session.getInfo().getBasicInfo().getThumbnail().getThumbnails()).hasSize(2);
+    }
+}
+
+class SessionTestData {
+    static Session.SessionBuilder defaultSession() {
+        return Session.builder()
+                .id(new SessionId(1L, 1L));
+    }
+
+    static SessionInfo.SessionInfoBuilder defaultSessionInfo() {
+        return SessionInfo.builder()
+                .basicInfo(new SessionBasicInfo("강의 제목", new SessionThumbnail()))
+                .maxEnrollment(0);
+    }
+
+    static SessionDetailInfo freeSessionDetailInfo() {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusMonths(1);
         SessionPrice price = new SessionPrice(SessionType.FREE, 0);
-        SessionDetailInfo detailInfo = new SessionDetailInfo(period, price);
-        SessionBasicInfo basicInfo = new SessionBasicInfo("강의 제목", THUMBNAIL);
-        SessionInfo sessionInfo = new SessionInfo(basicInfo, detailInfo);
-        Session session = new Session(
-                new SessionId(1L, 1L),
-                sessionInfo,
-                new FreeEnrollment()
-        );
 
-
-        session.enroll(USER, null);
-        assertThatThrownBy(() -> session.enroll(USER, null))
-                .isInstanceOf(IllegalStateException.class);
+        return SessionDetailInfo.builder()
+                .period(new SessionPeriod(startDate, endDate))
+                .price(price)
+                .build();
     }
 
-    @Test
-    @DisplayName("수강 인원이 가득 찬 강의는 수강 신청이 불가능하다")
-    void enrollFullSession() {
-        Session session = getPaidSession(1);
-        Payment payment = new Payment("payment1", 1L, 1L, 10000L);
-        NsUser anotherUser = new NsUser(2L, "user2", "password", "name", "email");
 
-        session.enroll(USER, payment);
-        assertThatThrownBy(() -> session.enroll(anotherUser, payment))
-                .isInstanceOf(IllegalStateException.class);
-    }
-
-    private static Session getPaidSession(int maxEnrollment) {
-        SessionPeriod period = new SessionPeriod(START_DATE, END_DATE);
+    static SessionDetailInfo paidSessionDetailInfo() {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusMonths(1);
         SessionPrice price = new SessionPrice(SessionType.PAID, 10000);
-        SessionDetailInfo detailInfo = new SessionDetailInfo(period, price);
-        SessionBasicInfo basicInfo = new SessionBasicInfo("강의 제목", THUMBNAIL);
-        SessionInfo sessionInfo = new SessionInfo(basicInfo, detailInfo);
 
-        return new Session(
-                new SessionId(1L, 1L),
-                sessionInfo,
-                new PaidEnrollment(maxEnrollment)
-        );
+        return SessionDetailInfo.builder()
+                .period(new SessionPeriod(startDate, endDate))
+                .price(price)
+                .build();
     }
-} 
+}

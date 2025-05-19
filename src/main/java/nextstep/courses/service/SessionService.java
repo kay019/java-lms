@@ -1,22 +1,17 @@
 package nextstep.courses.service;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionId;
-import nextstep.courses.domain.session.SessionStatus;
-import nextstep.courses.domain.session.SessionType;
-import nextstep.courses.domain.session.enrollment.Enrollment;
-import nextstep.courses.domain.session.enrollment.FreeEnrollment;
-import nextstep.courses.domain.session.enrollment.PaidEnrollment;
+import nextstep.courses.domain.session.*;
+import nextstep.courses.domain.session.enrollment.Enrollments;
+import nextstep.courses.domain.session.enrollment.EnrollmentStatus;
+import nextstep.courses.domain.session.enrollment.FreeEnrollments;
+import nextstep.courses.domain.session.enrollment.PaidEnrollments;
 import nextstep.courses.domain.session.info.SessionInfo;
 import nextstep.courses.domain.session.info.basic.SessionBasicInfo;
-import nextstep.courses.domain.session.info.basic.SessionThumbnail;
 import nextstep.courses.domain.session.info.detail.SessionDetailInfo;
 import nextstep.courses.domain.session.info.detail.SessionPeriod;
 import nextstep.courses.domain.session.info.detail.SessionPrice;
-import nextstep.courses.dto.ImageDto;
 import nextstep.courses.dto.SessionDto;
-import nextstep.courses.infrastructure.ImageRepository;
 import nextstep.courses.infrastructure.SessionEnrollmentRepository;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;
@@ -27,34 +22,51 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class SessionService {
     private final SessionRepository sessionRepository;
     private final SessionEnrollmentRepository sessionEnrollmentRepository;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
     private final PaymentService paymentService;
     private final UserService userService;
 
     @Transactional
     public void enroll(Long sessionId, String userId, String paymentId) {
         Session session = findSession(sessionId);
-
         NsUser user = userService.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         Payment payment = null;
         if (session.isPaid()) {
             payment = paymentService.payment(paymentId);
+            if (payment == null) {
+                throw new IllegalArgumentException("유료 강의는 결제가 필요합니다.");
+            }
+            session.getInfo().validatePayment(payment);
         }
 
-        session.enroll(user, payment);
+        Enrollments enrollments = session.createEnrollments();
+        enrollments.enroll(user);
         
         SessionDto updatedSessionDto = SessionDto.of(session);
         updatedSessionDto.setTimeStampForUpdate();
         sessionEnrollmentRepository.save(sessionId, user.getId());
+    }
+
+    @Transactional
+    public void approve(Long sessionId, String userId) {
+        Session session = findSession(sessionId);
+        NsUser user = userService.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        Enrollments enrollments = session.createEnrollments();
+        enrollments.approve(user);
+
+        SessionDto updatedSessionDto = SessionDto.of(session);
+        updatedSessionDto.setTimeStampForUpdate();
+        sessionEnrollmentRepository.updateStatus(sessionId, user.getId(), EnrollmentStatus.ENROLLED);
     }
 
     private Session findSession(Long sessionId) {
@@ -65,13 +77,19 @@ public class SessionService {
     }
 
     private Session createSessionFromDto(SessionDto sessionDto) {
-        SessionBasicInfo sessionBasicInfo = new SessionBasicInfo(sessionDto.getTitle(), getThumbnail(sessionDto.getId()));
+        SessionBasicInfo sessionBasicInfo = new SessionBasicInfo(sessionDto.getTitle(),
+                imageService.findThumbnailBySessionId(sessionDto.getId()));
         SessionDetailInfo sessionDetailInfo = getSessionDetailInfo(sessionDto);
-        SessionInfo sessionInfo = new SessionInfo(sessionBasicInfo, sessionDetailInfo);
+        SessionInfo sessionInfo = new SessionInfo(
+                sessionBasicInfo, 
+                sessionDetailInfo, 
+                sessionDto.getMaximumEnrollment(),
+                sessionDto.getProgressStatus(),
+                sessionDto.getRecruitmentStatus()
+        );
 
-        Enrollment enrollment = getEnrollment(sessionDto);
         SessionId entityId = new SessionId(sessionDto.getId(), sessionDto.getCourseId());
-        return new Session(entityId, sessionInfo, enrollment);
+        return new Session(entityId, sessionInfo);
     }
 
     private SessionDetailInfo getSessionDetailInfo(SessionDto sessionDto) {
@@ -80,34 +98,18 @@ public class SessionService {
         return new SessionDetailInfo(sessionPeriod, sessionPrice);
     }
 
-    private SessionThumbnail getThumbnail(Long sessionId) {
-        ImageDto imageDto = imageRepository.findBySessionId(sessionId);
-        if (imageDto == null) {
-            throw new IllegalArgumentException("존재하지 않는 이미지입니다.");
-        }
-
-        return new SessionThumbnail(imageDto.getFileName(), imageDto.getFileSize(),
-                imageDto.getWidth(), imageDto.getHeight());
-    }
-
-    private Enrollment getEnrollment(SessionDto sessionDto) {
+    private Enrollments getEnrollment(SessionDto sessionDto) {
         SessionType sessionType = sessionDto.getSessionType();
         List<Long> enrolledUserIds = sessionEnrollmentRepository.findUserIdsBySessionId(sessionDto.getId());
-        List<NsUser> enrolledUsers = findEnrolledUsersByIds(enrolledUserIds);
-        SessionStatus sessionStatus = sessionDto.getStatus();
+        List<NsUser> enrolledUsers = userService.findEnrolledUsersByIds(enrolledUserIds);
+        SessionProgressStatus progressStatus = sessionDto.getProgressStatus();
+        SessionRecruitmentStatus recruitmentStatus = sessionDto.getRecruitmentStatus();
 
         if (sessionType.isPaid()) {
             int maximumEnrollment = sessionDto.getMaximumEnrollment();
-            return new PaidEnrollment(maximumEnrollment, enrolledUsers, sessionStatus);
+            return new PaidEnrollments(maximumEnrollment, enrolledUsers, progressStatus, recruitmentStatus);
         }
 
-        return new FreeEnrollment(enrolledUsers, sessionStatus);
-    }
-
-    private List<NsUser> findEnrolledUsersByIds(List<Long> enrolledUserIds) {
-        return enrolledUserIds.stream()
-                .map(userId -> userService.findByUserId(userId.toString())
-                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다.")))
-                .collect(Collectors.toList());
+        return new FreeEnrollments(enrolledUsers, progressStatus, recruitmentStatus);
     }
 }
