@@ -40,7 +40,7 @@ public class JdbcCourseRepository implements CourseRepository {
     @Override
     public Course findById(Long id) {
         String sql = "select id, title, creator_id, created_at, updated_at, class_number from course where id = :id";
-        List<Session> sessions = new ArrayList<>();/*getSessions(id);*/
+        List<Session> sessions = findSessions(id);
         RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
                 rs.getLong("id"),
                 rs.getString("title"),
@@ -54,10 +54,9 @@ public class JdbcCourseRepository implements CourseRepository {
         return namedParameterJdbcTemplate.queryForObject(sql, parameterSource, ROW_MAPPER);
     }
 
- /*   private List<Session> getSessions(Long id) {
-        jdbcSessionRepository.findById()
+    private List<Session> findSessions(Long id) {
+        return jdbcSessionRepository.findSessions(id);
     }
-*/
 
     private static LocalDateTime toLocalDateTime(Timestamp timestamp) {
         if (timestamp == null) {

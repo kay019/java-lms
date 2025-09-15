@@ -18,4 +18,6 @@
 1. 숫자로 순서를 써서 하는건 실수 및 어려운 문제가 있음 
 -> NamedParameterJdbcTemplate사용해보기
 
-2. 
+
+TODO
+findSessions 메서드 테스트 코드 추가하기

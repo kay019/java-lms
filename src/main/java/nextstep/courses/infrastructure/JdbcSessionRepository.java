@@ -7,6 +7,7 @@ import nextstep.courses.domain.image.ImageType;
 import nextstep.courses.domain.image.SessionImage;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -89,16 +90,47 @@ public class JdbcSessionRepository implements SessionRepository {
 
             return new Session(pk,
                     students,
-                    new PricingType( rs.getBoolean(3), rs.getInt(2)),
+                    new PricingType(rs.getBoolean(3), rs.getInt(2)),
                     SessionState.valueOf(rs.getString(4)),
-                    new SessionImage(new ImageCapacity(rs.getInt(5)), ImageType.valueOf(rs.getString(6)), new ImageSize(rs.getInt(7),rs.getInt(8))),
+                    new SessionImage(new ImageCapacity(rs.getInt(5)), ImageType.valueOf(rs.getString(6)), new ImageSize(rs.getInt(7), rs.getInt(8))),
                     rs.getInt(9),
                     new SessionDate(toLocalDateTime(rs.getTimestamp(10)), toLocalDateTime(rs.getTimestamp(11)))
-                    ,rs.getLong(12) );
+                    , rs.getLong(12));
         };
 
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
+
+    public List<Session> findSessions(Long id) {
+        String sql = "select id, session_amount, is_premium, session_state, " +
+                "image_capacity, image_type, image_width, image_height, " +
+                "max_student_count, start_date, end_date, course_id " +
+                "from session where course_id = :courseId";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("courseId", id);
+
+        RowMapper<Session> rowMapper = (rs, rowNum) -> {
+            long pk = rs.getLong("id");
+            List<Long> students = findStudents(pk);
+
+            return new Session(
+                    pk,
+                    students,
+                    new PricingType(rs.getBoolean("is_premium"), rs.getInt("session_amount")),
+                    SessionState.valueOf(rs.getString("session_state")),
+                    new SessionImage(new ImageCapacity(rs.getInt("image_capacity")),
+                            ImageType.valueOf(rs.getString("image_type")),
+                            new ImageSize(rs.getInt("image_width"),
+                                    rs.getInt("image_height"))),
+                    rs.getInt("max_student_count"),
+                    new SessionDate(toLocalDateTime(rs.getTimestamp("start_date")), toLocalDateTime(rs.getTimestamp("end_date")))
+                    , rs.getLong("course_id"));
+        };
+
+        return jdbcTemplate.query(sql, rowMapper, id);
+    }
+
 
     private List<Long> findStudents(long pk) {
         String sql = "select id from session_students where session_id = ?";
