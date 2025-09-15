@@ -13,15 +13,18 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository("courseRepository")
 public class JdbcCourseRepository implements CourseRepository {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcSessionRepository jdbcSessionRepository;
+    private CourseSessionRepository courseSessionRepository;
 
-    public JdbcCourseRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcSessionRepository sessionRepository) {
+    public JdbcCourseRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcSessionRepository sessionRepository, CourseSessionRepository courseSessionRepository) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.jdbcSessionRepository = sessionRepository;
+        this.courseSessionRepository = courseSessionRepository;
     }
 
     @Override
@@ -40,6 +43,7 @@ public class JdbcCourseRepository implements CourseRepository {
     @Override
     public Course findById(Long id) {
         String sql = "select id, title, creator_id, created_at, updated_at, class_number from course where id = :id";
+        List<Session> sessions = getSessions(id);/*getSessions(id);*/
         List<Session> sessions = findSessions(id);
         RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
                 rs.getLong("id"),
@@ -54,9 +58,13 @@ public class JdbcCourseRepository implements CourseRepository {
         return namedParameterJdbcTemplate.queryForObject(sql, parameterSource, ROW_MAPPER);
     }
 
+    private List<Session> getSessions(Long id) {
+        List<Long> sessionIds = courseSessionRepository.findByCourseId(id);
+        return sessionIds.stream().map(jdbcSessionRepository::findById).collect(Collectors.toList());
     private List<Session> findSessions(Long id) {
         return jdbcSessionRepository.findSessions(id);
     }
+
 
     private static LocalDateTime toLocalDateTime(Timestamp timestamp) {
         if (timestamp == null) {
