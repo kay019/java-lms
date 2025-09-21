@@ -1,7 +1,6 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.Session;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +42,6 @@ public class JdbcCourseRepository implements CourseRepository {
     public Course findById(Long id) {
         String sql = "select id, title, creator_id, created_at, updated_at, class_number from course where id = :id";
         List<Session> sessions = getSessions(id);/*getSessions(id);*/
-        List<Session> sessions = findSessions(id);
         RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
                 rs.getLong("id"),
                 rs.getString("title"),
@@ -54,22 +51,19 @@ public class JdbcCourseRepository implements CourseRepository {
                 rs.getInt("class_number"),
                 sessions
         );
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id",id);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id);
         return namedParameterJdbcTemplate.queryForObject(sql, parameterSource, ROW_MAPPER);
     }
-
-    private List<Session> getSessions(Long id) {
-        List<Long> sessionIds = courseSessionRepository.findByCourseId(id);
-        return sessionIds.stream().map(jdbcSessionRepository::findById).collect(Collectors.toList());
-    private List<Session> findSessions(Long id) {
-        return jdbcSessionRepository.findSessions(id);
-    }
-
 
     private static LocalDateTime toLocalDateTime(Timestamp timestamp) {
         if (timestamp == null) {
             return null;
         }
         return timestamp.toLocalDateTime();
+    }
+
+    private List<Session> getSessions(Long id) {
+        List<Long> sessionIds = courseSessionRepository.findByCourseId(id);
+        return sessionIds.stream().map(jdbcSessionRepository::findById).collect(Collectors.toList());
     }
 }
