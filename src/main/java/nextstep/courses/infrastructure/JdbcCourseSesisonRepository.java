@@ -1,12 +1,11 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.CourseSessionRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public class JdbcCourseSesisonRepository implements CourseSessionRepository {
 
     private final JdbcOperations jdbcTemplate;
