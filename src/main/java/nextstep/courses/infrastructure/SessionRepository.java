@@ -1,4 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.courses.infrastructure;
+
+import nextstep.courses.domain.Session;
 
 public interface SessionRepository {
     long save(Session session);

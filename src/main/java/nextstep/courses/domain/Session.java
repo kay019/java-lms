@@ -18,6 +18,7 @@ public class Session {
     private Long courseId;
 
 
+
     public Session(PricingType pricingType, int maxStudentCount, SessionState state, SessionDate date
             , SessionImage image) {
         this(0L, new ArrayList<Long>(),pricingType,state,image,maxStudentCount,date,0L );
@@ -88,5 +89,7 @@ public class Session {
     public SessionDate getDate() {
         return date;
     }
-
+    public Long getCourseId() {
+        return courseId;
+    }
 }

@@ -7,7 +7,6 @@ import nextstep.courses.domain.image.ImageType;
 import nextstep.courses.domain.image.SessionImage;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -29,18 +28,18 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public long save(Session session) {
         String sql = "insert into session (session_amount," +
-                " is_premium," +
+                " course_type," +
                 " session_state," +
                 " image_capacity,image_type, image_width, image_height, max_student_count," +
-                "start_date, end_date" +
-                ") values(?,?,?,?,?,?,?,?,?,?)";
+                "start_date, end_date, course_id" +
+                ") values(?,?,?,?,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setInt(1, session.getPricingType().getSessionAmount());
-            ps.setBoolean(2, session.getPricingType().getIsPremium());
-            ps.setString(3, session.getState().getState());
+            ps.setString(2, session.getPricingType().getCourseType().toString());
+            ps.setString(3, session.getState().toString());
             ps.setInt(4, session.getImage().getCapacity().getImageSize());
             ps.setString(5, session.getImage().getType().toString());
             ps.setInt(6, session.getImage().getSize().getWidth());
@@ -48,27 +47,29 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.setInt(8, session.getMaxStudentCount());
             ps.setTimestamp(9, Timestamp.valueOf(session.getDate().getStartDate()));
             ps.setTimestamp(10, Timestamp.valueOf(session.getDate().getEndDate()));
+            ps.setLong(11, session.getCourseId());
             return ps;
         }, keyHolder);
 
         long pk = keyHolder.getKey().longValue();
 
         for (Long studentId : session.getStudents()) {
-            saveSessionStudent(pk, studentId);
+            saveSessionStudent(pk, studentId, session.getCourseId());
         }
         return pk;
     }
 
-    private long saveSessionStudent(long pk, Long studentId) {
+    private long saveSessionStudent(long pk, Long studentId, Long courseId) {
 
-        String sql = "insert into session_students (id, session_id"
-                + ") values(?,?);";
+        String sql = "insert into session_students (id, session_id, course_id"
+                + ") values(?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setLong(1, studentId);
             ps.setLong(2, pk);
+            ps.setLong(3, courseId);
             return ps;
         }, keyHolder);
 
@@ -79,7 +80,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public Session findById(Long id) {
         String sql = "select id," +
                 " session_amount," +
-                " is_premium," +
+                " course_type," +
                 " session_state," +
                 " image_capacity," +
                 " image_type," +
@@ -90,47 +91,18 @@ public class JdbcSessionRepository implements SessionRepository {
 
             return new Session(pk,
                     students,
-                    new PricingType(rs.getBoolean(3), rs.getInt(2)),
-                    SessionState.valueOf(rs.getString(4)),
-                    new SessionImage(new ImageCapacity(rs.getInt(5)), ImageType.valueOf(rs.getString(6)), new ImageSize(rs.getInt(7), rs.getInt(8))),
-                    rs.getInt(9),
-                    new SessionDate(toLocalDateTime(rs.getTimestamp(10)), toLocalDateTime(rs.getTimestamp(11)))
-                    , rs.getLong(12));
-        };
-
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
-    }
-
-    public List<Session> findSessions(Long id) {
-        String sql = "select id, session_amount, is_premium, session_state, " +
-                "image_capacity, image_type, image_width, image_height, " +
-                "max_student_count, start_date, end_date, course_id " +
-                "from session where course_id = :courseId";
-
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("courseId", id);
-
-        RowMapper<Session> rowMapper = (rs, rowNum) -> {
-            long pk = rs.getLong("id");
-            List<Long> students = findStudents(pk);
-
-            return new Session(
-                    pk,
-                    students,
-                    new PricingType(rs.getBoolean("is_premium"), rs.getInt("session_amount")),
+                    new PricingType(CourseType.getCourseType(rs.getString("course_type")), rs.getInt("session_amount")),
                     SessionState.valueOf(rs.getString("session_state")),
                     new SessionImage(new ImageCapacity(rs.getInt("image_capacity")),
-                            ImageType.valueOf(rs.getString("image_type")),
-                            new ImageSize(rs.getInt("image_width"),
-                                    rs.getInt("image_height"))),
+                            ImageType.valueOf(rs.getString("image_type")), new ImageSize(rs.getInt("image_width"),
+                            rs.getInt("image_height"))),
                     rs.getInt("max_student_count"),
                     new SessionDate(toLocalDateTime(rs.getTimestamp("start_date")), toLocalDateTime(rs.getTimestamp("end_date")))
                     , rs.getLong("course_id"));
         };
 
-        return jdbcTemplate.query(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
-
 
     private List<Long> findStudents(long pk) {
         String sql = "select id from session_students where session_id = ?";
