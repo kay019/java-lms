@@ -38,7 +38,7 @@ public class SessionRepositoryTest {
         List<Long> testStudents = List.of(1L, 2L, 3L);
         Session testSession = new Session(1L,
                 testStudents,
-                new PricingType(false, 0),
+                new PricingType(CourseType.BASIC, 0),
                 SessionState.valueOf("START"),
                 new SessionImage(new ImageCapacity(1024), ImageType.valueOf("gif"),
                         new ImageSize(300, 200)),

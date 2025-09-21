@@ -44,7 +44,7 @@ public class SessionTest {
 
     @Test
     public void 무료강의_최대_수강인원제한없음_테스트() {
-        PricingType pricingType = new PricingType(false, 0);
+        PricingType pricingType = new PricingType(CourseType.BASIC, 0);
         Session session = new Session(pricingType, 0, SessionState.START, sessionDate,sessionImage);
         assertDoesNotThrow(() -> {
             session.requestSession(matchPayment);
@@ -53,7 +53,7 @@ public class SessionTest {
 
     @Test
     public void 유료강의_최대_수강인원제한_테스트() {
-        PricingType pricingType = new PricingType(true, 300);
+        PricingType pricingType = new PricingType(CourseType.PREMIUM, 300);
         Session session = new Session(pricingType, 0, SessionState.START, sessionDate, sessionImage);
         assertThatThrownBy(() -> {
             session.requestSession(matchPayment);
@@ -63,13 +63,13 @@ public class SessionTest {
     @Test
     public void 무료강의_강의금액0원_실패테스트() {
         assertThatThrownBy(() -> {
-            new PricingType(false, 1);
+            new PricingType(CourseType.BASIC, 1);
         }).isInstanceOf(CustomException.class);
     }
 
     @Test
     public void 유료강의_강의금액불일치_테스트() {
-        PricingType pricingType = new PricingType(true, 10000);
+        PricingType pricingType = new PricingType(CourseType.PREMIUM, 10000);
         Session session = new Session(pricingType, 1, SessionState.START, sessionDate, sessionImage);
         assertThatThrownBy(() -> {
             session.requestSession(unMatchPayment);
@@ -78,7 +78,7 @@ public class SessionTest {
 
     @Test
     public void 유료강의_강의금액일치_테스트() {
-        PricingType pricingType = new PricingType(true, 10000);
+        PricingType pricingType = new PricingType(CourseType.PREMIUM, 10000);
         Session session = new Session(pricingType, 1, SessionState.START, sessionDate, sessionImage);
         assertDoesNotThrow(() -> {
             session.requestSession(matchPayment);
@@ -87,7 +87,7 @@ public class SessionTest {
 
     @Test
     public void 강의신청은_강의상태아닐때_실패테스트() {
-        PricingType pricingType = new PricingType(true, 10000);
+        PricingType pricingType = new PricingType(CourseType.PREMIUM, 10000);
         Session session = new Session(pricingType, 1, SessionState.READY, sessionDate, sessionImage);
         assertThatThrownBy(() -> {
             session.requestSession(matchPayment);
@@ -96,7 +96,7 @@ public class SessionTest {
 
     @Test
     public void 강의신청_모집상태_성공테스트() {
-        PricingType pricingType = new PricingType(true, 10000);
+        PricingType pricingType = new PricingType(CourseType.PREMIUM, 10000);
         Session session = new Session(pricingType, 1, SessionState.START, sessionDate, sessionImage);
         assertDoesNotThrow(() -> {
             session.requestSession(matchPayment);
