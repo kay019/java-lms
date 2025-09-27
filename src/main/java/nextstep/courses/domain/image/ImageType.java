@@ -1,6 +1,6 @@
-package nextstep.courses.domain.sessionimage;
+package nextstep.courses.domain.image;
 
-import nextstep.courses.Exception.CustomException;
+import nextstep.courses.exception.CustomException;
 
 import java.util.Arrays;
 
@@ -11,7 +11,6 @@ public enum ImageType {
     jpeg,
     png,
     svg;
-
 
     public static ImageType validateType(String imageType) {
         return Arrays.stream(values()).filter(type -> type.name().equals(imageType))

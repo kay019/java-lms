@@ -1,6 +1,6 @@
-package nextstep.courses.domain.sessionimage;
+package nextstep.courses.domain.image;
 
-import nextstep.courses.Exception.CustomException;
+import nextstep.courses.exception.CustomException;
 
 public class ImageCapacity {
 
@@ -8,6 +8,7 @@ public class ImageCapacity {
     public static final int MAXIMUM_SIZE = 1024 * 1024;
 
     private final int imageSize;
+
 
     public ImageCapacity(int imageSize) {
         validateSize(imageSize);
@@ -19,4 +20,9 @@ public class ImageCapacity {
             throw CustomException.OVER_MAX_IMAGE_CAPACITY;
         }
     }
+
+    public int getImageSize() {
+        return imageSize;
+    }
+
 }

@@ -14,23 +14,30 @@ public class Course {
     private Long creatorId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<Session> sessionList;
+    private List<Session> sessions;
 
     public Course() {
     }
 
     public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
+        this(0L, title, creatorId, LocalDateTime.now(), null,1);
+    }
+    public Course(Long id, String title, Long creatorId, List<Session> sessions) {
+        this(id, title, creatorId, LocalDateTime.now(), null,1, sessions);
     }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, int classNumber) {
+        this(id, title, creatorId, createdAt, updatedAt, classNumber, new ArrayList<>());
+        }
+
+    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, int classNumber, List<Session> sessions) {
         this.id = id;
         this.title = title;
         this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        sessionList = new ArrayList<>();
-        classNumber = count.incrementAndGet();
+        this.classNumber = classNumber;
+        this.sessions = sessions;
     }
 
     public String getTitle() {
@@ -45,14 +52,20 @@ public class Course {
         return createdAt;
     }
 
+    public int getClassNumber() {
+        return classNumber;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
+                ", classNumber=" + classNumber +
                 ", title='" + title + '\'' +
                 ", creatorId=" + creatorId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", sessions=" + sessions +
                 '}';
     }
 }

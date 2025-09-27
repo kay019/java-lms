@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.Exception.CustomException;
+import nextstep.courses.exception.CustomException;
 
 import java.time.LocalDateTime;
 
@@ -14,5 +14,13 @@ public class SessionDate {
         }
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 }

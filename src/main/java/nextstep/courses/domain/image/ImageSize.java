@@ -1,6 +1,6 @@
-package nextstep.courses.domain.sessionimage;
+package nextstep.courses.domain.image;
 
-import nextstep.courses.Exception.CustomException;
+import nextstep.courses.exception.CustomException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,5 +28,14 @@ public class ImageSize {
                 .setScale(FIRST_DECIMAL_PLACE, RoundingMode.FLOOR).doubleValue() != EXPECTED_SIZE_PERCENT) {
             throw CustomException.IMAGE_PERCENT_ERROR;
         }
+    }
+
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
