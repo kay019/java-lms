@@ -1,92 +1,78 @@
 package nextstep.qna.domain;
 
-import nextstep.users.domain.NsUser;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import nextstep.qna.CannotDeleteException;
+import nextstep.users.domain.NsUser;
 
-public class Question {
-    private Long id;
+public class Question extends BaseEntity {
+    private QuestionPost post;
+    private Answers answers;
+    private boolean deleted;
 
-    private String title;
+  public Question() {
+    this(null, null, new Answers(), false);
+  }
 
-    private String contents;
+  public Question(NsUser writer, String title, String contents) {
+    this(null, new QuestionPost(writer, title, contents), new Answers(), false);
+  }
 
-    private NsUser writer;
+  public Question(Long id, NsUser writer, String title, String contents) {
+    this(id, new QuestionPost(writer, title, contents), new Answers(), false);
+  }
 
-    private List<Answer> answers = new ArrayList<>();
+  public Question(Long id, QuestionPost post, Answers answers, boolean deleted) {
+    super(id);
+    this.post = post;
+    this.answers = answers;
+    this.deleted = deleted;
+  }
 
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
-
-    public Question() {
+  public void add(Answer answer) {
+    answers.create(answer);
     }
 
-    public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
+  public void deleteBy(NsUser loginUser) throws CannotDeleteException {
+    deleteRelatedAnswers(loginUser);
+    deleteQuestion(loginUser);
+  }
+
+  private void validateOwner(NsUser loginUser) throws CannotDeleteException {
+    if (!post.isOwner(loginUser)) {
+      throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+    }
+  }
+
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  public NsUser getWriter() {
+    return this.post.getWriter();
+  }
+
+  private void deleteQuestion(NsUser loginUser) throws CannotDeleteException {
+    validateOwner(loginUser);
+    this.deleted = true;
+  }
+
+  private void deleteRelatedAnswers(NsUser loginUser) throws CannotDeleteException {
+    answers.deleteBy(loginUser);
     }
 
-    public Question(Long id, NsUser writer, String title, String contents) {
-        this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
-    }
+  public List<DeleteHistory> createDeleteHistories() {
+    List<DeleteHistory> deleteHistories = new ArrayList<>();
+    deleteHistories.add(new DeleteHistory(ContentType.QUESTION, getId(), getWriter()));
+    deleteHistories.addAll(answers.createDeleteHistories());
+    return deleteHistories;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  @Override
+  public String toString() {
+    return "Question [id=" + getId() + ", title=" + post.getTitle() + ", contents=" + post.getContents() + ", writer="
+        + getWriter() + "]";
+  }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
-    }
-
-    public NsUser getWriter() {
-        return writer;
-    }
-
-    public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
-        answers.add(answer);
-    }
-
-    public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
-    }
-
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    @Override
-    public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
-    }
 }
