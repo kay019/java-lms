@@ -10,9 +10,7 @@ import java.util.List;
 public class Question extends SoftDeletableModel {
     private Long id;
 
-    private QuestionBody title;
-
-    private QuestionBody contents;
+    private QuestionBody questionBody;
 
     private NsUser writer;
 
@@ -22,18 +20,17 @@ public class Question extends SoftDeletableModel {
     }
 
     public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
+        this(0L, writer, new QuestionBody(title, contents));
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this(id, writer, new QuestionBody(title), new QuestionBody(contents));
+        this(id, writer, new QuestionBody(title, contents));
     }
 
-    public Question(Long id, NsUser writer, QuestionBody title, QuestionBody contents) {
+    public Question(Long id, NsUser writer, QuestionBody questionBody) {
         this.id = id;
         this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+        this.questionBody = questionBody;
     }
 
     public Long getId() {
@@ -57,16 +54,16 @@ public class Question extends SoftDeletableModel {
         return getDeleted();
     }
 
-    private void validateOwner(NsUser loginUser) throws CannotDeleteException {
+    public void delete(NsUser loginUser) throws CannotDeleteException {
+        deleteQuestion(loginUser);
+        answers.deleteAnswer(loginUser);
+    }
+
+    private void deleteQuestion(NsUser loginUser) throws CannotDeleteException {
         if (!this.isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
         updateDeleted();
-    }
-
-    public void delete(NsUser loginUser) throws CannotDeleteException {
-        validateOwner(loginUser);
-        answers.validateAnswerOwner(loginUser);
     }
 
     public List<DeleteHistory> toDeleteHistories(){
@@ -83,13 +80,9 @@ public class Question extends SoftDeletableModel {
         return this.answers.addDeleteAnswerHistory();
     }
 
-    private void updateDeleted() {
-        deleted();
-    }
-
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + getId() + ", title=" + questionBody.getTitle() + ", contents=" + questionBody.getContents() + ", writer=" + writer + "]";
     }
 
 }

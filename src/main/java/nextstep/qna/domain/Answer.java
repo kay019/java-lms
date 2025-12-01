@@ -12,7 +12,7 @@ public class Answer extends SoftDeletableModel {
 
     private Question question;
 
-    private QuestionBody contents;
+    private QuestionBody questionBody;
 
     public Answer() {
     }
@@ -25,7 +25,7 @@ public class Answer extends SoftDeletableModel {
        this(id, writer, question, new QuestionBody(contents));
     }
 
-    public Answer(Long id, NsUser writer, Question question, QuestionBody contents) {
+    public Answer(Long id, NsUser writer, Question question, QuestionBody questionBody) {
         this.id = id;
         if (writer == null) {
             throw new UnAuthorizedException();
@@ -37,16 +37,14 @@ public class Answer extends SoftDeletableModel {
 
         this.writer = writer;
         this.question = question;
-        this.contents = contents;
+        this.questionBody = questionBody;
     }
 
     public Long getId() {
         return id;
     }
 
-    private void updateDeleted() {
-        deleted();
-    }
+
 
     public boolean isDeleted() {
         return getDeleted();
@@ -65,7 +63,7 @@ public class Answer extends SoftDeletableModel {
         this.question = question;
     }
 
-    public void validateAnswerOwner(NsUser loginUser) throws CannotDeleteException {
+    public void delete(NsUser loginUser) throws CannotDeleteException {
         if (!this.isOwner(loginUser)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
@@ -74,6 +72,6 @@ public class Answer extends SoftDeletableModel {
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + questionBody.getContents() + "]";
     }
 }
