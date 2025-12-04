@@ -1,79 +1,56 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
-import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
-
 public class Answer {
-    private Long id;
+    private final SoftDeletableBaseEntity baseEntity;
+    private final Question question;
+    private final ContentDetails contentDetails;
 
-    private NsUser writer;
 
-    private Question question;
-
-    private String contents;
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
-
-    public Answer() {
+    public Answer(NsUser writer, Question question, String entity) {
+        this(null, writer, question, entity);
     }
 
-    public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
+    Answer(Long id, NsUser writer, Question question, String content) {
+        this(new SoftDeletableBaseEntity(id), question, new ContentDetails(writer, content));
     }
 
-    public Answer(Long id, NsUser writer, Question question, String contents) {
-        this.id = id;
-        if(writer == null) {
-            throw new UnAuthorizedException();
-        }
-
+    Answer(SoftDeletableBaseEntity baseEntity, Question question, ContentDetails contentDetails) {
         if(question == null) {
             throw new NotFoundException();
         }
-
-        this.writer = writer;
+        this.baseEntity = baseEntity;
         this.question = question;
-        this.contents = contents;
+        this.contentDetails = contentDetails;
     }
 
-    public Long getId() {
-        return id;
+    public void deleteBy(NsUser requestUser) throws CannotDeleteException {
+        if (!isOwner(requestUser)) {
+            throw new CannotDeleteException("답변자 외에는 답변을 삭제할 수 없습니다.");
+        }
+        baseEntity.delete();
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    private boolean isOwner(NsUser writer) {
+        return contentDetails.isWrittenBy(writer);
     }
 
     public boolean isDeleted() {
-        return deleted;
+        return baseEntity.isDeleted();
     }
 
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
-    }
-
-    public NsUser getWriter() {
-        return writer;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void toQuestion(Question question) {
-        this.question = question;
+    public DeleteHistory toDeleteHistory() throws CannotDeleteException {
+        if (!baseEntity.isDeleted()) {
+            throw new CannotDeleteException("삭제되지 않아서 삭제 히스토리를 구할 수 없습니다.");
+        }
+        return new DeleteHistory(ContentType.ANSWER, baseEntity.getId(), contentDetails.getWriter());
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [" + super.toString() + "]";
     }
 }
