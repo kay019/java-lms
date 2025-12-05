@@ -6,6 +6,7 @@ public class CoverImage {
 
     public static final double MAX_FILE_SIZE = 1024 * 1024; // 1MB
 
+    private Long id;
     private final long size;
     private final ImageType type;
     private final ImageDimentsion dimentsion;
@@ -14,12 +15,21 @@ public class CoverImage {
         this(size, ImageType.fromName(type.toUpperCase()), width, height);
     }
 
-    public CoverImage(long size, ImageType type, int width, int height) {
-        this(size, type, new ImageDimentsion(width, height));
+    public CoverImage(Long id, long size, String type, int width, int height) {
+        this(id, size, ImageType.fromName(type.toUpperCase()), width, height);
     }
 
-    public CoverImage(long size, ImageType type, ImageDimentsion dimentsion) {
+    public CoverImage(long size, ImageType type, int width, int height) {
+        this(0L, size, type, new ImageDimentsion(width, height));
+    }
+
+    public CoverImage(Long id, long size, ImageType type, int width, int height) {
+        this(id, size, type, new ImageDimentsion(width, height));
+    }
+
+    public CoverImage(Long id, long size, ImageType type, ImageDimentsion dimentsion) {
         validateFileSize(size);
+        this.id = id;
         this.size = size;
         this.type = type;
         this.dimentsion = dimentsion;
@@ -31,6 +41,10 @@ public class CoverImage {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public long getSize() {
         return size;
     }
@@ -39,5 +53,12 @@ public class CoverImage {
         return type;
     }
 
+    public int getWidth(){
+        return this.dimentsion.getWidth();
+    }
+
+    public int getHeight(){
+        return this.dimentsion.getHeight();
+    }
 
 }
