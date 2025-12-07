@@ -29,10 +29,11 @@ public class CourseRepositoryTest {
     @Test
     void crud() {
         Course course = new Course("TDD, 클린 코드 with Java", 1L);
-        int count = courseRepository.save(course);
-        assertThat(count).isEqualTo(1);
-        Course savedCourse = courseRepository.findById(1L);
+        Long courseId = courseRepository.save(course);
+        assertThat(courseId).isGreaterThan(0L); // TODO 다른테스트와 시퀀스가 충돌나서 임시 조치
+        Course savedCourse = courseRepository.findById(courseId);
         assertThat(course.getTitle()).isEqualTo(savedCourse.getTitle());
         LOGGER.debug("Course: {}", savedCourse);
     }
+
 }

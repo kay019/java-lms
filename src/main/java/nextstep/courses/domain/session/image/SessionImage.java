@@ -28,4 +28,20 @@ public class SessionImage {
         }
     }
 
+
+    public int getWidth() {
+        return imageDimension.getWidth();
+    }
+
+    public int getHeight() {
+        return imageDimension.getHeight();
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public String getImageTypeValue() {
+        return imageType.getValue();
+    }
 }
