@@ -9,22 +9,37 @@ public class Course {
 
     private Long creatorId;
 
-    private LocalDateTime createdAt;
+    private final Sessions sessions;
 
-    private LocalDateTime updatedAt;
+    private final LocalDateTime createdAt;
 
-    public Course() {}
+    private final LocalDateTime updatedAt;
 
-    public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
+    public Course(String title, Long creatorId, LocalDateTime now) {
+        this(0L, title, creatorId, new Sessions(), now, null);
     }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(
+            Long id,
+            String title,
+            Long creatorId,
+            Sessions sessions,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.creatorId = creatorId;
+        this.sessions = sessions;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void addSession(Session session) {
+        sessions.add(session);
+    }
+
+    public int sessionCount() {
+        return sessions.count();
     }
 
     public String getTitle() {
