@@ -1,33 +1,44 @@
 package nextstep.courses.domain.registration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Registrations {
-  private final List<Registration> registrations;
+    private final List<Registration> registrations;
 
-  public Registrations() {
-    this(new ArrayList<>());
-  }
+    public Registrations() {
+        this(new ArrayList<>());
+    }
 
-  public Registrations(List<Registration> registrations) {
-    this.registrations = registrations;
-  }
+    public Registrations(List<Registration> registrations) {
+        this.registrations = new ArrayList<>(registrations);
+    }
 
-  public Registrations add(Registration registration) {
-    List<Registration> newList = new ArrayList<>(registrations);
-    newList.add(registration);
-    return new Registrations(newList);
-  }
+    public Registrations add(Registration registration) {
+        validateDuplicateRegistration(registration);
+        List<Registration> newList = new ArrayList<>(registrations);
+        newList.add(registration);
+        return new Registrations(newList);
+    }
 
-  public int count() {
-    return registrations.size();
-  }
+    private void validateDuplicateRegistration(Registration registration) {
+        if (isAlreadyRegistered(registration.getStudentId())) {
+            throw new IllegalArgumentException("이미 수강신청한 학생입니다.");
+        }
+    }
 
-  public boolean contains(Long studentId) {
-    return registrations.stream()
-        .anyMatch(r -> r.contains(studentId));
-  }
+    public boolean isAlreadyRegistered(long studentId) {
+        return registrations.stream()
+            .anyMatch(registration -> registration.getStudentId().equals(studentId));
+    }
 
+    public void validateCapacity(int maxCapacity) {
+        if (count() > maxCapacity) {
+            throw new IllegalStateException("최대 수강 인원을 초과할 수 없습니다.");
+        }
+    }
+
+    public int count() {
+        return registrations.size();
+    }
 }

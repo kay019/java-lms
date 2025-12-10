@@ -15,6 +15,7 @@ public class SessionImageDimension {
     this.width = width;
     this.height = height;
   }
+
   private void validateMinLength(int width, int height){
     if(!(width >= MIN_WIDTH && height >= MIN_HEIGHT)) {
       throw new IllegalArgumentException("이미지는 가로 300이상, 세로 200 이상이어야 합니다.");
@@ -34,5 +35,11 @@ public class SessionImageDimension {
     return b == 0 ? a : gcd(b, a % b);
   }
 
+  public int width() {
+    return width;
+  }
 
+  public int height() {
+    return height;
+  }
 }

@@ -1,18 +1,15 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.image.SessionCoverImage;
-import nextstep.courses.domain.session.type.FreeType;
-import nextstep.courses.domain.session.type.SessionType;
 
 public class SessionBuilder {
     private Long id = null;
-    private Course course = new Course("TDD", 1L);
+    private Long courseId = 1L;
     private Term term = new Term(1);
-    private SessionCoverImage cover = new SessionCoverImage(300, 200, "png", 1024 * 500);
     private SessionPeriod period = new SessionPeriod("2025-01-01", "2025-01-31");
     private SessionState state = SessionState.PREPARING;
-    private SessionType type = new FreeType();
+  private SessionPolicy sessionPolicy = new SessionPolicy();
+    private SessionCoverImage coverImage = null;
 
     public static SessionBuilder aSession() {
         return new SessionBuilder();
@@ -23,18 +20,13 @@ public class SessionBuilder {
         return this;
     }
 
-    public SessionBuilder withCourse(Course course) {
-        this.course = course;
+    public SessionBuilder withCourseId(Long courseId) {
+        this.courseId = courseId;
         return this;
     }
 
     public SessionBuilder withTerm(int term) {
         this.term = new Term(term);
-        return this;
-    }
-
-    public SessionBuilder withCover(SessionCoverImage cover) {
-        this.cover = cover;
         return this;
     }
 
@@ -48,8 +40,13 @@ public class SessionBuilder {
         return this;
     }
 
-    public SessionBuilder withType(SessionType type) {
-        this.type = type;
+  public SessionBuilder withSessionPolicy(SessionPolicy sessionPolicy) {
+    this.sessionPolicy = sessionPolicy;
+        return this;
+    }
+
+    public SessionBuilder withCoverImage(SessionCoverImage coverImage) {
+        this.coverImage = coverImage;
         return this;
     }
 
@@ -58,8 +55,17 @@ public class SessionBuilder {
         return this;
     }
 
+  public SessionBuilder paid(long tuitionFee, int maxCapacity) {
+    this.sessionPolicy = SessionPolicy.paid(tuitionFee, maxCapacity);
+    return this;
+  }
+
+  public SessionBuilder free() {
+    this.sessionPolicy = SessionPolicy.free();
+        return this;
+    }
+
     public Session build() {
-        Enrollment enrollment = new Enrollment(state, type);
-        return new Session(id, course, term, cover, period, enrollment);
+      return sessionPolicy.createSession(id, courseId, term, period, state, coverImage);
     }
 }
