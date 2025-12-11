@@ -1,11 +1,13 @@
 package nextstep.courses.infrastructure.mapper;
 
 import nextstep.courses.domain.image.SessionCoverImage;
+import nextstep.courses.domain.image.SessionCoverImages;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionPeriod;
 import nextstep.courses.domain.session.SessionPolicy;
-import nextstep.courses.domain.session.SessionState;
+import nextstep.courses.domain.session.SessionProgressState;
 import nextstep.courses.domain.session.Term;
+import nextstep.courses.domain.session.policy.approval.ApprovalPolicy;
 import nextstep.courses.domain.session.policy.capacity.CapacityPolicy;
 import nextstep.courses.domain.session.policy.capacity.LimitedCapacity;
 import nextstep.courses.domain.session.policy.capacity.UnlimitedCapacity;
@@ -45,17 +47,19 @@ public class SessionMapper {
             session.getTerm().getValue(),
             session.getPeriod().startDay(),
             session.getPeriod().endDay(),
-            session.getState().name(),
+            session.getProgressState().name(),
+            "NOT_RECRUITING",
             typeName,
+            sessionPolicy.getApprovalPolicy().name(),
             maxCapacity,
             tuitionFee,
             session.getCreatedAt()
         );
     }
 
-    public static Session toDomain(SessionEntity entity, SessionCoverImage coverImage) {
+    public static Session toDomain(SessionEntity entity, SessionCoverImages coverImages) {
         SessionPeriod period = new SessionPeriod(entity.getStartDay(), entity.getEndDay());
-        SessionState state = SessionState.valueOf(entity.getState());
+        SessionProgressState state = SessionProgressState.valueOf(entity.getState());
         SessionPolicy sessionPolicy = createSessionPolicy(entity);
 
         return sessionPolicy.createSession(
@@ -64,14 +68,15 @@ public class SessionMapper {
             new Term(entity.getTerm()),
             period,
             state,
-            coverImage
+            coverImages
         );
     }
 
     private static SessionPolicy createSessionPolicy(SessionEntity entity) {
         TuitionPolicy tuitionPolicy = createTuitionPolicy(entity);
         CapacityPolicy capacityPolicy = createCapacityPolicy(entity);
-        return new SessionPolicy(tuitionPolicy, capacityPolicy);
+        ApprovalPolicy approvalPolicy = ApprovalPolicy.valueOf(entity.getApprovalPolicy());
+        return new SessionPolicy(tuitionPolicy, capacityPolicy, approvalPolicy);
     }
 
     private static TuitionPolicy createTuitionPolicy(SessionEntity entity) {
