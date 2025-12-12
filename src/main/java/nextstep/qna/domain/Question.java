@@ -1,66 +1,34 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question {
-    private Long id;
+public class Question extends BaseEntity {
+    private PostContent postContent;
 
-    private String title;
-
-    private String contents;
-
-    private NsUser writer;
-
-    private List<Answer> answers = new ArrayList<>();
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
+    private Answers answers = new Answers();
 
     public Question() {
     }
 
     public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
+        this(0L, new PostContent(writer, title, contents));
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+        this(id, new PostContent(writer, title, contents));
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
+    public Question(Long id, PostContent postContent) {
+        super(id);
+        this.postContent = postContent;
     }
 
     public NsUser getWriter() {
-        return writer;
+        return postContent.getWriter();
     }
 
     public void addAnswer(Answer answer) {
@@ -69,24 +37,45 @@ public class Question {
     }
 
     public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
+        return postContent.isOwner(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public void markAsDeleted(NsUser loginUser) throws CannotDeleteException {
+        validateDeletableBy(loginUser);
+        markAsDeleted();
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public void delete(NsUser loginUser) throws CannotDeleteException {
+        this.markAsDeleted(loginUser);
+        answers.delete(loginUser);
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<DeleteHistory> createDeleteHistories() {
+        List<DeleteHistory> histories = new ArrayList<>();
+
+        histories.add(new DeleteHistory(
+                ContentType.QUESTION,
+                getId(),
+                getWriter(),
+                LocalDateTime.now()
+        ));
+
+        histories.addAll(answers.createDeleteHistories());
+
+        return histories;
+    }
+
+    public void validateDeletableBy(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question{" +
+                "postContent=" + postContent +
+                ", answers=" + answers +
+                '}';
     }
 }
