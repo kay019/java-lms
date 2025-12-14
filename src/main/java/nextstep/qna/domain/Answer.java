@@ -1,71 +1,58 @@
 package nextstep.qna.domain;
 
-import nextstep.qna.NotFoundException;
-import nextstep.qna.UnAuthorizedException;
-import nextstep.users.domain.NsUser;
-
 import java.time.LocalDateTime;
+import nextstep.common.domain.SoftDeletableBaseEntity;
+import nextstep.qna.exception.unchecked.CannotDeleteException;
+import nextstep.qna.exception.unchecked.NotFoundException;
+import nextstep.qna.exception.unchecked.UnAuthorizedException;
+import nextstep.qna.exception.unchecked.WrongRequestException;
 
-public class Answer {
-    private Long id;
-
-    private NsUser writer;
-
+public class Answer extends SoftDeletableBaseEntity {
+    private Long writerId;
     private Question question;
+    private BoardContent boardContent;
 
-    private String contents;
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
-
-    public Answer() {
+    public Answer(long writerId, Question question, String contents) {
+        this(null, writerId, question, contents);
     }
 
-    public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
-    }
-
-    public Answer(Long id, NsUser writer, Question question, String contents) {
-        this.id = id;
-        if(writer == null) {
+    public Answer(Long id, long writerId, Question question, String contents) {
+        super(id);
+        if (writerId <= 0L) {
             throw new UnAuthorizedException();
         }
 
-        if(question == null) {
+        if (question == null) {
             throw new NotFoundException();
         }
 
-        this.writer = writer;
+        this.writerId = writerId;
         this.question = question;
-        this.contents = contents;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+        this.boardContent = new BoardContent("" , contents);
     }
 
     public boolean isDeleted() {
-        return deleted;
+        return super.isDeleted();
     }
 
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
+    public void putOnDelete(long requesterId) {
+        if (!isOwner(requesterId)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+
+        super.updateDeleted();
     }
 
-    public NsUser getWriter() {
-        return writer;
+    public boolean isOwner(long writerId) {
+        return this.writerId == writerId;
     }
 
-    public String getContents() {
-        return contents;
+    public DeleteHistory createAnswerDeleteHistory(LocalDateTime deletedDateTime) {
+        if (!isDeleted()) {
+            throw new WrongRequestException("삭제되지 않은 답변은 삭제이력을 생성할 수 없습니다.");
+        }
+
+        return new DeleteHistory(ContentType.ANSWER, super.getId(), this.writerId, deletedDateTime);
     }
 
     public void toQuestion(Question question) {
@@ -74,6 +61,9 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + super.getId()
+                + ", writerId=" + writerId
+                + ", contents=" + boardContent
+                + "]";
     }
 }
