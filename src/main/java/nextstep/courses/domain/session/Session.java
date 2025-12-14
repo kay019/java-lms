@@ -2,23 +2,22 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.Course;
 import nextstep.courses.domain.image.CoverImage;
+import nextstep.courses.domain.image.CoverImages;
+import nextstep.courses.domain.session.constant.SessionRecruitmentStatus;
 import nextstep.courses.domain.session.constant.SessionStatus;
 import nextstep.courses.domain.session.constant.SessionType;
-import nextstep.courses.record.SessionRecord;
 import nextstep.payments.domain.Payment;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class Session extends SessionCore {
+public class Session extends BaseEntity {
 
-    private final Long id;
     private Course course;
-    private final CoverImage coverImage;
+    private CoverImages coverImages;
     private final Enrollments enrollments;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final SessionCore sessionCore;
 
     public Session(Long id, LocalDateTime startDate, LocalDateTime endDate, String sessionType, String sessionStatus, CoverImage coverImage) {
         this(id, startDate, endDate, sessionType, Integer.MAX_VALUE, 0L, sessionStatus, coverImage);
@@ -37,90 +36,67 @@ public class Session extends SessionCore {
     }
 
     public Session(Long id, SessionRange sessionRange, SessionPolicy sessionPolicy, SessionStatus sessionStatus, CoverImage coverImage) {
-        this(id, null, sessionRange, sessionPolicy, sessionStatus, coverImage, new Enrollments(), LocalDateTime.now(), null);
+        this(id, null, new CoverImages(coverImage), new Enrollments(), LocalDateTime.now(), null, new SessionCore(sessionRange, sessionPolicy, sessionStatus, SessionRecruitmentStatus.RECRUITING));
     }
 
-    public Session(Long id, Course course, SessionRange sessionRange, SessionPolicy sessionPolicy, SessionStatus sessionStatus, CoverImage coverImage, Enrollments enrollments) {
-        this(id, course, sessionRange, sessionPolicy, sessionStatus, coverImage, enrollments, LocalDateTime.now(), null);
+    public Session(Long id, Course course, SessionRange sessionRange, SessionPolicy sessionPolicy, SessionStatus sessionStatus, List<CoverImage> coverImages, Enrollments enrollments, SessionRecruitmentStatus sessionRecruitmentStatus) {
+        this(id, course, new CoverImages(coverImages), enrollments, LocalDateTime.now(), null, new SessionCore(sessionRange, sessionPolicy, sessionStatus, sessionRecruitmentStatus));
     }
 
-    public Session(Long id, Course course, SessionRange sessionRange, SessionPolicy sessionPolicy, SessionStatus sessionStatus, CoverImage coverImage, Enrollments enrollments, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(sessionRange, sessionPolicy, sessionStatus);
-        this.id = id;
+    public Session(Long id, Course course, CoverImages coverImages, Enrollments enrollments, LocalDateTime createdAt, LocalDateTime updatedAt, SessionCore sessionCore) {
+        super(id, createdAt, updatedAt);
         this.course = course;
-        this.coverImage = coverImage;
+        this.coverImages = coverImages;
         this.enrollments = enrollments;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.sessionCore = sessionCore;
     }
+
 
     public void addEnrollment(Enrollment enrollment, Payment payment) {
-        validatePaymentAmount(payment);
-        validateNotFull(this.enrollments);
-        validateSessionStatus();
+        sessionCore.validatePaymentAmount(payment);
+        sessionCore.validateNotFull(this.enrollments);
+        sessionCore.validateSessionStatus();
+        sessionCore.validateRecruitmentStatus();
         this.enrollments.add(enrollment);
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public Course getCourse() {
         return course;
     }
 
-    public CoverImage getCoverImage() {
-        return coverImage;
+    public List<CoverImage> getCoverImages() {
+        return coverImages.getCoverImages();
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public SessionCore getSessionCore() {
+        return sessionCore;
     }
 
     public List<Enrollment> getEnrollments() {
         return enrollments.getEnrollments();
     }
 
-    public SessionRecord toSessionRecord() {
-        return new SessionRecord(
-                this.id,
-                this.course.getId(),
-                this.coverImage.getId(),
-                this.getSessionRange().getStartDate(),
-                this.getSessionRange().getEndDate(),
-                this.getMaxCapacity(),
-                this.getTuition(),
-                this.getSessionType(),
-                this.getSessionStatus().toString(),
-                this.createdAt,
-                this.updatedAt
-        );
-    }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(coverImage, session.coverImage) && Objects.equals(enrollments, session.enrollments);
+        return Objects.equals(getCourse(), session.getCourse()) && Objects.equals(getCoverImages(), session.getCoverImages()) && Objects.equals(getEnrollments(), session.getEnrollments()) && Objects.equals(getSessionCore(), session.getSessionCore());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, coverImage, enrollments);
+        return Objects.hash(getCourse(), getCoverImages(), getEnrollments(), getSessionCore());
     }
 
     @Override
     public String toString() {
         return "Session{" +
-                "id=" + id +
-                ", coverImage=" + coverImage +
+                "course=" + course +
+                ", coverImages=" + coverImages +
                 ", enrollments=" + enrollments +
+                ", sessionCore=" + sessionCore +
                 '}';
     }
-
-
 }

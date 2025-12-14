@@ -3,7 +3,6 @@ package nextstep.courses.infrastructure;
 import nextstep.courses.domain.session.Enrollment;
 import nextstep.courses.domain.session.repository.EnrollmentRepository;
 import nextstep.courses.record.EnrollmentRecord;
-import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +33,7 @@ public class EnrollmentRepositoryTest {
 
     @Test
     void crud() {
-        int count = enrollmentRepository.save(new Enrollment(NsUserTest.JAVAJIGI, 1L));
+        int count = enrollmentRepository.save(new Enrollment(NsUserTest.JAVAJIGI, 1L, LocalDateTime.now(), null));
         assertThat(count).isEqualTo(1);
 
         List<EnrollmentRecord> enrollments = enrollmentRepository.findBySessionId(1L);

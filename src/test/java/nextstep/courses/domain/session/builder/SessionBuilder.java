@@ -2,7 +2,9 @@ package nextstep.courses.domain.session.builder;
 
 import nextstep.courses.domain.Course;
 import nextstep.courses.domain.image.CoverImage;
+import nextstep.courses.domain.image.CoverImages;
 import nextstep.courses.domain.session.*;
+import nextstep.courses.domain.session.constant.SessionRecruitmentStatus;
 import nextstep.courses.domain.session.constant.SessionStatus;
 
 import java.time.LocalDateTime;
@@ -12,13 +14,14 @@ public class SessionBuilder {
 
     private Long id = 23334L;
     private Course course = new Course("TDD, 클린 코드 with Java", 1L);
-    private CoverImage coverImage = new CoverImage(2L, "png", 300, 200);
+    private CoverImages coverImages = new CoverImages(new CoverImage(2L, "png", 300, 200));
     private SessionRange sessionRange = new SessionRangeBuilder().build();
     private SessionPolicy sessionPolicy = new SessionPolicyBuilder().build();
     private SessionStatus sessionStatus = SessionStatus.PENDING;
     private Enrollments enrollments = new Enrollments();
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
+    private SessionRecruitmentStatus recruit = SessionRecruitmentStatus.RECRUITING;
 
     public SessionBuilder withId(Long id) {
         this.id = id;
@@ -30,8 +33,8 @@ public class SessionBuilder {
         return this;
     }
 
-    public SessionBuilder withCoverImage(CoverImage coverImage) {
-        this.coverImage = coverImage;
+    public SessionBuilder withCoverImages(CoverImages coverImages) {
+        this.coverImages = coverImages;
         return this;
     }
 
@@ -65,8 +68,17 @@ public class SessionBuilder {
         return this;
     }
 
+    public SessionBuilder withRecruit(SessionRecruitmentStatus recruit) {
+        this.recruit = recruit;
+        return this;
+    }
+
+    private SessionCore createdSessionCore() {
+        return new SessionCore(this.sessionRange, this.sessionPolicy, this.sessionStatus, recruit);
+    }
+
     public Session build() {
-        return new Session(id, course, sessionRange, sessionPolicy, sessionStatus, coverImage, enrollments, createdAt, updatedAt);
+        return new Session(id, course, coverImages, enrollments, createdAt, updatedAt, createdSessionCore());
     }
 
 }
