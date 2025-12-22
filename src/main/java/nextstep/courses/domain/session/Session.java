@@ -1,58 +1,52 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.session.image.SessionImage;
-import nextstep.payments.domain.Payment;
+import nextstep.courses.domain.enrollment.Enrollment;
+import nextstep.courses.domain.enrollment.EnrollmentCandidate;
+import nextstep.courses.domain.image.SessionImage;
+import nextstep.courses.domain.image.SessionImages;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Session {
     private final Long id;
-    private final int cohort;
-    private final SessionPeriod period;
-    private final SessionImage coverImage;
-    private final Enrollment enrollment;
+    private final SessionInfo sessionInfo;
+    private final ProgressStatus progressStatus;
+    private final RecruitmentStatus recruitmentStatus;
+    private final SessionType sessionType;
 
-    public Session(LocalDate startDate, LocalDate endDate, SessionImage coverImage, String status) {
-        this(new SessionPeriod(startDate, endDate), coverImage, SessionStatus.from(status), new FreeSessionType());
+    public Session(LocalDate startDate, LocalDate endDate, SessionImage image) {
+        this(new SessionInfo(1, startDate, endDate, image),
+                ProgressStatus.PREPARING,
+                RecruitmentStatus.NOT_RECRUITING,
+                new FreeSessionType());
     }
 
-    public Session(LocalDate startDate, LocalDate endDate, SessionImage image, String status, int maximumCapacity, long fee) {
-        this(new SessionPeriod(startDate, endDate), image, SessionStatus.from(status), new PaidSessionType(maximumCapacity, fee));
+    public Session(int cohort, LocalDate startDate, LocalDate endDate, SessionImage image,
+                   ProgressStatus progressStatus, RecruitmentStatus recruitmentStatus, SessionType type) {
+        this(null, new SessionInfo(cohort, startDate, endDate, image), progressStatus, recruitmentStatus, type);
     }
 
-    public Session(SessionPeriod period, SessionImage coverImage, SessionStatus status, SessionType sessionType) {
-        this(1, period, coverImage, new Enrollment(status, sessionType));
+    public Session(Long id, int cohort, LocalDate startDate, LocalDate endDate, SessionImage image,
+                   ProgressStatus progressStatus, RecruitmentStatus recruitmentStatus, SessionType type) {
+        this(id, new SessionInfo(cohort, startDate, endDate, image), progressStatus, recruitmentStatus, type);
     }
 
-    public Session(int cohort, LocalDate startDate, LocalDate endDate, SessionImage image) {
-        this(cohort, new SessionPeriod(startDate, endDate), image, new Enrollment(SessionStatus.PREPARING, new FreeSessionType()));
+    public Session(SessionInfo info, ProgressStatus progressStatus, RecruitmentStatus recruitmentStatus, SessionType type) {
+        this(null, info, progressStatus, recruitmentStatus, type);
     }
 
-    public Session(int cohort, LocalDate startDate, LocalDate endDate, SessionImage image, Enrollment enrollment) {
-        this(cohort, new SessionPeriod(startDate, endDate), image, enrollment);
-    }
-
-    public Session(int cohort, SessionPeriod period, SessionImage coverImage, Enrollment enrollment) {
-        this(null, cohort, period, coverImage, enrollment);
-    }
-
-    public Session(long id, int cohort, LocalDate startDate, LocalDate endDate, SessionImage image, Enrollment enrollment) {
-        this(id, cohort, new SessionPeriod(startDate, endDate), image, enrollment);
-    }
-
-    public Session(Long id, int cohort, SessionPeriod period, SessionImage coverImage, Enrollment enrollment) {
+    public Session(Long id, SessionInfo sessionInfo, ProgressStatus progressStatus, RecruitmentStatus recruitmentStatus, SessionType sessionType) {
         this.id = id;
-        this.cohort = cohort;
-        this.period = period;
-        this.coverImage = coverImage;
-        this.enrollment = enrollment;
+        this.sessionInfo = sessionInfo;
+        this.progressStatus = progressStatus;
+        this.recruitmentStatus = recruitmentStatus;
+        this.sessionType = sessionType;
     }
 
-    public Enrollment createEnrollment(List<EnrolledStudent> currentStudents) {
-        return new Enrollment(id, enrollment.getStatus(), enrollment.getSessionType(), currentStudents);
+
+    public Enrollment createEnrollment(List<EnrollmentCandidate> currentStudents) {
+        return new Enrollment(id, recruitmentStatus, sessionType, currentStudents);
     }
 
     public Long getId() {
@@ -60,23 +54,35 @@ public class Session {
     }
 
     public int getCohort() {
-        return cohort;
+        return sessionInfo.getCohort();
     }
 
     public SessionImage getImage() {
-        return coverImage;
+        return sessionInfo.getImage();
     }
 
-    public Enrollment getEnrollment() {
-        return enrollment;
+    public SessionImages getImages() {
+        return sessionInfo.getImages();
+    }
+
+    public SessionType getSessionType() {
+        return sessionType;
+    }
+
+    public ProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
+    public RecruitmentStatus getRecruitmentStatus() {
+        return recruitmentStatus;
     }
 
     public LocalDate getStartDate() {
-        return period.getStartDate();
+        return sessionInfo.getStartDate();
     }
 
     public LocalDate getEndDate() {
-        return period.getEndDate();
+        return sessionInfo.getEndDate();
     }
 
 }
