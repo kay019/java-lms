@@ -4,18 +4,18 @@ public class PaidEnrollmentRule implements EnrollmentRule {
     private final Money price;
     private final Capacity capacity;
 
-    PaidEnrollmentRule(int price, int capacity) {
+    public PaidEnrollmentRule(int price, int capacity) {
         this(new Money(price), new Capacity(capacity));
     }
 
-    PaidEnrollmentRule(Money price, Capacity capacity) {
+    public PaidEnrollmentRule(Money price, Capacity capacity) {
         this.price = price;
         this.capacity = capacity;
     }
 
     @Override
-    public void validate(int money, int enrolledCount) {
-        validateMoney(new Money(money));
+    public void validate(Money money, int enrolledCount) {
+        validateMoney(money);
         validateCapacity(enrolledCount);
     }
 
@@ -36,5 +36,13 @@ public class PaidEnrollmentRule implements EnrollmentRule {
     @Override
     public SessionType getType() {
         return SessionType.PAID;
+    }
+
+    public int getPrice() {
+        return this.price.getMoney();
+    }
+
+    public int getCapacity() {
+        return this.capacity.getCapacity();
     }
 }
