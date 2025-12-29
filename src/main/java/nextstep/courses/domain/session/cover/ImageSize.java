@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.cover;
 
 import java.util.Objects;
 
@@ -25,5 +25,9 @@ public class ImageSize {
     @Override
     public int hashCode() {
         return Objects.hashCode(imageSize);
+    }
+
+    public int value() {
+        return imageSize;
     }
 }

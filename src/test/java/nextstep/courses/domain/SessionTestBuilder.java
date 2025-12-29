@@ -1,10 +1,18 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.enrollment.*;
+import nextstep.courses.domain.session.Session;
+import nextstep.courses.domain.session.SessionDuration;
+import nextstep.courses.domain.session.SessionState;
+import nextstep.courses.domain.session.cover.CoverImage;
+
 import java.time.LocalDateTime;
 
 public class SessionTestBuilder {
 
     private long id = 1L;
+
+    private long courseId = 10L;
 
     private SessionDuration sessionDuration = new SessionDuration(
                     LocalDateTime.now().plusDays(1),
@@ -21,6 +29,16 @@ public class SessionTestBuilder {
 
     public static SessionTestBuilder aSession() {
         return new SessionTestBuilder();
+    }
+
+    public SessionTestBuilder withId(long id) {
+        this.id = id;
+        return this;
+    }
+
+    public SessionTestBuilder withCourseId(long courseId) {
+        this.courseId = courseId;
+        return this;
     }
 
     public SessionTestBuilder withClosedSession() {
@@ -40,7 +58,7 @@ public class SessionTestBuilder {
 
     public SessionTestBuilder withFullEnrollments(int count) {
         for (int i = 0; i < count; i++) {
-            enrollments.add(this.id, (long) i + 1);
+            enrollments.enroll(this.id, (long) i + 1);
         }
         return this;
     }
@@ -48,6 +66,7 @@ public class SessionTestBuilder {
     public Session build() {
         return new Session(
                 id,
+                courseId,
                 sessionDuration,
                 coverImage,
                 enrollmentPolicy,

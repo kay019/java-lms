@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.enrollment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class Enrollments {
         capacity.validateAvailable();
     }
 
-    public Enrollment add(Long sessionId, Long userId) {
+    public Enrollment enroll(Long sessionId, Long userId) {
         validateEnroll(userId);
 
         Enrollment enrollment = new Enrollment(sessionId, userId);
@@ -38,6 +38,10 @@ public class Enrollments {
     private boolean EnrolledCheck(Long userId) {
         return enrollments.stream()
                 .anyMatch(enrollment -> enrollment.isSameUser(userId));
+    }
+
+    public int getCapacity() {
+        return capacity.value();
     }
 }
 

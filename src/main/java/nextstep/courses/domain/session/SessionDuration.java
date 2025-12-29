@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import java.time.LocalDateTime;
 
@@ -16,5 +16,13 @@ public class SessionDuration {
         if (!startDate.isBefore(endDate)) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 }

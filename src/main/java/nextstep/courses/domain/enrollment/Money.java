@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.enrollment;
 
 import java.util.Objects;
 
@@ -11,6 +11,10 @@ public class Money {
 
     public boolean isEqualTo(Money other) {
         return this.equals(other);
+    }
+
+    public long value() {
+        return amount;
     }
 
     @Override

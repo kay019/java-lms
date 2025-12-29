@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session.cover;
 
 public class ImageDimension {
 
@@ -26,5 +26,13 @@ public class ImageDimension {
         if (!(HEIGHT_RATIO * width == WIDTH_RATIO * height)) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public int width() {
+        return width;
+    }
+
+    public int height() {
+        return height;
     }
 }

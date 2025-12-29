@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.enrollment;
 
 public class Capacity {
 
@@ -22,5 +22,9 @@ public class Capacity {
 
     public void increase() {
         this.current++;
+    }
+
+    public int value() {
+        return max;
     }
 }
