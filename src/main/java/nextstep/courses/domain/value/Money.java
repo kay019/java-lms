@@ -6,6 +6,10 @@ public class Money {
 
     private final int value;
 
+    public Money(long value) {
+        this((int) value);
+    }
+
     public Money(int value) {
         validate(value);
         this.value = value;
@@ -32,5 +36,9 @@ public class Money {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    public int value() {
+        return this.value;
     }
 }

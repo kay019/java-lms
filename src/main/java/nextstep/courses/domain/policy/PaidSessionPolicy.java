@@ -23,6 +23,11 @@ public class PaidSessionPolicy implements SessionPolicy {
         validateEnrollmentCount(currentEnrollmentCount);
     }
 
+    @Override
+    public SessionType type() {
+        return SessionType.PAID;
+    }
+
     private void validatePayment(Money payment) {
         if (!price.equals(payment)) {
             throw new RuntimeException("결제 금액이 수강료와 일치하지 않습니다.");
@@ -33,5 +38,15 @@ public class PaidSessionPolicy implements SessionPolicy {
         if (capacity.isFull(currentEnrollmentCount)) {
             throw new RuntimeException("수강 인원이 초과되었습니다.");
         }
+    }
+
+    @Override
+    public Integer price() {
+        return this.price.value();
+    }
+
+    @Override
+    public Integer capacity() {
+        return this.capacity.value();
     }
 }
