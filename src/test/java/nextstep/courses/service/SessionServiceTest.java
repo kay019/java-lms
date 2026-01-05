@@ -23,27 +23,52 @@ class SessionServiceTest {
 
     @Test
     void 강의를_개설하고_조회하기() {
-        ImageFile imageFile = new ImageFile(1024 * 1024, "png", 300, 200);
+        ImageFiles imageFiles = new ImageFiles(new ImageFile(1024 * 1024, "png", 300, 200));
+
         SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(7));
 
-
-        Long sessionId = sessionService.createSession(imageFile, period, SessionStatus.RECRUITING, new PaidEnrollmentRule(50000, 10));
+        Long sessionId = sessionService.createSession(imageFiles, period, SessionRecruitingStatus.RECRUITING, SessionProgressStatus.READY, new PaidEnrollmentRule(50000, 10));
 
         Session found = sessionService.findSession(sessionId);
 
-        assertThat(found.getSessionStatus())
-                .isEqualTo(SessionStatus.RECRUITING.toString());
+        assertThat(found.getRecruitingStatus())
+                .isEqualTo(SessionRecruitingStatus.RECRUITING.toString());
         assertThat(found.getPeriod()).isEqualTo(period);
     }
 
     @Test
     void 수강신청_성공() {
-        ImageFile imageFile = new ImageFile(1024 * 1024, "png", 300, 200);
+        ImageFiles imageFiles = new ImageFiles(new ImageFile(1024 * 1024, "png", 300, 200));
+
         SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(7));
-        Long sessionId = sessionService.createSession(imageFile, period, SessionStatus.RECRUITING, new PaidEnrollmentRule(50000, 10));
+
+        Long sessionId = sessionService.createSession(imageFiles, period, SessionRecruitingStatus.RECRUITING, SessionProgressStatus.READY, new PaidEnrollmentRule(50000, 10));
 
         sessionService.enroll(sessionId, 10L, new Money(50000));
 
         assertThat(enrollmentRepository.findBySessionId(sessionId)).hasSize(1);
+    }
+
+    @Test
+    void 수강신청_후_승인된다() {
+
+        ImageFiles imageFiles = new ImageFiles(new ImageFile(1024 * 1024, "png", 300, 200));
+
+        SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(7));
+
+        Long sessionId = sessionService.createSession(imageFiles, period, SessionRecruitingStatus.RECRUITING, SessionProgressStatus.READY, new PaidEnrollmentRule(50000, 10));
+
+        // 수강 신청
+        sessionService.enroll(sessionId, 1L, new Money(50000));
+
+        Enrollment enrollment = enrollmentRepository.findBySessionId(sessionId).get(0);
+
+        sessionService.selectEnrollment(sessionId, enrollment.getId());
+        sessionService.approveEnrollment(sessionId, enrollment.getId());
+
+        Enrollment approved = enrollmentRepository.findById(enrollment.getId());
+
+        assertThat(approved.getEnrollmentStatus())
+                .isEqualTo(EnrollmentStatus.APPROVED.toString());
     }
 }

@@ -24,37 +24,30 @@ public class SessionRepositoryTest {
 
     @Test
     void save() {
-        ImageFile imageFile = new ImageFile(1024*1024);
-        SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(7));
-        SessionStatus sessionStatus = SessionStatus.RECRUITING;
-        EnrollmentRule enrollmentRule = new PaidEnrollmentRule(50000, 10);
-        Enrollments enrollments = new Enrollments();
+        Session session = SessionBuilder.builder()
+                .withEnrollmentRule(new PaidEnrollmentRule(50000, 10))
+                .build();
 
-        Session session = new Session(imageFile, period, sessionStatus, enrollmentRule, enrollments);
+        Session savedSession = jdbcSessionRepository.save(session);
 
-        Long sessionId = jdbcSessionRepository.save(session);
-
-        assertThat(sessionId).isNotNull();
+        assertThat(savedSession).isNotNull();
     }
 
     @Test
     void find() {
         ImageFile imageFile = new ImageFile(1024 * 1024, "png", 300 , 200);
-        jdbcImageFileRepository.save(imageFile);
+        ImageFile savedImageFile = jdbcImageFileRepository.save(imageFile);
 
-        SessionPeriod period = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(7));
-        SessionStatus sessionStatus = SessionStatus.RECRUITING;
-        EnrollmentRule enrollmentRule = new PaidEnrollmentRule(50000, 10);
-        Enrollments enrollments = new Enrollments();
+        Session session = SessionBuilder.builder()
+                .withImageFiles(savedImageFile)
+                .withEnrollmentRule(new PaidEnrollmentRule(50000, 10))
+                .build();
 
-        Session session = new Session(imageFile, period, sessionStatus, enrollmentRule, enrollments);
+        Session savedSession = jdbcSessionRepository.save(session);
 
+        Session found = jdbcSessionRepository.findById(savedSession.getId());
 
-        Long sessionId = jdbcSessionRepository.save(session);
-
-        Session found = jdbcSessionRepository.findById(sessionId);
-
-        assertThat(found.getSessionStatus()).isEqualTo(session.getSessionStatus());
+        assertThat(found.getRecruitingStatus()).isEqualTo(session.getRecruitingStatus());
         assertThat(found.getPeriod()).isEqualTo(session.getPeriod());
     }
 }
