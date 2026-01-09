@@ -4,6 +4,7 @@ import nextstep.courses.domain.enrollment.Enrollment;
 import nextstep.courses.domain.enrollment.EnrollmentPolicy;
 import nextstep.courses.domain.enrollment.Enrollments;
 import nextstep.courses.domain.session.cover.CoverImage;
+import nextstep.courses.domain.session.cover.CoverImages;
 import nextstep.payments.domain.Payment;
 
 import java.time.LocalDateTime;
@@ -12,40 +13,47 @@ public class Session {
     private final long id;
     private final long courseId;
     private final SessionDuration sessionDuration;
-    private final CoverImage coverImage;
+    private final CoverImages coverImages;
     private final EnrollmentPolicy enrollmentPolicy;
     private final SessionState sessionState;
     private final Enrollments enrollments;
+    private final EnrollmentStatus enrollmentStatus;
+    private final SessionProgress sessionProgress;
+    private final EnrollmentAvailabilityPolicy enrollmentAvailabilityPolicy;
 
     public Session(long id
             , long courseId
             , LocalDateTime startDate
             , LocalDateTime endDate
-            , int size
-            , String fileName
-            , int width
-            , int height
+            , CoverImages coverImages
             , EnrollmentPolicy enrollmentPolicy
             , SessionState sessionState
-            , Enrollments enrollments) {
-
-        this(id, courseId, new SessionDuration(startDate, endDate), new CoverImage(size, fileName, width, height)
-                , enrollmentPolicy, sessionState, enrollments);
+            , Enrollments enrollments
+            , EnrollmentStatus enrollmentStatus
+            , SessionProgress sessionProgress
+            , EnrollmentAvailabilityPolicy enrollmentAvailabilityPolicy) {
+        this(id, courseId, new SessionDuration(startDate, endDate), coverImages
+                , enrollmentPolicy, sessionState, enrollments, enrollmentStatus, sessionProgress, enrollmentAvailabilityPolicy);
     }
 
-    public Session(long id, long courseId, SessionDuration sessionDuration, CoverImage coverImage
-            , EnrollmentPolicy enrollmentPolicy, SessionState sessionState, Enrollments enrollments) {
+    public Session(long id, long courseId, SessionDuration sessionDuration, CoverImages coverImages
+            , EnrollmentPolicy enrollmentPolicy, SessionState sessionState, Enrollments enrollments
+            , EnrollmentStatus enrollmentStatus, SessionProgress sessionProgress, EnrollmentAvailabilityPolicy enrollmentAvailabilityPolicy) {
         this.id = id;
         this.courseId = courseId;
         this.sessionDuration = sessionDuration;
-        this.coverImage = coverImage;
+        this.coverImages = coverImages;
         this.enrollmentPolicy = enrollmentPolicy;
         this.sessionState = sessionState;
         this.enrollments = enrollments;
+        this.enrollmentStatus = enrollmentStatus;
+        this.sessionProgress = sessionProgress;
+        this.enrollmentAvailabilityPolicy = enrollmentAvailabilityPolicy;
     }
 
     public Enrollment enroll(Long userId, Payment payment) {
-        sessionState.validateEnroll();
+        sessionState.validateEnroll(); // 삭제 예정
+        enrollmentAvailabilityPolicy.validate(sessionProgress, enrollmentStatus);
         enrollmentPolicy.validateEnrollment(payment);
         return enrollments.enroll(this.id, userId);
     }
@@ -66,20 +74,8 @@ public class Session {
         return sessionDuration.getEndDate();
     }
 
-    public int getCoverImageSize() {
-        return coverImage.getImageSize();
-    }
-
-    public String getCoverImageName() {
-        return coverImage.getImageName();
-    }
-
-    public int getCoverImageWidth() {
-        return coverImage.getCoverImageWidth();
-    }
-
-    public int getCoverImageHeight() {
-        return coverImage.getCoverImageHeight();
+    public CoverImages getCoverImages() {
+        return coverImages;
     }
 
     public String getPolicyType() {
@@ -98,15 +94,31 @@ public class Session {
         return enrollments.getCapacity();
     }
 
+    public String getEnrollmentStatus() {
+        return enrollmentStatus.name();
+    }
+
+    public String getSessionProgress() {
+        return sessionProgress.name();
+    }
+
     @Override
     public String toString() {
         return "Session{" +
                 "id=" + id +
                 ", sessionDuration=" + sessionDuration +
-                ", coverImage=" + coverImage +
+                ", coverImages=" + coverImages +
                 ", enrollmentPolicy=" + enrollmentPolicy +
                 ", sessionState=" + sessionState +
                 ", enrollments=" + enrollments +
                 '}';
+    }
+
+    public Enrollment approve(Long userId) {
+        return enrollments.approve(userId);
+    }
+
+    public Enrollment reject(Long userId) {
+        return enrollments.reject(userId);
     }
 }

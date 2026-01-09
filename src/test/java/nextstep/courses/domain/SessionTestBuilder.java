@@ -1,12 +1,13 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.domain.enrollment.*;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionDuration;
-import nextstep.courses.domain.session.SessionState;
+import nextstep.courses.domain.session.*;
 import nextstep.courses.domain.session.cover.CoverImage;
+import nextstep.courses.domain.session.cover.CoverImages;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SessionTestBuilder {
 
@@ -19,13 +20,16 @@ public class SessionTestBuilder {
                     LocalDateTime.now().plusDays(2)
             );
 
-    private CoverImage coverImage = new CoverImage(100, "test.png", 300, 200);
+    private CoverImages coverImages = new CoverImages(new ArrayList<>(List.of(new CoverImage(100, "test.png", 300, 200))));
 
     private EnrollmentPolicy enrollmentPolicy = new FreeEnrollmentPolicy();
 
     private SessionState sessionState = SessionState.OPEN;
 
     private Enrollments enrollments = new Enrollments(new Capacity(1));
+    private EnrollmentStatus enrollmentStatus = EnrollmentStatus.OPEN;
+    private SessionProgress sessionProgress = SessionProgress.IN_PROGRESS;
+    private EnrollmentAvailabilityPolicy enrollmentAvailabilityPolicy = new EnrollmentAvailabilityPolicy();
 
     public static SessionTestBuilder aSession() {
         return new SessionTestBuilder();
@@ -46,6 +50,16 @@ public class SessionTestBuilder {
         return this;
     }
 
+    public SessionTestBuilder withClosedEnrollmentStatus() {
+        this.enrollmentStatus = EnrollmentStatus.CLOSED;
+        return this;
+    }
+
+    public SessionTestBuilder withFinishedSession() {
+        this.sessionProgress = SessionProgress.FINISHED;
+        return this;
+    }
+
     public SessionTestBuilder withPaidEnrollment(Money price) {
         this.enrollmentPolicy = new PaidEnrollmentPolicy(price);
         return this;
@@ -63,15 +77,23 @@ public class SessionTestBuilder {
         return this;
     }
 
+    public SessionTestBuilder withAvailabilityPolicy(EnrollmentAvailabilityPolicy policy) {
+        this.enrollmentAvailabilityPolicy = policy;
+        return this;
+    }
+
     public Session build() {
         return new Session(
                 id,
                 courseId,
                 sessionDuration,
-                coverImage,
+                coverImages,
                 enrollmentPolicy,
                 sessionState,
-                enrollments
+                enrollments,
+                enrollmentStatus,
+                sessionProgress,
+                enrollmentAvailabilityPolicy
         );
     }
 }
