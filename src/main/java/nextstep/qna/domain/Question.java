@@ -1,27 +1,21 @@
 package nextstep.qna.domain;
 
+import nextstep.core.domain.SoftDeletableBaseEntity;
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question {
-    private Long id;
-
+public class Question extends SoftDeletableBaseEntity {
     private String title;
 
     private String contents;
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
+    private Answers answers = new Answers();
 
     public Question() {
     }
@@ -31,32 +25,18 @@ public class Question {
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this.id = id;
+        super(id);
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
     }
 
     public NsUser getWriter() {
@@ -72,21 +52,40 @@ public class Question {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
 
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+    }
+
+    public void delete(NsUser loginUser) throws CannotDeleteException {
+        validateOwner(loginUser);
+        answers.validateOwner(loginUser);
+        answers.delete();
+        deleteQuestion();
+    }
+
+    private void deleteQuestion() {
+        markDeleted();
+    }
+
+    public List<DeleteHistory> deleteHistories() {
+        List<DeleteHistory> histories = new ArrayList<>();
+        histories.add(deleteHistory());
+        histories.addAll(answers.deleteHistories());
+        return histories;
+    }
+
+    private void validateOwner(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    public DeleteHistory deleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, getId(), this.writer, LocalDateTime.now());
     }
 }

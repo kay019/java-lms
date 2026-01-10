@@ -1,25 +1,19 @@
 package nextstep.qna.domain;
 
+import nextstep.core.domain.SoftDeletableBaseEntity;
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 
-public class Answer {
-    private Long id;
-
+public class Answer extends SoftDeletableBaseEntity {
     private NsUser writer;
 
     private Question question;
 
     private String contents;
-
-    private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
 
     public Answer() {
     }
@@ -29,7 +23,7 @@ public class Answer {
     }
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
-        this.id = id;
+        super(id);
         if(writer == null) {
             throw new UnAuthorizedException();
         }
@@ -41,19 +35,6 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
     }
 
     public boolean isOwner(NsUser writer) {
@@ -75,5 +56,19 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+    }
+
+    public void validateOwner(NsUser owner) throws CannotDeleteException {
+        if (!isOwner(owner)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    public void delete() {
+        markDeleted();
+    }
+
+    public DeleteHistory deleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, getId(), this.writer, LocalDateTime.now());
     }
 }
