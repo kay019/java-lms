@@ -38,12 +38,16 @@ public class Answers {
         }
     }
 
-    public List<DeleteHistory> deleteAllAndCreateHistories(LocalDateTime now) {
-        List<DeleteHistory> histories = new ArrayList<>();
-
+    public void deleteAll() {
         for (Answer answer : values) {
             answer.delete();
-            histories.add(DeleteHistory.forAnswer(answer, now));
+        }
+    }
+
+    public List<DeleteHistory> createDeleteHistories(LocalDateTime now) {
+        List<DeleteHistory> histories = new ArrayList<>();
+        for (Answer answer : values) {
+            histories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), now));
         }
         return histories;
     }

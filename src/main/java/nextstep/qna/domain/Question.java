@@ -9,19 +9,8 @@ import java.util.List;
 
 public class Question {
     private Long id;
-
-    private String title;
-
-    private String contents;
-
-    private NsUser writer;
-
-    private Answers answers;
-    private boolean deleted;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
+    private QuestionContent content;
+    private QuestionState state;
 
     public Question() {
     }
@@ -32,9 +21,8 @@ public class Question {
 
     public Question(Long id, NsUser writer, String title, String contents) {
         this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+        this.content = new QuestionContent(title, contents);
+        this.state = new QuestionState(writer);
     }
 
     public Long getId() {
@@ -42,75 +30,63 @@ public class Question {
     }
 
     public String getTitle() {
-        return title;
+        return content.getTitle();
     }
 
     public Question setTitle(String title) {
-        this.title = title;
+        content.setTitle(title);
         return this;
     }
 
     public String getContents() {
-        return contents;
+        return content.getContents();
     }
 
     public Question setContents(String contents) {
-        this.contents = contents;
+        content.setContents(contents);
         return this;
     }
 
     public NsUser getWriter() {
-        return writer;
+        return state.getWriter();
     }
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
-        answers.add(answer);
+        state.addAnswer(answer);
     }
 
     public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
+        return state.isOwner(loginUser);
     }
 
     public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
+        state.setDeleted(deleted);
         return this;
     }
 
     public boolean isDeleted() {
-        return deleted;
+        return state.isDeleted();
     }
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + getId() + ", title=" + getTitle() + ", contents=" + getContents() + ", writer=" + getWriter() + "]";
     }
 
     public List<DeleteHistory> deleteBy(NsUser loginUser, LocalDateTime now)
         throws CannotDeleteException {
 
-        validateDeletePermission(loginUser);
+        state.validateDeletePermission(loginUser);
 
-        this.deleted = true;
+        state.setDeleted(true);
 
         List<DeleteHistory> histories = new ArrayList<>();
-        histories.add(DeleteHistory.forQuestion(this, now));
-        histories.addAll(answers.deleteAllAndCreateHistories(now));
+        histories.add(new DeleteHistory(ContentType.QUESTION, this.id, state.getWriter(), now));
+
+        state.getAnswers().deleteAll();
+        histories.addAll(state.getAnswers().createDeleteHistories(now));
 
         return histories;
-    }
-
-    private void validateDeletePermission(NsUser loginUser)
-        throws CannotDeleteException {
-
-        if (!isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-
-        if (answers.isEmpty()) {
-            return;
-        }
-
-        answers.validateAllOwnedBy(loginUser);
     }
 }
