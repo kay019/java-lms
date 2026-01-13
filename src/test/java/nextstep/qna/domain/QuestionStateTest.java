@@ -17,9 +17,10 @@ class QuestionStateTest {
     void validateDeletePermission_NoAnswers_OwnerCanDelete() throws Exception {
         // given
         QuestionState state = new QuestionState(NsUserTest.JAVAJIGI);
+        Answers answers = Answers.empty();
 
         // when & then
-        state.validateDeletePermission(NsUserTest.JAVAJIGI);
+        state.validateDeletePermission(NsUserTest.JAVAJIGI, answers);
     }
 
     @Test
@@ -30,10 +31,10 @@ class QuestionStateTest {
         Answer answer1 = new Answer(1L, NsUserTest.JAVAJIGI, question, "answer1");
         Answer answer2 = new Answer(2L, NsUserTest.JAVAJIGI, question, "answer2");
         Answers answers = Answers.of(Arrays.asList(answer1, answer2));
-        QuestionState state = new QuestionState(NsUserTest.JAVAJIGI, answers);
+        QuestionState state = new QuestionState(NsUserTest.JAVAJIGI);
 
         // when & then
-        state.validateDeletePermission(NsUserTest.JAVAJIGI);
+        state.validateDeletePermission(NsUserTest.JAVAJIGI, answers);
     }
 
     @Test
@@ -41,9 +42,10 @@ class QuestionStateTest {
     void validateDeletePermission_NotOwner_ThrowsException() {
         // given
         QuestionState state = new QuestionState(NsUserTest.JAVAJIGI);
+        Answers answers = Answers.empty();
 
         // when & then
-        assertThatThrownBy(() -> state.validateDeletePermission(NsUserTest.SANJIGI))
+        assertThatThrownBy(() -> state.validateDeletePermission(NsUserTest.SANJIGI, answers))
             .isInstanceOf(CannotDeleteException.class)
             .hasMessageContaining("질문을 삭제할 권한이 없습니다");
     }
@@ -55,10 +57,10 @@ class QuestionStateTest {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title", "contents");
         Answer answer = new Answer(1L, NsUserTest.SANJIGI, question, "answer by other");
         Answers answers = Answers.of(Arrays.asList(answer));
-        QuestionState state = new QuestionState(NsUserTest.JAVAJIGI, answers);
+        QuestionState state = new QuestionState(NsUserTest.JAVAJIGI);
 
         // when & then
-        assertThatThrownBy(() -> state.validateDeletePermission(NsUserTest.JAVAJIGI))
+        assertThatThrownBy(() -> state.validateDeletePermission(NsUserTest.JAVAJIGI, answers))
             .isInstanceOf(CannotDeleteException.class)
             .hasMessageContaining("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다");
     }
@@ -81,20 +83,5 @@ class QuestionStateTest {
 
         // when & then
         assertThat(state.isOwner(NsUserTest.SANJIGI)).isFalse();
-    }
-
-    @Test
-    @DisplayName("addAnswer는 답변을 추가한다")
-    void addAnswer_AddsAnswerToAnswers() {
-        // given
-        QuestionState state = new QuestionState(NsUserTest.JAVAJIGI);
-        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title", "contents");
-        Answer answer = new Answer(1L, NsUserTest.JAVAJIGI, question, "answer");
-
-        // when
-        state.addAnswer(answer);
-
-        // then
-        assertThat(state.getAnswers().isEmpty()).isFalse();
     }
 }

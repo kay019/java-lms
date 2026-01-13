@@ -10,6 +10,7 @@ import java.util.List;
 public class Question {
     private Long id;
     private QuestionContent content;
+    private Answers answers;
     private QuestionState state;
 
     public Question() {
@@ -22,6 +23,7 @@ public class Question {
     public Question(Long id, NsUser writer, String title, String contents) {
         this.id = id;
         this.content = new QuestionContent(title, contents);
+        this.answers = Answers.empty();
         this.state = new QuestionState(writer);
     }
 
@@ -33,18 +35,8 @@ public class Question {
         return content.getTitle();
     }
 
-    public Question setTitle(String title) {
-        content.setTitle(title);
-        return this;
-    }
-
     public String getContents() {
         return content.getContents();
-    }
-
-    public Question setContents(String contents) {
-        content.setContents(contents);
-        return this;
     }
 
     public NsUser getWriter() {
@@ -53,16 +45,11 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
-        state.addAnswer(answer);
+        answers.add(answer);
     }
 
     public boolean isOwner(NsUser loginUser) {
         return state.isOwner(loginUser);
-    }
-
-    public Question setDeleted(boolean deleted) {
-        state.setDeleted(deleted);
-        return this;
     }
 
     public boolean isDeleted() {
@@ -77,15 +64,15 @@ public class Question {
     public List<DeleteHistory> deleteBy(NsUser loginUser, LocalDateTime now)
         throws CannotDeleteException {
 
-        state.validateDeletePermission(loginUser);
+        state.validateDeletePermission(loginUser, answers);
 
         state.setDeleted(true);
 
         List<DeleteHistory> histories = new ArrayList<>();
         histories.add(new DeleteHistory(ContentType.QUESTION, this.id, state.getWriter(), now));
 
-        state.getAnswers().deleteAll();
-        histories.addAll(state.getAnswers().createDeleteHistories(now));
+        answers.deleteAll();
+        histories.addAll(answers.createDeleteHistories(now));
 
         return histories;
     }
